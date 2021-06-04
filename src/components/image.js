@@ -33,6 +33,7 @@ export default function  MyEditor() {
             canvasIamge.applyFilters();
             canvas.requestRenderAll();
             console.log('onclick button')
+
         }
         return(
             <div>

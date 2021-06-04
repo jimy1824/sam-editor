@@ -1,100 +1,146 @@
 import React, {useEffect, useState} from "react";
 import { fabric } from "fabric";
+import { v1 as uuid } from 'uuid'
 // import $ from "jquery";
 
 function SamEditor(props) {
-    const [loading, setLoading] = useState(false);
-    var canvas = new fabric.StaticCanvas('c');
-    // console.log("canvas loaded")
-    var canvasIamge;
+
+    const [canvas, setCanvas] = useState('');
+    let bodyImage;
+    let rightSleevImage;
+    let leftSleeveImage;
+
+    // urls
+
+    const bodyUrl = 'http://localhost:8000/media/uploads/body.png'
+    const leftSleeveUrl = 'http://localhost:8000/media/uploads/left_sleeve.png'
+    const rightSleeveUrl = 'http://localhost:8000/media/uploads/right_sleeve.png'
 
 
-    // useEffect(() => {
-    //     console.log("Mounting...");
-    //     loadImage()
-    // });
+    const initCanvas = () =>
+        new fabric.Canvas('canv', {
+            height: 600,
+            width: 600,
+            backgroundColor: 'white',
+        });
 
-    // var imgEl = document.createElement('img');
-    // imgEl.crossOrigin = 'anonymous';
-    // imgEl.src = 'https://i.imgur.com/28kU1bo.png';
-    // imgEl.onload = function () {
-    //     canvasIamge = new fabric.Image(imgEl);
-    //     canvasIamge.filters = [new fabric.Image.filters.HueRotation()];
-    //     canvas.add(canvasIamge);
-    //     setLoading(false)
-    // }
-    function loadImage(){
-        setLoading(true)
-        var image=new Image()
-        var button_filters = document.createElement('btn')
-        image.src='https://i.imgur.com/28kU1bo.png'
+    useEffect(() => {
+        setCanvas(initCanvas());
+    }, []);
 
-        image.onload = function () {
-                image = new fabric.Image(image);
-                image.filters = [new fabric.Image.filters.HueRotation()];
-                canvas.add(image);
-                // canvas.add(button_filters)
-            setLoading(false)
+    const loadImage = (e) => {
+        fabric.Image.fromURL(bodyUrl, function (body) {
+            body.id = "body";
+            body.filters = [new fabric.Image.filters.HueRotation()];
+            bodyImage = body
+            body.applyFilters()
+            body.set(
+                {
+                    left: 10,
+                    top: 100,
+                    selectable:true
+
+                })
+            canvas.add(body);
+        }, {crossOrigin: 'anonymous'})
+        fabric.Image.fromURL(rightSleeveUrl, function (sleeve) {
+            sleeve.id = "body";
+            sleeve.filters = [new fabric.Image.filters.HueRotation()];
+            rightSleevImage = sleeve
+            sleeve.applyFilters()
+            sleeve.set(
+                {
+                    left:520,
+                    top: 100,
+
+                })
+            canvas.add(sleeve);
+        }, {crossOrigin: 'anonymous'})
+        fabric.Image.fromURL(leftSleeveUrl, function (sleeve) {
+            sleeve.id = "body";
+            sleeve.filters = [new fabric.Image.filters.HueRotation()];
+            leftSleeveImage = sleeve
+            sleeve.applyFilters()
+            sleeve.set(
+                {
+                    left:77,
+                    top:34
+
+                })
+            canvas.add(sleeve);
+        }, {crossOrigin: 'anonymous'})
+
+    };
+        //     fabric.util.loadImage(imgUrl, (imgObj) => {
+        //         const img = new fabric.Image(imgObj)
+        //         img.filters = [new fabric.Image.filters.HueRotation()];
+        //         canvasIamge=img
+        //         img.applyFilters()
+        //         canvas.add(img)
+        //     }, null, 'anonymous')
+        // });
+        const changeColor = (e) => {
+            console.log(bodyImage)
+            bodyImage.filters[0].rotation = 2 * Math.random() - 1;
+            // console.log(image.filters[0].rotation);
+            bodyImage.applyFilters();
+            canvas.requestRenderAll();
+            console.log('onclick button')
         }
+        const addShape = (e) => {
+            let type = e.target.name;
+            let object
 
-        // button_filters.onclick = function (){
-        //     image = new fabric.Image(image);
-        //     image.filters = [new fabric.Image.filters.HueRotation()];
-        //     canvas.add(image)
-        //     setLoading(false)
-        // }
+            if (type === "rectangle") {
+                object = new fabric.Rect({
+                    height: 75,
+                    width: 150
+                });
 
-        // var canvasImage = new fabric.Image(image);
-        // console.log(canvasImage)
-        // canvasImage.filters = [new fabric.Image.filters.HueRotation()];
-        // console.log(canvasImage)
-        // canvas.add(canvasImage);
-    }
+            } else if (type === "triangle") {
+                object = new fabric.Triangle({
+                    width: 100,
+                    height: 100
+                })
 
-
-
-    function onButtonClick() {
-        console.log(canvasIamge)
-        canvasIamge.filters[0].rotation = 2 * Math.random() - 1;
-        // console.log(image.filters[0].rotation);
-        canvasIamge.applyFilters();
-        canvas.requestRenderAll();
-        console.log('onclick button')
-        // loadImage()
-        // console.log(image.filters[0].rotation)
-        // image.filters[0].rotation = 2 * Math.random() - 1;
-        // console.log(image.filters[0].rotation)
-        // console.log(image.applyFilters());
-        // canvas.requestRenderAll();
-        // console.log('onclick button')
-    }
-
-    // imgEl.src = 'https://i.imgur.com/28kU1bo.png';
-    // document.getElementById('hue').onclick= App() {
-    //   image.filters[0].rotation = 2 * Math.random() - 1;
-    //   console.log(image.filters[0].rotation);
-    //   image.applyFilters();
-    //   canvas.requestRenderAll();
-    // };
-
-
-
-    return (
-        <div>
-            {/*<button onClick={loadImage}>click here</button>*/}
-            { loading?(
-                <p>loading</p>
-            ):(
-                <div>
-                    <p>jhjh</p>
-                    <button onClick={loadImage}>Apply Filters</button>
-                    <canvas id="c" width='600' height='600'></canvas>
-                </div>
-            )
+            } else if (type === "circle") {
+                object = new fabric.Circle({
+                    radius: 50
+                })
             }
 
-        </div>
-    );
-}
+            object.set({id: uuid()})
+            canvas.add(object)
+            canvas.renderAll()
+        };
+
+        return (
+            <div>
+                <div>
+                    <button type='button' name='circle' onClick={loadImage}>
+                        loadImage
+                    </button>
+                    <button type='button' name='circle' onClick={changeColor}>
+                        change color
+                    </button>
+
+                    <button type='button' name='triangle' onClick={addShape}>
+                        Add a Triangle
+                    </button>
+
+                    <button type='button' name='rectangle' onClick={addShape}>
+                        Add a Rectangle
+                    </button>
+                </div>
+
+                <div>
+                    <canvas id='canv'/>
+                </div>
+
+            </div>
+
+        );
+    }
 
 export default SamEditor;
+
