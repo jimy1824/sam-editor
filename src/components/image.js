@@ -39,7 +39,7 @@ export default function  MyEditor() {
             <div>
                 <button onClick={onButtonClick}>click here</button>
                 <p>Sam Editor</p>
-                <canvas id="c" width='600' height='600'></canvas>
+                <canvas id="c" width='800' height='600'></canvas>
             </div>
 
         )

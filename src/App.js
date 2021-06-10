@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import './App.css';
 import { fabric } from "fabric";
 import SamEditor from "./components/editor";
+import Welcome from "./components/welcome";
 import MyEditor from "./components/image";
 
 // function App() {
@@ -61,10 +62,16 @@ function App() {
             <Switch>
                 <Route
                     // exact
-                    path="/"
+                    path="/editor"
                     component={SamEditor}
                     render={(props) => <SamEditor {...props} />}
                 />
+
+                <Route
+                    path="/"
+                    component={Welcome}
+                    render={(props) => <Welcome {...props} />}
+                    />
                 {/*<Route*/}
                 {/*    // exact*/}
                 {/*    path="/"*/}
