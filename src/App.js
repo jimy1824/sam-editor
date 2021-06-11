@@ -61,12 +61,11 @@ function App() {
             {/*        <Header/>*/}
             <Switch>
                 <Route
-                    // exact
-                    path="/editor"
+                    exact
+                    path="/editor/:id"
                     component={SamEditor}
                     render={(props) => <SamEditor {...props} />}
                 />
-
                 <Route
                     path="/"
                     component={Welcome}
