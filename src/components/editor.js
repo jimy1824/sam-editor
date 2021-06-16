@@ -8,10 +8,19 @@ import $ from "jquery";
 import {getProductDetail} from "../apiService";
 
 let product1 = null
+
+const viewOptions=[
+    'front',
+    'back',
+    'left',
+    'right'
+]
+
 function SamEditor(props) {
     const {id} = props.match.params
     const [product, setProduct] = useState(null);
-    const [ab, setAb] =  useState({});
+    const [randomId, setRandomId] = useState(1);
+
 
     useEffect(() => {
         getProductDetail(id)
@@ -31,13 +40,24 @@ function SamEditor(props) {
     //     }
     // }, [product])
 
+    const [view, setView] = useState(viewOptions[0]);
 
-    const [canvasFront, setCanvasFront] = useState(true);
-    const [canvasBack, setCanvasBack] = useState(false);
-    const [canvasRight, setCanvasRight] = useState(false);
-    const [canvasLeft, setCanvasLeft] = useState(false);
     const [canvas, setCanvas] = useState('')
+    // front
     const [frontCanvas, setFrontCanvas] = useState(null)
+    const [canvasFrontLoad, setCanvasFrontLoad] = useState(false);
+    let [frontDesign, setFrontDesigned] = useState(false)
+
+    // back
+    const [backCanvas, setBackCanvas] = useState(null);
+    const [backCanvasLoad, setBackCanvasLoad] = useState(false);
+
+    //
+    const [canvasRight, setCanvasRight] = useState(false);
+
+
+
+    const [canvasLeft, setCanvasLeft] = useState(false);
 
     // view section
 
@@ -71,37 +91,23 @@ function SamEditor(props) {
     const [showResults, setShowResults] = React.useState(false)
 
 
-    const initCanvas = () =>
-        new fabric.Canvas('canv', {
+    const initCanvas = (name,width) =>
+        new fabric.Canvas(name, {
 
             height: 800,
-            width: 800,
+            width: width,
             marginLeft:100,
             backgroundColor: 'white',
         });
 
     useEffect(() => {
-        setCanvas(initCanvas());
+        setFrontCanvas(initCanvas('front_canvas',923));
+        setBackCanvas(initCanvas('back_canvas',1000));
         // if(canvasFront) {
         //     frontImageLoad();
         // }
     }, []);
 
-    const initCanvasBack = () =>
-        new fabric.Canvas('canv_back', {
-
-            height: 800,
-            width: 800,
-            marginLeft:100,
-            backgroundColor: 'white',
-        });
-
-    useEffect(() => {
-        setCanvasBack(initCanvasBack());
-        if(canvasBack) {
-            backImageLoad();
-        }
-    }, []);
 
     const initCanvasLeft = () =>
         new fabric.Canvas('canv_left', {
@@ -202,7 +208,7 @@ function SamEditor(props) {
     var logo_demo = "http://localhost:8000/media/uploads/Button-Delete-128.png";
 
 
-    const loadImage=  (url,imageId,left,top,width,height, setImage)=>{
+    const loadImage=  (view,url,imageId,left,top,width,height, setImage)=>{
 
         fabric.Image.fromURL(url, function (img) {
             img.id = imageId;
@@ -217,16 +223,28 @@ function SamEditor(props) {
                     selectable: false,
 
                 })
-            canvas.add(img);
+            if(view==='front'){
+                console.log(view,'view')
+                frontCanvas.add(img);
+            }else if(view==='back'){
+                console.log(view,'view back')
+                backCanvas.add(img)
+            }
+
 
         }, {crossOrigin: 'anonymous'})
 
     }
 
+
     const loadColor=(img,colorCode)=>{
+        let test= document.getElementById('front_canvas')
+
+        console.log(test)
         img.filters[0].rotation = colorCode
         img.applyFilters();
-        canvas.requestRenderAll();
+        // test.requestRenderAll();
+        console.log(test.getContext('2d'))
     }
 
     const load_logo = (l) => {
@@ -251,45 +269,49 @@ function SamEditor(props) {
         );
     }
 
-    function frontImageLoad  () {
+    function frontImageLoad (view){
+        setFrontDesigned()
+        setView(view)
+        setRandomId(Math.random())
         setShowResults(true)
-        if(frontCanvas){
 
-            console.log('existing')
-        }else {
-             setCanvasRight(initCanvasRight());
-             console.log('new')
-        }
+        // if(canvasFrontLoad){
+        //
+        //     console.log('existing')
+        // }else {
+            setCanvasFrontLoad(true)
+            if (product?.front_view?.body_first_section?.image){
+                console.log('kkkkkkkkkkkkkk')
+                loadImage(view,product.front_view.body_first_section.image,'body_first_section',product.front_view.body_first_section.x_point,product.front_view.body_first_section.y_point,product.front_view.body_first_section.width,product.front_view.body_first_section.height,setBodyFisrtSection)
+            }
+            if (product.front_view?.body_second_section?.image){
+                loadImage(view,product.front_view.body_second_section.image,'body_second_section',product.front_view.body_second_section.x_point,product.front_view.body_second_section.y_point,product.front_view.body_second_section.width,product.front_view.body_second_section.height,setBodySecondSection)
+                // frontComponent.bodySecondSection = [new fabric.Image.filters.HueRotation()];
+
+            }
+            if (product.front_view?.body_third_section?.image){
+                loadImage(view,product.front_view.body_third_section.image,'body_third_section',product.front_view.body_third_section.x_point,product.front_view.body_third_section.y_point,product.front_view.body_third_section.width,product.front_view.body_third_section.height,setBodyThirdSection)
+
+            }
+            if (product.front_view?.collar?.image){
+                loadImage(view,product.front_view.collar.image,'front-collar',product.front_view.collar.x_point,product.front_view.collar.y_point,product.front_view.collar.width,product.front_view.collar.height,setFrontCollar)
+
+            }
+            if(product.front_view?.right_sleeve?.image){
+                loadImage(view,product.front_view.right_sleeve.image, 'right_sleeve', product.front_view.right_sleeve.x_point, product.front_view.right_sleeve.y_point, product.front_view.right_sleeve.width, product.front_view.right_sleeve.height, setRightSleeve)
+            }
+
+            if(product.front_view?.left_sleeve?.image){
+                loadImage(view,product.front_view.left_sleeve.image, 'left_sleeve', product.front_view.left_sleeve.x_point, product.front_view.left_sleeve.y_point, product.front_view.left_sleeve.width, product.front_view.left_sleeve.height, setLeftSleeve)
+            }
+
+        // }
         // setCanvasFront(true)
         // if (product.front_view.body_view.image){
         //     loadImage(product.front_view.body_view.image,'body_view',0,0,0,0,setFrontImage)
         // }
-        console.log(product?.front_view,'llllll')
 
-        if (product?.front_view?.body_first_section?.image){
-            console.log('kkkkkkkkkkkkkk')
-            loadImage(product.front_view.body_first_section.image,'body_first_section',product.front_view.body_first_section.x_point,product.front_view.body_first_section.y_point,product.front_view.body_first_section.width,product.front_view.body_first_section.height,setBodyFisrtSection)
-        }
-        if (product.front_view?.body_second_section?.image){
-            loadImage(product.front_view.body_second_section.image,'body_second_section',product.front_view.body_second_section.x_point,product.front_view.body_second_section.y_point,product.front_view.body_second_section.width,product.front_view.body_second_section.height,setBodySecondSection)
-            // frontComponent.bodySecondSection = [new fabric.Image.filters.HueRotation()];
 
-        }
-        if (product.front_view?.body_third_section?.image){
-            loadImage(product.front_view.body_third_section.image,'body_third_section',product.front_view.body_third_section.x_point,product.front_view.body_third_section.y_point,product.front_view.body_third_section.width,product.front_view.body_third_section.height,setBodyThirdSection)
-
-        }
-        if (product.front_view?.collar?.image){
-            loadImage(product.front_view.collar.image,'front-collar',product.front_view.collar.x_point,product.front_view.collar.y_point,product.front_view.collar.width,product.front_view.collar.height,setFrontCollar)
-
-        }
-        if(product.front_view?.right_sleeve?.image){
-            loadImage(product.front_view.right_sleeve.image, 'right_sleeve', product.front_view.right_sleeve.x_point, product.front_view.right_sleeve.y_point, product.front_view.right_sleeve.width, product.front_view.right_sleeve.height, setRightSleeve)
-        }
-
-        if(product.front_view?.left_sleeve?.image){
-            loadImage(product.front_view.left_sleeve.image, 'left_sleeve', product.front_view.left_sleeve.x_point, product.front_view.left_sleeve.y_point, product.front_view.left_sleeve.width, product.front_view.left_sleeve.height, setLeftSleeve)
-        }
 
 
         // console.log("kkkk")
@@ -313,38 +335,44 @@ function SamEditor(props) {
 
     };
 
-    const backImageLoad = (e) => {
-        setShowResults(true)
+    const backImageLoad = (view) => {
+        frontCanvas.visibility='hidden'
+        setFrontCanvas(frontCanvas)
+        setView(view)
+        setRandomId(Math.random())
 
-        setCanvasFront(false)
+
+        // setShowResults(true)
+
+        // setCanvasFront(false)
 
         if(product.back_view.back_first_part?.image){
-            loadImage(product.back_view.back_first_part.image,'back_first_part',
+            loadImage(view,product.back_view.back_first_part.image,'back_first_part',
                 product.back_view.back_first_part.x_point, product.back_view.back_first_part.y_point,
                 product.back_view.back_first_part.width, product.back_view.back_first_part.height, setBackViewUpper)
 
         }
 
         if(product.back_view.back_second_part?.image){
-            loadImage(product.back_view.back_second_part.image,'back_second_part',
+            loadImage(view,product.back_view.back_second_part.image,'back_second_part',
                 product.back_view.back_second_part.x_point, product.back_view.back_second_part.y_point,
                 product.back_view.back_second_part.width, product.back_view.back_second_part.height, setBackViewMiddle)
         }
 
         if(product.back_view.back_third_part?.image) {
-            loadImage(product.back_view.back_third_part.image, 'back_third_part',
+            loadImage(view,product.back_view.back_third_part.image, 'back_third_part',
                 product.back_view.back_third_part.x_point, product.back_view.back_third_part.y_point,
                 product.back_view.back_third_part.width, product.back_view.back_third_part.height, setBackViewBottom)
         }
 
         if(product.back_view.back_left_sleeve?.image){
-            loadImage(product.back_view.back_left_sleeve.image, 'back_left_sleeve',
+            loadImage(view,product.back_view.back_left_sleeve.image, 'back_left_sleeve',
                 product.back_view.back_left_sleeve.x_point, product.back_view.back_left_sleeve.y_point,
                 product.back_view.back_left_sleeve.width, product.back_view.back_left_sleeve.height, setLeftSleeve)
         }
 
         if(product.back_view.back_right_sleeve?.image){
-            loadImage(product.back_view.back_right_sleeve.image, 'back_right_sleeve',
+            loadImage(view,product.back_view.back_right_sleeve.image, 'back_right_sleeve',
                 product.back_view.back_right_sleeve.x_point, product.back_view.back_right_sleeve.y_point,
                 product.back_view.back_right_sleeve.width, product.back_view.back_right_sleeve.height, setRightSleeve)
         }
@@ -588,11 +616,11 @@ function SamEditor(props) {
     return (
 
         <div>
-            <button type='button' name='circle' onClick={frontImageLoad}>
+            <button type='button' name='circle' onClick={()=>{frontImageLoad("front")}}>
                 Front View
             </button>
             {/*{ showResults ? <Results /> : null }*/}
-            <button type="button" name="back_view" onClick={backImageLoad}>Back View</button>
+            <button type="button" name="back_view" onClick={()=>{backImageLoad("back")}}>Back View</button>
             <button type="button" name="left_view" onClick={leftImageLoad}>Left View</button>
             <button type="button" name="right_view" onClick={rightImageLoad}>Right View</button>
 
@@ -905,19 +933,39 @@ function SamEditor(props) {
             {/*        }}*/}
             {/*        onClick={blue_btn_clicked_front_chest}></button>*/}
 
-            <div>
-                <canvas id='canv' >
+            <div  >
+                {/*{*/}
+                {/*    view ==="front"? <div key={'front_canvas'}>*/}
+                {/*        <canvas id='front_canvas' ><div id="ans"></div></canvas>*/}
+                {/*        </div>*/}
+                {/*        : <div key={'back_canvas'}> <canvas id='back_canvas'><div id="ans"></div></canvas></div>*/}
+
+                {/*}*/}
+                {/*{(() => {*/}
+                {/*    switch (view) {*/}
+                {/*        case "front":   return (<canvas id='front_canvas' ><div id="ans"></div></canvas>);*/}
+                {/*        case "back": return (<canvas id='back_canvas'><div id="ans"></div></canvas>);*/}
+                {/*        case "left":  return (<canvas id='canv_left'><div id="ans"></div></canvas>);*/}
+                {/*        case "right":  return (<canvas id='canv_right'><div id="ans"></div></canvas>);*/}
+                {/*        default:      return "";*/}
+                {/*    }*/}
+                {/*})()}*/}
+                <div style={{display: view==='front' ? '' : 'none' }}>
+                    <canvas id='front_canvas'>
+                        <div id="ans"></div>
+                    </canvas>
+                </div>
+                <div style={{display: view==='back' ? '' : 'none' }}>
+                <canvas id='back_canvas'  >
                     <div id="ans"></div>
                 </canvas>
-                <canvas id='canv_back'>
-                    <div id="ans"></div>
-                </canvas>
-                <canvas id='canv_right'>
-                    <div id="ans"></div>
-                </canvas>
-                <canvas id='canv_left'>
-                    <div id="ans"></div>
-                </canvas>
+                </div>
+                {/*<canvas id='canv_right'>*/}
+                {/*    <div id="ans"></div>*/}
+                {/*</canvas>*/}
+                {/*<canvas id='canv_left'>*/}
+                {/*    <div id="ans"></div>*/}
+                {/*</canvas>*/}
             </div>
 
         </div>
