@@ -7,33 +7,37 @@ import * as PIXI from 'pixi.js'
 import $ from "jquery";
 import {getProductDetail} from "../apiService";
 
-
+let product1 = null
 function SamEditor(props) {
     const {id} = props.match.params
     const [product, setProduct] = useState(null);
+    const [ab, setAb] =  useState({});
 
     useEffect(() => {
-        let mounted = true;
         getProductDetail(id)
             .then(items => {
-                if(mounted) {
+                    console.log("product ",items)
                     setProduct(items)
-                }
+                // if(mounted) {
+                //     console.log("dddddddd")
+                // }
             })
-        return () => mounted = false;
     }, [])
 
-    useEffect(() => {
-        if(product){
-            frontImageLoad()
-        }
-    }, [product])
+    // useEffect(() => {
+    //
+    //     if(product){
+    //         frontImageLoad()
+    //     }
+    // }, [product])
 
 
-
-    // console.log(product,'product')
-
-    const [canvas, setCanvas] = useState('');
+    const [canvasFront, setCanvasFront] = useState(true);
+    const [canvasBack, setCanvasBack] = useState(false);
+    const [canvasRight, setCanvasRight] = useState(false);
+    const [canvasLeft, setCanvasLeft] = useState(false);
+    const [canvas, setCanvas] = useState('')
+    const [frontCanvas, setFrontCanvas] = useState(null)
 
     // view section
 
@@ -42,11 +46,24 @@ function SamEditor(props) {
     const [bodyFisrtSection, setBodyFisrtSection] = useState(null);
     const [bodySecondSection, setBodySecondSection] = useState(null);
     const [bodyThirdSection, setBodyThirdSection] = useState(null);
+    // const [leftViewBody, setLeftViewBody] = useState(null);
+    const [leftViewUpper, setLeftViewUpper] = useState(null);
+    const [leftViewLower, setLeftViewLower] = useState(null);
+    // const [rightViewBody, setRightViewBody] = useState(null);
+    const [rightViewUpper, setRightViewUpper] = useState(null);
+    const [rightViewLower, setRightViewLower] = useState(null);
+    const [backViewUpper, setBackViewUpper] = useState(null);
+    const [backViewMiddle, setBackViewMiddle] = useState(null);
+    const [backViewMBottom, setBackViewBottom] = useState(null);
     const [frontCollar, setFrontCollar] = useState(null);
+    const [right_sleeve, setRightSleeve] = useState(null);
+    const [left_sleeve, setLeftSleeve] = useState(null);
 
 
     // urls
     const frontComponent = ''
+    const leftComponent = ''
+    const backComponent = ''
 
 
 
@@ -59,13 +76,62 @@ function SamEditor(props) {
 
             height: 800,
             width: 800,
+            marginLeft:100,
             backgroundColor: 'white',
         });
 
     useEffect(() => {
         setCanvas(initCanvas());
-        if(canvas) {
-            frontImageLoad();
+        // if(canvasFront) {
+        //     frontImageLoad();
+        // }
+    }, []);
+
+    const initCanvasBack = () =>
+        new fabric.Canvas('canv_back', {
+
+            height: 800,
+            width: 800,
+            marginLeft:100,
+            backgroundColor: 'white',
+        });
+
+    useEffect(() => {
+        setCanvasBack(initCanvasBack());
+        if(canvasBack) {
+            backImageLoad();
+        }
+    }, []);
+
+    const initCanvasLeft = () =>
+        new fabric.Canvas('canv_left', {
+
+            height: 800,
+            width: 800,
+            marginLeft:100,
+            backgroundColor: 'white',
+        });
+
+    useEffect(() => {
+        setCanvasLeft(initCanvasLeft());
+        if(canvasLeft) {
+            leftImageLoad();
+        }
+    }, []);
+
+    const initCanvasRight = () =>
+        new fabric.Canvas('canv_right', {
+
+            height: 800,
+            width: 800,
+            marginLeft:100,
+            backgroundColor: 'white',
+        });
+
+    useEffect(() => {
+        setCanvasRight(initCanvasRight());
+        if(canvasRight) {
+            rightImageLoad();
         }
     }, []);
 
@@ -136,54 +202,23 @@ function SamEditor(props) {
     var logo_demo = "http://localhost:8000/media/uploads/Button-Delete-128.png";
 
 
-
-
-//         const setup = () => {
-//             let loader = new PIXI.Loader
-//    loader
-//         .add("avatar","http://localhost:8000/media/uploads/body.png")
-//         .load(initialize);
-// };
-//
-// const initialize = () => {
-//     console.log("abc")
-//     //We will create a sprite and then add it to stage and (0,0) position
-//     let avatar = new PIXI.Sprite(PIXI.Loader.resources["avatar"].texture);
-//     app_1.stage.addChild(avatar);
-// };
-//         const updatePixiCnt= (element) => {
-//     // the element is the DOM object that we will use as container to add pixi stage(canvas)
-//     pixi_cnt = element;
-//     //now we are adding the application to the DOM element which we got from the Ref.
-//     if(pixi_cnt && pixi_cnt.children.length<=0) {
-//        pixi_cnt.appendChild(app_1.view);
-//        //The setup function is a custom function that we created to add the sprites. We will this below
-//        setup();
-//     }
-//  };
     const loadImage=  (url,imageId,left,top,width,height, setImage)=>{
-        console.log(setImage,'setImage')
 
         fabric.Image.fromURL(url, function (img) {
             img.id = imageId;
             img.filters = [new fabric.Image.filters.HueRotation()];
             setImage(img)
-            // setImage = img
-            // obj = img
-            // var w3rcontext=canvas.getContext('2d');
-            // w3rcontext.
-            // console.log(obj)
+
             img.applyFilters()
             var cor = img.set(
                 {
                     left:left,
                     top: top,
-                    // width:width,
-                    // height:height,
                     selectable: false,
 
                 })
             canvas.add(img);
+
         }, {crossOrigin: 'anonymous'})
 
     }
@@ -216,27 +251,44 @@ function SamEditor(props) {
         );
     }
 
-    function frontImageLoad  (e) {
+    function frontImageLoad  () {
         setShowResults(true)
-        if (product.front_view.body_view.image){
-            loadImage(product.front_view.body_view.image,'body_view',0,0,0,0,setFrontImage)
+        if(frontCanvas){
+
+            console.log('existing')
+        }else {
+             setCanvasRight(initCanvasRight());
+             console.log('new')
         }
-        if (product.front_view.body_first_section.image){
-            console.log()
+        // setCanvasFront(true)
+        // if (product.front_view.body_view.image){
+        //     loadImage(product.front_view.body_view.image,'body_view',0,0,0,0,setFrontImage)
+        // }
+        console.log(product?.front_view,'llllll')
+
+        if (product?.front_view?.body_first_section?.image){
+            console.log('kkkkkkkkkkkkkk')
             loadImage(product.front_view.body_first_section.image,'body_first_section',product.front_view.body_first_section.x_point,product.front_view.body_first_section.y_point,product.front_view.body_first_section.width,product.front_view.body_first_section.height,setBodyFisrtSection)
         }
-        if (product.front_view.body_second_section.image){
+        if (product.front_view?.body_second_section?.image){
             loadImage(product.front_view.body_second_section.image,'body_second_section',product.front_view.body_second_section.x_point,product.front_view.body_second_section.y_point,product.front_view.body_second_section.width,product.front_view.body_second_section.height,setBodySecondSection)
             // frontComponent.bodySecondSection = [new fabric.Image.filters.HueRotation()];
 
         }
-        if (product.front_view.body_third_section?.image){
+        if (product.front_view?.body_third_section?.image){
             loadImage(product.front_view.body_third_section.image,'body_third_section',product.front_view.body_third_section.x_point,product.front_view.body_third_section.y_point,product.front_view.body_third_section.width,product.front_view.body_third_section.height,setBodyThirdSection)
 
         }
-        if (product.front_view.collar.image){
+        if (product.front_view?.collar?.image){
             loadImage(product.front_view.collar.image,'front-collar',product.front_view.collar.x_point,product.front_view.collar.y_point,product.front_view.collar.width,product.front_view.collar.height,setFrontCollar)
 
+        }
+        if(product.front_view?.right_sleeve?.image){
+            loadImage(product.front_view.right_sleeve.image, 'right_sleeve', product.front_view.right_sleeve.x_point, product.front_view.right_sleeve.y_point, product.front_view.right_sleeve.width, product.front_view.right_sleeve.height, setRightSleeve)
+        }
+
+        if(product.front_view?.left_sleeve?.image){
+            loadImage(product.front_view.left_sleeve.image, 'left_sleeve', product.front_view.left_sleeve.x_point, product.front_view.left_sleeve.y_point, product.front_view.left_sleeve.width, product.front_view.left_sleeve.height, setLeftSleeve)
         }
 
 
@@ -260,95 +312,83 @@ function SamEditor(props) {
         // }, {crossOrigin: 'anonymous'})
 
     };
-        // fabric.Image.fromURL(zip_url, function (zipper) {
-        //     zipper.id = "zipper";
-        //     zipper.filters = [new fabric.Image.filters.HueRotation()];
-        //     console.log(zipper.filters)
-        //     zipImage = zipper
-        //     var zipper_v = zipper.set(
-        //         {
-        //             left: 310,
-        //             top: 160,
-        //             selectable: false,
-        //         })
-        //     console.log(zipper_v);
-        //
-        //     zipper.applyFilters()
-        //     zipper_v.bringToFront();
-        //     zipper_v.bringForward(true);
-        //     canvas.add(zipper);
-        //
-        // }, {crossOrigin: 'anonymous'})
-
-        // fabric.Image.fromURL(hoodUrl, function (hoodie) {
-        //     hoodie.id = "zipper";
-        //     hoodie.filters = [new fabric.Image.filters.HueRotation()];
-        //     console.log(hoodie.filters)
-        //     hoodImage = hoodie
-        //     hoodie.applyFilters()
-        //     var hood_v = hoodie.set(
-        //         {
-        //             left: 257,
-        //             top: 30,
-        //             selectable: false,
-        //         })
-        //     console.log(hood_v);
-        //     hood_v.bringToFront();
-        //     hood_v.bringForward(true);
-        //     canvas.add(hoodie);
-        //
-        // }, {crossOrigin: 'anonymous'})
 
     const backImageLoad = (e) => {
-        fabric.Image.fromURL(backUrl, function (back_img) {
-            back_img.id = "body";
-            back_img.filters = [new fabric.Image.filters.HueRotation()];
-            backImage = back_img
-            back_img.applyFilters()
-            back_img.set(
-                {
-                    left: 110,
-                    top: 86,
-                    selectable: false
+        setShowResults(true)
 
-                })
-            canvas.add(back_img);
-        }, {crossOrigin: 'anonymous'})
+        setCanvasFront(false)
+
+        if(product.back_view.back_first_part?.image){
+            loadImage(product.back_view.back_first_part.image,'back_first_part',
+                product.back_view.back_first_part.x_point, product.back_view.back_first_part.y_point,
+                product.back_view.back_first_part.width, product.back_view.back_first_part.height, setBackViewUpper)
+
+        }
+
+        if(product.back_view.back_second_part?.image){
+            loadImage(product.back_view.back_second_part.image,'back_second_part',
+                product.back_view.back_second_part.x_point, product.back_view.back_second_part.y_point,
+                product.back_view.back_second_part.width, product.back_view.back_second_part.height, setBackViewMiddle)
+        }
+
+        if(product.back_view.back_third_part?.image) {
+            loadImage(product.back_view.back_third_part.image, 'back_third_part',
+                product.back_view.back_third_part.x_point, product.back_view.back_third_part.y_point,
+                product.back_view.back_third_part.width, product.back_view.back_third_part.height, setBackViewBottom)
+        }
+
+        if(product.back_view.back_left_sleeve?.image){
+            loadImage(product.back_view.back_left_sleeve.image, 'back_left_sleeve',
+                product.back_view.back_left_sleeve.x_point, product.back_view.back_left_sleeve.y_point,
+                product.back_view.back_left_sleeve.width, product.back_view.back_left_sleeve.height, setLeftSleeve)
+        }
+
+        if(product.back_view.back_right_sleeve?.image){
+            loadImage(product.back_view.back_right_sleeve.image, 'back_right_sleeve',
+                product.back_view.back_right_sleeve.x_point, product.back_view.back_right_sleeve.y_point,
+                product.back_view.back_right_sleeve.width, product.back_view.back_right_sleeve.height, setRightSleeve)
+        }
     };
 
     const leftImageLoad = (e) => {
-        fabric.Image.fromURL(leftSleeveUrl, function (sleeve) {
-            sleeve.id = "body";
-            sleeve.filters = [new fabric.Image.filters.HueRotation()];
-            leftSleeveImage = sleeve;
-            sleeve.applyFilters()
-            sleeve.set(
-                {
-                    left: 110,
-                    top: 84,
-                    selectable: false
+        setShowResults(true)
 
-                })
-            canvas.add(sleeve);
-        }, {crossOrigin: 'anonymous'})
+        // if (product.left_view?.left_v_body_view?.image){
+        //     loadImage(product.left_view.left_v_body_view.image,'left_v_body_view',
+        //         product.left_view.left_v_body_view.x_point, product.left_view.left_v_body_view.y_point,
+        //         product.left_view.left_v_body_view.width, product.left_view.left_v_body_view.height, setLeftViewBody)
+        // }
+
+        if (product.left_view?.left_v_upper_part?.image){
+            loadImage(product.left_view.left_v_upper_part.image,'left_v_upper_part',
+                product.left_view.left_v_upper_part.x_point, product.left_view.left_v_upper_part.y_point,
+                product.left_view.left_v_upper_part.width, product.left_view.left_v_upper_part.height, setLeftViewUpper)
+        }
+
+        if (product.left_view?.left_v_lower_part?.image){
+            loadImage(product.left_view.left_v_lower_part.image,'left_v_upper_part',
+                product.left_view.left_v_lower_part.x_point, product.left_view.left_v_lower_part.y_point,
+                product.left_view.left_v_lower_part.width, product.left_view.left_v_lower_part.height, setLeftViewLower)
+        }
     };
 
     const rightImageLoad = (e) => {
-        fabric.Image.fromURL(rightSleeveUrl, function (sleeve) {
-            sleeve.id = "body";
-            sleeve.filters = [new fabric.Image.filters.HueRotation()];
-            rightSleevImage = sleeve
-            sleeve.applyFilters()
-            sleeve.set(
-                {
-                    left: 110,
-                    top: 84,
-                    selectable: false
+        // if (product.right_view?.right_v_body_view?.image){
+        //     loadImage(product.right_view.right_v_body_view.image,'right_v_body_view',
+        //         product.right_view.right_v_body_view.x_point, product.right_view.right_v_body_view.y_point,
+        //         product.right_view.right_v_body_view.width, product.right_view.right_v_body_view.height, setRightViewBody)
+        // }
+        if (product.right_view?.right_v_upper_part?.image){
+            loadImage(product.right_view.right_v_upper_part.image,'right_v_upper_part',
+                product.right_view.right_v_upper_part.x_point, product.right_view.right_v_upper_part.y_point,
+                product.right_view.right_v_upper_part.width, product.right_view.right_v_upper_part.height, setRightViewUpper)
+        }
 
-                })
-            canvas.add(sleeve)
-        }, {crossOrigin: 'anonymous'})
-
+        if (product.right_view?.right_v_lower_part?.image) {
+            loadImage(product.right_view.right_v_lower_part.image, 'right_v_lower_part',
+                product.right_view.right_v_lower_part.x_point, product.right_view.right_v_lower_part.y_point,
+                product.right_view.right_v_lower_part.width, product.right_view.right_v_lower_part.height, setRightViewLower)
+        }
 
     };
 
@@ -374,170 +414,6 @@ function SamEditor(props) {
         document.getElementById('ans').innerHTML = name;
         document.getElementById('hello').style.margin = "none";
     }
-
-    // const blue_btn_clicked_front_chest = (e) => {
-    //     frontImage.filters[0].rotation = -0.7925393031704733
-    //     frontImage.applyFilters();
-    //     canvas.requestRenderAll();
-    // }
-    // function Box() {
-    //     console.log("box")
-    //     return (
-    //         <mesh>
-    //             <boxBufferGeometry attach="geometry" args={[1,1,1]}></boxBufferGeometry>
-    //             <meshLamberMaterial attach="material" color="red"/>
-    //         </mesh>
-    //     )
-    // }
-    // const show_text = (t) => {
-    //     fabric.Text(function (text) {
-    //         text.id = "body_text";
-    //         text.set(
-    //             {
-    //                 left: 560,
-    //                 top: 100,
-    //                 selectable: true,
-    //                 fontFamily: "arial",
-    //                 color: "#000"
-    //
-    //             })
-    //         console.log(text)
-    //         canvas.add(text);
-    //     }, {crossOrigin: 'anonymous'})
-    // }
-// const Results = () => (
-//         <div id="results" className="search-results" style={{marginTop:"500"}}>
-//         <p>Select Front Top Left Colors</p>
-//              <button id='blue_btn_front_top_left' type='button'
-//                     style={{
-//                         width: 30,
-//                         height: 30,
-//                         backgroundColor: "blue",
-//                         border: "1 px solid black",
-//                         borderRadius: "50%"
-//                     }}
-//                     onClick={blue_btn_clicked_front}>
-//             </button>
-//             <button id='red_btn_front_top_left' type='button'
-//                     style={{
-//                         width: 30,
-//                         height: 30,
-//                         marginLeft: 10,
-//                         backgroundColor: "red",
-//                         border: "3 px solid black",
-//                         borderRadius: "50%"
-//                     }}
-//                     onClick={red_btn_clicked_front}></button>
-//             <button id='green_btn_front_top_left' type='button'
-//                     style={{
-//                         width: 30,
-//                         height: 30,
-//                         marginLeft: 10,
-//                         backgroundColor: "green",
-//                         border: "3 px solid black",
-//                         borderRadius: "50%"
-//                     }}
-//                     onClick={green_btn_clicked_front}></button>
-//
-//             <p>Select Front Top Right Colors</p>
-//             <button id='blue_btn_front_top_right' type='button'
-//                     style={{
-//                         width: 30,
-//                         height: 30,
-//                         backgroundColor: "blue",
-//                         border: "1 px solid black",
-//                         borderRadius: "50%"
-//                     }}
-//                     onClick={blue_btn_clicked_front}>
-//             </button>
-//             <button id='red_btn_front_top_right' type='button'
-//                     style={{
-//                         width: 30,
-//                         height: 30,
-//                         marginLeft: 10,
-//                         backgroundColor: "red",
-//                         border: "3 px solid black",
-//                         borderRadius: "50%"
-//                     }}
-//                     onClick={red_btn_clicked_front}></button>
-//             <button id='green_btn_front_top_right' type='button'
-//                     style={{
-//                         width: 30,
-//                         height: 30,
-//                         marginLeft: 10,
-//                         backgroundColor: "green",
-//                         border: "3 px solid black",
-//                         borderRadius: "50%"
-//                     }}
-//                     onClick={green_btn_clicked_front}></button>
-//
-//             <p>Select Front Bottom Left Colors</p>
-//             <button id='blue_btn_front_bottom_left' type='button'
-//                     style={{
-//                         width: 30,
-//                         height: 30,
-//                         backgroundColor: "blue",
-//                         border: "1 px solid black",
-//                         borderRadius: "50%"
-//                     }}
-//                     onClick={blue_btn_clicked_front}>
-//             </button>
-//             <button id='red_btn_front_bottom_left' type='button'
-//                     style={{
-//                         width: 30,
-//                         height: 30,
-//                         marginLeft: 10,
-//                         backgroundColor: "red",
-//                         border: "3 px solid black",
-//                         borderRadius: "50%"
-//                     }}
-//                     onClick={red_btn_clicked_front}></button>
-//             <button id='green_btn_front_bottom_left' type='button'
-//                     style={{
-//                         width: 30,
-//                         height: 30,
-//                         marginLeft: 10,
-//                         backgroundColor: "green",
-//                         border: "3 px solid black",
-//                         borderRadius: "50%"
-//                     }}
-//                     onClick={green_btn_clicked_front}></button>
-//
-//             <p>Select Front Bottom Right Color</p>
-//             <button id='blue_btn_front_bottom_right' type='button'
-//                     style={{
-//                         width: 30,
-//                         height: 30,
-//                         backgroundColor: "blue",
-//                         border: "1 px solid black",
-//                         borderRadius: "50%"
-//                     }}
-//                     onClick={blue_btn_clicked_front}>
-//             </button>
-//             <button id='red_btn_front_bottom_right' type='button'
-//                     style={{
-//                         width: 30,
-//                         height: 30,
-//                         marginLeft: 10,
-//                         backgroundColor: "red",
-//                         border: "3 px solid black",
-//                         borderRadius: "50%"
-//                     }}
-//                     onClick={red_btn_clicked_front}></button>
-//             <button id='green_btn_front_bottom_right' type='button'
-//                     style={{
-//                         width: 30,
-//                         height: 30,
-//                         marginLeft: 10,
-//                         backgroundColor: "green",
-//                         border: "3 px solid black",
-//                         borderRadius: "50%"
-//                     }}
-//                     onClick={green_btn_clicked_front}></button>
-
-
-//   </div>
-// )
 
 
     //Collar Function
@@ -581,7 +457,6 @@ function SamEditor(props) {
     const green_front = () => {
         // 0.7721581741520329
         loadColor(bodySecondSection, "00ff00")
-        console.log(bodySecondSection, "#00ff00")
         frontImage.applyFilters();
         canvas.requestRenderAll();
     }
@@ -607,7 +482,6 @@ function SamEditor(props) {
     }
 
     const green_btn_clicked_sleeve_right = (e) => {
-        console.log(color)
         rightSleevImage.filters[0].rotation = 0.7721581741520329
 
         rightSleevImage.applyFilters();
@@ -752,6 +626,81 @@ function SamEditor(props) {
 
             <br></br>
             <br></br>
+
+            <p>Select Front Full Body Color</p>
+              <button id='blue_btn_front_top_left' type='button'
+                      //-0.7925393031704733
+                  //0.04339308661309316
+                  //0.7721581741520329
+                    style={{
+                        width: 30,
+                        height: 30,
+                        backgroundColor: "red",
+                        border: "1 px solid black",
+                        borderRadius: "50%"
+                    }}
+                    onClick={()=>{loadColor(bodyFisrtSection,0.7721581741520329)}}>
+            </button>
+            <button id='red_btn_front_top_left' type='button'
+                    style={{
+                        width: 30,
+                        height: 30,
+                        marginLeft: 10,
+                        backgroundColor: "green",
+                        border: "3 px solid black",
+                        borderRadius: "50%"
+                    }}
+                    onClick={()=>{loadColor(bodyFisrtSection,-0.7925393031704733)}}
+                    ></button>
+            <button id='green_btn_front_top_left' type='button'
+                    style={{
+                        width: 30,
+                        height: 30,
+                        marginLeft: 10,
+                        backgroundColor: "blue",
+                        border: "3 px solid black",
+                        borderRadius: "50%"
+                    }}
+                    onClick={()=>{loadColor(bodyFisrtSection, 0.04339308661309316)}}
+            ></button>
+
+            <p>Select Collar Color</p>
+              <button id='blue_btn_front_top_left' type='button'
+                      //-0.7925393031704733
+                  //0.04339308661309316
+                  //0.7721581741520329
+                    style={{
+                        width: 30,
+                        height: 30,
+                        backgroundColor: "red",
+                        border: "1 px solid black",
+                        borderRadius: "50%"
+                    }}
+                    onClick={()=>{loadColor(frontCollar,0.7721581741520329)}}>
+            </button>
+            <button id='red_btn_front_top_left' type='button'
+                    style={{
+                        width: 30,
+                        height: 30,
+                        marginLeft: 10,
+                        backgroundColor: "green",
+                        border: "3 px solid black",
+                        borderRadius: "50%"
+                    }}
+                    onClick={()=>{loadColor(frontCollar,-0.7925393031704733)}}
+                    ></button>
+            <button id='green_btn_front_top_left' type='button'
+                    style={{
+                        width: 30,
+                        height: 30,
+                        marginLeft: 10,
+                        backgroundColor: "blue",
+                        border: "3 px solid black",
+                        borderRadius: "50%"
+                    }}
+                    onClick={()=>{loadColor(frontCollar,0.04339308661309316)}}
+            ></button>
+
              <p>Select Front First Section  Colors</p>
               <button id='blue_btn_front_top_left' type='button'
                     style={{
@@ -916,25 +865,25 @@ function SamEditor(props) {
 
             <p>Select Back Color</p>
 
-            <button id='blue_btn_end' type='button'
-                    style={{
-                        width: 30,
-                        height: 30,
-                        backgroundColor: "blue",
-                        border: "1 px solid black",
-                        borderRadius: "50%"
-                    }}
-                    onClick={blue_btn_clicked_back}></button>
             <button id='red_btn_end' type='button'
                     style={{
                         width: 30,
                         height: 30,
-                        marginLeft: 10,
                         backgroundColor: "red",
+                        border: "1 px solid black",
+                        borderRadius: "50%"
+                    }}
+                    onClick={()=>{loadColor(backViewMiddle, 0.7721581741520329)}}></button>
+            <button id='blue_btn_end' type='button'
+                    style={{
+                        width: 30,
+                        height: 30,
+                        marginLeft: 10,
+                        backgroundColor: "blue",
                         border: "3 px solid black",
                         borderRadius: "50%"
                     }}
-                    onClick={red_btn_clicked_back}></button>
+                    onClick={()=>{loadColor(backViewMiddle, 0.04339308661309316)}}></button>
             <button id='green_btn_end' type='button'
                     style={{
                         width: 30,
@@ -944,7 +893,7 @@ function SamEditor(props) {
                         border: "3 px solid black",
                         borderRadius: "50%"
                     }}
-                    onClick={green_btn_clicked_back}></button>
+                    onClick={()=>{loadColor(backViewMiddle, -0.7925393031704733)}}></button>
 
             {/*<button id='blue_btn_front_chest' type='button'*/}
             {/*        style={{*/}
@@ -958,6 +907,15 @@ function SamEditor(props) {
 
             <div>
                 <canvas id='canv' >
+                    <div id="ans"></div>
+                </canvas>
+                <canvas id='canv_back'>
+                    <div id="ans"></div>
+                </canvas>
+                <canvas id='canv_right'>
+                    <div id="ans"></div>
+                </canvas>
+                <canvas id='canv_left'>
                     <div id="ans"></div>
                 </canvas>
             </div>
