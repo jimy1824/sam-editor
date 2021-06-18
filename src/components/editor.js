@@ -21,7 +21,7 @@ const viewOptions = [
 function SamEditor(props) {
     const {id} = props.match.params
     const [product, setProduct] = useState(null);
-    const [ab, setAb] = useState({});
+    const [ab, setAb] =  useState({});
 
     useEffect(() => {
         getProductDetail(id)
