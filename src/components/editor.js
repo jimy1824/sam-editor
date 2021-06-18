@@ -21,7 +21,7 @@ const viewOptions = [
 function SamEditor(props) {
     const {id} = props.match.params
     const [product, setProduct] = useState(null);
-    const [ab, setAb] =  useState({});
+    const [ab, setAb] = useState({});
 
     useEffect(() => {
         getProductDetail(id)
@@ -345,7 +345,7 @@ function SamEditor(props) {
         setView(viewOptions[2])
         setShowResults(true)
 
-        if(canvasLeft){
+        if (canvasLeft) {
 
             if (product.left_view?.left_v_body_view?.image) {
                 loadImage(product.left_view.left_v_body_view.image, 'left_v_body_view',
@@ -631,7 +631,7 @@ function SamEditor(props) {
 
             <br></br>
             <br></br>
-            <div style={{float:"left"}}>
+            <div style={{float: "left"}}>
 
 
                 {/*<p>Select Zipper Color</p>*/}
@@ -857,7 +857,13 @@ function SamEditor(props) {
                                     ></button>
                                     <form action="">
                                         <label htmlFor="patterns" style={{marginTop: "20px"}}></label>
-                                        <select name="patterns" id="patterns" style={{width:"150px", height:"30px",borderWidth:"1px", borderStyle:"solid", margin:"10px"}}>
+                                        <select name="patterns" id="patterns" style={{
+                                            width: "150px",
+                                            height: "30px",
+                                            borderWidth: "1px",
+                                            borderStyle: "solid",
+                                            margin: "10px"
+                                        }}>
                                             <option value="image1">Image1</option>
                                             <option value="image2">Image2</option>
                                             <option value="image3">Image3</option>
@@ -869,13 +875,30 @@ function SamEditor(props) {
                                     <button type='button'
                                             name='upload_logo'
                                             onClick={load_logo}
-                                            style={{backgroundColor:"#767FE0", color:"white", border:"none", borderRadius:"50px", width:"120px", height:"30px",margin:"10px"}}>
-                                    Load Logo
+                                            style={{
+                                                backgroundColor: "#767FE0",
+                                                color: "white",
+                                                border: "none",
+                                                borderRadius: "50px",
+                                                width: "120px",
+                                                height: "30px",
+                                                margin: "10px"
+                                            }}>
+                                        Load Logo
                                     </button>
                                     <br></br>
                                     <button type="button"
                                             onClick={download_Image}
-                                            style={{backgroundColor:"#767FE0", color:"white", border:"none", borderRadius:"50px", width:"120px", height:"30px",margin:"10px"}}>Download Image</button>
+                                            style={{
+                                                backgroundColor: "#767FE0",
+                                                color: "white",
+                                                border: "none",
+                                                borderRadius: "50px",
+                                                width: "120px",
+                                                height: "30px",
+                                                margin: "10px"
+                                            }}>Download Image
+                                    </button>
 
                                 </div>
                             );
@@ -997,9 +1020,15 @@ function SamEditor(props) {
                                             }}></button>
 
                                     <form action="">
-                                         <label htmlFor="patterns" style={{marginTop: "20px"}}></label>
-                                        <select name="patterns" id="patterns" style={{width:"150px", height:"30px",borderWidth:"1px", borderStyle:"solid", margin:"10px"}}>
-                                             <option value="image1">Image1</option>
+                                        <label htmlFor="patterns" style={{marginTop: "20px"}}></label>
+                                        <select name="patterns" id="patterns" style={{
+                                            width: "150px",
+                                            height: "30px",
+                                            borderWidth: "1px",
+                                            borderStyle: "solid",
+                                            margin: "10px"
+                                        }}>
+                                            <option value="image1">Image1</option>
                                             <option value="image2">Image2</option>
                                             <option value="image3">Image3</option>
                                             <option value="image4">Image4</option>
@@ -1007,16 +1036,33 @@ function SamEditor(props) {
                                         <input type="submit" value="Submit"></input>
                                     </form>
 
-                                     <button type='button'
+                                    <button type='button'
                                             name='upload_logo'
                                             onClick={load_logo}
-                                            style={{backgroundColor:"#767FE0", color:"white", border:"none", borderRadius:"50px", width:"120px", height:"30px",margin:"10px"}}>
-                                    Load Logo
+                                            style={{
+                                                backgroundColor: "#767FE0",
+                                                color: "white",
+                                                border: "none",
+                                                borderRadius: "50px",
+                                                width: "120px",
+                                                height: "30px",
+                                                margin: "10px"
+                                            }}>
+                                        Load Logo
                                     </button>
                                     <br></br>
                                     <button type="button"
                                             onClick={download_Image}
-                                            style={{backgroundColor:"#767FE0", color:"white", border:"none", borderRadius:"50px", width:"120px", height:"30px",margin:"10px"}}>Download Image</button>
+                                            style={{
+                                                backgroundColor: "#767FE0",
+                                                color: "white",
+                                                border: "none",
+                                                borderRadius: "50px",
+                                                width: "120px",
+                                                height: "30px",
+                                                margin: "10px"
+                                            }}>Download Image
+                                    </button>
 
                                 </div>
                             );
@@ -1102,8 +1148,14 @@ function SamEditor(props) {
                                             }}></button>
 
                                     <form action="">
-                                         <label htmlFor="patterns" style={{marginTop: "20px"}}></label>
-                                        <select name="patterns" id="patterns" style={{width:"150px", height:"30px",borderWidth:"1px", borderStyle:"solid", margin:"10px"}}>
+                                        <label htmlFor="patterns" style={{marginTop: "20px"}}></label>
+                                        <select name="patterns" id="patterns" style={{
+                                            width: "150px",
+                                            height: "30px",
+                                            borderWidth: "1px",
+                                            borderStyle: "solid",
+                                            margin: "10px"
+                                        }}>
                                             <option value="image1">Image1</option>
                                             <option value="image2">Image2</option>
                                             <option value="image3">Image3</option>
@@ -1115,13 +1167,30 @@ function SamEditor(props) {
                                     <button type='button'
                                             name='upload_logo'
                                             onClick={load_logo}
-                                            style={{backgroundColor:"#767FE0", color:"white", border:"none", borderRadius:"50px", width:"120px", height:"30px",margin:"10px"}}>
-                                    Load Logo
+                                            style={{
+                                                backgroundColor: "#767FE0",
+                                                color: "white",
+                                                border: "none",
+                                                borderRadius: "50px",
+                                                width: "120px",
+                                                height: "30px",
+                                                margin: "10px"
+                                            }}>
+                                        Load Logo
                                     </button>
                                     <br></br>
                                     <button type="button"
                                             onClick={download_Image}
-                                            style={{backgroundColor:"#767FE0", color:"white", border:"none", borderRadius:"50px", width:"120px", height:"30px",margin:"10px"}}>Download Image</button>
+                                            style={{
+                                                backgroundColor: "#767FE0",
+                                                color: "white",
+                                                border: "none",
+                                                borderRadius: "50px",
+                                                width: "120px",
+                                                height: "30px",
+                                                margin: "10px"
+                                            }}>Download Image
+                                    </button>
 
                                 </div>
                             );
@@ -1203,8 +1272,14 @@ function SamEditor(props) {
                                             }}></button>
 
                                     <form action="">
-                                         <label htmlFor="patterns" style={{marginTop: "20px"}}></label>
-                                        <select name="patterns" id="patterns" style={{width:"150px", height:"30px",borderWidth:"1px", borderStyle:"solid", margin:"10px"}}>
+                                        <label htmlFor="patterns" style={{marginTop: "20px"}}></label>
+                                        <select name="patterns" id="patterns" style={{
+                                            width: "150px",
+                                            height: "30px",
+                                            borderWidth: "1px",
+                                            borderStyle: "solid",
+                                            margin: "10px"
+                                        }}>
                                             <option value="image1">Image1</option>
                                             <option value="image2">Image2</option>
                                             <option value="image3">Image3</option>
@@ -1216,13 +1291,30 @@ function SamEditor(props) {
                                     <button type='button'
                                             name='upload_logo'
                                             onClick={load_logo}
-                                            style={{backgroundColor:"#767FE0", color:"white", border:"none", borderRadius:"50px", width:"120px", height:"30px",margin:"10px"}}>
-                                    Load Logo
+                                            style={{
+                                                backgroundColor: "#767FE0",
+                                                color: "white",
+                                                border: "none",
+                                                borderRadius: "50px",
+                                                width: "120px",
+                                                height: "30px",
+                                                margin: "10px"
+                                            }}>
+                                        Load Logo
                                     </button>
                                     <br></br>
                                     <button type="button"
                                             onClick={download_Image}
-                                            style={{backgroundColor:"#767FE0", color:"white", border:"none", borderRadius:"50px", width:"120px", height:"30px",margin:"10px"}}>Download Image</button>
+                                            style={{
+                                                backgroundColor: "#767FE0",
+                                                color: "white",
+                                                border: "none",
+                                                borderRadius: "50px",
+                                                width: "120px",
+                                                height: "30px",
+                                                margin: "10px"
+                                            }}>Download Image
+                                    </button>
 
                                 </div>
                             );
@@ -1230,8 +1322,8 @@ function SamEditor(props) {
                             return "";
                     }
                 })()}
-                </div>
-                <div style={{float:"right"}}>
+            </div>
+            <div style={{float: "right"}}>
 
                 <div style={{display: view === viewOptions[0] ? '' : viewOptions[null]}}>
 
@@ -1255,9 +1347,6 @@ function SamEditor(props) {
             </div>
 
         </div>
-
-
-
 
     );
 
