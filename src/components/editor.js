@@ -5,19 +5,29 @@ import {saveAs} from 'file-saver'
 import {v1 as uuid} from 'uuid';
 import * as PIXI from 'pixi.js'
 import $ from "jquery";
+import {Tabs, Tab} from "@material-ui/core";
+import 'bootstrap/dist/css/bootstrap.min.css';
 import {getProductDetail} from "../apiService";
 
 let product1 = null
+
+const viewOptions = [
+    'front',
+    'back',
+    'left',
+    'right'
+]
+
 function SamEditor(props) {
     const {id} = props.match.params
     const [product, setProduct] = useState(null);
-    const [ab, setAb] =  useState({});
+    const [ab, setAb] = useState({});
 
     useEffect(() => {
         getProductDetail(id)
             .then(items => {
-                    console.log("product ",items)
-                    setProduct(items)
+                console.log("product ", items)
+                setProduct(items)
                 // if(mounted) {
                 //     console.log("dddddddd")
                 // }
@@ -40,16 +50,17 @@ function SamEditor(props) {
     const [frontCanvas, setFrontCanvas] = useState(null)
 
     // view section
+    const [view, setView] = useState(viewOptions[0], viewOptions[1], viewOptions[2], viewOptions[3]);
 
     // images with canvas
     const [frontImage, setFrontImage] = useState(null);
     const [bodyFisrtSection, setBodyFisrtSection] = useState(null);
     const [bodySecondSection, setBodySecondSection] = useState(null);
     const [bodyThirdSection, setBodyThirdSection] = useState(null);
-    // const [leftViewBody, setLeftViewBody] = useState(null);
+    const [leftViewBody, setLeftViewBody] = useState(null);
     const [leftViewUpper, setLeftViewUpper] = useState(null);
     const [leftViewLower, setLeftViewLower] = useState(null);
-    // const [rightViewBody, setRightViewBody] = useState(null);
+    const [rightViewBody, setRightViewBody] = useState(null);
     const [rightViewUpper, setRightViewUpper] = useState(null);
     const [rightViewLower, setRightViewLower] = useState(null);
     const [backViewUpper, setBackViewUpper] = useState(null);
@@ -65,8 +76,13 @@ function SamEditor(props) {
     const leftComponent = ''
     const backComponent = ''
 
+    // tabs
+    const [selectedTab, setSelectedTab] = React.useState(0);
+    const handleChange = (event, newValue) => {
+        setSelectedTab(newValue);
+    }
 
-
+    //
     const [color, setColor] = useState("blue");
     const [showResults, setShowResults] = React.useState(false)
 
@@ -76,7 +92,7 @@ function SamEditor(props) {
 
             height: 800,
             width: 800,
-            marginLeft:100,
+            marginLeft: 100,
             backgroundColor: 'white',
         });
 
@@ -92,13 +108,13 @@ function SamEditor(props) {
 
             height: 800,
             width: 800,
-            marginLeft:100,
+            marginLeft: 100,
             backgroundColor: 'white',
         });
 
     useEffect(() => {
         setCanvasBack(initCanvasBack());
-        if(canvasBack) {
+        if (canvasBack) {
             backImageLoad();
         }
     }, []);
@@ -108,13 +124,13 @@ function SamEditor(props) {
 
             height: 800,
             width: 800,
-            marginLeft:100,
+            marginLeft: 100,
             backgroundColor: 'white',
         });
 
     useEffect(() => {
         setCanvasLeft(initCanvasLeft());
-        if(canvasLeft) {
+        if (canvasLeft) {
             leftImageLoad();
         }
     }, []);
@@ -124,13 +140,13 @@ function SamEditor(props) {
 
             height: 800,
             width: 800,
-            marginLeft:100,
+            marginLeft: 100,
             backgroundColor: 'white',
         });
 
     useEffect(() => {
         setCanvasRight(initCanvasRight());
-        if(canvasRight) {
+        if (canvasRight) {
             rightImageLoad();
         }
     }, []);
@@ -140,8 +156,6 @@ function SamEditor(props) {
     //         frontImageLoad();
     //     }
     // }, [canvas]);
-
-
 
 
     // const renderer = new THREE.WebGLRenderer({canvas});
@@ -199,10 +213,10 @@ function SamEditor(props) {
     const backUrl = 'http://localhost:8000/media/uploads/back.png'
     const rightSleeveUrl = 'http://localhost:8000/media/uploads/left-sleeve.png'
     const leftSleeveUrl = 'http://localhost:8000/media/uploads/right-sleeve.png'
-    var logo_demo = "http://localhost:8000/media/uploads/Button-Delete-128.png";
+    var logo_demo = "http://localhost:8000/media/uploads/body/polo_logo.png";
 
 
-    const loadImage=  (url,imageId,left,top,width,height, setImage)=>{
+    const loadImage = (url, imageId, left, top, width, height, setImage) => {
 
         fabric.Image.fromURL(url, function (img) {
             img.id = imageId;
@@ -212,7 +226,7 @@ function SamEditor(props) {
             img.applyFilters()
             var cor = img.set(
                 {
-                    left:left,
+                    left: left,
                     top: top,
                     selectable: false,
 
@@ -223,7 +237,7 @@ function SamEditor(props) {
 
     }
 
-    const loadColor=(img,colorCode)=>{
+    const loadColor = (img, colorCode) => {
         img.filters[0].rotation = colorCode
         img.applyFilters();
         canvas.requestRenderAll();
@@ -236,8 +250,8 @@ function SamEditor(props) {
                 logo.id = "logo_sleeve";
                 // logo.height = 150;
                 // logo.width = 150;
-                // logo.innerHeight = 50;
-                // logo.innerWidth = 50;
+                logo.innerHeight = 50;
+                logo.innerWidth = 50;
                 logo_img = logo;
                 logo.set({
                     left: 15,
@@ -251,135 +265,119 @@ function SamEditor(props) {
         );
     }
 
-    function frontImageLoad  () {
+    function frontImageLoad(frontI) {
         setShowResults(true)
-        if(frontCanvas){
-
+        setView(viewOptions[0])
+        if (frontCanvas) {
             console.log('existing')
-        }else {
-             setCanvasRight(initCanvasRight());
-             console.log('new')
+        } else {
+
+            // setCanvasFront(true)
+            // if (product.front_view.body_view.image){
+            //     loadImage(product.front_view.body_view.image,'body_view',0,0,0,0,setFrontImage)
+            // }
+            console.log(product?.front_view, 'llllll')
+
+            if (product?.front_view?.body_first_section?.image) {
+                console.log('kkkkkkkkkkkkkk')
+                loadImage(product.front_view.body_first_section.image, 'body_first_section', product.front_view.body_first_section.x_point, product.front_view.body_first_section.y_point, product.front_view.body_first_section.width, product.front_view.body_first_section.height, setBodyFisrtSection)
+            }
+            if (product.front_view?.body_second_section?.image) {
+                loadImage(product.front_view.body_second_section.image, 'body_second_section', product.front_view.body_second_section.x_point, product.front_view.body_second_section.y_point, product.front_view.body_second_section.width, product.front_view.body_second_section.height, setBodySecondSection)
+                // frontComponent.bodySecondSection = [new fabric.Image.filters.HueRotation()];
+
+            }
+            if (product.front_view?.body_third_section?.image) {
+                loadImage(product.front_view.body_third_section.image, 'body_third_section', product.front_view.body_third_section.x_point, product.front_view.body_third_section.y_point, product.front_view.body_third_section.width, product.front_view.body_third_section.height, setBodyThirdSection)
+
+            }
+            if (product.front_view?.collar?.image) {
+                loadImage(product.front_view.collar.image, 'front-collar', product.front_view.collar.x_point, product.front_view.collar.y_point, product.front_view.collar.width, product.front_view.collar.height, setFrontCollar)
+
+            }
+            if (product.front_view?.right_sleeve?.image) {
+                loadImage(product.front_view.right_sleeve.image, 'right_sleeve', product.front_view.right_sleeve.x_point, product.front_view.right_sleeve.y_point, product.front_view.right_sleeve.width, product.front_view.right_sleeve.height, setRightSleeve)
+            }
+
+            if (product.front_view?.left_sleeve?.image) {
+                loadImage(product.front_view.left_sleeve.image, 'left_sleeve', product.front_view.left_sleeve.x_point, product.front_view.left_sleeve.y_point, product.front_view.left_sleeve.width, product.front_view.left_sleeve.height, setLeftSleeve)
+            }
         }
-        // setCanvasFront(true)
-        // if (product.front_view.body_view.image){
-        //     loadImage(product.front_view.body_view.image,'body_view',0,0,0,0,setFrontImage)
-        // }
-        console.log(product?.front_view,'llllll')
-
-        if (product?.front_view?.body_first_section?.image){
-            console.log('kkkkkkkkkkkkkk')
-            loadImage(product.front_view.body_first_section.image,'body_first_section',product.front_view.body_first_section.x_point,product.front_view.body_first_section.y_point,product.front_view.body_first_section.width,product.front_view.body_first_section.height,setBodyFisrtSection)
-        }
-        if (product.front_view?.body_second_section?.image){
-            loadImage(product.front_view.body_second_section.image,'body_second_section',product.front_view.body_second_section.x_point,product.front_view.body_second_section.y_point,product.front_view.body_second_section.width,product.front_view.body_second_section.height,setBodySecondSection)
-            // frontComponent.bodySecondSection = [new fabric.Image.filters.HueRotation()];
-
-        }
-        if (product.front_view?.body_third_section?.image){
-            loadImage(product.front_view.body_third_section.image,'body_third_section',product.front_view.body_third_section.x_point,product.front_view.body_third_section.y_point,product.front_view.body_third_section.width,product.front_view.body_third_section.height,setBodyThirdSection)
-
-        }
-        if (product.front_view?.collar?.image){
-            loadImage(product.front_view.collar.image,'front-collar',product.front_view.collar.x_point,product.front_view.collar.y_point,product.front_view.collar.width,product.front_view.collar.height,setFrontCollar)
-
-        }
-        if(product.front_view?.right_sleeve?.image){
-            loadImage(product.front_view.right_sleeve.image, 'right_sleeve', product.front_view.right_sleeve.x_point, product.front_view.right_sleeve.y_point, product.front_view.right_sleeve.width, product.front_view.right_sleeve.height, setRightSleeve)
-        }
-
-        if(product.front_view?.left_sleeve?.image){
-            loadImage(product.front_view.left_sleeve.image, 'left_sleeve', product.front_view.left_sleeve.x_point, product.front_view.left_sleeve.y_point, product.front_view.left_sleeve.width, product.front_view.left_sleeve.height, setLeftSleeve)
-        }
-
-
-        // console.log("kkkk")
-        // fabric.Image.fromURL(frontComponent.main_body_view.image, function (body) {
-        //     body.id = "body";
-        //     body.filters = [new fabric.Image.filters.HueRotation()];
-        //     console.log(body.filters)
-        //     frontImage = body
-        //     body.applyFilters()
-        //     var cor = body.set(
-        //         {
-        //             left: 110,
-        //             top: 0,
-        //             selectable: false,
-        //
-        //         })
-        //     console.log(cor);
-        //     canvas.add(body);
-        //
-        // }, {crossOrigin: 'anonymous'})
-
-    };
+    }
 
     const backImageLoad = (e) => {
+        setView(viewOptions[1])
         setShowResults(true)
 
-        setCanvasFront(false)
-
-        if(product.back_view.back_first_part?.image){
-            loadImage(product.back_view.back_first_part.image,'back_first_part',
+        if (product.back_view.back_first_part?.image) {
+            loadImage(product.back_view.back_first_part.image, 'back_first_part',
                 product.back_view.back_first_part.x_point, product.back_view.back_first_part.y_point,
                 product.back_view.back_first_part.width, product.back_view.back_first_part.height, setBackViewUpper)
 
         }
 
-        if(product.back_view.back_second_part?.image){
-            loadImage(product.back_view.back_second_part.image,'back_second_part',
+        if (product.back_view.back_second_part?.image) {
+            loadImage(product.back_view.back_second_part.image, 'back_second_part',
                 product.back_view.back_second_part.x_point, product.back_view.back_second_part.y_point,
                 product.back_view.back_second_part.width, product.back_view.back_second_part.height, setBackViewMiddle)
         }
 
-        if(product.back_view.back_third_part?.image) {
+        if (product.back_view.back_third_part?.image) {
             loadImage(product.back_view.back_third_part.image, 'back_third_part',
                 product.back_view.back_third_part.x_point, product.back_view.back_third_part.y_point,
                 product.back_view.back_third_part.width, product.back_view.back_third_part.height, setBackViewBottom)
         }
 
-        if(product.back_view.back_left_sleeve?.image){
+        if (product.back_view.back_left_sleeve?.image) {
             loadImage(product.back_view.back_left_sleeve.image, 'back_left_sleeve',
                 product.back_view.back_left_sleeve.x_point, product.back_view.back_left_sleeve.y_point,
                 product.back_view.back_left_sleeve.width, product.back_view.back_left_sleeve.height, setLeftSleeve)
         }
 
-        if(product.back_view.back_right_sleeve?.image){
+        if (product.back_view.back_right_sleeve?.image) {
             loadImage(product.back_view.back_right_sleeve.image, 'back_right_sleeve',
                 product.back_view.back_right_sleeve.x_point, product.back_view.back_right_sleeve.y_point,
                 product.back_view.back_right_sleeve.width, product.back_view.back_right_sleeve.height, setRightSleeve)
         }
-    };
+    }
 
     const leftImageLoad = (e) => {
+        setView(viewOptions[2])
         setShowResults(true)
 
-        // if (product.left_view?.left_v_body_view?.image){
-        //     loadImage(product.left_view.left_v_body_view.image,'left_v_body_view',
-        //         product.left_view.left_v_body_view.x_point, product.left_view.left_v_body_view.y_point,
-        //         product.left_view.left_v_body_view.width, product.left_view.left_v_body_view.height, setLeftViewBody)
-        // }
+        if(canvasLeft){
 
-        if (product.left_view?.left_v_upper_part?.image){
-            loadImage(product.left_view.left_v_upper_part.image,'left_v_upper_part',
-                product.left_view.left_v_upper_part.x_point, product.left_view.left_v_upper_part.y_point,
-                product.left_view.left_v_upper_part.width, product.left_view.left_v_upper_part.height, setLeftViewUpper)
+            if (product.left_view?.left_v_body_view?.image) {
+                loadImage(product.left_view.left_v_body_view.image, 'left_v_body_view',
+                    product.left_view.left_v_body_view.x_point, product.left_view.left_v_body_view.y_point,
+                    product.left_view.left_v_body_view.width, product.left_view.left_v_body_view.height, setLeftViewBody)
+            }
+
+            if (product.left_view?.left_v_upper_part?.image) {
+                loadImage(product.left_view.left_v_upper_part.image, 'left_v_upper_part',
+                    product.left_view.left_v_upper_part.x_point, product.left_view.left_v_upper_part.y_point,
+                    product.left_view.left_v_upper_part.width, product.left_view.left_v_upper_part.height, setLeftViewUpper)
+            }
+
+            if (product.left_view?.left_v_lower_part?.image) {
+                loadImage(product.left_view.left_v_lower_part.image, 'left_v_upper_part',
+                    product.left_view.left_v_lower_part.x_point, product.left_view.left_v_lower_part.y_point,
+                    product.left_view.left_v_lower_part.width, product.left_view.left_v_lower_part.height, setLeftViewLower)
+            }
+
         }
 
-        if (product.left_view?.left_v_lower_part?.image){
-            loadImage(product.left_view.left_v_lower_part.image,'left_v_upper_part',
-                product.left_view.left_v_lower_part.x_point, product.left_view.left_v_lower_part.y_point,
-                product.left_view.left_v_lower_part.width, product.left_view.left_v_lower_part.height, setLeftViewLower)
-        }
-    };
+    }
 
     const rightImageLoad = (e) => {
-        // if (product.right_view?.right_v_body_view?.image){
-        //     loadImage(product.right_view.right_v_body_view.image,'right_v_body_view',
-        //         product.right_view.right_v_body_view.x_point, product.right_view.right_v_body_view.y_point,
-        //         product.right_view.right_v_body_view.width, product.right_view.right_v_body_view.height, setRightViewBody)
-        // }
-        if (product.right_view?.right_v_upper_part?.image){
-            loadImage(product.right_view.right_v_upper_part.image,'right_v_upper_part',
+        setView(viewOptions[3])
+        if (product.right_view?.right_v_body_view?.image) {
+            loadImage(product.right_view.right_v_body_view.image, 'right_v_body_view',
+                product.right_view.right_v_body_view.x_point, product.right_view.right_v_body_view.y_point,
+                product.right_view.right_v_body_view.width, product.right_view.right_v_body_view.height, setRightViewBody)
+        }
+        if (product.right_view?.right_v_upper_part?.image) {
+            loadImage(product.right_view.right_v_upper_part.image, 'right_v_upper_part',
                 product.right_view.right_v_upper_part.x_point, product.right_view.right_v_upper_part.y_point,
                 product.right_view.right_v_upper_part.width, product.right_view.right_v_upper_part.height, setRightViewUpper)
         }
@@ -390,15 +388,15 @@ function SamEditor(props) {
                 product.right_view.right_v_lower_part.width, product.right_view.right_v_lower_part.height, setRightViewLower)
         }
 
-    };
+    }
 
     const textShow = () => {
 
         var text = new fabric.Textbox(
             'This is Text',
             {
-                width:500,
-                textAlign:"center",
+                width: 500,
+                textAlign: "center",
             }
         );
 
@@ -439,7 +437,7 @@ function SamEditor(props) {
     //Front Functions
     const blue_front = () => {
         // console.log(frontImage,'frontImage')
-        loadColor(bodyFisrtSection,-0.7925393031704733)
+        loadColor(bodyFisrtSection, -0.7925393031704733)
         // console.log(frontImage)
         // // -0.7925393031704733
         // frontImage.filters[0].rotation = -0.7925393031704733
@@ -460,6 +458,7 @@ function SamEditor(props) {
         frontImage.applyFilters();
         canvas.requestRenderAll();
     }
+
     //End Front Functions
 
 
@@ -581,348 +580,686 @@ function SamEditor(props) {
         object.set({id: uuid()})
         canvas.add(object)
         canvas.renderAll()
-    };
-
-
+    }
 
     return (
 
         <div>
-            <button type='button' name='circle' onClick={frontImageLoad}>
-                Front View
-            </button>
-            {/*{ showResults ? <Results /> : null }*/}
-            <button type="button" name="back_view" onClick={backImageLoad}>Back View</button>
-            <button type="button" name="left_view" onClick={leftImageLoad}>Left View</button>
-            <button type="button" name="right_view" onClick={rightImageLoad}>Right View</button>
+            {/*<button type='button' name='circle' onClick={frontImageLoad}>*/}
+            {/*    Front View*/}
+            {/*</button>*/}
+            {/*/!*{ showResults ? <Results /> : null }*!/*/}
+            {/*<button type="button" name="back_view" onClick={backImageLoad}>Back View</button>*/}
+            {/*<button type="button" name="left_view" onClick={leftImageLoad}>Left View</button>*/}
+            {/*<button type="button" name="right_view" onClick={rightImageLoad}>Right View</button>*/}
 
-            <button type='button' name='triangle' onClick={addShape}>
-                Add a Triangle
-            </button>
+            {/*<button type='button' name='triangle' onClick={addShape}>*/}
+            {/*    Add a Triangle*/}
+            {/*</button>*/}
 
-            <button type='button' name='rectangle' onClick={addShape}>
-                Add a Rectangle
-            </button>
+            {/*<button type='button' name='rectangle' onClick={addShape}>*/}
+            {/*    Add a Rectangle*/}
+            {/*</button>*/}
 
-            <button type='button' name='upload_logo' onClick={load_logo}>
-                Load Logo
-            </button>
 
-            <button type='button' name='add_text' onClick={textShow}>Add Text</button>
-            <button type='button' name='download' onClick={download_Image}>
-                Download Design
-            </button>
+            {/*<button type='button' name='add_text' onClick={textShow}>Add Text</button>*/}
 
-            <input type="button" onClick={showDiv} value="click on me"/>
-            <form id="hello" style={{display:"none"}}>
-                <label>Enter Name: </label>
-                <input type="text" id="name" required/>
-                <button type="button" onClick={showValue}>submit</button>
-            </form>
 
+            {/*<input type="button" onClick={showDiv} value="click on me"/>*/}
+            {/*<form id="hello" style={{display:"none"}}>*/}
+            {/*    <label>Enter Name: </label>*/}
+            {/*    <input type="text" id="name" required/>*/}
+            {/*    <button type="button" onClick={showValue}>submit</button>*/}
+            {/*</form>*/}
+
+            <Tabs value={selectedTab} onChange={handleChange}>
+                <Tab label="Front View" onClick={frontImageLoad}>
+
+                </Tab>
+                <Tab label="Back View" onClick={backImageLoad}>
+                    <p>back</p>
+                </Tab>
+                <Tab label="Left View" onClick={leftImageLoad}>
+                    <p>left</p>
+                </Tab>
+                <Tab label="Right View" onClick={rightImageLoad}>
+                    <p>right</p>
+                </Tab>
+            </Tabs>
 
             <br></br>
 
-
             <br></br>
             <br></br>
-
-            <p>Select Front Full Body Color</p>
-              <button id='blue_btn_front_top_left' type='button'
-                      //-0.7925393031704733
-                  //0.04339308661309316
-                  //0.7721581741520329
-                    style={{
-                        width: 30,
-                        height: 30,
-                        backgroundColor: "red",
-                        border: "1 px solid black",
-                        borderRadius: "50%"
-                    }}
-                    onClick={()=>{loadColor(bodyFisrtSection,0.7721581741520329)}}>
-            </button>
-            <button id='red_btn_front_top_left' type='button'
-                    style={{
-                        width: 30,
-                        height: 30,
-                        marginLeft: 10,
-                        backgroundColor: "green",
-                        border: "3 px solid black",
-                        borderRadius: "50%"
-                    }}
-                    onClick={()=>{loadColor(bodyFisrtSection,-0.7925393031704733)}}
-                    ></button>
-            <button id='green_btn_front_top_left' type='button'
-                    style={{
-                        width: 30,
-                        height: 30,
-                        marginLeft: 10,
-                        backgroundColor: "blue",
-                        border: "3 px solid black",
-                        borderRadius: "50%"
-                    }}
-                    onClick={()=>{loadColor(bodyFisrtSection, 0.04339308661309316)}}
-            ></button>
-
-            <p>Select Collar Color</p>
-              <button id='blue_btn_front_top_left' type='button'
-                      //-0.7925393031704733
-                  //0.04339308661309316
-                  //0.7721581741520329
-                    style={{
-                        width: 30,
-                        height: 30,
-                        backgroundColor: "red",
-                        border: "1 px solid black",
-                        borderRadius: "50%"
-                    }}
-                    onClick={()=>{loadColor(frontCollar,0.7721581741520329)}}>
-            </button>
-            <button id='red_btn_front_top_left' type='button'
-                    style={{
-                        width: 30,
-                        height: 30,
-                        marginLeft: 10,
-                        backgroundColor: "green",
-                        border: "3 px solid black",
-                        borderRadius: "50%"
-                    }}
-                    onClick={()=>{loadColor(frontCollar,-0.7925393031704733)}}
-                    ></button>
-            <button id='green_btn_front_top_left' type='button'
-                    style={{
-                        width: 30,
-                        height: 30,
-                        marginLeft: 10,
-                        backgroundColor: "blue",
-                        border: "3 px solid black",
-                        borderRadius: "50%"
-                    }}
-                    onClick={()=>{loadColor(frontCollar,0.04339308661309316)}}
-            ></button>
-
-             <p>Select Front First Section  Colors</p>
-              <button id='blue_btn_front_top_left' type='button'
-                    style={{
-                        width: 30,
-                        height: 30,
-                        backgroundColor: "blue",
-                        border: "1 px solid black",
-                        borderRadius: "50%"
-                    }}
-                    onClick={()=>{loadColor(bodyFisrtSection,-0.7925393031704733)}}>
-            </button>
-            <button id='red_btn_front_top_left' type='button'
-                    style={{
-                        width: 30,
-                        height: 30,
-                        marginLeft: 10,
-                        backgroundColor: "red",
-                        border: "3 px solid black",
-                        borderRadius: "50%"
-                    }}
-                    onClick={()=>{loadColor(bodyFisrtSection,0.04339308661309316)}}
-                    ></button>
-            <button id='green_btn_front_top_left' type='button'
-                    style={{
-                        width: 30,
-                        height: 30,
-                        marginLeft: 10,
-                        backgroundColor: "green",
-                        border: "3 px solid black",
-                        borderRadius: "50%"
-                    }}
-                    onClick={()=>{loadColor(bodyFisrtSection,0.7721581741520329)}}
-            ></button>
-
-            <p>Select Front second Section  Colors</p>
-            <button id='blue_btn_front_top_left' type='button'
-                    style={{
-                        width: 30,
-                        height: 30,
-                        backgroundColor: "blue",
-                        border: "1 px solid black",
-                        borderRadius: "50%"
-                    }}
-                    onClick={()=>{loadColor(bodySecondSection,-0.7925393031704733)}}>
-            </button>
-            <button id='red_btn_front_top_left' type='button'
-                    style={{
-                        width: 30,
-                        height: 30,
-                        marginLeft: 10,
-                        backgroundColor: "red",
-                        border: "3 px solid black",
-                        borderRadius: "50%"
-                    }}
-                    onClick={()=>{loadColor(bodySecondSection, 0.04339308661309316)}}
-            ></button>
-            <button id='green_btn_front_top_left' type='button'
-                    style={{
-                        width: 30,
-                        height: 30,
-                        marginLeft: 10,
-                        backgroundColor: "green",
-                        border: "3 px solid black",
-                        borderRadius: "50%"
-                    }}
-                    onClick={()=>{loadColor(bodySecondSection, 0.7721581741520329)}}
-            ></button>
-
-            {/*<p>Select Zipper Color</p>*/}
-            {/*<button id='blue_btn_zip' type='button'*/}
-            {/*        style={{*/}
-            {/*            width: 30,*/}
-            {/*            height: 30,*/}
-            {/*            backgroundColor: "blue",*/}
-            {/*            border: "1 px solid black",*/}
-            {/*            borderRadius: "50%"*/}
-            {/*        }}*/}
-            {/*        onClick={blue_btn_zipper}></button>*/}
-            {/*<button id='red_btn_zip' type='button'*/}
-            {/*        style={{*/}
-            {/*            width: 30,*/}
-            {/*            height: 30,*/}
-            {/*            marginLeft: 10,*/}
-            {/*            backgroundColor: "red",*/}
-            {/*            border: "3 px solid black",*/}
-            {/*            borderRadius: "50%"*/}
-            {/*        }}*/}
-            {/*        onClick={red_btn_zipper}></button>*/}
-            {/*<button id='green_btn_zip' type='button'*/}
-            {/*        style={{*/}
-            {/*            width: 30,*/}
-            {/*            height: 30,*/}
-            {/*            marginLeft: 10,*/}
-            {/*            backgroundColor: "green",*/}
-            {/*            border: "3 px solid black",*/}
-            {/*            borderRadius: "50%"*/}
-            {/*        }}*/}
-            {/*        onClick={green_btn_zipper}></button>*/}
-
-            <p>Select Right Sleeve Color</p>
-            <button id='blue_btn_sleeve' type='button'
-                    style={{
-                        width: 30,
-                        height: 30,
-                        backgroundColor: "blue",
-                        border: "1 px solid black",
-                        borderRadius: "50%"
-                    }}
-                    onClick={blue_btn_clicked_sleeve_right}></button>
-            <button id='red_btn_sleeve' type='button'
-                    style={{
-                        width: 30,
-                        height: 30,
-                        marginLeft: 10,
-                        backgroundColor: "red",
-                        border: "3 px solid black",
-                        borderRadius: "50%"
-                    }}
-                    onClick={red_btn_clicked_sleeve_right}></button>
-            <button id='green_btn_sleeve' type='button'
-                    style={{
-                        width: 30,
-                        height: 30,
-                        marginLeft: 10,
-                        backgroundColor: "green",
-                        border: "3 px solid black",
-                        borderRadius: "50%"
-                    }}
-                    onClick={green_btn_clicked_sleeve_right}></button>
-
-            <p>Select Left Sleeve Color</p>
-            <button id='blue_btn_sleeve' type='button'
-                    style={{
-                        width: 30,
-                        height: 30,
-                        backgroundColor: "blue",
-                        border: "1 px solid black",
-                        borderRadius: "50%"
-                    }}
-                    onClick={blue_clicked_sleeve_left}></button>
-            <button id='red_btn_sleeve' type='button'
-                    style={{
-                        width: 30,
-                        height: 30,
-                        marginLeft: 10,
-                        backgroundColor: "red",
-                        border: "3 px solid black",
-                        borderRadius: "50%"
-                    }}
-                    onClick={red_clicked_sleeve_left}></button>
-            <button id='green_btn_sleeve' type='button'
-                    style={{
-                        width: 30,
-                        height: 30,
-                        marginLeft: 10,
-                        backgroundColor: "green",
-                        border: "3 px solid black",
-                        borderRadius: "50%"
-                    }}
-                    onClick={green_clicked_sleeve_left}></button>
+            <div style={{float:"left"}}>
 
 
-            <p>Select Back Color</p>
+                {/*<p>Select Zipper Color</p>*/}
+                {/*<button id='blue_btn_zip' type='button'*/}
+                {/*        style={{*/}
+                {/*            width: 30,*/}
+                {/*            height: 30,*/}
+                {/*            backgroundColor: "blue",*/}
+                {/*            border: "1 px solid black",*/}
+                {/*            borderRadius: "50%"*/}
+                {/*        }}*/}
+                {/*        onClick={blue_btn_zipper}></button>*/}
+                {/*<button id='red_btn_zip' type='button'*/}
+                {/*        style={{*/}
+                {/*            width: 30,*/}
+                {/*            height: 30,*/}
+                {/*            marginLeft: 10,*/}
+                {/*            backgroundColor: "red",*/}
+                {/*            border: "3 px solid black",*/}
+                {/*            borderRadius: "50%"*/}
+                {/*        }}*/}
+                {/*        onClick={red_btn_zipper}></button>*/}
+                {/*<button id='green_btn_zip' type='button'*/}
+                {/*        style={{*/}
+                {/*            width: 30,*/}
+                {/*            height: 30,*/}
+                {/*            marginLeft: 10,*/}
+                {/*            backgroundColor: "green",*/}
+                {/*            border: "3 px solid black",*/}
+                {/*            borderRadius: "50%"*/}
+                {/*        }}*/}
+                {/*        onClick={green_btn_zipper}></button>*/}
 
-            <button id='red_btn_end' type='button'
-                    style={{
-                        width: 30,
-                        height: 30,
-                        backgroundColor: "red",
-                        border: "1 px solid black",
-                        borderRadius: "50%"
-                    }}
-                    onClick={()=>{loadColor(backViewMiddle, 0.7721581741520329)}}></button>
-            <button id='blue_btn_end' type='button'
-                    style={{
-                        width: 30,
-                        height: 30,
-                        marginLeft: 10,
-                        backgroundColor: "blue",
-                        border: "3 px solid black",
-                        borderRadius: "50%"
-                    }}
-                    onClick={()=>{loadColor(backViewMiddle, 0.04339308661309316)}}></button>
-            <button id='green_btn_end' type='button'
-                    style={{
-                        width: 30,
-                        height: 30,
-                        marginLeft: 10,
-                        backgroundColor: "green",
-                        border: "3 px solid black",
-                        borderRadius: "50%"
-                    }}
-                    onClick={()=>{loadColor(backViewMiddle, -0.7925393031704733)}}></button>
 
-            {/*<button id='blue_btn_front_chest' type='button'*/}
-            {/*        style={{*/}
-            {/*            width: 30,*/}
-            {/*            height: 30,*/}
-            {/*            backgroundColor: "blue",*/}
-            {/*            border: "1 px solid black",*/}
-            {/*            borderRadius: "50%"*/}
-            {/*        }}*/}
-            {/*        onClick={blue_btn_clicked_front_chest}></button>*/}
+                {/*<button id='blue_btn_front_chest' type='button'*/}
+                {/*        style={{*/}
+                {/*            width: 30,*/}
+                {/*            height: 30,*/}
+                {/*            backgroundColor: "blue",*/}
+                {/*            border: "1 px solid black",*/}
+                {/*            borderRadius: "50%"*/}
+                {/*        }}*/}
+                {/*        onClick={blue_btn_clicked_front_chest}></button>*/}
 
-            <div>
-                <canvas id='canv' >
-                    <div id="ans"></div>
-                </canvas>
-                <canvas id='canv_back'>
-                    <div id="ans"></div>
-                </canvas>
-                <canvas id='canv_right'>
-                    <div id="ans"></div>
-                </canvas>
-                <canvas id='canv_left'>
-                    <div id="ans"></div>
-                </canvas>
+                {/*{(() => {*/}
+                {/*    switch (view) {*/}
+                {/*         case viewOptions[0]:*/}
+                {/*            return (<p>p1</p>);*/}
+                {/*         case viewOptions[1]:*/}
+                {/*            return (<p>p2</p>);*/}
+                {/*        default: return null*/}
+                {/*    }*/}
+                {/*})()}*/}
+
+                {(() => {
+                    switch (view) {
+                        case viewOptions[0]:
+                            return (
+                                <div>
+                                    <p>Set Full Body Color</p>
+                                    <button id='blue_btn_front_top_left' type='button'
+                                        //-0.7925393031704733
+                                        //0.04339308661309316
+                                        //0.7721581741520329
+                                            style={{
+                                                width: 30,
+                                                height: 30,
+                                                backgroundColor: "red",
+                                                border: "1 px solid black",
+                                                borderRadius: "50%"
+                                            }}
+                                            onClick={() => {
+                                                loadColor(bodyFisrtSection, 0.7721581741520329)
+                                            }}>
+                                    </button>
+                                    <button id='red_btn_front_top_left' type='button'
+                                            style={{
+                                                width: 30,
+                                                height: 30,
+                                                marginLeft: 10,
+                                                backgroundColor: "green",
+                                                border: "3 px solid black",
+                                                borderRadius: "50%"
+                                            }}
+                                            onClick={() => {
+                                                loadColor(bodyFisrtSection, -0.7925393031704733)
+                                            }}
+                                    ></button>
+                                    <button id='green_btn_front_top_left' type='button'
+                                            style={{
+                                                width: 30,
+                                                height: 30,
+                                                marginLeft: 10,
+                                                backgroundColor: "blue",
+                                                border: "3 px solid black",
+                                                borderRadius: "50%"
+                                            }}
+                                            onClick={() => {
+                                                loadColor(bodyFisrtSection, 0.04339308661309316)
+                                            }}
+                                    ></button>
+                                    <p>Select Collar Color</p>
+                                    <button id='blue_btn_front_top_left' type='button'
+                                        //-0.7925393031704733
+                                        //0.04339308661309316
+                                        //0.7721581741520329
+                                            style={{
+                                                width: 30,
+                                                height: 30,
+                                                backgroundColor: "red",
+                                                border: "1 px solid black",
+                                                borderRadius: "50%"
+                                            }}
+                                            onClick={() => {
+                                                loadColor(frontCollar, 0.7721581741520329)
+                                            }}>
+                                    </button>
+                                    <button id='red_btn_front_top_left' type='button'
+                                            style={{
+                                                width: 30,
+                                                height: 30,
+                                                marginLeft: 10,
+                                                backgroundColor: "green",
+                                                border: "3 px solid black",
+                                                borderRadius: "50%"
+                                            }}
+                                            onClick={() => {
+                                                loadColor(frontCollar, -0.7925393031704733)
+                                            }}
+                                    ></button>
+                                    <button id='green_btn_front_top_left' type='button'
+                                            style={{
+                                                width: 30,
+                                                height: 30,
+                                                marginLeft: 10,
+                                                backgroundColor: "blue",
+                                                border: "3 px solid black",
+                                                borderRadius: "50%"
+                                            }}
+                                            onClick={() => {
+                                                loadColor(frontCollar, 0.04339308661309316)
+                                            }}
+                                    ></button>
+
+                                    <p>Select Front First Section Colors</p>
+                                    <button id='blue_btn_front_top_left' type='button'
+                                            style={{
+                                                width: 30,
+                                                height: 30,
+                                                backgroundColor: "blue",
+                                                border: "1 px solid black",
+                                                borderRadius: "50%"
+                                            }}
+                                            onClick={() => {
+                                                loadColor(bodyFisrtSection, -0.7925393031704733)
+                                            }}>
+                                    </button>
+                                    <button id='red_btn_front_top_left' type='button'
+                                            style={{
+                                                width: 30,
+                                                height: 30,
+                                                marginLeft: 10,
+                                                backgroundColor: "red",
+                                                border: "3 px solid black",
+                                                borderRadius: "50%"
+                                            }}
+                                            onClick={() => {
+                                                loadColor(bodyFisrtSection, 0.04339308661309316)
+                                            }}
+                                    ></button>
+                                    <button id='green_btn_front_top_left' type='button'
+                                            style={{
+                                                width: 30,
+                                                height: 30,
+                                                marginLeft: 10,
+                                                backgroundColor: "green",
+                                                border: "3 px solid black",
+                                                borderRadius: "50%"
+                                            }}
+                                            onClick={() => {
+                                                loadColor(bodyFisrtSection, 0.7721581741520329)
+                                            }}
+                                    ></button>
+
+                                    <p>Select Front second Section Colors</p>
+                                    <button id='blue_btn_front_top_left' type='button'
+                                            style={{
+                                                width: 30,
+                                                height: 30,
+                                                backgroundColor: "blue",
+                                                border: "1 px solid black",
+                                                borderRadius: "50%"
+                                            }}
+                                            onClick={() => {
+                                                loadColor(bodySecondSection, -0.7925393031704733)
+                                            }}>
+                                    </button>
+                                    <button id='red_btn_front_top_left' type='button'
+                                            style={{
+                                                width: 30,
+                                                height: 30,
+                                                marginLeft: 10,
+                                                backgroundColor: "red",
+                                                border: "3 px solid black",
+                                                borderRadius: "50%"
+                                            }}
+                                            onClick={() => {
+                                                loadColor(bodySecondSection, 0.04339308661309316)
+                                            }}
+                                    ></button>
+                                    <button id='green_btn_front_top_left' type='button'
+                                            style={{
+                                                width: 30,
+                                                height: 30,
+                                                marginLeft: 10,
+                                                backgroundColor: "green",
+                                                border: "3 px solid black",
+                                                borderRadius: "50%"
+                                            }}
+                                            onClick={() => {
+                                                loadColor(bodySecondSection, 0.7721581741520329)
+                                            }}
+                                    ></button>
+                                    <form action="">
+                                        <label htmlFor="patterns" style={{marginTop: "20px"}}></label>
+                                        <select name="patterns" id="patterns" style={{width:"150px", height:"30px",borderWidth:"1px", borderStyle:"solid", margin:"10px"}}>
+                                            <option value="image1">Image1</option>
+                                            <option value="image2">Image2</option>
+                                            <option value="image3">Image3</option>
+                                            <option value="image4">Image4</option>
+                                        </select>
+                                        <input type="submit" value="Submit"></input>
+                                    </form>
+
+                                    <button type='button'
+                                            name='upload_logo'
+                                            onClick={load_logo}
+                                            style={{backgroundColor:"#767FE0", color:"white", border:"none", borderRadius:"50px", width:"120px", height:"30px",margin:"10px"}}>
+                                    Load Logo
+                                    </button>
+                                    <br></br>
+                                    <button type="button"
+                                            onClick={download_Image}
+                                            style={{backgroundColor:"#767FE0", color:"white", border:"none", borderRadius:"50px", width:"120px", height:"30px",margin:"10px"}}>Download Image</button>
+
+                                </div>
+                            );
+                        case viewOptions[1]:
+                            return (
+                                <div>
+                                    <p>Select Back Bottom Color</p>
+
+                                    <button id='red_btn_end' type='button'
+                                            style={{
+                                                width: 30,
+                                                height: 30,
+                                                backgroundColor: "red",
+                                                border: "1 px solid black",
+                                                borderRadius: "50%"
+                                            }}
+                                            onClick={() => {
+                                                loadColor(backViewMBottom, 0.7721581741520329)
+                                            }}></button>
+                                    <button id='blue_btn_end' type='button'
+                                            style={{
+                                                width: 30,
+                                                height: 30,
+                                                marginLeft: 10,
+                                                backgroundColor: "blue",
+                                                border: "3 px solid black",
+                                                borderRadius: "50%"
+                                            }}
+                                            onClick={() => {
+                                                loadColor(backViewMBottom, 0.04339308661309316)
+                                            }}></button>
+                                    <button id='green_btn_end' type='button'
+                                            style={{
+                                                width: 30,
+                                                height: 30,
+                                                marginLeft: 10,
+                                                backgroundColor: "green",
+                                                border: "3 px solid black",
+                                                borderRadius: "50%"
+                                            }}
+                                            onClick={() => {
+                                                loadColor(backViewMBottom, -0.7925393031704733)
+                                            }}></button>
+
+                                    <p>Select Back Middle Color</p>
+
+                                    <button id='red_btn_end' type='button'
+                                            style={{
+                                                width: 30,
+                                                height: 30,
+                                                backgroundColor: "red",
+                                                border: "1 px solid black",
+                                                borderRadius: "50%"
+                                            }}
+                                            onClick={() => {
+                                                loadColor(backViewMiddle, 0.7721581741520329)
+                                            }}></button>
+                                    <button id='blue_btn_end' type='button'
+                                            style={{
+                                                width: 30,
+                                                height: 30,
+                                                marginLeft: 10,
+                                                backgroundColor: "blue",
+                                                border: "3 px solid black",
+                                                borderRadius: "50%"
+                                            }}
+                                            onClick={() => {
+                                                loadColor(backViewMiddle, 0.04339308661309316)
+                                            }}></button>
+                                    <button id='green_btn_end' type='button'
+                                            style={{
+                                                width: 30,
+                                                height: 30,
+                                                marginLeft: 10,
+                                                backgroundColor: "green",
+                                                border: "3 px solid black",
+                                                borderRadius: "50%"
+                                            }}
+                                            onClick={() => {
+                                                loadColor(backViewMiddle, -0.7925393031704733)
+                                            }}></button>
+
+                                    <p>Select Back Top Color</p>
+
+                                    <button id='red_btn_end' type='button'
+                                            style={{
+                                                width: 30,
+                                                height: 30,
+                                                backgroundColor: "red",
+                                                border: "1 px solid black",
+                                                borderRadius: "50%"
+                                            }}
+                                            onClick={() => {
+                                                loadColor(backViewUpper, 0.7721581741520329)
+                                            }}></button>
+                                    <button id='blue_btn_end' type='button'
+                                            style={{
+                                                width: 30,
+                                                height: 30,
+                                                marginLeft: 10,
+                                                backgroundColor: "blue",
+                                                border: "3 px solid black",
+                                                borderRadius: "50%"
+                                            }}
+                                            onClick={() => {
+                                                loadColor(backViewUpper, 0.04339308661309316)
+                                            }}></button>
+                                    <button id='green_btn_end' type='button'
+                                            style={{
+                                                width: 30,
+                                                height: 30,
+                                                marginLeft: 10,
+                                                backgroundColor: "green",
+                                                border: "3 px solid black",
+                                                borderRadius: "50%"
+                                            }}
+                                            onClick={() => {
+                                                loadColor(backViewUpper, -0.7925393031704733)
+                                            }}></button>
+
+                                    <form action="">
+                                         <label htmlFor="patterns" style={{marginTop: "20px"}}></label>
+                                        <select name="patterns" id="patterns" style={{width:"150px", height:"30px",borderWidth:"1px", borderStyle:"solid", margin:"10px"}}>
+                                             <option value="image1">Image1</option>
+                                            <option value="image2">Image2</option>
+                                            <option value="image3">Image3</option>
+                                            <option value="image4">Image4</option>
+                                        </select>
+                                        <input type="submit" value="Submit"></input>
+                                    </form>
+
+                                     <button type='button'
+                                            name='upload_logo'
+                                            onClick={load_logo}
+                                            style={{backgroundColor:"#767FE0", color:"white", border:"none", borderRadius:"50px", width:"120px", height:"30px",margin:"10px"}}>
+                                    Load Logo
+                                    </button>
+                                    <br></br>
+                                    <button type="button"
+                                            onClick={download_Image}
+                                            style={{backgroundColor:"#767FE0", color:"white", border:"none", borderRadius:"50px", width:"120px", height:"30px",margin:"10px"}}>Download Image</button>
+
+                                </div>
+                            );
+                        case viewOptions[2]:
+                            return (
+                                <div>
+                                    <p>Select Left Sleeve Upper Color</p>
+                                    <button id='green_btn_sleeve' type='button'
+                                            style={{
+                                                width: 30,
+                                                height: 30,
+                                                backgroundColor: "green",
+                                                border: "1 px solid black",
+                                                borderRadius: "50%"
+                                            }}
+                                            onClick={() => {
+                                                loadColor(leftViewUpper, -0.7925393031704733)
+                                            }}>
+                                    </button>
+                                    <button id='blue_btn_sleeve' type='button'
+                                            style={{
+                                                width: 30,
+                                                height: 30,
+                                                marginLeft: 10,
+                                                backgroundColor: "blue",
+                                                border: "3 px solid black",
+                                                borderRadius: "50%"
+                                            }}
+                                            onClick={() => {
+                                                loadColor(leftViewUpper, 0.04339308661309316)
+                                            }}>
+                                    </button>
+                                    <button id='red_btn_sleeve' type='button'
+                                            style={{
+                                                width: 30,
+                                                height: 30,
+                                                marginLeft: 10,
+                                                backgroundColor: "red",
+                                                border: "3 px solid black",
+                                                borderRadius: "50%"
+                                            }}
+                                            onClick={() => {
+                                                loadColor(leftViewUpper, 0.7721581741520329)
+                                            }}></button>
+
+                                    <p>Select Left Sleeve Lower Color</p>
+                                    <button id='green_btn_sleeve' type='button'
+                                            style={{
+                                                width: 30,
+                                                height: 30,
+                                                backgroundColor: "green",
+                                                border: "1 px solid black",
+                                                borderRadius: "50%"
+                                            }}
+                                            onClick={() => {
+                                                loadColor(leftViewLower, -0.7925393031704733)
+                                            }}>
+                                    </button>
+                                    <button id='blue_btn_sleeve' type='button'
+                                            style={{
+                                                width: 30,
+                                                height: 30,
+                                                marginLeft: 10,
+                                                backgroundColor: "blue",
+                                                border: "3 px solid black",
+                                                borderRadius: "50%"
+                                            }}
+                                            onClick={() => {
+                                                loadColor(leftViewLower, 0.04339308661309316)
+                                            }}>
+                                    </button>
+                                    <button id='red_btn_sleeve' type='button'
+                                            style={{
+                                                width: 30,
+                                                height: 30,
+                                                marginLeft: 10,
+                                                backgroundColor: "red",
+                                                border: "3 px solid black",
+                                                borderRadius: "50%"
+                                            }}
+                                            onClick={() => {
+                                                loadColor(leftViewLower, 0.7721581741520329)
+                                            }}></button>
+
+                                    <form action="">
+                                         <label htmlFor="patterns" style={{marginTop: "20px"}}></label>
+                                        <select name="patterns" id="patterns" style={{width:"150px", height:"30px",borderWidth:"1px", borderStyle:"solid", margin:"10px"}}>
+                                            <option value="image1">Image1</option>
+                                            <option value="image2">Image2</option>
+                                            <option value="image3">Image3</option>
+                                            <option value="image4">Image4</option>
+                                        </select>
+                                        <input type="submit" value="Submit"></input>
+                                    </form>
+
+                                    <button type='button'
+                                            name='upload_logo'
+                                            onClick={load_logo}
+                                            style={{backgroundColor:"#767FE0", color:"white", border:"none", borderRadius:"50px", width:"120px", height:"30px",margin:"10px"}}>
+                                    Load Logo
+                                    </button>
+                                    <br></br>
+                                    <button type="button"
+                                            onClick={download_Image}
+                                            style={{backgroundColor:"#767FE0", color:"white", border:"none", borderRadius:"50px", width:"120px", height:"30px",margin:"10px"}}>Download Image</button>
+
+                                </div>
+                            );
+                        case viewOptions[3]:
+                            return (
+                                <div>
+                                    <p>Select Right Sleeve Upper Color</p>
+                                    <button id='blue_btn_sleeve' type='button'
+                                            style={{
+                                                width: 30,
+                                                height: 30,
+                                                backgroundColor: "blue",
+                                                border: "1 px solid black",
+                                                borderRadius: "50%"
+                                            }}
+                                            onClick={() => {
+                                                loadColor(rightViewUpper, -0.7925393031704733)
+                                            }}></button>
+                                    <button id='red_btn_sleeve' type='button'
+                                            style={{
+                                                width: 30,
+                                                height: 30,
+                                                marginLeft: 10,
+                                                backgroundColor: "red",
+                                                border: "3 px solid black",
+                                                borderRadius: "50%"
+                                            }}
+                                            onClick={() => {
+                                                loadColor(rightViewUpper, 0.04339308661309316)
+                                            }}></button>
+                                    <button id='green_btn_sleeve' type='button'
+                                            style={{
+                                                width: 30,
+                                                height: 30,
+                                                marginLeft: 10,
+                                                backgroundColor: "green",
+                                                border: "3 px solid black",
+                                                borderRadius: "50%"
+                                            }}
+                                            onClick={() => {
+                                                loadColor(rightViewUpper, 0.7721581741520329)
+                                            }}></button>
+
+                                    <p>Select Right Sleeve Lower Color</p>
+                                    <button id='blue_btn_sleeve' type='button'
+                                            style={{
+                                                width: 30,
+                                                height: 30,
+                                                backgroundColor: "blue",
+                                                border: "1 px solid black",
+                                                borderRadius: "50%"
+                                            }}
+                                            onClick={() => {
+                                                loadColor(rightViewLower, -0.7925393031704733)
+                                            }}></button>
+                                    <button id='red_btn_sleeve' type='button'
+                                            style={{
+                                                width: 30,
+                                                height: 30,
+                                                marginLeft: 10,
+                                                backgroundColor: "red",
+                                                border: "3 px solid black",
+                                                borderRadius: "50%"
+                                            }}
+                                            onClick={() => {
+                                                loadColor(rightViewLower, 0.04339308661309316)
+                                            }}></button>
+                                    <button id='green_btn_sleeve' type='button'
+                                            style={{
+                                                width: 30,
+                                                height: 30,
+                                                marginLeft: 10,
+                                                backgroundColor: "green",
+                                                border: "3 px solid black",
+                                                borderRadius: "50%"
+                                            }}
+                                            onClick={() => {
+                                                loadColor(rightViewLower, 0.7721581741520329)
+                                            }}></button>
+
+                                    <form action="">
+                                         <label htmlFor="patterns" style={{marginTop: "20px"}}></label>
+                                        <select name="patterns" id="patterns" style={{width:"150px", height:"30px",borderWidth:"1px", borderStyle:"solid", margin:"10px"}}>
+                                            <option value="image1">Image1</option>
+                                            <option value="image2">Image2</option>
+                                            <option value="image3">Image3</option>
+                                            <option value="image4">Image4</option>
+                                        </select>
+                                        <input type="submit" value="Submit"></input>
+                                    </form>
+
+                                    <button type='button'
+                                            name='upload_logo'
+                                            onClick={load_logo}
+                                            style={{backgroundColor:"#767FE0", color:"white", border:"none", borderRadius:"50px", width:"120px", height:"30px",margin:"10px"}}>
+                                    Load Logo
+                                    </button>
+                                    <br></br>
+                                    <button type="button"
+                                            onClick={download_Image}
+                                            style={{backgroundColor:"#767FE0", color:"white", border:"none", borderRadius:"50px", width:"120px", height:"30px",margin:"10px"}}>Download Image</button>
+
+                                </div>
+                            );
+                        default:
+                            return "";
+                    }
+                })()}
+                </div>
+                <div style={{float:"right"}}>
+
+                <div style={{display: view === viewOptions[0] ? '' : viewOptions[null]}}>
+
+                    <canvas id='canv'>
+                        <div id="ans"></div>
+                    </canvas>
+
+                </div>
+                <div style={{display: view === viewOptions[1] ? '' : viewOptions[null]}}>
+                    {/*<canvas id='canv_back'>*/}
+                    {/*    <div id="ans"></div>*/}
+                    {/*</canvas>*/}
+                </div>
+
+                {/*<div style={{display: view === viewOptions[2] ? '' : viewOptions[null]}}>*/}
+                {/*    <canvas id='canv_left'>*/}
+                {/*        <div id="ans"></div>*/}
+                {/*    </canvas>*/}
+                {/*</div>*/}
+
             </div>
 
         </div>
 
-);
+
+
+
+    );
 
 
 }
