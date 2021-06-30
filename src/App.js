@@ -1,3 +1,4 @@
+import "bootstrap/dist/js/bootstrap.min.js";
 import logo from './logo.svg';
 import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
@@ -6,6 +7,7 @@ import { fabric } from "fabric";
 import SamEditor from "./components/editor";
 import Welcome from "./components/welcome";
 import MyEditor from "./components/image";
+import SamLocalEditor from "./components/local_stroge_editor";
 
 // function App() {
 //
@@ -60,11 +62,17 @@ function App() {
             {/*    <div className="container-fluid">*/}
             {/*        <Header/>*/}
             <Switch>
+                {/*<Route*/}
+                {/*    exact*/}
+                {/*    path="/editor/:id"*/}
+                {/*    component={SamEditor}*/}
+                {/*    render={(props) => <SamEditor {...props} />}*/}
+                {/*/>*/}
                 <Route
                     exact
                     path="/editor/:id"
-                    component={SamEditor}
-                    render={(props) => <SamEditor {...props} />}
+                    component={SamLocalEditor}
+                    render={(props) => <SamLocalEditor {...props} />}
                 />
                 <Route
                     path="/"
