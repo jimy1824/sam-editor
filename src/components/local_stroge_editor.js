@@ -16,9 +16,12 @@ const viewOptions = [
     'left',
     'right'
 ]
+var fonts = ["Pacifico", "VT323", "Quicksand", "Inconsolata"];
+var logo_demo = "http://localhost:8000/media/uploads/body/polo_logo.png";
+var logo_img
 
 function SamLocalEditor(props) {
-    const {id} = props.match.params
+    let {id} = props.match.params
     const [product, setProduct] = useState(null);
     useEffect(() => {
         getProductDetail(id)
@@ -32,7 +35,10 @@ function SamLocalEditor(props) {
     }, [])
 
     const [canvas, setCanvas] = useState(null)
+     const [name, setName] = useState(null);
+    let [image, setImage] = useState(null);
 
+    const [img, setImg] = useState(null);
 
     // tabs
     const [selectedTab, setSelectedTab] = React.useState(0);
@@ -104,6 +110,36 @@ function SamLocalEditor(props) {
         }, {crossOrigin: 'anonymous'})
     }
 
+    const handleInput = event => {
+        setName(event.target.value);
+    };
+
+    const handleImage = event => {
+        setImage(event.target.files[0])
+    }
+
+    const textShow = (text) => {
+        console.log(text)
+        var text = new fabric.Textbox(name, {
+            fontFamily: 'Pacifico',
+            fontSize: 20,
+            fill: "#00ff00",
+            visible: true,
+        });
+        console.log(text)
+
+        canvas.add(text);
+
+    }
+
+    const changeFontStyle = (fontstyle) => {
+        fontstyle = function (font) {
+            document.getElementById(
+                "output-text").style.fontFamily
+                = font.value;
+        }
+    }
+
     const loadImage = (url, imageId, left, top) => {
 
         fabric.Image.fromURL(url, function (img) {
@@ -123,6 +159,19 @@ function SamLocalEditor(props) {
         }, {crossOrigin: 'anonymous'})
 
     }
+
+    // const loadSample = (url, imgId, left, top) => {
+    //     fabric.Image.fromURL(url, function(sample_img){
+    //         sample_img.id = imgId;
+    //         var sam = sample_img.set({
+    //             left: left,
+    //             top: top,
+    //             selectable: false,
+    //         })
+    //             image.add(sample_img);
+    //     },{crossOrigin: 'anonymous'})
+    // }
+
     const addColor = () => {
         if(selectedComponentId==='sleeve'){
             var obj=JSON.parse(localStorage.getItem('right_sleeve'))
@@ -167,7 +216,27 @@ function SamLocalEditor(props) {
         setColorShow(true)
     }
 
+    const load_logo = (l) => {
+        var samImg = new Image();
+        samImg.onload = function (imge) {
+            console.log("inside function")
+            var pug = new fabric.Image(samImg, {
+                id:"sample_image",
+                width: 500,
+                height: 500,
+                innerWidth:200,
+                innerHeight:200,
 
+            });
+            console.log(pug, "pug")
+            canvas.add(pug);
+        };
+        samImg.src = l;
+
+        console.log("Image Clicked", l)
+    }
+
+    console.log(img, "222")
 
     function frontImageLoad() {
         clearCanvas()
@@ -184,7 +253,7 @@ function SamLocalEditor(props) {
             if (localStorage.getItem('body_second_section')) {
                 loadObject(JSON.parse(localStorage.getItem('body_second_section')))
             } else {
-                loadImage(body.front_view.body_second_section.image, 'body_second_section', body.body_second_section.x_point, body.front_view.body_second_section.y_point)
+                loadImage(body.body_second_section.image, 'body_second_section', body.body_second_section.x_point, body.body_second_section.y_point)
             }
         }
         if (body.body_third_section?.image) {
@@ -378,6 +447,26 @@ function SamLocalEditor(props) {
         }
 
     }
+
+    const getSampleImages = (s) => {
+        var url = 'http://localhost:8000/api/logos';
+
+        fetch(url)
+            .then(function(response){
+                return response.json();
+            })
+            .then(function (data){
+                console.log(data)
+                setImg(data)
+
+            })
+    }
+
+    function displaySample(img_sample){
+        document.getElementById('sample_images').src = img_sample;
+    }
+
+
     const hexatoHSL=(hex)=> {
         var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
         var r = parseInt(result[1], 16);
@@ -410,34 +499,6 @@ function SamLocalEditor(props) {
         var colorInHSL =  h;
         return colorInHSL
     }
-
-
-
-    const blue_front = () => {
-        // console.log(frontImage,'frontImage')
-        // loadColor(bodyFisrtSection, -0.7925393031704733)
-        // console.log(frontImage)
-        // // -0.7925393031704733
-        // frontImage.filters[0].rotation = -0.7925393031704733
-        // frontImage.applyFilters();
-        // canvas.requestRenderAll();
-    }
-
-    const red_front = () => {
-        // 0.04339308661309316
-        // frontImage.filters[0].rotation = 0.04339308661309316
-        // frontImage.applyFilters();
-        // canvas.requestRenderAll();
-    }
-
-    const green_front = () => {
-        // 0.7721581741520329
-        // loadColor(bodySecondSection, "00ff00")
-        // frontImage.applyFilters();
-        // canvas.requestRenderAll();
-    }
-
-    //End Front Functions
 
 
     function download_Image() {
@@ -507,18 +568,83 @@ function SamLocalEditor(props) {
             <div>
                 {selectedTab === 0 &&
                 <div className='row'>
-                    <div className="btn-group" role="group" aria-label="Basic example">
+                    <div className="btn-group" role="group" aria-label="Basic example" style={{width:"100%"}}>
                         <button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('body_first_section')}}>Body</button>
                         <button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('front-collar')}}>Collar</button>
                         <button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('sleeve')}}>sleeve</button>
                     </div>
+
                     {colorShow &&
                     <div>
-                     <p> Choose color</p>
+                        <div style={{width:"400px", float:"left", marginLeft:"20px"}}>
+                     <p> Choose Body color</p>
                     <CirclePicker
                         color={ color }
                         onChangeComplete={ handleChangeComplete}
                     />
+                    <br></br>
+                        <div id="output-text">
+                            <input onChange={handleInput} placeholder="Enter text"/>
+                                    <button type='button'
+                                            name='text_show'
+                                            onClick={textShow}
+                                            style={{
+                                                backgroundColor: "#767FE0",
+                                                color: "white",
+                                                border: "none",
+                                                borderRadius: "50px",
+                                                width: "120px",
+                                                height: "30px",
+                                                margin: "10px"
+                                            }}>
+                                        Add Text
+                                    </button>
+                            <br></br>
+
+                            <select id="input-font" onChange={changeFontStyle (this)}>
+
+                            <option value="Comic Sans"
+                                    selected="selected">
+                                Comic Sans
+                            </option>
+                            <option value="Arial">Arial</option>
+                            <option value="fantasy">Fantasy</option>
+                            <option value="cursive">cursive</option>
+                        </select>
+                            <select id="input-font" style={{marginLeft:"10px"}}>
+
+                            <option value="Normal"
+                                    selected="selected">
+                                Normal
+                            </option>
+                            <option value="Arial" style={{fontStyle:"bolder"}}>Bold</option>
+                            <option value="fantasy" style={{fontStyle:"italic"}}>Italic</option>
+                            <option value="cursive" style={{fontStyle:"underline"}}>Underline</option>
+                        </select>
+
+                        </div>
+                            <br></br>
+                        <CirclePicker
+                        // color={ name }
+                        // onChangeComplete={ handleChangeComplete}
+                    />
+                    <br></br>
+
+                    <input type="file"/>
+                        </div>
+                        <div style={{width:"300px", float:"right"}}>
+                            <div style={{width:"300px", height:"300px", border:"solid", borderColor:"black", borderWidth:"1px", float:"right", marginRight:"-500px", marginTop:"10px"}}>
+                                <button onClick={getSampleImages}>Load Images</button>
+                                {
+                                    img?
+                                    img.map((s) =>
+                                             <img src={s.image} alt={''} style={{width:"50px", height:"50px"}} onClick={()=> {load_logo(s.image)}}/>
+
+                                    )
+                                :null}
+                            </div>
+
+                        </div>
                     </div>
                     }
 
@@ -571,17 +697,69 @@ function SamLocalEditor(props) {
                 }
                 {/* back view */}
                 {selectedTab === 1 &&
-                <div>
-                    <p>Back</p>
-                    <button onClick={() => {
-                        clearCanvas()
-                    }}>clear
-                    </button>
-                </div>
+                <div className='row' style={{width:"100%"}}>
+                    <div className="btn-group" role="group" aria-label="Basic example" style={{width:"100%"}}>
+                        <button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('back_second_part')}}>Back</button>
+                        {/*<button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('front-collar')}}>Collar</button>*/}
+                        <button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('sleeve')}}>Sleeve</button>
+                    </div>
+                    {colorShow &&
+                    <div style={{marginLeft:"50px", display:"inline"}}>
+                     <p> Choose color</p>
 
+                    <CirclePicker
+                        color={ color }
+                        onChangeComplete={ handleChangeComplete}
+                    />
+                    <br></br>
+                        <div id="output-text">
+                            <input onChange={handleInput} placeholder="Enter text"/>
+                                    <button type='button'
+                                            name='text_show'
+                                            onClick={textShow}
+                                            style={{
+                                                backgroundColor: "#767FE0",
+                                                color: "white",
+                                                border: "none",
+                                                borderRadius: "50px",
+                                                width: "120px",
+                                                height: "30px",
+                                                margin: "10px"
+                                            }}>
+                                        Add Text
+                                    </button>
+                            <br></br>
+
+                            <select id="input-font" onChange={changeFontStyle (this)}>
+
+                            <option value="Comic Sans"
+                                    selected="selected">
+                                Comic Sans
+                            </option>
+                            <option value="Arial">Arial</option>
+                            <option value="fantasy">Fantasy</option>
+                            <option value="cursive">cursive</option>
+                        </select>
+                            <select id="input-font" style={{marginLeft:"10px"}}>
+
+                            <option value="Normal"
+                                    selected="selected">
+                                Normal
+                            </option>
+                            <option value="Arial" style={{fontStyle:"bolder"}}>Bold</option>
+                            <option value="fantasy" style={{fontStyle:"italic"}}>Italic</option>
+                            <option value="cursive" style={{fontStyle:"underline"}}>Underline</option>
+                        </select>
+                            <br></br>
+                            <br></br>
+
+                        </div>
+                    </div>
+                    }
+                </div>
                 }
-                {selectedTab === 2 && <div>Right</div>}
-                {selectedTab === 3 && <div>Left</div>}
+                {/*{selectedTab === 2 && <div>Right</div>}*/}
+                {/*{selectedTab === 3 && <div>Left</div>}*/}
             </div>
             <canvas id='canvas'>
                 <div id="ans"></div>
