@@ -49,13 +49,13 @@ function Welcome(props){
 
     return(
       <div style={{marginLeft:"100px", marginTop:"100px"}}>
-          <h1 style={{textAlign:"center", color:"yellowgreen"}}>Categories</h1>
+          <h1 style={{textAlign:"center", color:"black"}}>Categories</h1>
           <div style={{display:"inline-flex"}}>
               {categoryList &&
                   categoryList.map((item,index) => {
                           return (
-                              <div>
-                                  <button key={index} onClick={()=>{setSelectedcategory(item)}} style={{backgroundColor:"yellowgreen", marginLeft:10, width:"100px", height:"50px",color:"white", border:"none"}}>{item.name}</button>
+                              <div style={{marginTop:"20px"}}>
+                                  <button key={index} onClick={()=>{setSelectedcategory(item)}} style={{backgroundColor:"yellowgreen", marginLeft:10, width:"80px", height:"50px",color:"white", border:"none"}}>{item.name}</button>
                               </div>
                           )}
                   )}

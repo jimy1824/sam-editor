@@ -49,6 +49,7 @@ function SamLocalEditor(props) {
         setSelectedTab(newValue);
         if (newValue === 0) {
             frontImageLoad()
+            // imageSaved()
         }
         if (newValue === 1) {
             backImageLoad()
@@ -123,22 +124,20 @@ function SamLocalEditor(props) {
         var text = new fabric.Textbox(name, {
             fontFamily: 'Pacifico',
             fontSize: 20,
-            fill: "#00ff00",
+            fill: "#00ffff",
             visible: true,
+            fontWeight:"bold",
         });
         console.log(text)
-
+        localStorage.setItem(text, JSON.stringify(text))
         canvas.add(text);
 
     }
 
-    const changeFontStyle = (fontstyle) => {
-        fontstyle = function (font) {
-            document.getElementById(
-                "output-text").style.fontFamily
-                = font.value;
+    var changeFontStyle = function (font) {
+           // document.getElementById("output-text")
+           //              .style.fontWeight = "italic";
         }
-    }
 
     const loadImage = (url, imageId, left, top) => {
 
@@ -221,15 +220,17 @@ function SamLocalEditor(props) {
         samImg.onload = function (imge) {
             console.log("inside function")
             var pug = new fabric.Image(samImg, {
-                id:"sample_image",
+                id:"imageID",
                 width: 500,
                 height: 500,
                 innerWidth:200,
                 innerHeight:200,
 
             });
+            console.log(l,"ll")
             console.log(pug, "pug")
             canvas.add(pug);
+            localStorage.setItem(samImg, JSON.stringify(imge));
         };
         samImg.src = l;
 
@@ -237,6 +238,15 @@ function SamLocalEditor(props) {
     }
 
     console.log(img, "222")
+
+    // function download_Image() {
+    //     var canvas = document.getElementById("canv");
+    //     var image = canvas.toDataURL("image/png", 1.0).replace("image/svg", "image/octet-stream");
+    //     var link = document.createElement('a');
+    //     link.download = "Your_Product_Design.svg";
+    //     link.href = image;
+    //     link.click();
+    // }
 
     function frontImageLoad() {
         clearCanvas()
@@ -466,6 +476,24 @@ function SamLocalEditor(props) {
         document.getElementById('sample_images').src = img_sample;
     }
 
+    function imageSaved(i){
+        let logo = JSON.parse(localStorage.getItem('samImage'))
+
+        if (logo.image1?.image) {
+            if (localStorage.getItem('samImage')) {
+                loadObject(JSON.parse(localStorage.getItem('samImage')))
+            } else {
+                loadImage(
+                    logo.image1.image,
+                    'imageID',
+                    logo.image1.x_point,
+                    logo.image1.y_point,
+                )
+            }
+        }
+
+    }
+
 
     const hexatoHSL=(hex)=> {
         var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
@@ -498,16 +526,6 @@ function SamLocalEditor(props) {
         l = Math.round(l);
         var colorInHSL =  h;
         return colorInHSL
-    }
-
-
-    function download_Image() {
-        var canvas = document.getElementById("canv");
-        var image = canvas.toDataURL("image/png", 1.0).replace("image/svg", "image/octet-stream");
-        var link = document.createElement('a');
-        link.download = "Your_Product_Design.svg";
-        link.href = image;
-        link.click();
     }
 
     // Sleeve Functions
@@ -631,6 +649,20 @@ function SamLocalEditor(props) {
                     <br></br>
 
                     <input type="file"/>
+                    {/*<button type='button'*/}
+                    {/*                        name='text_show'*/}
+                    {/*                        onClick={download_Image}*/}
+                    {/*                        style={{*/}
+                    {/*                            backgroundColor: "#767FE0",*/}
+                    {/*                            color: "white",*/}
+                    {/*                            border: "none",*/}
+                    {/*                            borderRadius: "50px",*/}
+                    {/*                            width: "120px",*/}
+                    {/*                            height: "30px",*/}
+                    {/*                            margin: "10px"*/}
+                    {/*                        }}>*/}
+                    {/*                    Download Design*/}
+                    {/*                </button>*/}
                         </div>
                         <div style={{width:"300px", float:"right"}}>
                             <div style={{width:"300px", height:"300px", border:"solid", borderColor:"black", borderWidth:"1px", float:"right", marginRight:"-500px", marginTop:"10px"}}>
@@ -638,7 +670,7 @@ function SamLocalEditor(props) {
                                 {
                                     img?
                                     img.map((s) =>
-                                             <img src={s.image} alt={''} style={{width:"50px", height:"50px"}} onClick={()=> {load_logo(s.image)}}/>
+                                             <img src={s.image1} alt={''} style={{width:"50px", height:"50px"}} onClick={()=> {load_logo(s.image1)}}/>
 
                                     )
                                 :null}
@@ -758,7 +790,68 @@ function SamLocalEditor(props) {
                     }
                 </div>
                 }
-                {/*{selectedTab === 2 && <div>Right</div>}*/}
+                {selectedTab === 2 &&
+                <div className='row' style={{width:"100%"}}>
+                    <div className="btn-group" role="group" aria-label="Basic example" style={{width:"100%"}}>
+                        <button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('left_v_upper_part')}}>Left Sleeve</button>
+                        {/*<button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('front-collar')}}>Collar</button>*/}
+                        <button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('left_v_lower_part')}}>Right Sleeve</button>
+                    </div>
+                    {colorShow &&
+                    <div style={{marginLeft:"50px", display:"inline"}}>
+                     <p> Choose color</p>
+
+                    <CirclePicker
+                        color={ color }
+                        onChangeComplete={ handleChangeComplete }
+                    />
+                    <br></br>
+                        <div id="output-text">
+                            <input onChange={handleInput} placeholder="Enter text"/>
+                                    <button type='button'
+                                            name='text_show'
+                                            onClick={textShow}
+                                            style={{
+                                                backgroundColor: "#767FE0",
+                                                color: "white",
+                                                border: "none",
+                                                borderRadius: "50px",
+                                                width: "120px",
+                                                height: "30px",
+                                                margin: "10px"
+                                            }}>
+                                        Add Text
+                                    </button>
+                            <br></br>
+
+                            <select id="input-font" onChange={changeFontStyle (this)}>
+
+                            <option value="Comic Sans"
+                                    selected="selected">
+                                Comic Sans
+                            </option>
+                            <option value="Arial">Arial</option>
+                            <option value="fantasy">Fantasy</option>
+                            <option value="cursive">cursive</option>
+                        </select>
+                            <select id="input-font" style={{marginLeft:"10px"}}>
+
+                            <option value="Normal"
+                                    selected="selected">
+                                Normal
+                            </option>
+                            <option value="Arial" style={{fontStyle:"bolder"}}>Bold</option>
+                            <option value="fantasy" style={{fontStyle:"italic"}}>Italic</option>
+                            <option value="cursive" style={{fontStyle:"underline"}}>Underline</option>
+                        </select>
+                            <br></br>
+                            <br></br>
+
+                        </div>
+                    </div>
+                    }
+                </div>
+                }
                 {/*{selectedTab === 3 && <div>Left</div>}*/}
             </div>
             <canvas id='canvas'>
