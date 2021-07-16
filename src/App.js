@@ -108,7 +108,7 @@ function App() {
                 />
                 <Route
                     exact
-                    path="/editor/bag/:id"
+                    path="/editor/base-ball-shirt/:id"
                     component={SamLocalEditorBaseBShirtFront}
                     render={(props) => <SamLocalEditorBaseBShirtFront {...props} />}
                 />

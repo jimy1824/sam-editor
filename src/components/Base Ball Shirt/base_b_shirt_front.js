@@ -28,10 +28,10 @@ function SamLocalEditorBaseBShirtFront(props) {
     useEffect(() => {
         getProductDetail(id)
             .then(items => {
-                localStorage.setItem('body', JSON.stringify(items.front_view));
-                localStorage.setItem('back', JSON.stringify(items.back_view));
-                localStorage.setItem('left', JSON.stringify(items.left_view));
-                localStorage.setItem('right', JSON.stringify(items.right_view));
+                localStorage.setItem('front_view_base_b_shirt', JSON.stringify(items.front_view_base_b_shirt));
+                localStorage.setItem('back_view_base_b_shirt', JSON.stringify(items.back_view_base_b_shirt));
+                localStorage.setItem('left_view_base_b_shirt', JSON.stringify(items.left_view_base_b_shirt));
+                localStorage.setItem('right_view_base_b_shirt', JSON.stringify(items.right_view_base_b_shirt));
                 setProduct(items)
             })
     }, [])
@@ -307,131 +307,106 @@ function SamLocalEditorBaseBShirtFront(props) {
 
     function frontImageLoad() {
         clearCanvas()
-        let body = JSON.parse(localStorage.getItem('body'))
-        if (body.body_first_section?.image) {
-            if (localStorage.getItem('body_first_section')) {
-                loadObject(JSON.parse(localStorage.getItem('body_first_section')))
+        let front_view_base_b_shirt = JSON.parse(localStorage.getItem('front_view_base_b_shirt'))
+        if (front_view_base_b_shirt.base_b_shirt_body_front?.image) {
+            if (localStorage.getItem('base_b_shirt_body_front')) {
+                loadObject(JSON.parse(localStorage.getItem('base_b_shirt_body_front')))
             } else {
-                loadImage(body.body_first_section.image, 'body_first_section', body.body_first_section.x_point, body.body_first_section.y_point)
+                loadImage(
+                    front_view_base_b_shirt.base_b_shirt_body_front.image,
+                    'base_b_shirt_body_front',
+                    front_view_base_b_shirt.base_b_shirt_body_front.x_point,
+                    front_view_base_b_shirt.base_b_shirt_body_front.y_point)
             }
 
         }
-        if (body.body_second_section?.image) {
-            if (localStorage.getItem('body_second_section')) {
-                loadObject(JSON.parse(localStorage.getItem('body_second_section')))
+        if (front_view_base_b_shirt.base_b_shirt_neck_front?.image) {
+            if (localStorage.getItem('base_b_shirt_neck_front')) {
+                loadObject(JSON.parse(localStorage.getItem('base_b_shirt_neck_front')))
             } else {
-                loadImage(body.body_second_section.image, 'body_second_section', body.body_second_section.x_point, body.body_second_section.y_point)
+                loadImage(
+                    front_view_base_b_shirt.base_b_shirt_neck_front.image,
+                    'base_b_shirt_neck_front',
+                    front_view_base_b_shirt.base_b_shirt_neck_front.x_point,
+                    front_view_base_b_shirt.base_b_shirt_neck_front.y_point
+                )
             }
         }
-        if (body.body_third_section?.image) {
-            if (localStorage.getItem('body_third_section')) {
-                loadObject(JSON.parse(localStorage.getItem('body_third_section')))
+        if (front_view_base_b_shirt.base_b_shirt_left_sleeve_front?.image) {
+            if (localStorage.getItem('base_b_shirt_left_sleeve_front')) {
+                loadObject(JSON.parse(localStorage.getItem('base_b_shirt_left_sleeve_front')))
             } else {
-                loadImage(body.body_third_section.image, 'body_third_section', body.body_third_section.x_point, body.body_third_section.y_point)
+                loadImage(
+                    front_view_base_b_shirt.base_b_shirt_left_sleeve_front.image,
+                    'base_b_shirt_left_sleeve_front',
+                    front_view_base_b_shirt.base_b_shirt_left_sleeve_front.x_point,
+                    front_view_base_b_shirt.base_b_shirt_left_sleeve_front.y_point)
             }
         }
-        if (body.collar?.image) {
-            if (localStorage.getItem('front-collar')) {
-                loadObject(JSON.parse(localStorage.getItem('front-collar')))
+        if (front_view_base_b_shirt.base_b_shirt_right_sleeve_front?.image) {
+            if (localStorage.getItem('base_b_shirt_right_sleeve_front')) {
+                loadObject(JSON.parse(localStorage.getItem('base_b_shirt_right_sleeve_front')))
             } else {
-                loadImage(body.collar.image, 'front-collar', body.collar.x_point, body.collar.y_point)
+                loadImage(
+                    front_view_base_b_shirt.base_b_shirt_right_sleeve_front.image,
+                    'base_b_shirt_right_sleeve_front',
+                    front_view_base_b_shirt.base_b_shirt_right_sleeve_front.x_point,
+                    front_view_base_b_shirt.base_b_shirt_right_sleeve_front.y_point
+                )
             }
         }
-        if (body.right_sleeve?.image) {
-            if (localStorage.getItem('right_sleeve')) {
-                loadObject(JSON.parse(localStorage.getItem('right_sleeve')))
+        if (front_view_base_b_shirt.base_b_shirt_button_front?.image) {
+            if (localStorage.getItem('base_b_shirt_button_front')) {
+                loadObject(JSON.parse(localStorage.getItem('base_b_shirt_button_front')))
             } else {
-                loadImage(body.right_sleeve.image, 'right_sleeve', body.right_sleeve.x_point, body.right_sleeve.y_point)
+                loadImage(
+                    front_view_base_b_shirt.base_b_shirt_button_front.image,
+                    'base_b_shirt_button_front',
+                    front_view_base_b_shirt.base_b_shirt_button_front.x_point,
+                    front_view_base_b_shirt.base_b_shirt_button_front.y_point)
             }
-        }
-
-        if (body.left_sleeve?.image) {
-            if (localStorage.getItem('left_sleeve')) {
-                loadObject(JSON.parse(localStorage.getItem('left_sleeve')))
-            } else {
-                loadImage(body.left_sleeve.image, 'left_sleeve', body.left_sleeve.x_point, body.left_sleeve.y_point)
-
-            }
-        }
-
-        if (body.towel_front?.image) {
-            if (localStorage.getItem('towel_front')) {
-                loadObject(JSON.parse(localStorage.getItem('towel_front')))
-            } else {
-                loadImage(body.towel_front.image,
-                    'towel_front',
-                    body.towel_front.x_point,
-                    body.towel_front.y_point)
-            }
-
         }
     }
 
     function backImageLoad() {
         clearCanvas()
-        let back = JSON.parse(localStorage.getItem('back'))
-        if (back.back_first_part?.image) {
-            if (localStorage.getItem('back_first_part')) {
-                loadObject(JSON.parse(localStorage.getItem('back_first_part')))
+        let back_view_base_b_shirt = JSON.parse(localStorage.getItem('back_view_base_b_shirt'))
+        if (back_view_base_b_shirt.base_b_shirt_body_back?.image) {
+            if (localStorage.getItem('base_b_shirt_body_back')) {
+                loadObject(JSON.parse(localStorage.getItem('base_b_shirt_body_back')))
             } else {
                 loadImage(
-                    back.back_first_part.image,
-                    'back_first_part',
-                    back.back_first_part.x_point,
-                    back.back_first_part.y_point,
+                    back_view_base_b_shirt.base_b_shirt_body_back.image,
+                    'base_b_shirt_body_back',
+                    back_view_base_b_shirt.base_b_shirt_body_back.x_point,
+                    back_view_base_b_shirt.base_b_shirt_body_back.y_point,
                 )
             }
 
         }
 
-        if (back.back_second_part?.image) {
-            if (localStorage.getItem('back_second_part')) {
-                loadObject(JSON.parse(localStorage.getItem('back_second_part')))
+        if (back_view_base_b_shirt.base_b_shirt_left_sleeve_back?.image) {
+            if (localStorage.getItem('base_b_shirt_left_sleeve_back')) {
+                loadObject(JSON.parse(localStorage.getItem('base_b_shirt_left_sleeve_back')))
             } else {
                 loadImage(
-                    back.back_second_part.image,
-                    'back_second_part',
-                    back.back_second_part.x_point,
-                    back.back_second_part.y_point,
+                    back_view_base_b_shirt.base_b_shirt_left_sleeve_back.image,
+                    'base_b_shirt_left_sleeve_back',
+                    back_view_base_b_shirt.base_b_shirt_left_sleeve_back.x_point,
+                    back_view_base_b_shirt.base_b_shirt_left_sleeve_back.y_point,
                 )
             }
         }
 
-        if (back.back_third_part?.image) {
-            if (localStorage.getItem('back_third_part')) {
-                loadObject(JSON.parse(localStorage.getItem('back_third_part')))
+        if (back_view_base_b_shirt.base_b_shirt_right_sleeve_back?.image) {
+            if (localStorage.getItem('base_b_shirt_right_sleeve_back')) {
+                loadObject(JSON.parse(localStorage.getItem('base_b_shirt_right_sleeve_back')))
             } else {
                 loadImage(
-                    back.back_third_part.image,
-                    'back_third_part',
-                    back.back_third_part.x_point,
-                    back.back_third_part.y_point,
-                )
-            }
-        }
-
-        if (back.back_left_sleeve?.image) {
-            if (localStorage.getItem('back_left_sleeve')) {
-                loadObject(JSON.parse(localStorage.getItem('back_left_sleeve')))
-            } else {
-                loadImage(
-                    back.back_left_sleeve.image,
-                    'back_left_sleeve',
-                    back.back_left_sleeve.x_point,
-                    back.back_left_sleeve.y_point,
-                )
-            }
-        }
-
-        if (back.back_right_sleeve?.image) {
-            if (localStorage.getItem('back_right_sleeve')) {
-                loadObject(JSON.parse(localStorage.getItem('back_right_sleeve')))
-            } else {
-                loadImage(
-                    back.back_right_sleeve.image,
-                    'back_right_sleeve',
-                    back.back_right_sleeve.x_point,
-                    back.back_right_sleeve.y_point,
+                    back_view_base_b_shirt.base_b_shirt_right_sleeve_back.image,
+                    'base_b_shirt_right_sleeve_back',
+                    back_view_base_b_shirt.base_b_shirt_right_sleeve_back.x_point,
+                    back_view_base_b_shirt.base_b_shirt_right_sleeve_back.y_point,
                 )
             }
         }
@@ -439,99 +414,61 @@ function SamLocalEditorBaseBShirtFront(props) {
 
     const leftImageLoad = (e) => {
         clearCanvas()
-        let left = JSON.parse(localStorage.getItem('left'))
+        let left_view_base_b_shirt = JSON.parse(localStorage.getItem('left_view_base_b_shirt'))
 
-        if (left?.left_v_body_view?.image) {
-            if (localStorage.getItem('left_v_body_view')) {
-                loadObject(JSON.parse(localStorage.getItem('left_v_body_view')))
+        if (left_view_base_b_shirt?.base_b_shirt_mid_left?.image) {
+            if (localStorage.getItem('base_b_shirt_mid_left')) {
+                loadObject(JSON.parse(localStorage.getItem('base_b_shirt_mid_left')))
             } else {
                 loadImage(
-                    left.left_v_body_view.image,
-                    'left_v_body_view',
-                    left.left_v_body_view.x_point,
-                    left.left_v_body_view.y_point,
+                    left_view_base_b_shirt.base_b_shirt_mid_left.image,
+                    'base_b_shirt_mid_left',
+                    left_view_base_b_shirt.base_b_shirt_mid_left.x_point,
+                    left_view_base_b_shirt.base_b_shirt_mid_left.y_point,
                 )
             }
 
         }
 
-        if (left.left_v_upper_part?.image) {
-            if (localStorage.getItem('left_v_upper_part')) {
-                loadObject(JSON.parse(localStorage.getItem('left_v_upper_part')))
+        if (left_view_base_b_shirt.base_b_shirt_left_sleeve_left?.image) {
+            if (localStorage.getItem('base_b_shirt_left_sleeve_left')) {
+                loadObject(JSON.parse(localStorage.getItem('base_b_shirt_left_sleeve_left')))
             } else {
                 loadImage(
-                    left.left_v_upper_part.image,
-                    'left_v_upper_part',
-                    left.left_v_upper_part.x_point,
-                    left.left_v_upper_part.y_point,
+                    left_view_base_b_shirt.base_b_shirt_left_sleeve_left.image,
+                    'base_b_shirt_left_sleeve_left',
+                    left_view_base_b_shirt.base_b_shirt_left_sleeve_left.x_point,
+                    left_view_base_b_shirt.base_b_shirt_left_sleeve_left.y_point,
                 )
             }
         }
 
-        if (left?.left_v_lower_part?.image) {
-            if (localStorage.getItem('left_v_lower_part')) {
-                loadObject(JSON.parse(localStorage.getItem('left_v_lower_part')))
+        if (left_view_base_b_shirt?.base_b_shirt_right_sleeve_left?.image) {
+            if (localStorage.getItem('base_b_shirt_right_sleeve_left')) {
+                loadObject(JSON.parse(localStorage.getItem('base_b_shirt_right_sleeve_left')))
             } else {
                 loadImage(
-                    left.left_v_lower_part.image,
-                    'left_v_lower_part',
-                    left.left_v_lower_part.x_point,
-                    left.left_v_lower_part.y_point,
+                    left_view_base_b_shirt.base_b_shirt_right_sleeve_left.image,
+                    'base_b_shirt_right_sleeve_left',
+                    left_view_base_b_shirt.base_b_shirt_right_sleeve_left.x_point,
+                    left_view_base_b_shirt.base_b_shirt_right_sleeve_left.y_point,
                 )
             }
         }
 
-        if (left?.left_v_left_s_upper?.image) {
-            if (localStorage.getItem('left_v_left_s_upper')) {
-                loadObject(JSON.parse(localStorage.getItem('left_v_left_s_upper')))
+        if (left_view_base_b_shirt?.base_b_shirt_bottom_sleeve_left?.image) {
+            if (localStorage.getItem('base_b_shirt_bottom_sleeve_left')) {
+                loadObject(JSON.parse(localStorage.getItem('base_b_shirt_bottom_sleeve_left')))
             } else {
                 loadImage(
-                    left.left_v_left_s_upper.image,
-                    'left_v_left_s_upper',
-                    left.left_v_left_s_upper.x_point,
-                    left.left_v_left_s_upper.y_point,
+                    left_view_base_b_shirt.base_b_shirt_bottom_sleeve_left.image,
+                    'base_b_shirt_bottom_sleeve_left',
+                    left_view_base_b_shirt.base_b_shirt_bottom_sleeve_left.x_point,
+                    left_view_base_b_shirt.base_b_shirt_bottom_sleeve_left.y_point,
                 )
             }
         }
 
-        if (left?.left_v_left_s_lower?.image) {
-            if (localStorage.getItem('left_v_left_s_lower')) {
-                loadObject(JSON.parse(localStorage.getItem('left_v_left_s_lower')))
-            } else {
-                loadImage(
-                    left.left_v_left_s_lower.image,
-                    'left_v_left_s_lower',
-                    left.left_v_left_s_lower.x_point,
-                    left.left_v_left_s_lower.y_point,
-                )
-            }
-        }
-
-        if (left?.left_v_right_s_upper?.image) {
-            if (localStorage.getItem('left_v_right_s_upper')) {
-                loadObject(JSON.parse(localStorage.getItem('left_v_right_s_upper')))
-            } else {
-                loadImage(
-                    left.left_v_right_s_upper.image,
-                    'left_v_right_s_upper',
-                    left.left_v_right_s_upper.x_point,
-                    left.left_v_right_s_upper.y_point,
-                )
-            }
-        }
-
-        if (left?.left_v_right_s_lower?.image) {
-            if (localStorage.getItem('left_v_right_s_lower')) {
-                loadObject(JSON.parse(localStorage.getItem('left_v_right_s_lower')))
-            } else {
-                loadImage(
-                    left.left_v_right_s_lower.image,
-                    'left_v_right_s_lower',
-                    left.left_v_right_s_lower.x_point,
-                    left.left_v_right_s_lower.y_point,
-                )
-            }
-        }
 
     }
 
@@ -539,104 +476,58 @@ function SamLocalEditorBaseBShirtFront(props) {
 
     const rightImageLoad = (e) => {
         clearCanvas()
-        let right = JSON.parse(localStorage.getItem('right'))
+        let right_view_base_b_shirt = JSON.parse(localStorage.getItem('right_view_base_b_shirt'))
 
-        if (right.right_v_body_view?.image) {
-            if (localStorage.getItem('right_v_body_view')) {
-                loadObject(JSON.parse(localStorage.getItem('right_v_body_view')))
+        if (right_view_base_b_shirt.base_b_shirt_mid_right?.image) {
+            if (localStorage.getItem('base_b_shirt_mid_right')) {
+                loadObject(JSON.parse(localStorage.getItem('base_b_shirt_mid_right')))
             } else {
                 loadImage(
-                    right.right_v_body_view.image,
-                    'right_v_body_view',
-                    right.right_v_body_view.x_point,
-                    right.right_v_body_view.y_point,
+                    right_view_base_b_shirt.base_b_shirt_mid_right.image,
+                    'base_b_shirt_mid_right',
+                    right_view_base_b_shirt.base_b_shirt_mid_right.x_point,
+                    right_view_base_b_shirt.base_b_shirt_mid_right.y_point,
                 )
             }
         }
-        if (right.right_v_upper_part?.image) {
-            if (localStorage.getItem('right_v_upper_part')) {
-                loadObject(JSON.parse(localStorage.getItem('right_v_upper_part')))
+        if (right_view_base_b_shirt.base_b_shirt_left_sleeve_right?.image) {
+            if (localStorage.getItem('base_b_shirt_left_sleeve_right')) {
+                loadObject(JSON.parse(localStorage.getItem('base_b_shirt_left_sleeve_right')))
             } else {
                 loadImage(
-                    right.right_v_upper_part.image,
-                    'right_v_upper_part',
-                    right.right_v_upper_part.x_point,
-                    right.right_v_upper_part.y_point,
+                    right_view_base_b_shirt.base_b_shirt_left_sleeve_right.image,
+                    'base_b_shirt_left_sleeve_right',
+                    right_view_base_b_shirt.base_b_shirt_left_sleeve_right.x_point,
+                    right_view_base_b_shirt.base_b_shirt_left_sleeve_right.y_point,
                 )
             }
         }
 
-        if (right.right_v_lower_part?.image) {
-            if (localStorage.getItem('right_v_upper_part')){
-                loadObject(JSON.parse(localStorage.getItem('right_v_lower_part')))
-            }
-            else if(localStorage.getItem(right.right_v_lower_part?.image)){
-
-            }
-            else {
+        if (right_view_base_b_shirt.base_b_shirt_right_sleeve_right?.image) {
+            if (localStorage.getItem('base_b_shirt_right_sleeve_right')){
+                loadObject(JSON.parse(localStorage.getItem('base_b_shirt_right_sleeve_right')))
+            }else {
                 loadImage(
-                    right.right_v_lower_part.image,
-                    'right_v_lower_part',
-                    right.right_v_lower_part.x_point,
-                    right.right_v_lower_part.y_point,
+                    right_view_base_b_shirt.base_b_shirt_right_sleeve_right.image,
+                    'base_b_shirt_right_sleeve_right',
+                    right_view_base_b_shirt.base_b_shirt_right_sleeve_right.x_point,
+                    right_view_base_b_shirt.base_b_shirt_right_sleeve_right.y_point,
                 )
             }
         }
 
-        if (right.right_v_left_s_upper?.image) {
-            if (localStorage.getItem('right_v_left_s_upper')) {
-                loadObject(JSON.parse(localStorage.getItem('right_v_left_s_upper')))
+        if (right_view_base_b_shirt.base_b_shirt_bottom_sleeve_right?.image) {
+            if (localStorage.getItem('base_b_shirt_bottom_sleeve_right')) {
+                loadObject(JSON.parse(localStorage.getItem('base_b_shirt_bottom_sleeve_right')))
             } else {
                 loadImage(
-                    right.right_v_left_s_upper.image,
-                    'right_v_left_s_upper',
-                    right.right_v_left_s_upper.x_point,
-                    right.right_v_left_s_upper.y_point,
+                    right_view_base_b_shirt.base_b_shirt_bottom_sleeve_right.image,
+                    'base_b_shirt_bottom_sleeve_right',
+                    right_view_base_b_shirt.base_b_shirt_bottom_sleeve_right.x_point,
+                    right_view_base_b_shirt.base_b_shirt_bottom_sleeve_right.y_point,
                 )
             }
         }
-
-        if (right.right_v_left_s_lower?.image) {
-            if (localStorage.getItem('right_v_left_s_lower')) {
-                loadObject(JSON.parse(localStorage.getItem('right_v_left_s_lower')))
-            } else {
-                loadImage(
-                    right.right_v_left_s_lower.image,
-                    'right_v_left_s_lower',
-                    right.right_v_left_s_lower.x_point,
-                    right.right_v_left_s_lower.y_point,
-                )
-            }
-        }
-
-        if (right.right_v_right_s_upper?.image) {
-            if (localStorage.getItem('right_v_right_s_upper')) {
-                loadObject(JSON.parse(localStorage.getItem('right_v_right_s_upper')))
-            } else {
-                loadImage(
-                    right.right_v_right_s_upper.image,
-                    'right_v_right_s_upper',
-                    right.right_v_right_s_upper.x_point,
-                    right.right_v_right_s_upper.y_point,
-                )
-            }
-        }
-
-        if (right.right_v_right_s_lower?.image) {
-            if (localStorage.getItem('right_v_right_s_lower')) {
-                loadObject(JSON.parse(localStorage.getItem('right_v_right_s_lower')))
-            } else {
-                loadImage(
-                    right.right_v_right_s_lower.image,
-                    'right_v_right_s_lower',
-                    right.right_v_right_s_lower.x_point,
-                    right.right_v_right_s_lower.y_point,
-                )
-            }
-        }
-
-
-
     }
 
     const getSampleImages = (s) => {
