@@ -75,6 +75,7 @@ function SamLocalEditor(props) {
         });
 
     useEffect(() => {
+        localStorage.clear();
         setCanvas(initCanvas('canvas'));
     }, []);
     useEffect(() => {
@@ -411,6 +412,7 @@ function SamLocalEditor(props) {
         }
 
         if (back.back_left_sleeve?.image) {
+            console.log(back.back_left_sleeve?.image)
             if (localStorage.getItem('back_left_sleeve')) {
                 loadObject(JSON.parse(localStorage.getItem('back_left_sleeve')))
             } else {
@@ -659,7 +661,6 @@ function SamLocalEditor(props) {
 
     function imageSaved(i){
         let logo = JSON.parse(localStorage.getItem('samImage'))
-
         if (logo.image1?.image) {
             if (localStorage.getItem('samImage')) {
                 loadObject(JSON.parse(localStorage.getItem('samImage')))
@@ -759,19 +760,12 @@ function SamLocalEditor(props) {
             <div>
                 {selectedTab === 0 &&
                 <div className='row'>
-                    <div className="btn-group" role="group" aria-label="Basic example" style={{width: "100%"}}>
-                        <button type="button" className="btn btn-secondary" onClick={() => {
-                            onComponentClick('body_first_section')
-                        }}>Body
-                        </button>
-                        <button type="button" className="btn btn-secondary" onClick={() => {
-                            onComponentClick('front-collar')
-                        }}>Collar
-                        </button>
-                        <button type="button" className="btn btn-secondary" onClick={() => {
-                            onComponentClick('sleeve')
-                        }}>sleeve
-                        </button>
+                    <div className="btn-group" role="group" aria-label="Basic example" style={{width:"100%"}}>
+                        <button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('body_first_section')}}>Body First Section</button>
+                        <button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('body_second_section')}}>Body second section</button>
+                        <button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('body_third_section')}}>Body Third Section</button>
+                        <button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('front-collar')}}>Collar</button>
+                        <button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('sleeve')}}>sleeve</button>
                     </div>
 
                     {colorShow &&
@@ -979,14 +973,14 @@ function SamLocalEditor(props) {
                             }}>
                                 <button onClick={getSampleImages}>Load Images</button>
                                 {
-                                    img ?
-                                        img.map((s) =>
-                                            <img src={s.image} alt={''} style={{width: "50px", height: "50px"}}
-                                                 onClick={() => {
-                                                     load_logo(s.image)
-                                                 }}/>
-                                        )
-                                        : null}
+
+
+                                    img?
+                                    img.map((s) =>
+                                             <img src={s.image} alt={''} style={{width:"50px", height:"50px"}} onClick={()=> {load_logo(s.image)}}/>
+
+                                    )
+                                :null}
                             </div>
 
                         </div>
@@ -1120,9 +1114,9 @@ function SamLocalEditor(props) {
                 {selectedTab === 2 &&
                 <div className='row' style={{width:"100%"}}>
                     <div className="btn-group" role="group" aria-label="Basic example" style={{width:"100%"}}>
-                        <button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('left_v_upper_part')}}>Left Sleeve</button>
+                        <button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('left_v_upper_part')}}>upper Sleeve</button>
                         {/*<button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('front-collar')}}>Collar</button>*/}
-                        <button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('left_v_lower_part')}}>Right Sleeve</button>
+                        <button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('left_v_lower_part')}}>Lower Sleeve</button>
                     </div>
                     {colorShow &&
                     <div style={{marginLeft:"50px", display:"inline"}}>
@@ -1192,81 +1186,68 @@ function SamLocalEditor(props) {
                 </div>
                 // <SamLocalEditorRight/>
                 }
-                {selectedTab === 3 &&
-                <div>
+                {selectedTab === 3 && <div>
+
                     <div className='row' style={{width:"100%"}}>
-                    <div className="btn-group" role="group" aria-label="Basic example" style={{width:"100%"}}>
-                        <button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('left_v_upper_part')}}>Left Sleeve</button>
-                        {/*<button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('front-collar')}}>Collar</button>*/}
-                        <button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('left_v_lower_part')}}>Right Sleeve</button>
-                    </div>
-                    {colorShow &&
-                    <div style={{marginLeft:"50px", display:"inline"}}>
-                     <p> Choose color</p>
+                        <div className="btn-group" role="group" aria-label="Basic example" style={{width:"100%"}}>
+                            <button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('left_v_upper_part')}}>Left Sleeve</button>
+                            {/*<button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('front-collar')}}>Collar</button>*/}
+                            <button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('left_v_lower_part')}}>Right Sleeve</button>
+                        </div>
+                        {colorShow &&
+                        <div style={{marginLeft:"50px", display:"inline"}}>
+                            <p> Choose color</p>
 
-                    <CirclePicker
-                        color={ color }
-                        onChangeComplete={ handleChangeComplete }
-                    />
-                    <br></br>
-                        <div id="output-text">
-                            <input onChange={handleInput} placeholder="Enter text"/>
-                                    <button type='button'
-                                            name='text_show'
-                                            onClick={textShow}
-                                            style={{
-                                                backgroundColor: "#767FE0",
-                                                color: "white",
-                                                border: "none",
-                                                borderRadius: "50px",
-                                                width: "120px",
-                                                height: "30px",
-                                                margin: "10px"
-                                            }}>
-                                        Add Text
-                                    </button>
+                            <CirclePicker
+                                color={ color }
+                                onChangeComplete={ handleChangeComplete }
+                            />
                             <br></br>
+                            <div id="output-text">
+                                <input onChange={handleInput} placeholder="Enter text"/>
+                                <button type='button'
+                                        name='text_show'
+                                        onClick={textShow}
+                                        style={{
+                                            backgroundColor: "#767FE0",
+                                            color: "white",
+                                            border: "none",
+                                            borderRadius: "50px",
+                                            width: "120px",
+                                            height: "30px",
+                                            margin: "10px"
+                                        }}>
+                                    Add Text
+                                </button>
+                                <br></br>
 
-                            <select id="input-font" onChange={changeFontStyle (this)}>
+                                <select id="input-font" onChange={changeFontStyle (this)}>
 
-                            <option value="Comic Sans"
-                                    selected="selected">
-                                Comic Sans
-                            </option>
-                            <option value="Arial">Arial</option>
-                            <option value="fantasy">Fantasy</option>
-                            <option value="cursive">cursive</option>
-                        </select>
-                            <select id="input-font" style={{marginLeft:"10px"}}>
+                                    <option value="Comic Sans"
+                                            selected="selected">
+                                        Comic Sans
+                                    </option>
+                                    <option value="Arial">Arial</option>
+                                    <option value="fantasy">Fantasy</option>
+                                    <option value="cursive">cursive</option>
+                                </select>
+                                <select id="input-font" style={{marginLeft:"10px"}}>
 
-                            <option value="Normal"
-                                    selected="selected">
-                                Normal
-                            </option>
-                            <option value="Arial" style={{fontStyle:"bolder"}}>Bold</option>
-                            <option value="fantasy" style={{fontStyle:"italic"}}>Italic</option>
-                            <option value="cursive" style={{fontStyle:"underline"}}>Underline</option>
-                        </select>
-                            <br></br>
-                            <div style={{width:"300px", float:"right"}}>
-                            <div style={{width:"300px", height:"300px", border:"solid", borderColor:"black", borderWidth:"1px", float:"right", marginRight:"-900px", marginTop:"-150px"}}>
-                                <button onClick={getSampleImages}>Load Images</button>
-                                {
-                                    img?
-                                    img.map((s) =>
-                                             <img src={s.image} alt={''} style={{width:"50px", height:"50px"}} onClick={()=> {load_logo(s.image)}}/>
-                                    )
-                                :null}
+                                    <option value="Normal"
+                                            selected="selected">
+                                        Normal
+                                    </option>
+                                    <option value="Arial" style={{fontStyle:"bolder"}}>Bold</option>
+                                    <option value="fantasy" style={{fontStyle:"italic"}}>Italic</option>
+                                    <option value="cursive" style={{fontStyle:"underline"}}>Underline</option>
+                                </select>
+                                <br></br>
+                                <br></br>
+
                             </div>
-
                         </div>
-                            <br></br>
-
-                        </div>
+                        }
                     </div>
-                    }
-                </div>
-                    {/*<SamLocalEditorLeft/>*/}
                 </div>}
             </div>
             <canvas id='canvas'>
