@@ -138,7 +138,7 @@ function App() {
                 />
                 <Route
                     exact
-                    path="/editor/bag/:id"
+                    path="/editor/pants/:id"
                     component={SamLocalEditorPantFront}
                     render={(props) => <SamLocalEditorPantFront {...props} />}
                 />
