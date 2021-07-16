@@ -28,8 +28,10 @@ function SamLocalEditorCoachJacFront(props) {
     useEffect(() => {
         getProductDetail(id)
             .then(items => {
-                localStorage.setItem('front_view_tank_top', JSON.stringify(items.front_view_tank_top));
-                localStorage.setItem('back_view_tank_top', JSON.stringify(items.back_view_tank_top));
+                localStorage.setItem('front_view_coach_jac', JSON.stringify(items.front_view_coach_jac));
+                localStorage.setItem('back_view_base_coach_jac', JSON.stringify(items.back_view_base_coach_jac));
+                localStorage.setItem('left_view_coach_jac', JSON.stringify(items.left_view_coach_jac));
+                localStorage.setItem('right_view_coach_jac', JSON.stringify(items.right_view_coach_jac));
                 setProduct(items)
             })
     }, [])
@@ -53,6 +55,12 @@ function SamLocalEditorCoachJacFront(props) {
         }
         if (newValue === 1) {
             backImageLoad()
+        }
+        if (newValue === 2) {
+            rightImageLoad()
+        }
+        if (newValue === 3) {
+            leftImageLoad()
         }
     }
 
@@ -295,85 +303,133 @@ function SamLocalEditorCoachJacFront(props) {
 
     function frontImageLoad() {
         clearCanvas()
-        let front_view_tank_top = JSON.parse(localStorage.getItem('front_view_tank_top'))
-        if (front_view_tank_top.tank_collar_front?.image) {
-            if (localStorage.getItem('tank_collar_front')) {
-                loadObject(JSON.parse(localStorage.getItem('tank_collar_front')))
+        let front_view_coach_jac = JSON.parse(localStorage.getItem('front_view_coach_jac'))
+        if (front_view_coach_jac.coach_jac_body_front?.image) {
+            if (localStorage.getItem('coach_jac_body_front')) {
+                loadObject(JSON.parse(localStorage.getItem('coach_jac_body_front')))
             } else {
                 loadImage(
-                    front_view_tank_top.tank_collar_front.image,
-                    'tank_collar_front',
-                    front_view_tank_top.tank_collar_front.x_point,
-                    front_view_tank_top.tank_collar_front.y_point)
+                    front_view_coach_jac.coach_jac_body_front.image,
+                    'coach_jac_body_front',
+                    front_view_coach_jac.coach_jac_body_front.x_point,
+                    front_view_coach_jac.coach_jac_body_front.y_point)
             }
 
         }
-        if (front_view_tank_top.tank_collar_inner_front?.image) {
-            if (localStorage.getItem('tank_collar_inner_front')) {
-                loadObject(JSON.parse(localStorage.getItem('tank_collar_inner_front')))
+        if (front_view_coach_jac.coach_jac_collar_front?.image) {
+            if (localStorage.getItem('coach_jac_collar_front')) {
+                loadObject(JSON.parse(localStorage.getItem('coach_jac_collar_front')))
             } else {
                 loadImage(
-                    front_view_tank_top.tank_collar_inner_front.image,
-                    'tank_collar_inner_front',
-                    front_view_tank_top.tank_collar_inner_front.x_point,
-                    front_view_tank_top.tank_collar_inner_front.y_point)
+                    front_view_coach_jac.coach_jac_collar_front.image,
+                    'coach_jac_collar_front',
+                    front_view_coach_jac.coach_jac_collar_front.x_point,
+                    front_view_coach_jac.coach_jac_collar_front.y_point)
             }
         }
-        if (front_view_tank_top.tank_top_front?.image) {
-            if (localStorage.getItem('tank_top_front')) {
-                loadObject(JSON.parse(localStorage.getItem('tank_top_front')))
+        if (front_view_coach_jac.coach_jac_collar_inner_front?.image) {
+            if (localStorage.getItem('coach_jac_collar_inner_front')) {
+                loadObject(JSON.parse(localStorage.getItem('coach_jac_collar_inner_front')))
             } else {
                 loadImage(
-                    front_view_tank_top.tank_top_front.image,
-                    'tank_top_front',
-                    front_view_tank_top.tank_top_front.x_point,
-                    front_view_tank_top.tank_top_front.y_point)
+                    front_view_coach_jac.coach_jac_collar_inner_front.image,
+                    'coach_jac_collar_inner_front',
+                    front_view_coach_jac.coach_jac_collar_inner_front.x_point,
+                    front_view_coach_jac.coach_jac_collar_inner_front.y_point)
             }
         }
-        if (front_view_tank_top.tank_mid_front?.image) {
-            if (localStorage.getItem('tank_mid_front')) {
-                loadObject(JSON.parse(localStorage.getItem('tank_mid_front')))
+        if (front_view_coach_jac.coach_jac_button_front?.image) {
+            if (localStorage.getItem('coach_jac_button_front')) {
+                loadObject(JSON.parse(localStorage.getItem('coach_jac_button_front')))
             } else {
                 loadImage(
-                    front_view_tank_top.tank_mid_front.image,
-                    'tank_mid_front',
-                    front_view_tank_top.tank_mid_front.x_point,
-                    front_view_tank_top.tank_mid_front.y_point)
+                    front_view_coach_jac.coach_jac_button_front.image,
+                    'coach_jac_button_front',
+                    front_view_coach_jac.coach_jac_button_front.x_point,
+                    front_view_coach_jac.coach_jac_button_front.y_point)
             }
         }
-        if (front_view_tank_top.tank_bottom_front?.image) {
-            if (localStorage.getItem('tank_bottom_front')) {
-                loadObject(JSON.parse(localStorage.getItem('tank_bottom_front')))
+        if (front_view_coach_jac.coach_jac_left_pocket_front?.image) {
+            if (localStorage.getItem('coach_jac_left_pocket_front')) {
+                loadObject(JSON.parse(localStorage.getItem('coach_jac_left_pocket_front')))
             } else {
                 loadImage(
-                    front_view_tank_top.tank_bottom_front.image,
-                    'tank_bottom_front',
-                    front_view_tank_top.tank_bottom_front.x_point,
-                    front_view_tank_top.tank_bottom_front.y_point)
-            }
-        }
-
-        if (front_view_tank_top.tank_left_sleeve_front?.image) {
-            if (localStorage.getItem('tank_left_sleeve_front')) {
-                loadObject(JSON.parse(localStorage.getItem('tank_left_sleeve_front')))
-            } else {
-                loadImage(
-                    front_view_tank_top.tank_left_sleeve_front.image,
-                    'tank_left_sleeve_front',
-                    front_view_tank_top.tank_left_sleeve_front.x_point,
-                    front_view_tank_top.tank_left_sleeve_front.y_point)
-
+                    front_view_coach_jac.coach_jac_left_pocket_front.image,
+                    'coach_jac_left_pocket_front',
+                    front_view_coach_jac.coach_jac_left_pocket_front.x_point,
+                    front_view_coach_jac.coach_jac_left_pocket_front.y_point)
             }
         }
 
-        if (front_view_tank_top.tank_right_sleeve_front?.image) {
-            if (localStorage.getItem('tank_right_sleeve_front')) {
-                loadObject(JSON.parse(localStorage.getItem('tank_right_sleeve_front')))
+        if (front_view_coach_jac.coach_jac_right_pocket_front?.image) {
+            if (localStorage.getItem('coach_jac_right_pocket_front')) {
+                loadObject(JSON.parse(localStorage.getItem('coach_jac_right_pocket_front')))
             } else {
-                loadImage(front_view_tank_top.tank_right_sleeve_front.image,
-                    'tank_right_sleeve_front',
-                    front_view_tank_top.tank_right_sleeve_front.x_point,
-                    front_view_tank_top.tank_right_sleeve_front.y_point)
+                loadImage(
+                    front_view_coach_jac.coach_jac_right_pocket_front.image,
+                    'coach_jac_right_pocket_front',
+                    front_view_coach_jac.coach_jac_right_pocket_front.x_point,
+                    front_view_coach_jac.coach_jac_right_pocket_front.y_point)
+
+            }
+        }
+
+        if (front_view_coach_jac.coach_jac_hem_front?.image) {
+            if (localStorage.getItem('coach_jac_hem_front')) {
+                loadObject(JSON.parse(localStorage.getItem('coach_jac_hem_front')))
+            } else {
+                loadImage(front_view_coach_jac.coach_jac_hem_front.image,
+                    'coach_jac_hem_front',
+                    front_view_coach_jac.coach_jac_hem_front.x_point,
+                    front_view_coach_jac.coach_jac_hem_front.y_point)
+            }
+
+        }
+
+        if (front_view_coach_jac.coach_jac_left_sleeve_front?.image) {
+            if (localStorage.getItem('coach_jac_left_sleeve_front')) {
+                loadObject(JSON.parse(localStorage.getItem('coach_jac_left_sleeve_front')))
+            } else {
+                loadImage(front_view_coach_jac.coach_jac_left_sleeve_front.image,
+                    'coach_jac_left_sleeve_front',
+                    front_view_coach_jac.coach_jac_left_sleeve_front.x_point,
+                    front_view_coach_jac.coach_jac_left_sleeve_front.y_point)
+            }
+
+        }
+
+        if (front_view_coach_jac.coach_jac_right_sleeve_front?.image) {
+            if (localStorage.getItem('coach_jac_right_sleeve_front')) {
+                loadObject(JSON.parse(localStorage.getItem('coach_jac_right_sleeve_front')))
+            } else {
+                loadImage(front_view_coach_jac.coach_jac_right_sleeve_front.image,
+                    'coach_jac_right_sleeve_front',
+                    front_view_coach_jac.coach_jac_right_sleeve_front.x_point,
+                    front_view_coach_jac.coach_jac_right_sleeve_front.y_point)
+            }
+
+        }
+
+        if (front_view_coach_jac.coach_jac_left_cuff_front?.image) {
+            if (localStorage.getItem('coach_jac_left_cuff_front')) {
+                loadObject(JSON.parse(localStorage.getItem('coach_jac_left_cuff_front')))
+            } else {
+                loadImage(front_view_coach_jac.coach_jac_left_cuff_front.image,
+                    'coach_jac_left_cuff_front',
+                    front_view_coach_jac.coach_jac_left_cuff_front.x_point,
+                    front_view_coach_jac.coach_jac_left_cuff_front.y_point)
+            }
+
+        }
+
+        if (front_view_coach_jac.coach_jac_right_cuff_front?.image) {
+            if (localStorage.getItem('coach_jac_right_cuff_front')) {
+                loadObject(JSON.parse(localStorage.getItem('coach_jac_right_cuff_front')))
+            } else {
+                loadImage(front_view_coach_jac.coach_jac_right_cuff_front.image,
+                    'coach_jac_right_cuff_front',
+                    front_view_coach_jac.coach_jac_right_cuff_front.x_point,
+                    front_view_coach_jac.coach_jac_right_cuff_front.y_point)
             }
 
         }
@@ -381,84 +437,337 @@ function SamLocalEditorCoachJacFront(props) {
 
     function backImageLoad() {
         clearCanvas()
-        let back_view_tank_top = JSON.parse(localStorage.getItem('back_view_tank_top'))
-        if (back_view_tank_top.tank_collar_back?.image) {
-            if (localStorage.getItem('tank_collar_back')) {
-                loadObject(JSON.parse(localStorage.getItem('tank_collar_back')))
+        let back_view_base_coach_jac = JSON.parse(localStorage.getItem('back_view_base_coach_jac'))
+        if (back_view_base_coach_jac.coach_jac_body_back?.image) {
+            if (localStorage.getItem('coach_jac_body_back')) {
+                loadObject(JSON.parse(localStorage.getItem('coach_jac_body_back')))
             } else {
                 loadImage(
-                    back_view_tank_top.tank_collar_back.image,
-                    'tank_collar_back',
-                    back_view_tank_top.tank_collar_back.x_point,
-                    back_view_tank_top.tank_collar_back.y_point,
+                    back_view_base_coach_jac.coach_jac_body_back.image,
+                    'coach_jac_body_back',
+                    back_view_base_coach_jac.coach_jac_body_back.x_point,
+                    back_view_base_coach_jac.coach_jac_body_back.y_point,
                 )
             }
 
         }
 
-        if (back_view_tank_top.tank_top_back?.image) {
-            if (localStorage.getItem('tank_top_back')) {
-                loadObject(JSON.parse(localStorage.getItem('tank_top_back')))
+        if (back_view_base_coach_jac.coach_jac_collar_back?.image) {
+            if (localStorage.getItem('coach_jac_collar_back')) {
+                loadObject(JSON.parse(localStorage.getItem('coach_jac_collar_back')))
             } else {
                 loadImage(
-                    back_view_tank_top.tank_top_back.image,
-                    'tank_top_back',
-                    back_view_tank_top.tank_top_back.x_point,
-                    back_view_tank_top.tank_top_back.y_point,
+                    back_view_base_coach_jac.coach_jac_collar_back.image,
+                    'coach_jac_collar_back',
+                    back_view_base_coach_jac.coach_jac_collar_back.x_point,
+                    back_view_base_coach_jac.coach_jac_collar_back.y_point,
                 )
             }
         }
 
-        if (back_view_tank_top.tank_mid_back?.image) {
-            if (localStorage.getItem('tank_mid_back')) {
-                loadObject(JSON.parse(localStorage.getItem('tank_mid_back')))
+        if (back_view_base_coach_jac.coach_jac_left_sleeve_back?.image) {
+            if (localStorage.getItem('coach_jac_left_sleeve_back')) {
+                loadObject(JSON.parse(localStorage.getItem('coach_jac_left_sleeve_back')))
             } else {
                 loadImage(
-                    back_view_tank_top.tank_mid_back.image,
-                    'tank_mid_back',
-                    back_view_tank_top.tank_mid_back.x_point,
-                    back_view_tank_top.tank_mid_back.y_point,
+                    back_view_base_coach_jac.coach_jac_left_sleeve_back.image,
+                    'coach_jac_left_sleeve_back',
+                    back_view_base_coach_jac.coach_jac_left_sleeve_back.x_point,
+                    back_view_base_coach_jac.coach_jac_left_sleeve_back.y_point,
                 )
             }
         }
 
-        if (back_view_tank_top.tank_bottom_back?.image) {
-            if (localStorage.getItem('tank_bottom_back')) {
-                loadObject(JSON.parse(localStorage.getItem('tank_bottom_back')))
+        if (back_view_base_coach_jac.coach_jac_right_sleeve_back?.image) {
+            if (localStorage.getItem('coach_jac_right_sleeve_back')) {
+                loadObject(JSON.parse(localStorage.getItem('coach_jac_right_sleeve_back')))
             } else {
                 loadImage(
-                    back_view_tank_top.tank_bottom_back.image,
-                    'tank_bottom_back',
-                    back_view_tank_top.tank_bottom_back.x_point,
-                    back_view_tank_top.tank_bottom_back.y_point,
+                    back_view_base_coach_jac.coach_jac_right_sleeve_back.image,
+                    'coach_jac_right_sleeve_back',
+                    back_view_base_coach_jac.coach_jac_right_sleeve_back.x_point,
+                    back_view_base_coach_jac.coach_jac_right_sleeve_back.y_point,
                 )
             }
         }
 
-        if (back_view_tank_top.tank_left_sleeve_back?.image) {
-            if (localStorage.getItem('tank_left_sleeve_back')) {
-                loadObject(JSON.parse(localStorage.getItem('tank_left_sleeve_back')))
+        if (back_view_base_coach_jac.coach_jac_hem_back?.image) {
+            if (localStorage.getItem('coach_jac_hem_back')) {
+                loadObject(JSON.parse(localStorage.getItem('coach_jac_hem_back')))
             } else {
                 loadImage(
-                    back_view_tank_top.tank_left_sleeve_back.image,
-                    'tank_left_sleeve_back',
-                    back_view_tank_top.tank_left_sleeve_back.x_point,
-                    back_view_tank_top.tank_left_sleeve_back.y_point,
+                    back_view_base_coach_jac.coach_jac_hem_back.image,
+                    'coach_jac_hem_back',
+                    back_view_base_coach_jac.coach_jac_hem_back.x_point,
+                    back_view_base_coach_jac.coach_jac_hem_back.y_point,
                 )
             }
         }
-        if (back_view_tank_top.tank_right_sleeve_back?.image) {
+        if (back_view_base_coach_jac.tank_right_sleeve_back?.image) {
             if (localStorage.getItem('tank_right_sleeve_back')) {
                 loadObject(JSON.parse(localStorage.getItem('tank_right_sleeve_back')))
             } else {
                 loadImage(
-                    back_view_tank_top.tank_right_sleeve_back.image,
-                    'tank_right_sleeve_back',
-                    back_view_tank_top.tank_right_sleeve_back.x_point,
-                    back_view_tank_top.tank_right_sleeve_back.y_point,
+                    back_view_base_coach_jac.coach_jac_left_cuff_back.image,
+                    'coach_jac_left_cuff_back',
+                    back_view_base_coach_jac.coach_jac_left_cuff_back.x_point,
+                    back_view_base_coach_jac.coach_jac_left_cuff_back.y_point,
                 )
             }
         }
+        if (back_view_base_coach_jac.coach_jac_right_cuff_back?.image) {
+            if (localStorage.getItem('coach_jac_right_cuff_back')) {
+                loadObject(JSON.parse(localStorage.getItem('coach_jac_right_cuff_back')))
+            } else {
+                loadImage(
+                    back_view_base_coach_jac.coach_jac_right_cuff_back.image,
+                    'coach_jac_right_cuff_back',
+                    back_view_base_coach_jac.coach_jac_right_cuff_back.x_point,
+                    back_view_base_coach_jac.coach_jac_right_cuff_back.y_point,
+                )
+            }
+        }
+
+    }
+    function leftImageLoad() {
+        clearCanvas()
+        let left_view_coach_jac = JSON.parse(localStorage.getItem('left_view_coach_jac'))
+        if (left_view_coach_jac.coach_jac_mid_body_left?.image) {
+            if (localStorage.getItem('coach_jac_mid_body_left')) {
+                loadObject(JSON.parse(localStorage.getItem('coach_jac_mid_body_left')))
+            } else {
+                loadImage(
+                    left_view_coach_jac.coach_jac_mid_body_left.image,
+                    'coach_jac_mid_body_left',
+                    left_view_coach_jac.coach_jac_mid_body_left.x_point,
+                    left_view_coach_jac.coach_jac_mid_body_left.y_point,
+                )
+            }
+
+        }
+
+        if (left_view_coach_jac.coach_jac_left_body_left?.image) {
+            if (localStorage.getItem('coach_jac_left_body_left')) {
+                loadObject(JSON.parse(localStorage.getItem('coach_jac_left_body_left')))
+            } else {
+                loadImage(
+                    left_view_coach_jac.coach_jac_left_body_left.image,
+                    'coach_jac_left_body_left',
+                    left_view_coach_jac.coach_jac_left_body_left.x_point,
+                    left_view_coach_jac.coach_jac_left_body_left.y_point,
+                )
+            }
+
+        }
+
+        if (left_view_coach_jac.coach_jac_right_body_left?.image) {
+            if (localStorage.getItem('coach_jac_right_body_left')) {
+                loadObject(JSON.parse(localStorage.getItem('coach_jac_right_body_left')))
+            } else {
+                loadImage(
+                    left_view_coach_jac.coach_jac_right_body_left.image,
+                    'coach_jac_right_body_left',
+                    left_view_coach_jac.coach_jac_right_body_left.x_point,
+                    left_view_coach_jac.coach_jac_right_body_left.y_point,
+                )
+            }
+
+        }
+
+        if (left_view_coach_jac.coach_jac_bottom_body_left?.image) {
+            if (localStorage.getItem('coach_jac_bottom_body_left')) {
+                loadObject(JSON.parse(localStorage.getItem('coach_jac_bottom_body_left')))
+            } else {
+                loadImage(
+                    left_view_coach_jac.coach_jac_bottom_body_left.image,
+                    'coach_jac_bottom_body_left',
+                    left_view_coach_jac.coach_jac_bottom_body_left.x_point,
+                    left_view_coach_jac.coach_jac_bottom_body_left.y_point,
+                )
+            }
+
+        }
+
+        if (left_view_coach_jac.coach_jac_mid_cuff_left?.image) {
+            if (localStorage.getItem('coach_jac_mid_cuff_left')) {
+                loadObject(JSON.parse(localStorage.getItem('coach_jac_mid_cuff_left')))
+            } else {
+                loadImage(
+                    left_view_coach_jac.coach_jac_mid_cuff_left.image,
+                    'coach_jac_mid_cuff_left',
+                    left_view_coach_jac.coach_jac_mid_cuff_left.x_point,
+                    left_view_coach_jac.coach_jac_mid_cuff_left.y_point,
+                )
+            }
+
+        }
+
+        if (left_view_coach_jac.coach_jac_left_cuff_left?.image) {
+            if (localStorage.getItem('coach_jac_left_cuff_left')) {
+                loadObject(JSON.parse(localStorage.getItem('coach_jac_left_cuff_left')))
+            } else {
+                loadImage(
+                    left_view_coach_jac.coach_jac_left_cuff_left.image,
+                    'coach_jac_left_cuff_left',
+                    left_view_coach_jac.coach_jac_left_cuff_left.x_point,
+                    left_view_coach_jac.coach_jac_left_cuff_left.y_point,
+                )
+            }
+
+        }
+
+        if (left_view_coach_jac.coach_jac_right_cuff_left?.image) {
+            if (localStorage.getItem('coach_jac_right_cuff_left')) {
+                loadObject(JSON.parse(localStorage.getItem('coach_jac_right_cuff_left')))
+            } else {
+                loadImage(
+                    left_view_coach_jac.coach_jac_right_cuff_left.image,
+                    'coach_jac_right_cuff_left',
+                    left_view_coach_jac.coach_jac_right_cuff_left.x_point,
+                    left_view_coach_jac.coach_jac_right_cuff_left.y_point,
+                )
+            }
+
+        }
+
+
+
+        if (left_view_coach_jac.coach_jac_bottom_cuff_left?.image) {
+            if (localStorage.getItem('coach_jac_bottom_cuff_left')) {
+                loadObject(JSON.parse(localStorage.getItem('coach_jac_bottom_cuff_left')))
+            } else {
+                loadImage(
+                    left_view_coach_jac.coach_jac_bottom_cuff_left.image,
+                    'coach_jac_bottom_cuff_left',
+                    left_view_coach_jac.coach_jac_bottom_cuff_left.x_point,
+                    left_view_coach_jac.coach_jac_bottom_cuff_left.y_point,
+                )
+            }
+
+        }
+
+
+
+    }
+
+    function rightImageLoad() {
+        clearCanvas()
+        let right_view_coach_jac = JSON.parse(localStorage.getItem('right_view_coach_jac'))
+        if (right_view_coach_jac.coach_jac_mid_body_right?.image) {
+            if (localStorage.getItem('coach_jac_mid_body_right')) {
+                loadObject(JSON.parse(localStorage.getItem('coach_jac_mid_body_right')))
+            } else {
+                loadImage(
+                    right_view_coach_jac.coach_jac_mid_body_right.image,
+                    'coach_jac_mid_body_right',
+                    right_view_coach_jac.coach_jac_mid_body_right.x_point,
+                    right_view_coach_jac.coach_jac_mid_body_right.y_point,
+                )
+            }
+
+        }
+
+        if (right_view_coach_jac.coach_jac_left_body_right?.image) {
+            if (localStorage.getItem('coach_jac_left_body_right')) {
+                loadObject(JSON.parse(localStorage.getItem('coach_jac_left_body_right')))
+            } else {
+                loadImage(
+                    right_view_coach_jac.coach_jac_left_body_right.image,
+                    'coach_jac_left_body_right',
+                    right_view_coach_jac.coach_jac_left_body_right.x_point,
+                    right_view_coach_jac.coach_jac_left_body_right.y_point,
+                )
+            }
+
+        }
+
+        if (right_view_coach_jac.coach_jac_right_body_right?.image) {
+            if (localStorage.getItem('coach_jac_right_body_right')) {
+                loadObject(JSON.parse(localStorage.getItem('coach_jac_right_body_right')))
+            } else {
+                loadImage(
+                    right_view_coach_jac.coach_jac_right_body_right.image,
+                    'coach_jac_right_body_right',
+                    right_view_coach_jac.coach_jac_right_body_right.x_point,
+                    right_view_coach_jac.coach_jac_right_body_right.y_point,
+                )
+            }
+
+        }
+
+        if (right_view_coach_jac.coach_jac_bottom_body_right?.image) {
+            if (localStorage.getItem('coach_jac_bottom_body_right')) {
+                loadObject(JSON.parse(localStorage.getItem('coach_jac_bottom_body_right')))
+            } else {
+                loadImage(
+                    right_view_coach_jac.coach_jac_bottom_body_right.image,
+                    'coach_jac_bottom_body_right',
+                    right_view_coach_jac.coach_jac_bottom_body_right.x_point,
+                    right_view_coach_jac.coach_jac_bottom_body_right.y_point,
+                )
+            }
+
+        }
+
+        if (right_view_coach_jac.coach_jac_mid_cuff_right?.image) {
+            if (localStorage.getItem('coach_jac_mid_cuff_right')) {
+                loadObject(JSON.parse(localStorage.getItem('coach_jac_mid_cuff_right')))
+            } else {
+                loadImage(
+                    right_view_coach_jac.coach_jac_mid_cuff_right.image,
+                    'coach_jac_mid_cuff_right',
+                    right_view_coach_jac.coach_jac_mid_cuff_right.x_point,
+                    right_view_coach_jac.coach_jac_mid_cuff_right.y_point,
+                )
+            }
+
+        }
+
+        if (right_view_coach_jac.coach_jac_left_cuff_right?.image) {
+            if (localStorage.getItem('coach_jac_left_cuff_right')) {
+                loadObject(JSON.parse(localStorage.getItem('coach_jac_left_cuff_right')))
+            } else {
+                loadImage(
+                    right_view_coach_jac.coach_jac_left_cuff_right.image,
+                    'coach_jac_left_cuff_right',
+                    right_view_coach_jac.coach_jac_left_cuff_right.x_point,
+                    right_view_coach_jac.coach_jac_left_cuff_right.y_point,
+                )
+            }
+
+        }
+
+        if (right_view_coach_jac.coach_jac_right_cuff_right?.image) {
+            if (localStorage.getItem('coach_jac_right_cuff_right')) {
+                loadObject(JSON.parse(localStorage.getItem('coach_jac_right_cuff_right')))
+            } else {
+                loadImage(
+                    right_view_coach_jac.coach_jac_right_cuff_right.image,
+                    'coach_jac_right_cuff_right',
+                    right_view_coach_jac.coach_jac_right_cuff_right.x_point,
+                    right_view_coach_jac.coach_jac_right_cuff_right.y_point,
+                )
+            }
+
+        }
+
+
+        if (right_view_coach_jac.coach_jac_bottom_cuff_right?.image) {
+            if (localStorage.getItem('coach_jac_bottom_cuff_right')) {
+                loadObject(JSON.parse(localStorage.getItem('coach_jac_bottom_cuff_right')))
+            } else {
+                loadImage(
+                    right_view_coach_jac.coach_jac_bottom_cuff_right.image,
+                    'coach_jac_bottom_cuff_right',
+                    right_view_coach_jac.coach_jac_bottom_cuff_right.x_point,
+                    right_view_coach_jac.coach_jac_bottom_cuff_right.y_point,
+                )
+            }
+
+        }
+
+
+
     }
 
 
@@ -574,6 +883,8 @@ function SamLocalEditorCoachJacFront(props) {
                 >
                     <Tab label="Front View"/>
                     <Tab label="Back View"/>
+                    <Tab label="Right side"/>
+                    <Tab label="Left Side"/>
                 </Tabs>
             </AppBar>
             {/* front view*/}
@@ -864,6 +1175,12 @@ function SamLocalEditorCoachJacFront(props) {
                 {/* back view */}
                 {selectedTab === 1 &&
                     <SamLocalEditorCoachJacBack/>
+                }
+                {selectedTab === 2 &&
+                    <SamLocalEditorCoachJacRight/>
+                }
+                {selectedTab === 3 &&
+                <SamLocalEditorCoachJacLeft/>
                 }
             </div>
             <canvas id='canvas'>
