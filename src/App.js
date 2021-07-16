@@ -102,7 +102,7 @@ function App() {
                 />
                 <Route
                     exact
-                    path="/editor/bag/:id"
+                    path="/editor/base-ball-jacket/:id"
                     component={SamLocalEditorBaseBJacFront}
                     render={(props) => <SamLocalEditorBaseBJacFront {...props} />}
                 />

@@ -28,16 +28,16 @@ function SamLocalEditorBaseBJacFront(props) {
     useEffect(() => {
         getProductDetail(id)
             .then(items => {
-                localStorage.setItem('body', JSON.stringify(items.front_view));
-                localStorage.setItem('back', JSON.stringify(items.back_view));
-                localStorage.setItem('left', JSON.stringify(items.left_view));
-                localStorage.setItem('right', JSON.stringify(items.right_view));
+                localStorage.setItem('front_view_base_b_jacket', JSON.stringify(items.front_view_base_b_jacket));
+                localStorage.setItem('back_view_base_b_jacket', JSON.stringify(items.back_view_base_b_jacket));
+                localStorage.setItem('left_view_base_b_jacket', JSON.stringify(items.left_view_base_b_jacket));
+                localStorage.setItem('right_view_base_b_jacket', JSON.stringify(items.right_view_base_b_jacket));
                 setProduct(items)
             })
     }, [])
 
     const [canvas, setCanvas] = useState(null)
-     const [name, setName] = useState(null);
+    const [name, setName] = useState(null);
     let [image, setImage] = useState(null);
 
     const [img, setImg] = useState(null);
@@ -139,9 +139,9 @@ function SamLocalEditorBaseBJacFront(props) {
     }
 
     var changeFontStyle = function (font) {
-           // document.getElementById("output-text")
-           //              .style.fontWeight = "italic";
-        }
+        // document.getElementById("output-text")
+        //              .style.fontWeight = "italic";
+    }
 
     const loadImage = (url, imageId, left, top) => {
 
@@ -272,7 +272,7 @@ function SamLocalEditorBaseBJacFront(props) {
         }
         l_logo.src = l;
 
-         var r_logo = new Image();
+        var r_logo = new Image();
         r_logo.onload = function (left_logo){
             console.log("Inside Right Logo")
             var right = new fabric.Image(r_logo, {
@@ -307,61 +307,161 @@ function SamLocalEditorBaseBJacFront(props) {
 
     function frontImageLoad() {
         clearCanvas()
-        let body = JSON.parse(localStorage.getItem('body'))
-        if (body.body_first_section?.image) {
-            if (localStorage.getItem('body_first_section')) {
-                loadObject(JSON.parse(localStorage.getItem('body_first_section')))
+        let front_view_base_b_jacket = JSON.parse(localStorage.getItem('front_view_base_b_jacket'))
+        if (front_view_base_b_jacket.base_b_jac_front_body?.image) {
+            if (localStorage.getItem('base_b_jac_front_body')) {
+                loadObject(JSON.parse(localStorage.getItem('base_b_jac_front_body')))
             } else {
-                loadImage(body.body_first_section.image, 'body_first_section', body.body_first_section.x_point, body.body_first_section.y_point)
+                loadImage(front_view_base_b_jacket.base_b_jac_front_body.image, 'base_b_jac_front_body', front_view_base_b_jacket.base_b_jac_front_body.x_point, front_view_base_b_jacket.base_b_jac_front_body.y_point)
             }
 
         }
-        if (body.body_second_section?.image) {
-            if (localStorage.getItem('body_second_section')) {
-                loadObject(JSON.parse(localStorage.getItem('body_second_section')))
+        if (front_view_base_b_jacket.base_b_jac_front_collar?.image) {
+            if (localStorage.getItem('base_b_jac_front_collar')) {
+                loadObject(JSON.parse(localStorage.getItem('base_b_jac_front_collar')))
             } else {
-                loadImage(body.body_second_section.image, 'body_second_section', body.body_second_section.x_point, body.body_second_section.y_point)
+                loadImage(front_view_base_b_jacket.base_b_jac_front_collar.image, 'base_b_jac_front_collar', front_view_base_b_jacket.base_b_jac_front_collar.x_point, front_view_base_b_jacket.base_b_jac_front_collar.y_point)
             }
         }
-        if (body.body_third_section?.image) {
-            if (localStorage.getItem('body_third_section')) {
-                loadObject(JSON.parse(localStorage.getItem('body_third_section')))
+        if (front_view_base_b_jacket.base_b_jac_front_collar_inner?.image) {
+            if (localStorage.getItem('base_b_jac_front_collar_inner')) {
+                loadObject(JSON.parse(localStorage.getItem('base_b_jac_front_collar_inner')))
             } else {
-                loadImage(body.body_third_section.image, 'body_third_section', body.body_third_section.x_point, body.body_third_section.y_point)
+                loadImage(front_view_base_b_jacket.base_b_jac_front_collar_inner.image, 'base_b_jac_front_collar_inner', front_view_base_b_jacket.base_b_jac_front_collar_inner.x_point, front_view_base_b_jacket.base_b_jac_front_collar_inner.y_point)
             }
         }
-        if (body.collar?.image) {
-            if (localStorage.getItem('front-collar')) {
-                loadObject(JSON.parse(localStorage.getItem('front-collar')))
+        if (front_view_base_b_jacket.base_b_jac_front_hem?.image) {
+            if (localStorage.getItem('base_b_jac_front_hem')) {
+                loadObject(JSON.parse(localStorage.getItem('base_b_jac_front_hem')))
             } else {
-                loadImage(body.collar.image, 'front-collar', body.collar.x_point, body.collar.y_point)
+                loadImage(front_view_base_b_jacket.base_b_jac_front_hem.image, 'base_b_jac_front_hem', front_view_base_b_jacket.base_b_jac_front_hem.x_point, front_view_base_b_jacket.base_b_jac_front_hem.y_point)
             }
         }
-        if (body.right_sleeve?.image) {
-            if (localStorage.getItem('right_sleeve')) {
-                loadObject(JSON.parse(localStorage.getItem('right_sleeve')))
+        if (front_view_base_b_jacket.base_b_jac_front_hem_strips?.image) {
+            if (localStorage.getItem('base_b_jac_front_hem_strips')) {
+                loadObject(JSON.parse(localStorage.getItem('base_b_jac_front_hem_strips')))
             } else {
-                loadImage(body.right_sleeve.image, 'right_sleeve', body.right_sleeve.x_point, body.right_sleeve.y_point)
-            }
-        }
-
-        if (body.left_sleeve?.image) {
-            if (localStorage.getItem('left_sleeve')) {
-                loadObject(JSON.parse(localStorage.getItem('left_sleeve')))
-            } else {
-                loadImage(body.left_sleeve.image, 'left_sleeve', body.left_sleeve.x_point, body.left_sleeve.y_point)
-
+                loadImage(front_view_base_b_jacket.base_b_jac_front_hem_strips.image, 'base_b_jac_front_hem_strips', front_view_base_b_jacket.base_b_jac_front_hem_strips.x_point, front_view_base_b_jacket.base_b_jac_front_hem_strips.y_point)
             }
         }
 
-        if (body.towel_front?.image) {
-            if (localStorage.getItem('towel_front')) {
-                loadObject(JSON.parse(localStorage.getItem('towel_front')))
+        if (front_view_base_b_jacket.base_b_jac_front_hem_mid?.image) {
+            if (localStorage.getItem('base_b_jac_front_hem_mid')) {
+                loadObject(JSON.parse(localStorage.getItem('base_b_jac_front_hem_mid')))
             } else {
-                loadImage(body.towel_front.image,
-                    'towel_front',
-                    body.towel_front.x_point,
-                    body.towel_front.y_point)
+                loadImage(front_view_base_b_jacket.base_b_jac_front_hem_mid.image, 'base_b_jac_front_hem_mid', front_view_base_b_jacket.base_b_jac_front_hem_mid.x_point, front_view_base_b_jacket.base_b_jac_front_hem_mid.y_point)
+
+            }
+        }
+
+        if (front_view_base_b_jacket.base_b_jac_front_button_body?.image) {
+            if (localStorage.getItem('base_b_jac_front_button_body')) {
+                loadObject(JSON.parse(localStorage.getItem('base_b_jac_front_button_body')))
+            } else {
+                loadImage(front_view_base_b_jacket.base_b_jac_front_button_body.image,
+                    'base_b_jac_front_button_body',
+                    front_view_base_b_jacket.base_b_jac_front_button_body.x_point,
+                    front_view_base_b_jacket.base_b_jac_front_button_body.y_point)
+            }
+
+        }
+        if (front_view_base_b_jacket.base_b_jac_front_button_hem?.image) {
+            if (localStorage.getItem('base_b_jac_front_button_hem')) {
+                loadObject(JSON.parse(localStorage.getItem('base_b_jac_front_button_hem')))
+            } else {
+                loadImage(front_view_base_b_jacket.base_b_jac_front_button_hem.image,
+                    'base_b_jac_front_button_hem',
+                    front_view_base_b_jacket.base_b_jac_front_button_hem.x_point,
+                    front_view_base_b_jacket.base_b_jac_front_button_hem.y_point)
+            }
+
+        }
+        if (front_view_base_b_jacket.base_b_jac_left_pocket_front?.image) {
+            if (localStorage.getItem('base_b_jac_left_pocket_front')) {
+                loadObject(JSON.parse(localStorage.getItem('base_b_jac_left_pocket_front')))
+            } else {
+                loadImage(front_view_base_b_jacket.base_b_jac_left_pocket_front.image,
+                    'base_b_jac_left_pocket_front',
+                    front_view_base_b_jacket.base_b_jac_left_pocket_front.x_point,
+                    front_view_base_b_jacket.base_b_jac_left_pocket_front.y_point)
+            }
+
+        }
+        if (front_view_base_b_jacket.base_b_jac_left_pocket_front?.image) {
+            if (localStorage.getItem('base_b_jac_right_pocket_front')) {
+                loadObject(JSON.parse(localStorage.getItem('base_b_jac_right_pocket_front')))
+            } else {
+                loadImage(front_view_base_b_jacket.base_b_jac_right_pocket_front.image,
+                    'base_b_jac_right_pocket_front',
+                    front_view_base_b_jacket.base_b_jac_right_pocket_front.x_point,
+                    front_view_base_b_jacket.base_b_jac_right_pocket_front.y_point)
+            }
+
+        }
+
+        if (front_view_base_b_jacket.base_b_jac_left_sleeve_front?.image) {
+            if (localStorage.getItem('base_b_jac_left_sleeve_front')) {
+                loadObject(JSON.parse(localStorage.getItem('base_b_jac_left_sleeve_front')))
+            } else {
+                loadImage(front_view_base_b_jacket.base_b_jac_left_sleeve_front.image,
+                    'base_b_jac_left_sleeve_front',
+                    front_view_base_b_jacket.base_b_jac_left_sleeve_front.x_point,
+                    front_view_base_b_jacket.base_b_jac_left_sleeve_front.y_point)
+            }
+
+        }
+        if (front_view_base_b_jacket.base_b_jac_left_cuff_front?.image) {
+            if (localStorage.getItem('base_b_jac_left_cuff_front')) {
+                loadObject(JSON.parse(localStorage.getItem('base_b_jac_left_cuff_front')))
+            } else {
+                loadImage(front_view_base_b_jacket.base_b_jac_left_cuff_front.image,
+                    'base_b_jac_left_cuff_front',
+                    front_view_base_b_jacket.base_b_jac_left_cuff_front.x_point,
+                    front_view_base_b_jacket.base_b_jac_left_cuff_front.y_point)
+            }
+
+        }
+        if (front_view_base_b_jacket.base_b_jac_left_cuff_front?.image) {
+            if (localStorage.getItem('base_b_jac_left_cuff_front_strips')) {
+                loadObject(JSON.parse(localStorage.getItem('base_b_jac_left_cuff_front_strips')))
+            } else {
+                loadImage(front_view_base_b_jacket.base_b_jac_left_cuff_front_strips.image,
+                    'base_b_jac_left_cuff_front_strips',
+                    front_view_base_b_jacket.base_b_jac_left_cuff_front_strips.x_point,
+                    front_view_base_b_jacket.base_b_jac_left_cuff_front_strips.y_point)
+            }
+
+        }
+        if (front_view_base_b_jacket.base_b_jac_right_sleeve_front?.image) {
+            if (localStorage.getItem('base_b_jac_right_sleeve_front')) {
+                loadObject(JSON.parse(localStorage.getItem('base_b_jac_right_sleeve_front')))
+            } else {
+                loadImage(front_view_base_b_jacket.base_b_jac_right_sleeve_front.image,
+                    'base_b_jac_right_sleeve_front',
+                    front_view_base_b_jacket.base_b_jac_right_sleeve_front.x_point,
+                    front_view_base_b_jacket.base_b_jac_right_sleeve_front.y_point)
+            }
+
+        }
+        if (front_view_base_b_jacket.base_b_jac_right_cuff_front?.image) {
+            if (localStorage.getItem('base_b_jac_right_cuff_front')) {
+                loadObject(JSON.parse(localStorage.getItem('base_b_jac_right_cuff_front')))
+            } else {
+                loadImage(front_view_base_b_jacket.base_b_jac_right_cuff_front.image,
+                    'base_b_jac_right_cuff_front',
+                    front_view_base_b_jacket.base_b_jac_right_cuff_front.x_point,
+                    front_view_base_b_jacket.base_b_jac_right_cuff_front.y_point)
+            }
+
+        }
+        if (front_view_base_b_jacket.base_b_jac_right_cuff_front_strips?.image) {
+            if (localStorage.getItem('base_b_jac_right_cuff_front_strips')) {
+                loadObject(JSON.parse(localStorage.getItem('base_b_jac_right_cuff_front_strips')))
+            } else {
+                loadImage(front_view_base_b_jacket.base_b_jac_right_cuff_front_strips.image,
+                    'base_b_jac_right_cuff_front_strips',
+                    front_view_base_b_jacket.base_b_jac_right_cuff_front_strips.x_point,
+                    front_view_base_b_jacket.base_b_jac_right_cuff_front_strips.y_point)
             }
 
         }
@@ -369,166 +469,299 @@ function SamLocalEditorBaseBJacFront(props) {
 
     function backImageLoad() {
         clearCanvas()
-        let back = JSON.parse(localStorage.getItem('back'))
-        if (back.back_first_part?.image) {
-            if (localStorage.getItem('back_first_part')) {
-                loadObject(JSON.parse(localStorage.getItem('back_first_part')))
+        let back_view_base_b_jacket = JSON.parse(localStorage.getItem('back_view_base_b_jacket'))
+        if (back_view_base_b_jacket.base_b_jac_collar_back?.image) {
+            if (localStorage.getItem('base_b_jac_collar_back')) {
+                loadObject(JSON.parse(localStorage.getItem('base_b_jac_collar_back')))
             } else {
                 loadImage(
-                    back.back_first_part.image,
-                    'back_first_part',
-                    back.back_first_part.x_point,
-                    back.back_first_part.y_point,
+                    back_view_base_b_jacket.base_b_jac_collar_back.image,
+                    'base_b_jac_collar_back',
+                    back_view_base_b_jacket.base_b_jac_collar_back.x_point,
+                    back_view_base_b_jacket.base_b_jac_collar_back.y_point,
                 )
             }
 
         }
 
-        if (back.back_second_part?.image) {
-            if (localStorage.getItem('back_second_part')) {
-                loadObject(JSON.parse(localStorage.getItem('back_second_part')))
+        if (back_view_base_b_jacket.base_b_jac_collar_strips_back?.image) {
+            if (localStorage.getItem('base_b_jac_collar_strips_back')) {
+                loadObject(JSON.parse(localStorage.getItem('base_b_jac_collar_strips_back')))
             } else {
                 loadImage(
-                    back.back_second_part.image,
-                    'back_second_part',
-                    back.back_second_part.x_point,
-                    back.back_second_part.y_point,
+                    back_view_base_b_jacket.base_b_jac_collar_strips_back.image,
+                    'base_b_jac_collar_strips_back',
+                    back_view_base_b_jacket.base_b_jac_collar_strips_back.x_point,
+                    back_view_base_b_jacket.base_b_jac_collar_strips_back.y_point,
                 )
             }
         }
 
-        if (back.back_third_part?.image) {
-            if (localStorage.getItem('back_third_part')) {
-                loadObject(JSON.parse(localStorage.getItem('back_third_part')))
+        if (back_view_base_b_jacket.base_b_jac_body_back?.image) {
+            if (localStorage.getItem('base_b_jac_body_back')) {
+                loadObject(JSON.parse(localStorage.getItem('base_b_jac_body_back')))
             } else {
                 loadImage(
-                    back.back_third_part.image,
-                    'back_third_part',
-                    back.back_third_part.x_point,
-                    back.back_third_part.y_point,
+                    back_view_base_b_jacket.base_b_jac_body_back.image,
+                    'base_b_jac_body_back',
+                    back_view_base_b_jacket.base_b_jac_body_back.x_point,
+                    back_view_base_b_jacket.base_b_jac_body_back.y_point,
                 )
             }
         }
 
-        if (back.back_left_sleeve?.image) {
-            if (localStorage.getItem('back_left_sleeve')) {
-                loadObject(JSON.parse(localStorage.getItem('back_left_sleeve')))
+        if (back_view_base_b_jacket.base_b_jac_hem_back?.image) {
+            if (localStorage.getItem('base_b_jac_hem_back')) {
+                loadObject(JSON.parse(localStorage.getItem('base_b_jac_hem_back')))
             } else {
                 loadImage(
-                    back.back_left_sleeve.image,
-                    'back_left_sleeve',
-                    back.back_left_sleeve.x_point,
-                    back.back_left_sleeve.y_point,
+                    back_view_base_b_jacket.base_b_jac_hem_back.image,
+                    'base_b_jac_hem_back',
+                    back_view_base_b_jacket.base_b_jac_hem_back.x_point,
+                    back_view_base_b_jacket.base_b_jac_hem_back.y_point,
                 )
             }
         }
 
-        if (back.back_right_sleeve?.image) {
-            if (localStorage.getItem('back_right_sleeve')) {
-                loadObject(JSON.parse(localStorage.getItem('back_right_sleeve')))
+        if (back_view_base_b_jacket.base_b_jac_hem_strips_back?.image) {
+            if (localStorage.getItem('base_b_jac_hem_strips_back')) {
+                loadObject(JSON.parse(localStorage.getItem('base_b_jac_hem_strips_back')))
             } else {
                 loadImage(
-                    back.back_right_sleeve.image,
-                    'back_right_sleeve',
-                    back.back_right_sleeve.x_point,
-                    back.back_right_sleeve.y_point,
+                    back_view_base_b_jacket.base_b_jac_hem_strips_back.image,
+                    'base_b_jac_hem_strips_back',
+                    back_view_base_b_jacket.base_b_jac_hem_strips_back.x_point,
+                    back_view_base_b_jacket.base_b_jac_hem_strips_back.y_point,
                 )
             }
         }
+        if (back_view_base_b_jacket.base_b_jac_left_sleeve_back?.image) {
+            if (localStorage.getItem('base_b_jac_left_sleeve_back')) {
+                loadObject(JSON.parse(localStorage.getItem('base_b_jac_left_sleeve_back')))
+            } else {
+                loadImage(
+                    back_view_base_b_jacket.base_b_jac_left_sleeve_back.image,
+                    'base_b_jac_left_sleeve_back',
+                    back_view_base_b_jacket.base_b_jac_left_sleeve_back.x_point,
+                    back_view_base_b_jacket.base_b_jac_left_sleeve_back.y_point,
+                )
+            }
+        }
+        if (back_view_base_b_jacket.base_b_jac_left_cuff_back?.image) {
+            if (localStorage.getItem('base_b_jac_left_cuff_back')) {
+                loadObject(JSON.parse(localStorage.getItem('base_b_jac_left_cuff_back')))
+            } else {
+                loadImage(
+                    back_view_base_b_jacket.base_b_jac_left_cuff_back.image,
+                    'base_b_jac_left_cuff_back',
+                    back_view_base_b_jacket.base_b_jac_left_cuff_back.x_point,
+                    back_view_base_b_jacket.base_b_jac_left_cuff_back.y_point,
+                )
+            }
+        }
+        if (back_view_base_b_jacket.base_b_jac_left_cuff_strip_back?.image) {
+            if (localStorage.getItem('base_b_jac_left_cuff_strip_back')) {
+                loadObject(JSON.parse(localStorage.getItem('base_b_jac_left_cuff_strip_back')))
+            } else {
+                loadImage(
+                    back_view_base_b_jacket.base_b_jac_left_cuff_strip_back.image,
+                    'base_b_jac_left_cuff_strip_back',
+                    back_view_base_b_jacket.base_b_jac_left_cuff_strip_back.x_point,
+                    back_view_base_b_jacket.base_b_jac_left_cuff_strip_back.y_point,
+                )
+            }
+        }
+        if (back_view_base_b_jacket.base_b_jac_right_sleeve_back?.image) {
+            if (localStorage.getItem('base_b_jac_right_sleeve_back')) {
+                loadObject(JSON.parse(localStorage.getItem('base_b_jac_right_sleeve_back')))
+            } else {
+                loadImage(
+                    back_view_base_b_jacket.base_b_jac_right_sleeve_back.image,
+                    'base_b_jac_right_sleeve_back',
+                    back_view_base_b_jacket.base_b_jac_right_sleeve_back.x_point,
+                    back_view_base_b_jacket.base_b_jac_right_sleeve_back.y_point,
+                )
+            }
+        }
+        if (back_view_base_b_jacket.base_b_jac_right_cuff_back?.image) {
+            if (localStorage.getItem('base_b_jac_right_cuff_back')) {
+                loadObject(JSON.parse(localStorage.getItem('base_b_jac_right_cuff_back')))
+            } else {
+                loadImage(
+                    back_view_base_b_jacket.base_b_jac_right_cuff_back.image,
+                    'base_b_jac_right_cuff_back',
+                    back_view_base_b_jacket.base_b_jac_right_cuff_back.x_point,
+                    back_view_base_b_jacket.base_b_jac_right_cuff_back.y_point,
+                )
+            }
+        }
+        if (back_view_base_b_jacket.base_b_jac_right_cuff_strip_back?.image) {
+            if (localStorage.getItem('base_b_jac_right_cuff_strip_back')) {
+                loadObject(JSON.parse(localStorage.getItem('base_b_jac_right_cuff_strip_back')))
+            } else {
+                loadImage(
+                    back_view_base_b_jacket.base_b_jac_right_cuff_strip_back.image,
+                    'base_b_jac_right_cuff_strip_back',
+                    back_view_base_b_jacket.base_b_jac_right_cuff_strip_back.x_point,
+                    back_view_base_b_jacket.base_b_jac_right_cuff_strip_back.y_point,
+                )
+            }
+        }
+
     }
 
     const leftImageLoad = (e) => {
         clearCanvas()
-        let left = JSON.parse(localStorage.getItem('left'))
+        let left_view_base_b_jacket = JSON.parse(localStorage.getItem('left_view_base_b_jacket'))
 
-        if (left?.left_v_body_view?.image) {
-            if (localStorage.getItem('left_v_body_view')) {
-                loadObject(JSON.parse(localStorage.getItem('left_v_body_view')))
+        if (left_view_base_b_jacket?.base_b_jac_mid_body_left?.image) {
+            if (localStorage.getItem('base_b_jac_mid_body_left')) {
+                loadObject(JSON.parse(localStorage.getItem('base_b_jac_mid_body_left')))
             } else {
                 loadImage(
-                    left.left_v_body_view.image,
-                    'left_v_body_view',
-                    left.left_v_body_view.x_point,
-                    left.left_v_body_view.y_point,
+                    left_view_base_b_jacket.base_b_jac_mid_body_left.image,
+                    'base_b_jac_mid_body_left',
+                    left_view_base_b_jacket.base_b_jac_mid_body_left.x_point,
+                    left_view_base_b_jacket.base_b_jac_mid_body_left.y_point,
                 )
             }
 
         }
 
-        if (left.left_v_upper_part?.image) {
-            if (localStorage.getItem('left_v_upper_part')) {
-                loadObject(JSON.parse(localStorage.getItem('left_v_upper_part')))
+        if (left_view_base_b_jacket.base_b_jac_mid_cuff_left?.image) {
+            if (localStorage.getItem('base_b_jac_mid_cuff_left')) {
+                loadObject(JSON.parse(localStorage.getItem('base_b_jac_mid_cuff_left')))
             } else {
                 loadImage(
-                    left.left_v_upper_part.image,
-                    'left_v_upper_part',
-                    left.left_v_upper_part.x_point,
-                    left.left_v_upper_part.y_point,
+                    left_view_base_b_jacket.base_b_jac_mid_cuff_left.image,
+                    'base_b_jac_mid_cuff_left',
+                    left_view_base_b_jacket.base_b_jac_mid_cuff_left.x_point,
+                    left_view_base_b_jacket.base_b_jac_mid_cuff_left.y_point,
                 )
             }
         }
 
-        if (left?.left_v_lower_part?.image) {
-            if (localStorage.getItem('left_v_lower_part')) {
-                loadObject(JSON.parse(localStorage.getItem('left_v_lower_part')))
+        if (left_view_base_b_jacket?.base_b_jac_mid_cuff_strips_left?.image) {
+            if (localStorage.getItem('base_b_jac_mid_cuff_strips_left')) {
+                loadObject(JSON.parse(localStorage.getItem('base_b_jac_mid_cuff_strips_left')))
             } else {
                 loadImage(
-                    left.left_v_lower_part.image,
-                    'left_v_lower_part',
-                    left.left_v_lower_part.x_point,
-                    left.left_v_lower_part.y_point,
+                    left_view_base_b_jacket.base_b_jac_mid_cuff_strips_left.image,
+                    'base_b_jac_mid_cuff_strips_left',
+                    left_view_base_b_jacket.base_b_jac_mid_cuff_strips_left.x_point,
+                    left_view_base_b_jacket.base_b_jac_mid_cuff_strips_left.y_point,
                 )
             }
         }
 
-        if (left?.left_v_left_s_upper?.image) {
-            if (localStorage.getItem('left_v_left_s_upper')) {
-                loadObject(JSON.parse(localStorage.getItem('left_v_left_s_upper')))
+        if (left_view_base_b_jacket?.base_b_jac_left_body_left?.image) {
+            if (localStorage.getItem('base_b_jac_left_body_left')) {
+                loadObject(JSON.parse(localStorage.getItem('base_b_jac_left_body_left')))
             } else {
                 loadImage(
-                    left.left_v_left_s_upper.image,
-                    'left_v_left_s_upper',
-                    left.left_v_left_s_upper.x_point,
-                    left.left_v_left_s_upper.y_point,
+                    left_view_base_b_jacket.base_b_jac_left_body_left.image,
+                    'base_b_jac_left_body_left',
+                    left_view_base_b_jacket.base_b_jac_left_body_left.x_point,
+                    left_view_base_b_jacket.base_b_jac_left_body_left.y_point,
                 )
             }
         }
 
-        if (left?.left_v_left_s_lower?.image) {
-            if (localStorage.getItem('left_v_left_s_lower')) {
-                loadObject(JSON.parse(localStorage.getItem('left_v_left_s_lower')))
+        if (left_view_base_b_jacket?.base_b_jac_left_cuff_left?.image) {
+            if (localStorage.getItem('base_b_jac_left_cuff_left')) {
+                loadObject(JSON.parse(localStorage.getItem('base_b_jac_left_cuff_left')))
             } else {
                 loadImage(
-                    left.left_v_left_s_lower.image,
-                    'left_v_left_s_lower',
-                    left.left_v_left_s_lower.x_point,
-                    left.left_v_left_s_lower.y_point,
+                    left_view_base_b_jacket.base_b_jac_left_cuff_left.image,
+                    'base_b_jac_left_cuff_left',
+                    left_view_base_b_jacket.base_b_jac_left_cuff_left.x_point,
+                    left_view_base_b_jacket.base_b_jac_left_cuff_left.y_point,
                 )
             }
         }
 
-        if (left?.left_v_right_s_upper?.image) {
-            if (localStorage.getItem('left_v_right_s_upper')) {
-                loadObject(JSON.parse(localStorage.getItem('left_v_right_s_upper')))
+        if (left_view_base_b_jacket?.base_b_jac_left_cuff_strips_left?.image) {
+            if (localStorage.getItem('base_b_jac_left_cuff_strips_left')) {
+                loadObject(JSON.parse(localStorage.getItem('base_b_jac_left_cuff_strips_left')))
             } else {
                 loadImage(
-                    left.left_v_right_s_upper.image,
-                    'left_v_right_s_upper',
-                    left.left_v_right_s_upper.x_point,
-                    left.left_v_right_s_upper.y_point,
+                    left_view_base_b_jacket.base_b_jac_left_cuff_strips_left.image,
+                    'base_b_jac_left_cuff_strips_left',
+                    left_view_base_b_jacket.base_b_jac_left_cuff_strips_left.x_point,
+                    left_view_base_b_jacket.base_b_jac_left_cuff_strips_left.y_point,
                 )
             }
         }
 
-        if (left?.left_v_right_s_lower?.image) {
-            if (localStorage.getItem('left_v_right_s_lower')) {
-                loadObject(JSON.parse(localStorage.getItem('left_v_right_s_lower')))
+        if (left_view_base_b_jacket?.base_b_jac_right_body_left?.image) {
+            if (localStorage.getItem('base_b_jac_right_body_left')) {
+                loadObject(JSON.parse(localStorage.getItem('base_b_jac_right_body_left')))
             } else {
                 loadImage(
-                    left.left_v_right_s_lower.image,
-                    'left_v_right_s_lower',
-                    left.left_v_right_s_lower.x_point,
-                    left.left_v_right_s_lower.y_point,
+                    left_view_base_b_jacket.base_b_jac_right_body_left.image,
+                    'base_b_jac_right_body_left',
+                    left_view_base_b_jacket.base_b_jac_right_body_left.x_point,
+                    left_view_base_b_jacket.base_b_jac_right_body_left.y_point,
+                )
+            }
+        }
+        if (left_view_base_b_jacket?.base_b_jac_right_cuff_left?.image) {
+            if (localStorage.getItem('base_b_jac_right_cuff_left')) {
+                loadObject(JSON.parse(localStorage.getItem('base_b_jac_right_cuff_left')))
+            } else {
+                loadImage(
+                    left_view_base_b_jacket.base_b_jac_right_cuff_left.image,
+                    'base_b_jac_right_cuff_left',
+                    left_view_base_b_jacket.base_b_jac_right_cuff_left.x_point,
+                    left_view_base_b_jacket.base_b_jac_right_cuff_left.y_point,
+                )
+            }
+        }
+        if (left_view_base_b_jacket?.base_b_jac_right_cuff_left?.image) {
+            if (localStorage.getItem('base_b_jac_right_cuff_strips_left')) {
+                loadObject(JSON.parse(localStorage.getItem('base_b_jac_right_cuff_strips_left')))
+            } else {
+                loadImage(
+                    left_view_base_b_jacket.base_b_jac_right_cuff_strips_left.image,
+                    'base_b_jac_right_cuff_strips_left',
+                    left_view_base_b_jacket.base_b_jac_right_cuff_strips_left.x_point,
+                    left_view_base_b_jacket.base_b_jac_right_cuff_strips_left.y_point,
+                )
+            }
+        }
+        if (left_view_base_b_jacket?.base_b_jac_bottom_body_left?.image) {
+            if (localStorage.getItem('base_b_jac_bottom_body_left')) {
+                loadObject(JSON.parse(localStorage.getItem('base_b_jac_bottom_body_left')))
+            } else {
+                loadImage(
+                    left_view_base_b_jacket.base_b_jac_bottom_body_left.image,
+                    'base_b_jac_bottom_body_left',
+                    left_view_base_b_jacket.base_b_jac_bottom_body_left.x_point,
+                    left_view_base_b_jacket.base_b_jac_bottom_body_left.y_point,
+                )
+            }
+        }
+        if (left_view_base_b_jacket?.base_b_jac_bottom_cuff_left?.image) {
+            if (localStorage.getItem('base_b_jac_bottom_cuff_left')) {
+                loadObject(JSON.parse(localStorage.getItem('base_b_jac_bottom_cuff_left')))
+            } else {
+                loadImage(
+                    left_view_base_b_jacket.base_b_jac_bottom_cuff_left.image,
+                    'base_b_jac_bottom_cuff_left',
+                    left_view_base_b_jacket.base_b_jac_bottom_cuff_left.x_point,
+                    left_view_base_b_jacket.base_b_jac_bottom_body_left.y_point,
+                )
+            }
+        }
+        if (left_view_base_b_jacket?.base_b_jac_bottom_cuff_strips_left?.image) {
+            if (localStorage.getItem('base_b_jac_bottom_cuff_strips_left')) {
+                loadObject(JSON.parse(localStorage.getItem('base_b_jac_bottom_cuff_strips_left')))
+            } else {
+                loadImage(
+                    left_view_base_b_jacket.base_b_jac_bottom_cuff_strips_left.image,
+                    'base_b_jac_bottom_cuff_strips_left',
+                    left_view_base_b_jacket.base_b_jac_bottom_cuff_strips_left.x_point,
+                    left_view_base_b_jacket.base_b_jac_bottom_cuff_strips_left.y_point,
                 )
             }
         }
@@ -539,103 +772,157 @@ function SamLocalEditorBaseBJacFront(props) {
 
     const rightImageLoad = (e) => {
         clearCanvas()
-        let right = JSON.parse(localStorage.getItem('right'))
+        let right_view_base_b_jacket = JSON.parse(localStorage.getItem('right_view_base_b_jacket'))
 
-        if (right.right_v_body_view?.image) {
-            if (localStorage.getItem('right_v_body_view')) {
-                loadObject(JSON.parse(localStorage.getItem('right_v_body_view')))
+        if (right_view_base_b_jacket.base_b_jac_mid_body_right?.image) {
+            if (localStorage.getItem('base_b_jac_mid_body_right')) {
+                loadObject(JSON.parse(localStorage.getItem('base_b_jac_mid_body_right')))
             } else {
                 loadImage(
-                    right.right_v_body_view.image,
-                    'right_v_body_view',
-                    right.right_v_body_view.x_point,
-                    right.right_v_body_view.y_point,
+                    right_view_base_b_jacket.base_b_jac_mid_body_right.image,
+                    'base_b_jac_mid_body_right',
+                    right_view_base_b_jacket.base_b_jac_mid_body_right.x_point,
+                    right_view_base_b_jacket.base_b_jac_mid_body_right.y_point,
                 )
             }
         }
-        if (right.right_v_upper_part?.image) {
-            if (localStorage.getItem('right_v_upper_part')) {
-                loadObject(JSON.parse(localStorage.getItem('right_v_upper_part')))
+        if (right_view_base_b_jacket.base_b_jac_mid_cuff_right?.image) {
+            if (localStorage.getItem('base_b_jac_mid_cuff_right')) {
+                loadObject(JSON.parse(localStorage.getItem('base_b_jac_mid_cuff_right')))
             } else {
                 loadImage(
-                    right.right_v_upper_part.image,
-                    'right_v_upper_part',
-                    right.right_v_upper_part.x_point,
-                    right.right_v_upper_part.y_point,
+                    right_view_base_b_jacket.base_b_jac_mid_cuff_right.image,
+                    'base_b_jac_mid_cuff_right',
+                    right_view_base_b_jacket.base_b_jac_mid_cuff_right.x_point,
+                    right_view_base_b_jacket.base_b_jac_mid_cuff_right.y_point,
                 )
             }
         }
 
-        if (right.right_v_lower_part?.image) {
-            if (localStorage.getItem('right_v_upper_part')){
-                loadObject(JSON.parse(localStorage.getItem('right_v_lower_part')))
-            }
-            else if(localStorage.getItem(right.right_v_lower_part?.image)){
-
-            }
-            else {
+        if (right_view_base_b_jacket.base_b_jac_mid_cuff_strips_right?.image) {
+            if (localStorage.getItem('base_b_jac_mid_cuff_strips_right')){
+                loadObject(JSON.parse(localStorage.getItem('base_b_jac_mid_cuff_strips_right')))
+            }else {
                 loadImage(
-                    right.right_v_lower_part.image,
-                    'right_v_lower_part',
-                    right.right_v_lower_part.x_point,
-                    right.right_v_lower_part.y_point,
+                    right_view_base_b_jacket.base_b_jac_mid_cuff_strips_right.image,
+                    'base_b_jac_mid_cuff_strips_right',
+                    right_view_base_b_jacket.base_b_jac_mid_cuff_strips_right.x_point,
+                    right_view_base_b_jacket.base_b_jac_mid_cuff_strips_right.y_point,
                 )
             }
         }
 
-        if (right.right_v_left_s_upper?.image) {
-            if (localStorage.getItem('right_v_left_s_upper')) {
-                loadObject(JSON.parse(localStorage.getItem('right_v_left_s_upper')))
+        if (right_view_base_b_jacket.base_b_jac_left_body_right?.image) {
+            if (localStorage.getItem('base_b_jac_left_body_right')) {
+                loadObject(JSON.parse(localStorage.getItem('base_b_jac_left_body_right')))
             } else {
                 loadImage(
-                    right.right_v_left_s_upper.image,
-                    'right_v_left_s_upper',
-                    right.right_v_left_s_upper.x_point,
-                    right.right_v_left_s_upper.y_point,
+                    right_view_base_b_jacket.base_b_jac_left_body_right.image,
+                    'base_b_jac_left_body_right',
+                    right_view_base_b_jacket.base_b_jac_left_body_right.x_point,
+                    right_view_base_b_jacket.base_b_jac_left_body_right.y_point,
                 )
             }
         }
 
-        if (right.right_v_left_s_lower?.image) {
-            if (localStorage.getItem('right_v_left_s_lower')) {
-                loadObject(JSON.parse(localStorage.getItem('right_v_left_s_lower')))
+        if (right_view_base_b_jacket.base_b_jac_left_cuff_right?.image) {
+            if (localStorage.getItem('base_b_jac_left_cuff_right')) {
+                loadObject(JSON.parse(localStorage.getItem('base_b_jac_left_cuff_right')))
             } else {
                 loadImage(
-                    right.right_v_left_s_lower.image,
-                    'right_v_left_s_lower',
-                    right.right_v_left_s_lower.x_point,
-                    right.right_v_left_s_lower.y_point,
+                    right_view_base_b_jacket.base_b_jac_left_cuff_right.image,
+                    'base_b_jac_left_cuff_right',
+                    right_view_base_b_jacket.base_b_jac_left_cuff_right.x_point,
+                    right_view_base_b_jacket.base_b_jac_left_cuff_right.y_point,
                 )
             }
         }
 
-        if (right.right_v_right_s_upper?.image) {
-            if (localStorage.getItem('right_v_right_s_upper')) {
-                loadObject(JSON.parse(localStorage.getItem('right_v_right_s_upper')))
+        if (right_view_base_b_jacket.base_b_jac_left_cuff_strips_right?.image) {
+            if (localStorage.getItem('base_b_jac_left_cuff_strips_right')) {
+                loadObject(JSON.parse(localStorage.getItem('base_b_jac_left_cuff_strips_right')))
             } else {
                 loadImage(
-                    right.right_v_right_s_upper.image,
-                    'right_v_right_s_upper',
-                    right.right_v_right_s_upper.x_point,
-                    right.right_v_right_s_upper.y_point,
+                    right_view_base_b_jacket.base_b_jac_left_cuff_strips_right.image,
+                    'base_b_jac_left_cuff_strips_right',
+                    right_view_base_b_jacket.base_b_jac_left_cuff_strips_right.x_point,
+                    right_view_base_b_jacket.base_b_jac_left_cuff_strips_right.y_point,
                 )
             }
         }
 
-        if (right.right_v_right_s_lower?.image) {
-            if (localStorage.getItem('right_v_right_s_lower')) {
-                loadObject(JSON.parse(localStorage.getItem('right_v_right_s_lower')))
+        if (right_view_base_b_jacket.base_b_jac_right_body_right?.image) {
+            if (localStorage.getItem('base_b_jac_right_body_right')) {
+                loadObject(JSON.parse(localStorage.getItem('base_b_jac_right_body_right')))
             } else {
                 loadImage(
-                    right.right_v_right_s_lower.image,
-                    'right_v_right_s_lower',
-                    right.right_v_right_s_lower.x_point,
-                    right.right_v_right_s_lower.y_point,
+                    right_view_base_b_jacket.base_b_jac_right_body_right.image,
+                    'base_b_jac_right_body_right',
+                    right_view_base_b_jacket.base_b_jac_right_body_right.x_point,
+                    right_view_base_b_jacket.base_b_jac_right_body_right.y_point,
                 )
             }
         }
-
-
+        if (right_view_base_b_jacket.base_b_jac_right_cuff_right?.image) {
+            if (localStorage.getItem('base_b_jac_right_cuff_right')) {
+                loadObject(JSON.parse(localStorage.getItem('base_b_jac_right_cuff_right')))
+            } else {
+                loadImage(
+                    right_view_base_b_jacket.base_b_jac_right_cuff_right.image,
+                    'base_b_jac_right_cuff_right',
+                    right_view_base_b_jacket.base_b_jac_right_cuff_right.x_point,
+                    right_view_base_b_jacket.base_b_jac_right_cuff_right.y_point,
+                )
+            }
+        }
+        if (right_view_base_b_jacket.base_b_jac_right_cuff_strips_right?.image) {
+            if (localStorage.getItem('base_b_jac_right_cuff_strips_right')) {
+                loadObject(JSON.parse(localStorage.getItem('base_b_jac_right_cuff_strips_right')))
+            } else {
+                loadImage(
+                    right_view_base_b_jacket.base_b_jac_right_cuff_strips_right.image,
+                    'base_b_jac_right_cuff_strips_right',
+                    right_view_base_b_jacket.base_b_jac_right_cuff_strips_right.x_point,
+                    right_view_base_b_jacket.base_b_jac_right_cuff_strips_right.y_point,
+                )
+            }
+        }
+        if (right_view_base_b_jacket.base_b_jac_bottom_body_right?.image) {
+            if (localStorage.getItem('base_b_jac_bottom_body_right')) {
+                loadObject(JSON.parse(localStorage.getItem('base_b_jac_bottom_body_right')))
+            } else {
+                loadImage(
+                    right_view_base_b_jacket.base_b_jac_bottom_body_right.image,
+                    'base_b_jac_bottom_body_right',
+                    right_view_base_b_jacket.base_b_jac_bottom_body_right.x_point,
+                    right_view_base_b_jacket.base_b_jac_bottom_body_right.y_point,
+                )
+            }
+        }
+        if (right_view_base_b_jacket.base_b_jac_bottom_cuff_right?.image) {
+            if (localStorage.getItem('base_b_jac_bottom_cuff_right')) {
+                loadObject(JSON.parse(localStorage.getItem('base_b_jac_bottom_cuff_right')))
+            } else {
+                loadImage(
+                    right_view_base_b_jacket.base_b_jac_bottom_cuff_right.image,
+                    'base_b_jac_bottom_cuff_right',
+                    right_view_base_b_jacket.base_b_jac_bottom_cuff_right.x_point,
+                    right_view_base_b_jacket.base_b_jac_bottom_cuff_right.y_point,
+                )
+            }
+        }
+        if (right_view_base_b_jacket.base_b_jac_bottom_cuff_strips_right?.image) {
+            if (localStorage.getItem('base_b_jac_bottom_cuff_strips_right')) {
+                loadObject(JSON.parse(localStorage.getItem('base_b_jac_bottom_cuff_strips_right')))
+            } else {
+                loadImage(
+                    right_view_base_b_jacket.base_b_jac_bottom_cuff_strips_right.image,
+                    'base_b_jac_bottom_cuff_strips_right',
+                    right_view_base_b_jacket.base_b_jac_bottom_cuff_strips_right.x_point,
+                    right_view_base_b_jacket.base_b_jac_bottom_cuff_strips_right.y_point,
+                )
+            }
+        }
 
     }
 
@@ -761,64 +1048,16 @@ function SamLocalEditorBaseBJacFront(props) {
                 <div className='row'>
                     <div className="btn-group" role="group" aria-label="Basic example" style={{width: "100%"}}>
                         <button type="button" className="btn btn-secondary" onClick={() => {
-                            onComponentClick('base_b_jac_front_body')
+                            onComponentClick('body_first_section')
                         }}>Body
                         </button>
                         <button type="button" className="btn btn-secondary" onClick={() => {
-                            onComponentClick('base_b_jac_front_collar')
+                            onComponentClick('front-collar')
                         }}>Collar
                         </button>
                         <button type="button" className="btn btn-secondary" onClick={() => {
-                            onComponentClick('base_b_jac_front_collar_inner')
-                        }}>Collar Inner
-                        </button>
-                        <button type="button" className="btn btn-secondary" onClick={() => {
-                            onComponentClick('base_b_jac_front_hem')
-                        }}>Hem
-                        </button>
-                        <button type="button" className="btn btn-secondary" onClick={() => {
-                            onComponentClick('base_b_jac_front_hem_strips')
-                        }}>Hem Strips
-                        </button>
-                        <button type="button" className="btn btn-secondary" onClick={() => {
-                            onComponentClick('base_b_jac_front_hem_mid')
-                        }}>Hem Mid
-                        </button>
-                        <button type="button" className="btn btn-secondary" onClick={() => {
-                            onComponentClick('base_b_jac_front_button_body')
-                        }}>Button Body
-                        </button>
-                        <button type="button" className="btn btn-secondary" onClick={() => {
-                            onComponentClick('base_b_jac_front_button_hem')
-                        }}>Buttons Hem
-                        </button>
-                        <button type="button" className="btn btn-secondary" onClick={() => {
-                            onComponentClick('base_b_jac_left_pocket_front')
-                        }}>Left Pocket
-                        </button>
-                        <button type="button" className="btn btn-secondary" onClick={() => {
-                            onComponentClick('base_b_jac_right_pocket_front')
-                        }}>Right Pocket
-                        </button>
-                        <button type="button" className="btn btn-secondary" onClick={() => {
-                            onComponentClick('base_b_jac_left_cuff_front')
-                        }}>Left Cuff
-                        </button>
-                        <button type="button" className="btn btn-secondary" onClick={() => {
-                            onComponentClick('base_b_jac_left_cuff_front_strips')
-                        }}>Left Cuff Strips
-                        </button>
-                        <button type="button" className="btn btn-secondary" onClick={() => {
-                            onComponentClick('base_b_jac_right_sleeve_front')
-                        }}>Right Sleeve
-                        </button>
-                        <button type="button" className="btn btn-secondary" onClick={() => {
-                            onComponentClick('base_b_jac_right_cuff_front')
-                        }}>Right Cuff
-                        </button>
-                        <button type="button" className="btn btn-secondary" onClick={() => {
-                            onComponentClick('base_b_jac_right_cuff_front_strips')
-                        }}>Right Cuff Strips
+                            onComponentClick('sleeve')
+                        }}>sleeve
                         </button>
                     </div>
 
@@ -1164,13 +1403,86 @@ function SamLocalEditorBaseBJacFront(props) {
                 //     }
                 // </div>
                 // <SamLocalEditorBack/>
-                    <SamLocalEditorBaseBJacBack/>
+                <SamLocalEditorBaseBJacBack/>
                 }
                 {selectedTab === 2 &&
-                    <SamLocalBaseBJacRight/>
+                // <div className='row' style={{width:"100%"}}>
+                //     <div className="btn-group" role="group" aria-label="Basic example" style={{width:"100%"}}>
+                //         <button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('left_v_upper_part')}}>Left Sleeve</button>
+                //         {/*<button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('front-collar')}}>Collar</button>*/}
+                //         <button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('left_v_lower_part')}}>Right Sleeve</button>
+                //     </div>
+                //     {colorShow &&
+                //     <div style={{marginLeft:"50px", display:"inline"}}>
+                //      <p> Choose color</p>
+                //
+                //     <CirclePicker
+                //         color={ color }
+                //         onChangeComplete={ handleChangeComplete }
+                //     />
+                //     <br></br>
+                //         <div id="output-text">
+                //             <input onChange={handleInput} placeholder="Enter text"/>
+                //                     <button type='button'
+                //                             name='text_show'
+                //                             onClick={textShow}
+                //                             style={{
+                //                                 backgroundColor: "#767FE0",
+                //                                 color: "white",
+                //                                 border: "none",
+                //                                 borderRadius: "50px",
+                //                                 width: "120px",
+                //                                 height: "30px",
+                //                                 margin: "10px"
+                //                             }}>
+                //                         Add Text
+                //                     </button>
+                //             <br></br>
+                //
+                //             <select id="input-font" onChange={changeFontStyle (this)}>
+                //
+                //             <option value="Comic Sans"
+                //                     selected="selected">
+                //                 Comic Sans
+                //             </option>
+                //             <option value="Arial">Arial</option>
+                //             <option value="fantasy">Fantasy</option>
+                //             <option value="cursive">cursive</option>
+                //         </select>
+                //             <select id="input-font" style={{marginLeft:"10px"}}>
+                //
+                //             <option value="Normal"
+                //                     selected="selected">
+                //                 Normal
+                //             </option>
+                //             <option value="Arial" style={{fontStyle:"bolder"}}>Bold</option>
+                //             <option value="fantasy" style={{fontStyle:"italic"}}>Italic</option>
+                //             <option value="cursive" style={{fontStyle:"underline"}}>Underline</option>
+                //         </select>
+                //             <br></br>
+                //             <div style={{width:"300px", float:"right"}}>
+                //             <div style={{width:"300px", height:"300px", border:"solid", borderColor:"black", borderWidth:"1px", float:"right", marginRight:"-900px", marginTop:"-150px"}}>
+                //                 <button onClick={getSampleImages}>Load Images</button>
+                //                 {
+                //                     img?
+                //                     img.map((s) =>
+                //                              <img src={s.image} alt={''} style={{width:"50px", height:"50px"}} onClick={()=> {load_logo(s.image)}}/>
+                //                     )
+                //                 :null}
+                //             </div>
+                //
+                //         </div>
+                //             <br></br>
+                //
+                //         </div>
+                //     </div>
+                //     }
+                // </div>
+                // <SamLocalEditorRight/>
+                <SamLocalBaseBJacRight/>
                 }
                 {selectedTab === 3 &&
-                    <SamLocalBaseBJacLeft/>
+                <SamLocalBaseBJacLeft/>
                 }
             </div>
             <canvas id='canvas'>
