@@ -1,7 +1,5 @@
 import React, {useEffect, useState, useRef} from "react";
-import SamLocalEditorRight from "./right_canvas";
-import SamLocalEditorBack from "./back_canvas";
-import SamLocalEditorLeft from "./left_canvas";
+import SamLocalEditorVestBack from "./vest_back";
 // import THREELib from "three-js";
 import {fabric} from "fabric";
 import {saveAs} from 'file-saver'
@@ -11,27 +9,23 @@ import $ from "jquery";
 import { CirclePicker } from 'react-color';
 import {Tabs, Tab, AppBar} from "@material-ui/core";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import {getProductDetail} from "../apiService";
+import {getProductDetail} from "../../apiService";
 
 const viewOptions = [
     'front',
     'back',
-    'left',
-    'right'
 ]
 var fonts = ["Pacifico", "VT323", "Quicksand", "Inconsolata"];
 var logo_img
 
-function SamLocalEditor(props) {
+function SamLocalEditorVestFront(props) {
     let {id} = props.match.params
     const [product, setProduct] = useState(null);
     useEffect(() => {
         getProductDetail(id)
             .then(items => {
-                localStorage.setItem('body', JSON.stringify(items.front_view));
-                localStorage.setItem('back', JSON.stringify(items.back_view));
-                localStorage.setItem('left', JSON.stringify(items.left_view));
-                localStorage.setItem('right', JSON.stringify(items.right_view));
+                localStorage.setItem('body', JSON.stringify(items.front_view_vest));
+                localStorage.setItem('back', JSON.stringify(items.back_view_vest));
                 setProduct(items)
             })
     }, [])
@@ -56,14 +50,6 @@ function SamLocalEditor(props) {
         if (newValue === 1) {
             backImageLoad()
         }
-        if (newValue === 2) {
-            rightImageLoad()
-        }
-        if (newValue === 3) {
-            leftImageLoad()
-        }
-
-
     }
 
     const initCanvas = (name) =>
@@ -75,7 +61,6 @@ function SamLocalEditor(props) {
         });
 
     useEffect(() => {
-        localStorage.clear();
         setCanvas(initCanvas('canvas'));
     }, []);
     useEffect(() => {
@@ -155,7 +140,6 @@ function SamLocalEditor(props) {
                     left: left,
                     top: top,
                     selectable: false,
-
 
                 })
             console.log(imageId)
@@ -253,45 +237,6 @@ function SamLocalEditor(props) {
 
         samImg.src = l;
 
-        var l_logo = new Image();
-        l_logo.onload = function (left_logo){
-            console.log("Inside Left Logo")
-            var left = new fabric.Image(l_logo, {
-                id:"image_left_logo",
-                width:l_logo.width/2,
-                height:l_logo.height,
-                scaleX : 30/samImg.width,
-                scaleY : 30/samImg.height,
-                angle:30,
-                flipX:true,
-                top:45,
-                left:72,
-                selectable:false,
-            });
-            canvas.add(left);
-            console.log(left, "left")
-        }
-        l_logo.src = l;
-
-         var r_logo = new Image();
-        r_logo.onload = function (left_logo){
-            console.log("Inside Right Logo")
-            var right = new fabric.Image(r_logo, {
-                id:"image_left_logo",
-                width:r_logo.width/2,
-                height:r_logo.height,
-                scaleX : 30/samImg.width,
-                scaleY : 30/samImg.height,
-                angle:-30,
-                top:55,
-                left:228,
-                selectable:false,
-            });
-            canvas.add(right);
-            console.log(right, "left")
-        }
-        r_logo.src = l;
-
         console.log("Image Clicked", l)
     }
 
@@ -308,338 +253,223 @@ function SamLocalEditor(props) {
 
     function frontImageLoad() {
         clearCanvas()
-        let body = JSON.parse(localStorage.getItem('body'))
-        if (body.body_first_section?.image) {
-            if (localStorage.getItem('body_first_section')) {
-                loadObject(JSON.parse(localStorage.getItem('body_first_section')))
+        let vest_front = JSON.parse(localStorage.getItem('body'))
+        if (vest_front.collar_vest?.image) {
+            if (localStorage.getItem('collar_vest')) {
+                loadObject(JSON.parse(localStorage.getItem('collar_vest')))
             } else {
-                loadImage(body.body_first_section.image, 'body_first_section', body.body_first_section.x_point, body.body_first_section.y_point)
+                loadImage(vest_front.collar_vest.image, 'collar_vest',
+                    vest_front.collar_vest.x_point, vest_front.collar_vest.y_point)
             }
 
         }
-        if (body.body_second_section?.image) {
-            if (localStorage.getItem('body_second_section')) {
-                loadObject(JSON.parse(localStorage.getItem('body_second_section')))
-            } else {
-                loadImage(body.body_second_section.image, 'body_second_section', body.body_second_section.x_point, body.body_second_section.y_point)
-            }
-        }
-        if (body.body_third_section?.image) {
-            if (localStorage.getItem('body_third_section')) {
-                loadObject(JSON.parse(localStorage.getItem('body_third_section')))
-            } else {
-                loadImage(body.body_third_section.image, 'body_third_section', body.body_third_section.x_point, body.body_third_section.y_point)
-            }
-        }
-        if (body.collar?.image) {
-            if (localStorage.getItem('front-collar')) {
-                loadObject(JSON.parse(localStorage.getItem('front-collar')))
-            } else {
-                loadImage(body.collar.image, 'front-collar', body.collar.x_point, body.collar.y_point)
-            }
-        }
-        if (body.right_sleeve?.image) {
-            if (localStorage.getItem('right_sleeve')) {
-                loadObject(JSON.parse(localStorage.getItem('right_sleeve')))
-            } else {
-                loadImage(body.right_sleeve.image, 'right_sleeve', body.right_sleeve.x_point, body.right_sleeve.y_point)
-            }
-        }
 
-        if (body.left_sleeve?.image) {
-            if (localStorage.getItem('left_sleeve')) {
-                loadObject(JSON.parse(localStorage.getItem('left_sleeve')))
+        if (vest_front.vest_top?.image) {
+            if (localStorage.getItem('vest_top')) {
+                loadObject(JSON.parse(localStorage.getItem('vest_top')))
             } else {
-                loadImage(body.left_sleeve.image, 'left_sleeve', body.left_sleeve.x_point, body.left_sleeve.y_point)
-
+                loadImage(vest_front.vest_top.image, 'vest_top',
+                    vest_front.vest_top.x_point, vest_front.vest_top.y_point)
             }
         }
-
-        if (body.towel_front?.image) {
-            if (localStorage.getItem('towel_front')) {
-                loadObject(JSON.parse(localStorage.getItem('towel_front')))
+        if (vest_front.vest_mid?.image) {
+            if (localStorage.getItem('vest_mid')) {
+                loadObject(JSON.parse(localStorage.getItem('vest_mid')))
             } else {
-                loadImage(body.towel_front.image,
-                    'towel_front',
-                    body.towel_front.x_point,
-                    body.towel_front.y_point)
+                loadImage(vest_front.vest_mid.image, 'vest_mid',
+                    vest_front.vest_mid.x_point,
+                    vest_front.vest_mid.y_point)
             }
-
+        }
+        if (vest_front.vest_bottom?.image) {
+            if (localStorage.getItem('vest_bottom')) {
+                loadObject(JSON.parse(localStorage.getItem('vest_bottom')))
+            } else {
+                loadImage(vest_front.vest_bottom.image, 'vest_bottom',
+                    vest_front.vest_bottom.x_point, vest_front.vest_bottom.y_point)
+            }
+        }
+        if (vest_front.vest_hem?.image) {
+            if (localStorage.getItem('vest_hem')) {
+                loadObject(JSON.parse(localStorage.getItem('vest_hem')))
+            } else {
+                loadImage(vest_front.vest_hem.image, 'vest_hem',
+                    vest_front.vest_hem.x_point, vest_front.vest_hem.y_point)
+            }
+        }
+        if (vest_front.vest_left_sleeve?.image) {
+            if (localStorage.getItem('vest_left_sleeve')) {
+                loadObject(JSON.parse(localStorage.getItem('vest_left_sleeve')))
+            } else {
+                loadImage(vest_front.vest_left_sleeve.image, 'vest_left_sleeve',
+                    vest_front.vest_left_sleeve.x_point, vest_front.vest_left_sleeve.y_point)
+            }
+        }
+        if (vest_front.vest_right_sleeve?.image) {
+            if (localStorage.getItem('vest_right_sleeve')) {
+                loadObject(JSON.parse(localStorage.getItem('vest_right_sleeve')))
+            } else {
+                loadImage(vest_front.vest_right_sleeve.image, 'vest_right_sleeve',
+                    vest_front.vest_right_sleeve.x_point, vest_front.vest_right_sleeve.y_point)
+            }
+        }
+        if (vest_front.zip_vest?.image) {
+            if (localStorage.getItem('zip_vest')) {
+                loadObject(JSON.parse(localStorage.getItem('zip_vest')))
+            } else {
+                loadImage(vest_front.zip_vest.image, 'zip_vest',
+                    vest_front.zip_vest.x_point,
+                    vest_front.zip_vest.y_point)
+            }
+        }
+        if (vest_front.vest_pocket_left?.image) {
+            if (localStorage.getItem('vest_pocket_left')) {
+                loadObject(JSON.parse(localStorage.getItem('vest_pocket_left')))
+            } else {
+                loadImage(vest_front.vest_pocket_left.image, 'vest_pocket_left',
+                    vest_front.vest_pocket_left.x_point, vest_front.vest_pocket_left.y_point)
+            }
+        }
+        if (vest_front.vest_pocket_right?.image) {
+            if (localStorage.getItem('vest_pocket_right')) {
+                loadObject(JSON.parse(localStorage.getItem('vest_pocket_right')))
+            } else {
+                loadImage(vest_front.vest_pocket_right.image, 'vest_pocket_right',
+                    vest_front.vest_pocket_right.x_point, vest_front.vest_pocket_right.y_point)
+            }
         }
     }
 
     function backImageLoad() {
         clearCanvas()
-        let back = JSON.parse(localStorage.getItem('back'))
-        if (back.back_first_part?.image) {
-            if (localStorage.getItem('back_first_part')) {
-                loadObject(JSON.parse(localStorage.getItem('back_first_part')))
+        let vest_back = JSON.parse(localStorage.getItem('back'))
+        if (vest_back.collar_vest_back?.image) {
+            if (localStorage.getItem('collar_vest_back')) {
+                loadObject(JSON.parse(localStorage.getItem('collar_vest_back')))
             } else {
                 loadImage(
-                    back.back_first_part.image,
-                    'back_first_part',
-                    back.back_first_part.x_point,
-                    back.back_first_part.y_point,
+                    vest_back.collar_vest_back.image,
+                    'collar_vest_back',
+                    vest_back.collar_vest_back.x_point,
+                    vest_back.collar_vest_back.y_point,
                 )
             }
 
         }
 
-        if (back.back_second_part?.image) {
-            if (localStorage.getItem('back_second_part')) {
-                loadObject(JSON.parse(localStorage.getItem('back_second_part')))
+        if (vest_back.vest_full_back?.image) {
+            if (localStorage.getItem('vest_full_back')) {
+                loadObject(JSON.parse(localStorage.getItem('vest_full_back')))
             } else {
                 loadImage(
-                    back.back_second_part.image,
-                    'back_second_part',
-                    back.back_second_part.x_point,
-                    back.back_second_part.y_point,
+                    vest_back.vest_full_back.image,
+                    'vest_full_back',
+                    vest_back.vest_full_back.x_point,
+                    vest_back.vest_full_back.y_point,
                 )
             }
         }
 
-        if (back.back_third_part?.image) {
-            if (localStorage.getItem('back_third_part')) {
-                loadObject(JSON.parse(localStorage.getItem('back_third_part')))
+        if (vest_back.vest_top_back?.image) {
+            if (localStorage.getItem('vest_top_back')) {
+                loadObject(JSON.parse(localStorage.getItem('vest_top_back')))
             } else {
                 loadImage(
-                    back.back_third_part.image,
-                    'back_third_part',
-                    back.back_third_part.x_point,
-                    back.back_third_part.y_point,
+                    vest_back.vest_top_back.image,
+                    'vest_top_back',
+                    vest_back.vest_top_back.x_point,
+                    vest_back.vest_top_back.y_point,
                 )
             }
         }
 
-        if (back.back_left_sleeve?.image) {
-            console.log(back.back_left_sleeve?.image)
-            if (localStorage.getItem('back_left_sleeve')) {
-                loadObject(JSON.parse(localStorage.getItem('back_left_sleeve')))
+        if (vest_back.vest_mid_back?.image) {
+            if (localStorage.getItem('vest_mid_back')) {
+                loadObject(JSON.parse(localStorage.getItem('vest_mid_back')))
             } else {
                 loadImage(
-                    back.back_left_sleeve.image,
-                    'back_left_sleeve',
-                    back.back_left_sleeve.x_point,
-                    back.back_left_sleeve.y_point,
+                    vest_back.vest_mid_back.image,
+                    'vest_mid_back',
+                    vest_back.vest_mid_back.x_point,
+                    vest_back.vest_mid_back.y_point,
                 )
             }
         }
 
-        if (back.back_right_sleeve?.image) {
-            if (localStorage.getItem('back_right_sleeve')) {
-                loadObject(JSON.parse(localStorage.getItem('back_right_sleeve')))
+        if (vest_back.vest_bottom_back?.image) {
+            if (localStorage.getItem('vest_bottom_back')) {
+                loadObject(JSON.parse(localStorage.getItem('vest_bottom_back')))
             } else {
                 loadImage(
-                    back.back_right_sleeve.image,
-                    'back_right_sleeve',
-                    back.back_right_sleeve.x_point,
-                    back.back_right_sleeve.y_point,
+                    vest_back.vest_bottom_back.image,
+                    'vest_bottom_back',
+                    vest_back.vest_bottom_back.x_point,
+                    vest_back.vest_bottom_back.y_point,
+                )
+            }
+        }
+         if (vest_back.vest_pocket_left_back?.image) {
+            if (localStorage.getItem('vest_pocket_left_back')) {
+                loadObject(JSON.parse(localStorage.getItem('vest_pocket_left_back')))
+            } else {
+                loadImage(
+                    vest_back.vest_pocket_left_back.image,
+                    'vest_pocket_left_back',
+                    vest_back.vest_pocket_left_back.x_point,
+                    vest_back.vest_pocket_left_back.y_point,
+                )
+            }
+        }
+         if (vest_back.vest_pocket_right_back?.image) {
+            if (localStorage.getItem('vest_pocket_right_back')) {
+                loadObject(JSON.parse(localStorage.getItem('vest_pocket_right_back')))
+            } else {
+                loadImage(
+                    vest_back.vest_pocket_right_back.image,
+                    'vest_pocket_right_back',
+                    vest_back.vest_pocket_right_back.x_point,
+                    vest_back.vest_pocket_right_back.y_point,
+                )
+            }
+        }
+         if (vest_back.vest_hem_back?.image) {
+            if (localStorage.getItem('vest_hem_back')) {
+                loadObject(JSON.parse(localStorage.getItem('vest_hem_back')))
+            } else {
+                loadImage(
+                    vest_back.vest_hem_back.image,
+                    'vest_hem_back',
+                    vest_back.vest_hem_back.x_point,
+                    vest_back.vest_hem_back.y_point,
+                )
+            }
+        }
+         if (vest_back.vest_left_sleeve_back?.image) {
+            if (localStorage.getItem('vest_left_sleeve_back')) {
+                loadObject(JSON.parse(localStorage.getItem('vest_left_sleeve_back')))
+            } else {
+                loadImage(
+                    vest_back.vest_left_sleeve_back.image,
+                    'vest_left_sleeve_back',
+                    vest_back.vest_left_sleeve_back.x_point,
+                    vest_back.vest_left_sleeve_back.y_point,
+                )
+            }
+        }
+         if (vest_back.vest_right_sleeve_back?.image) {
+            if (localStorage.getItem('vest_right_sleeve_back')) {
+                loadObject(JSON.parse(localStorage.getItem('vest_right_sleeve_back')))
+            } else {
+                loadImage(
+                    vest_back.vest_right_sleeve_back.image,
+                    'vest_right_sleeve_back',
+                    vest_back.vest_right_sleeve_back.x_point,
+                    vest_back.vest_right_sleeve_back.y_point,
                 )
             }
         }
     }
 
-    const leftImageLoad = (e) => {
-        clearCanvas()
-        let left = JSON.parse(localStorage.getItem('left'))
-
-        if (left?.left_v_body_view?.image) {
-            if (localStorage.getItem('left_v_body_view')) {
-                loadObject(JSON.parse(localStorage.getItem('left_v_body_view')))
-            } else {
-                loadImage(
-                    left.left_v_body_view.image,
-                    'left_v_body_view',
-                    left.left_v_body_view.x_point,
-                    left.left_v_body_view.y_point,
-                )
-            }
-
-        }
-
-        if (left.left_v_upper_part?.image) {
-            if (localStorage.getItem('left_v_upper_part')) {
-                loadObject(JSON.parse(localStorage.getItem('left_v_upper_part')))
-            } else {
-                loadImage(
-                    left.left_v_upper_part.image,
-                    'left_v_upper_part',
-                    left.left_v_upper_part.x_point,
-                    left.left_v_upper_part.y_point,
-                )
-            }
-        }
-
-        if (left?.left_v_lower_part?.image) {
-            if (localStorage.getItem('left_v_lower_part')) {
-                loadObject(JSON.parse(localStorage.getItem('left_v_lower_part')))
-            } else {
-                loadImage(
-                    left.left_v_lower_part.image,
-                    'left_v_lower_part',
-                    left.left_v_lower_part.x_point,
-                    left.left_v_lower_part.y_point,
-                )
-            }
-        }
-
-        if (left?.left_v_left_s_upper?.image) {
-            if (localStorage.getItem('left_v_left_s_upper')) {
-                loadObject(JSON.parse(localStorage.getItem('left_v_left_s_upper')))
-            } else {
-                loadImage(
-                    left.left_v_left_s_upper.image,
-                    'left_v_left_s_upper',
-                    left.left_v_left_s_upper.x_point,
-                    left.left_v_left_s_upper.y_point,
-                )
-            }
-        }
-
-        if (left?.left_v_left_s_lower?.image) {
-            if (localStorage.getItem('left_v_left_s_lower')) {
-                loadObject(JSON.parse(localStorage.getItem('left_v_left_s_lower')))
-            } else {
-                loadImage(
-                    left.left_v_left_s_lower.image,
-                    'left_v_left_s_lower',
-                    left.left_v_left_s_lower.x_point,
-                    left.left_v_left_s_lower.y_point,
-                )
-            }
-        }
-
-        if (left?.left_v_right_s_upper?.image) {
-            if (localStorage.getItem('left_v_right_s_upper')) {
-                loadObject(JSON.parse(localStorage.getItem('left_v_right_s_upper')))
-            } else {
-                loadImage(
-                    left.left_v_right_s_upper.image,
-                    'left_v_right_s_upper',
-                    left.left_v_right_s_upper.x_point,
-                    left.left_v_right_s_upper.y_point,
-                )
-            }
-        }
-
-        if (left?.left_v_right_s_lower?.image) {
-            if (localStorage.getItem('left_v_right_s_lower')) {
-                loadObject(JSON.parse(localStorage.getItem('left_v_right_s_lower')))
-            } else {
-                loadImage(
-                    left.left_v_right_s_lower.image,
-                    'left_v_right_s_lower',
-                    left.left_v_right_s_lower.x_point,
-                    left.left_v_right_s_lower.y_point,
-                )
-            }
-        }
-
-    }
-
-
-
-    const rightImageLoad = (e) => {
-        clearCanvas()
-        let right = JSON.parse(localStorage.getItem('right'))
-
-        if (right.right_v_body_view?.image) {
-            if (localStorage.getItem('right_v_body_view')) {
-                loadObject(JSON.parse(localStorage.getItem('right_v_body_view')))
-            } else {
-                loadImage(
-                    right.right_v_body_view.image,
-                    'right_v_body_view',
-                    right.right_v_body_view.x_point,
-                    right.right_v_body_view.y_point,
-                )
-            }
-        }
-        if (right.right_v_upper_part?.image) {
-            if (localStorage.getItem('right_v_upper_part')) {
-                loadObject(JSON.parse(localStorage.getItem('right_v_upper_part')))
-            } else {
-                loadImage(
-                    right.right_v_upper_part.image,
-                    'right_v_upper_part',
-                    right.right_v_upper_part.x_point,
-                    right.right_v_upper_part.y_point,
-                )
-            }
-        }
-
-        if (right.right_v_lower_part?.image) {
-            if (localStorage.getItem('right_v_upper_part')){
-                loadObject(JSON.parse(localStorage.getItem('right_v_lower_part')))
-            }
-            else if(localStorage.getItem(right.right_v_lower_part?.image)){
-
-            }
-            else {
-                loadImage(
-                    right.right_v_lower_part.image,
-                    'right_v_lower_part',
-                    right.right_v_lower_part.x_point,
-                    right.right_v_lower_part.y_point,
-                )
-            }
-        }
-
-        if (right.right_v_left_s_upper?.image) {
-            if (localStorage.getItem('right_v_left_s_upper')) {
-                loadObject(JSON.parse(localStorage.getItem('right_v_left_s_upper')))
-            } else {
-                loadImage(
-                    right.right_v_left_s_upper.image,
-                    'right_v_left_s_upper',
-                    right.right_v_left_s_upper.x_point,
-                    right.right_v_left_s_upper.y_point,
-                )
-            }
-        }
-
-        if (right.right_v_left_s_lower?.image) {
-            if (localStorage.getItem('right_v_left_s_lower')) {
-                loadObject(JSON.parse(localStorage.getItem('right_v_left_s_lower')))
-            } else {
-                loadImage(
-                    right.right_v_left_s_lower.image,
-                    'right_v_left_s_lower',
-                    right.right_v_left_s_lower.x_point,
-                    right.right_v_left_s_lower.y_point,
-                )
-            }
-        }
-
-        if (right.right_v_right_s_upper?.image) {
-            if (localStorage.getItem('right_v_right_s_upper')) {
-                loadObject(JSON.parse(localStorage.getItem('right_v_right_s_upper')))
-            } else {
-                loadImage(
-                    right.right_v_right_s_upper.image,
-                    'right_v_right_s_upper',
-                    right.right_v_right_s_upper.x_point,
-                    right.right_v_right_s_upper.y_point,
-                )
-            }
-        }
-
-        if (right.right_v_right_s_lower?.image) {
-            if (localStorage.getItem('right_v_right_s_lower')) {
-                loadObject(JSON.parse(localStorage.getItem('right_v_right_s_lower')))
-            } else {
-                loadImage(
-                    right.right_v_right_s_lower.image,
-                    'right_v_right_s_lower',
-                    right.right_v_right_s_lower.x_point,
-                    right.right_v_right_s_lower.y_point,
-                )
-            }
-        }
-
-
-
-    }
 
     const getSampleImages = (s) => {
         var url = 'http://localhost:8000/api/logos';
@@ -661,6 +491,7 @@ function SamLocalEditor(props) {
 
     function imageSaved(i){
         let logo = JSON.parse(localStorage.getItem('samImage'))
+
         if (logo.image1?.image) {
             if (localStorage.getItem('samImage')) {
                 loadObject(JSON.parse(localStorage.getItem('samImage')))
@@ -752,20 +583,53 @@ function SamLocalEditor(props) {
                 >
                     <Tab label="Front View"/>
                     <Tab label="Back View"/>
-                    <Tab label="Right side"/>
-                    <Tab label="Left Side"/>
                 </Tabs>
             </AppBar>
             {/* front view*/}
             <div>
                 {selectedTab === 0 &&
                 <div className='row'>
-                    <div className="btn-group" role="group" aria-label="Basic example" style={{width:"100%"}}>
-                        <button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('body_first_section')}}>Body First Section</button>
-                        <button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('body_second_section')}}>Body second section</button>
-                        <button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('body_third_section')}}>Body Third Section</button>
-                        <button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('front-collar')}}>Collar</button>
-                        <button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('sleeve')}}>sleeve</button>
+                    <div className="btn-group" role="group" aria-label="Basic example" style={{width: "100%"}}>
+                        <button type="button" className="btn btn-secondary" onClick={() => {
+                            onComponentClick('collar_vest')
+                        }}>Collar
+                        </button>
+                        <button type="button" className="btn btn-secondary" onClick={() => {
+                            onComponentClick('zip_vest')
+                        }}>Zip
+                        </button>
+                        <button type="button" className="btn btn-secondary" onClick={() => {
+                            onComponentClick('vest_top')
+                        }}>Top Section
+                        </button>
+                        <button type="button" className="btn btn-secondary" onClick={() => {
+                            onComponentClick('vest_mid')
+                        }}>Mid Section
+                        </button>
+                        <button type="button" className="btn btn-secondary" onClick={() => {
+                            onComponentClick('vest_bottom')
+                        }}>Bottom Section
+                        </button>
+                        <button type="button" className="btn btn-secondary" onClick={() => {
+                            onComponentClick('vest_pocket_left')
+                        }}>Left Pocket
+                        </button>
+                        <button type="button" className="btn btn-secondary" onClick={() => {
+                            onComponentClick('vest_pocket_right')
+                        }}>Right Pocket
+                        </button>
+                        <button type="button" className="btn btn-secondary" onClick={() => {
+                            onComponentClick('vest_hem')
+                        }}>Hem
+                        </button>
+                        <button type="button" className="btn btn-secondary" onClick={() => {
+                            onComponentClick('vest_left_sleeve')
+                        }}>Left Sleeve
+                        </button>
+                        <button type="button" className="btn btn-secondary" onClick={() => {
+                            onComponentClick('vest_right_sleeve')
+                        }}>Right Sleeve
+                        </button>
                     </div>
 
                     {colorShow &&
@@ -973,14 +837,14 @@ function SamLocalEditor(props) {
                             }}>
                                 <button onClick={getSampleImages}>Load Images</button>
                                 {
-
-
-                                    img?
-                                    img.map((s) =>
-                                             <img src={s.image} alt={''} style={{width:"50px", height:"50px"}} onClick={()=> {load_logo(s.image)}}/>
-
-                                    )
-                                :null}
+                                    img ?
+                                        img.map((s) =>
+                                            <img src={s.image} alt={''} style={{width: "50px", height: "50px"}}
+                                                 onClick={() => {
+                                                     load_logo(s.image)
+                                                 }}/>
+                                        )
+                                        : null}
                             </div>
 
                         </div>
@@ -1036,219 +900,95 @@ function SamLocalEditor(props) {
                 }
                 {/* back view */}
                 {selectedTab === 1 &&
-                <div className='row' style={{width:"100%"}}>
-                    <div className="btn-group" role="group" aria-label="Basic example" style={{width:"100%"}}>
-                        <button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('back_second_part')}}>Back</button>
-                        {/*<button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('front-collar')}}>Collar</button>*/}
-                        <button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('sleeve')}}>Sleeve</button>
-                    </div>
-                    {colorShow &&
-                    <div style={{marginLeft:"50px", display:"inline"}}>
-                     <p> Choose color</p>
+                // <div className='row' style={{width:"100%"}}>
+                //     <div className="btn-group" role="group" aria-label="Basic example" style={{width:"100%"}}>
+                //        <button type="button" className="btn btn-secondary" onClick={() => {
+                //             onComponentClick('bag_handle_back')
+                //         }}>Bag Handle
+                //         </button>
+                //         <button type="button" className="btn btn-secondary" onClick={() => {
+                //             onComponentClick('bag_top_back_body')
+                //         }}>Bag Top Section
+                //         </button>
+                //         <button type="button" className="btn btn-secondary" onClick={() => {
+                //             onComponentClick('bag_mid_back_body')
+                //         }}>Bag Mid Section
+                //         </button>
+                //         <button type="button" className="btn btn-secondary" onClick={() => {
+                //             onComponentClick('bag_bottom_back_body')
+                //         }}>Bag Bottom Section
+                //         </button>
+                //     </div>
+                //     {colorShow &&
+                //     <div style={{marginLeft:"50px", display:"inline"}}>
+                //      <p> Choose color</p>
+                //
+                //     <CirclePicker
+                //         color={ color }
+                //         onChangeComplete={ handleChangeComplete}
+                //     />
+                //     <br></br>
+                //         <div id="output-text">
+                //             <input onChange={handleInput} placeholder="Enter text"/>
+                //                     <button type='button'
+                //                             name='text_show'
+                //                             onClick={textShow}
+                //                             style={{
+                //                                 backgroundColor: "#767FE0",
+                //                                 color: "white",
+                //                                 border: "none",
+                //                                 borderRadius: "50px",
+                //                                 width: "120px",
+                //                                 height: "30px",
+                //                                 margin: "10px"
+                //                             }}>
+                //                         Add Text
+                //                     </button>
+                //             <br></br>
+                //
+                //             <select id="input-font" onChange={changeFontStyle (this)}>
+                //
+                //             <option value="Comic Sans"
+                //                     selected="selected">
+                //                 Comic Sans
+                //             </option>
+                //             <option value="Arial">Arial</option>
+                // /*            <option value="fantasy">Fantasy</option>*/
+                // {/*            <option value="cursive">cursive</option>*/}
+                // {/*        </select>*/}
+                // {/*            <select id="input-font" style={{marginLeft:"10px"}}>*/}
+                //
+                // {/*            <option value="Normal"*/}
+                // {/*                    selected="selected">*/}
+                // //                 Normal
+                // {/*            </option>*/}
+                // {/*            <option value="Arial" style={{fontStyle:"bolder"}}>Bold</option>*/}
+                // {/*            <option value="fantasy" style={{fontStyle:"italic"}}>Italic</option>*/}
+                // {/*            <option value="cursive" style={{fontStyle:"underline"}}>Underline</option>*/}
+                // {/*        </select>*/}
+                // //             <br></br>
+                // //             <div style={{width:"300px", float:"right"}}>
+                // {/*            <div style={{width:"300px", height:"300px", border:"solid", borderColor:"black", borderWidth:"1px", float:"right", marginRight:"-980px", marginTop:"-200px"}}>*/}
+                // {/*                <button onClick={getSampleImages}>Load Images</button>*/}
+                // {/*                {*/}
+                // {/*                    img?*/}
+                // {/*                    img.map((s) =>*/}
+                // {/*                             <img src={s.image} alt={''} style={{width:"50px", height:"50px"}} onClick={()=> {load_logo(s.image)}}/>*/}
 
-                    <CirclePicker
-                        color={ color }
-                        onChangeComplete={ handleChangeComplete}
-                    />
-                    <br></br>
-                        <div id="output-text">
-                            <input onChange={handleInput} placeholder="Enter text"/>
-                                    <button type='button'
-                                            name='text_show'
-                                            onClick={textShow}
-                                            style={{
-                                                backgroundColor: "#767FE0",
-                                                color: "white",
-                                                border: "none",
-                                                borderRadius: "50px",
-                                                width: "120px",
-                                                height: "30px",
-                                                margin: "10px"
-                                            }}>
-                                        Add Text
-                                    </button>
-                            <br></br>
-
-                            <select id="input-font" onChange={changeFontStyle (this)}>
-
-                            <option value="Comic Sans"
-                                    selected="selected">
-                                Comic Sans
-                            </option>
-                            <option value="Arial">Arial</option>
-                            <option value="fantasy">Fantasy</option>
-                            <option value="cursive">cursive</option>
-                        </select>
-                            <select id="input-font" style={{marginLeft:"10px"}}>
-
-                            <option value="Normal"
-                                    selected="selected">
-                                Normal
-                            </option>
-                            <option value="Arial" style={{fontStyle:"bolder"}}>Bold</option>
-                            <option value="fantasy" style={{fontStyle:"italic"}}>Italic</option>
-                            <option value="cursive" style={{fontStyle:"underline"}}>Underline</option>
-                        </select>
-                            <br></br>
-                            <div style={{width:"300px", float:"right"}}>
-                            <div style={{width:"300px", height:"300px", border:"solid", borderColor:"black", borderWidth:"1px", float:"right", marginRight:"-980px", marginTop:"-200px"}}>
-                                <button onClick={getSampleImages}>Load Images</button>
-                                {
-                                    img?
-                                    img.map((s) =>
-                                             <img src={s.image} alt={''} style={{width:"50px", height:"50px"}} onClick={()=> {load_logo(s.image)}}/>
-
-                                    )
-                                :null}
-                            </div>
-
-                        </div>
-                            <br></br>
-
-                        </div>
-                    </div>
-                    }
-                </div>
-                // <SamLocalEditorBack/>
+                //                     )
+                //                 :null}
+                //             </div>
+                //
+                //         </div>
+                //             <br></br>
+                //
+                //{/*        </div>*/}
+                //{/*    </div>*/}
+                //{/*    }*/}
+                //{/*</div>*/}
+                <SamLocalEditorVestBack/>
                 }
-                {selectedTab === 2 &&
-                <div className='row' style={{width:"100%"}}>
-                    <div className="btn-group" role="group" aria-label="Basic example" style={{width:"100%"}}>
-                        <button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('left_v_upper_part')}}>upper Sleeve</button>
-                        {/*<button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('front-collar')}}>Collar</button>*/}
-                        <button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('left_v_lower_part')}}>Lower Sleeve</button>
-                    </div>
-                    {colorShow &&
-                    <div style={{marginLeft:"50px", display:"inline"}}>
-                     <p> Choose color</p>
 
-                    <CirclePicker
-                        color={ color }
-                        onChangeComplete={ handleChangeComplete }
-                    />
-                    <br></br>
-                        <div id="output-text">
-                            <input onChange={handleInput} placeholder="Enter text"/>
-                                    <button type='button'
-                                            name='text_show'
-                                            onClick={textShow}
-                                            style={{
-                                                backgroundColor: "#767FE0",
-                                                color: "white",
-                                                border: "none",
-                                                borderRadius: "50px",
-                                                width: "120px",
-                                                height: "30px",
-                                                margin: "10px"
-                                            }}>
-                                        Add Text
-                                    </button>
-                            <br></br>
-
-                            <select id="input-font" onChange={changeFontStyle (this)}>
-
-                            <option value="Comic Sans"
-                                    selected="selected">
-                                Comic Sans
-                            </option>
-                            <option value="Arial">Arial</option>
-                            <option value="fantasy">Fantasy</option>
-                            <option value="cursive">cursive</option>
-                        </select>
-                            <select id="input-font" style={{marginLeft:"10px"}}>
-
-                            <option value="Normal"
-                                    selected="selected">
-                                Normal
-                            </option>
-                            <option value="Arial" style={{fontStyle:"bolder"}}>Bold</option>
-                            <option value="fantasy" style={{fontStyle:"italic"}}>Italic</option>
-                            <option value="cursive" style={{fontStyle:"underline"}}>Underline</option>
-                        </select>
-                            <br></br>
-                            <div style={{width:"300px", float:"right"}}>
-                            <div style={{width:"300px", height:"300px", border:"solid", borderColor:"black", borderWidth:"1px", float:"right", marginRight:"-900px", marginTop:"-150px"}}>
-                                <button onClick={getSampleImages}>Load Images</button>
-                                {
-                                    img?
-                                    img.map((s) =>
-                                             <img src={s.image} alt={''} style={{width:"50px", height:"50px"}} onClick={()=> {load_logo(s.image)}}/>
-                                    )
-                                :null}
-                            </div>
-
-                        </div>
-                            <br></br>
-
-                        </div>
-                    </div>
-                    }
-                </div>
-                // <SamLocalEditorRight/>
-                }
-                {selectedTab === 3 && <div>
-
-                    <div className='row' style={{width:"100%"}}>
-                        <div className="btn-group" role="group" aria-label="Basic example" style={{width:"100%"}}>
-                            <button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('left_v_upper_part')}}>Left Sleeve</button>
-                            {/*<button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('front-collar')}}>Collar</button>*/}
-                            <button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('left_v_lower_part')}}>Right Sleeve</button>
-                        </div>
-                        {colorShow &&
-                        <div style={{marginLeft:"50px", display:"inline"}}>
-                            <p> Choose color</p>
-
-                            <CirclePicker
-                                color={ color }
-                                onChangeComplete={ handleChangeComplete }
-                            />
-                            <br></br>
-                            <div id="output-text">
-                                <input onChange={handleInput} placeholder="Enter text"/>
-                                <button type='button'
-                                        name='text_show'
-                                        onClick={textShow}
-                                        style={{
-                                            backgroundColor: "#767FE0",
-                                            color: "white",
-                                            border: "none",
-                                            borderRadius: "50px",
-                                            width: "120px",
-                                            height: "30px",
-                                            margin: "10px"
-                                        }}>
-                                    Add Text
-                                </button>
-                                <br></br>
-
-                                <select id="input-font" onChange={changeFontStyle (this)}>
-
-                                    <option value="Comic Sans"
-                                            selected="selected">
-                                        Comic Sans
-                                    </option>
-                                    <option value="Arial">Arial</option>
-                                    <option value="fantasy">Fantasy</option>
-                                    <option value="cursive">cursive</option>
-                                </select>
-                                <select id="input-font" style={{marginLeft:"10px"}}>
-
-                                    <option value="Normal"
-                                            selected="selected">
-                                        Normal
-                                    </option>
-                                    <option value="Arial" style={{fontStyle:"bolder"}}>Bold</option>
-                                    <option value="fantasy" style={{fontStyle:"italic"}}>Italic</option>
-                                    <option value="cursive" style={{fontStyle:"underline"}}>Underline</option>
-                                </select>
-                                <br></br>
-                                <br></br>
-
-                            </div>
-                        </div>
-                        }
-                    </div>
-                </div>}
             </div>
             <canvas id='canvas'>
                 <div id="ans"></div>
@@ -1261,5 +1001,5 @@ function SamLocalEditor(props) {
 
 }
 
-export default SamLocalEditor;
+export default SamLocalEditorVestFront;
 
