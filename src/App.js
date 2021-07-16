@@ -144,7 +144,7 @@ function App() {
                 />
                 <Route
                     exact
-                    path="/editor/bag/:id"
+                    path="/editor/tank-top/:id"
                     component={SamLocalEditorTankTopFront}
                     render={(props) => <SamLocalEditorTankTopFront {...props} />}
                 />

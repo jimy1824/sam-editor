@@ -27,10 +27,8 @@ function SamLocalEditorTankTopFront(props) {
     useEffect(() => {
         getProductDetail(id)
             .then(items => {
-                localStorage.setItem('body', JSON.stringify(items.front_view));
-                localStorage.setItem('back', JSON.stringify(items.back_view));
-                localStorage.setItem('left', JSON.stringify(items.left_view));
-                localStorage.setItem('right', JSON.stringify(items.right_view));
+                localStorage.setItem('front_view_tank_top', JSON.stringify(items.front_view_tank_top));
+                localStorage.setItem('back_view_tank_top', JSON.stringify(items.back_view_tank_top));
                 setProduct(items)
             })
     }, [])
@@ -50,16 +48,9 @@ function SamLocalEditorTankTopFront(props) {
         setSelectedTab(newValue);
         if (newValue === 0) {
             frontImageLoad()
-            // imageSaved()
         }
         if (newValue === 1) {
             backImageLoad()
-        }
-        if (newValue === 2) {
-            rightImageLoad()
-        }
-        if (newValue === 3) {
-            leftImageLoad()
         }
 
 
@@ -306,61 +297,85 @@ function SamLocalEditorTankTopFront(props) {
 
     function frontImageLoad() {
         clearCanvas()
-        let body = JSON.parse(localStorage.getItem('body'))
-        if (body.body_first_section?.image) {
-            if (localStorage.getItem('body_first_section')) {
-                loadObject(JSON.parse(localStorage.getItem('body_first_section')))
+        let front_view_tank_top = JSON.parse(localStorage.getItem('front_view_tank_top'))
+        if (front_view_tank_top.tank_collar_front?.image) {
+            if (localStorage.getItem('tank_collar_front')) {
+                loadObject(JSON.parse(localStorage.getItem('tank_collar_front')))
             } else {
-                loadImage(body.body_first_section.image, 'body_first_section', body.body_first_section.x_point, body.body_first_section.y_point)
+                loadImage(
+                    front_view_tank_top.tank_collar_front.image,
+                    'tank_collar_front',
+                    front_view_tank_top.tank_collar_front.x_point,
+                    front_view_tank_top.tank_collar_front.y_point)
             }
 
         }
-        if (body.body_second_section?.image) {
-            if (localStorage.getItem('body_second_section')) {
-                loadObject(JSON.parse(localStorage.getItem('body_second_section')))
+        if (front_view_tank_top.tank_collar_inner_front?.image) {
+            if (localStorage.getItem('tank_collar_inner_front')) {
+                loadObject(JSON.parse(localStorage.getItem('tank_collar_inner_front')))
             } else {
-                loadImage(body.body_second_section.image, 'body_second_section', body.body_second_section.x_point, body.body_second_section.y_point)
+                loadImage(
+                    front_view_tank_top.tank_collar_inner_front.image,
+                    'tank_collar_inner_front',
+                    front_view_tank_top.tank_collar_inner_front.x_point,
+                    front_view_tank_top.tank_collar_inner_front.y_point)
             }
         }
-        if (body.body_third_section?.image) {
-            if (localStorage.getItem('body_third_section')) {
-                loadObject(JSON.parse(localStorage.getItem('body_third_section')))
+        if (front_view_tank_top.tank_top_front?.image) {
+            if (localStorage.getItem('tank_top_front')) {
+                loadObject(JSON.parse(localStorage.getItem('tank_top_front')))
             } else {
-                loadImage(body.body_third_section.image, 'body_third_section', body.body_third_section.x_point, body.body_third_section.y_point)
+                loadImage(
+                    front_view_tank_top.tank_top_front.image,
+                    'tank_top_front',
+                    front_view_tank_top.tank_top_front.x_point,
+                    front_view_tank_top.tank_top_front.y_point)
             }
         }
-        if (body.collar?.image) {
-            if (localStorage.getItem('front-collar')) {
-                loadObject(JSON.parse(localStorage.getItem('front-collar')))
+        if (front_view_tank_top.tank_mid_front?.image) {
+            if (localStorage.getItem('tank_mid_front')) {
+                loadObject(JSON.parse(localStorage.getItem('tank_mid_front')))
             } else {
-                loadImage(body.collar.image, 'front-collar', body.collar.x_point, body.collar.y_point)
+                loadImage(
+                    front_view_tank_top.tank_mid_front.image,
+                    'tank_mid_front',
+                    front_view_tank_top.tank_mid_front.x_point,
+                    front_view_tank_top.tank_mid_front.y_point)
             }
         }
-        if (body.right_sleeve?.image) {
-            if (localStorage.getItem('right_sleeve')) {
-                loadObject(JSON.parse(localStorage.getItem('right_sleeve')))
+        if (front_view_tank_top.tank_bottom_front?.image) {
+            if (localStorage.getItem('tank_bottom_front')) {
+                loadObject(JSON.parse(localStorage.getItem('tank_bottom_front')))
             } else {
-                loadImage(body.right_sleeve.image, 'right_sleeve', body.right_sleeve.x_point, body.right_sleeve.y_point)
+                loadImage(
+                    front_view_tank_top.tank_bottom_front.image,
+                    'tank_bottom_front',
+                    front_view_tank_top.tank_bottom_front.x_point,
+                    front_view_tank_top.tank_bottom_front.y_point)
             }
         }
 
-        if (body.left_sleeve?.image) {
-            if (localStorage.getItem('left_sleeve')) {
-                loadObject(JSON.parse(localStorage.getItem('left_sleeve')))
+        if (front_view_tank_top.tank_left_sleeve_front?.image) {
+            if (localStorage.getItem('tank_left_sleeve_front')) {
+                loadObject(JSON.parse(localStorage.getItem('tank_left_sleeve_front')))
             } else {
-                loadImage(body.left_sleeve.image, 'left_sleeve', body.left_sleeve.x_point, body.left_sleeve.y_point)
+                loadImage(
+                    front_view_tank_top.tank_left_sleeve_front.image,
+                    'tank_left_sleeve_front',
+                    front_view_tank_top.tank_left_sleeve_front.x_point,
+                    front_view_tank_top.tank_left_sleeve_front.y_point)
 
             }
         }
 
-        if (body.towel_front?.image) {
-            if (localStorage.getItem('towel_front')) {
-                loadObject(JSON.parse(localStorage.getItem('towel_front')))
+        if (front_view_tank_top.tank_right_sleeve_front?.image) {
+            if (localStorage.getItem('tank_right_sleeve_front')) {
+                loadObject(JSON.parse(localStorage.getItem('tank_right_sleeve_front')))
             } else {
-                loadImage(body.towel_front.image,
-                    'towel_front',
-                    body.towel_front.x_point,
-                    body.towel_front.y_point)
+                loadImage(front_view_tank_top.tank_right_sleeve_front.image,
+                    'tank_right_sleeve_front',
+                    front_view_tank_top.tank_right_sleeve_front.x_point,
+                    front_view_tank_top.tank_right_sleeve_front.y_point)
             }
 
         }
@@ -368,274 +383,84 @@ function SamLocalEditorTankTopFront(props) {
 
     function backImageLoad() {
         clearCanvas()
-        let back = JSON.parse(localStorage.getItem('back'))
-        if (back.back_first_part?.image) {
-            if (localStorage.getItem('back_first_part')) {
-                loadObject(JSON.parse(localStorage.getItem('back_first_part')))
+        let back_view_tank_top = JSON.parse(localStorage.getItem('back_view_tank_top'))
+        if (back_view_tank_top.tank_collar_back?.image) {
+            if (localStorage.getItem('tank_collar_back')) {
+                loadObject(JSON.parse(localStorage.getItem('tank_collar_back')))
             } else {
                 loadImage(
-                    back.back_first_part.image,
-                    'back_first_part',
-                    back.back_first_part.x_point,
-                    back.back_first_part.y_point,
+                    back_view_tank_top.tank_collar_back.image,
+                    'tank_collar_back',
+                    back_view_tank_top.tank_collar_back.x_point,
+                    back_view_tank_top.tank_collar_back.y_point,
                 )
             }
 
         }
 
-        if (back.back_second_part?.image) {
-            if (localStorage.getItem('back_second_part')) {
-                loadObject(JSON.parse(localStorage.getItem('back_second_part')))
+        if (back_view_tank_top.tank_top_back?.image) {
+            if (localStorage.getItem('tank_top_back')) {
+                loadObject(JSON.parse(localStorage.getItem('tank_top_back')))
             } else {
                 loadImage(
-                    back.back_second_part.image,
-                    'back_second_part',
-                    back.back_second_part.x_point,
-                    back.back_second_part.y_point,
+                    back_view_tank_top.tank_top_back.image,
+                    'tank_top_back',
+                    back_view_tank_top.tank_top_back.x_point,
+                    back_view_tank_top.tank_top_back.y_point,
                 )
             }
         }
 
-        if (back.back_third_part?.image) {
-            if (localStorage.getItem('back_third_part')) {
-                loadObject(JSON.parse(localStorage.getItem('back_third_part')))
+        if (back_view_tank_top.tank_mid_back?.image) {
+            if (localStorage.getItem('tank_mid_back')) {
+                loadObject(JSON.parse(localStorage.getItem('tank_mid_back')))
             } else {
                 loadImage(
-                    back.back_third_part.image,
-                    'back_third_part',
-                    back.back_third_part.x_point,
-                    back.back_third_part.y_point,
+                    back_view_tank_top.tank_mid_back.image,
+                    'tank_mid_back',
+                    back_view_tank_top.tank_mid_back.x_point,
+                    back_view_tank_top.tank_mid_back.y_point,
                 )
             }
         }
 
-        if (back.back_left_sleeve?.image) {
-            if (localStorage.getItem('back_left_sleeve')) {
-                loadObject(JSON.parse(localStorage.getItem('back_left_sleeve')))
+        if (back_view_tank_top.tank_bottom_back?.image) {
+            if (localStorage.getItem('tank_bottom_back')) {
+                loadObject(JSON.parse(localStorage.getItem('tank_bottom_back')))
             } else {
                 loadImage(
-                    back.back_left_sleeve.image,
-                    'back_left_sleeve',
-                    back.back_left_sleeve.x_point,
-                    back.back_left_sleeve.y_point,
+                    back_view_tank_top.tank_bottom_back.image,
+                    'tank_bottom_back',
+                    back_view_tank_top.tank_bottom_back.x_point,
+                    back_view_tank_top.tank_bottom_back.y_point,
                 )
             }
         }
 
-        if (back.back_right_sleeve?.image) {
-            if (localStorage.getItem('back_right_sleeve')) {
-                loadObject(JSON.parse(localStorage.getItem('back_right_sleeve')))
+        if (back_view_tank_top.tank_left_sleeve_back?.image) {
+            if (localStorage.getItem('tank_left_sleeve_back')) {
+                loadObject(JSON.parse(localStorage.getItem('tank_left_sleeve_back')))
             } else {
                 loadImage(
-                    back.back_right_sleeve.image,
-                    'back_right_sleeve',
-                    back.back_right_sleeve.x_point,
-                    back.back_right_sleeve.y_point,
+                    back_view_tank_top.tank_left_sleeve_back.image,
+                    'tank_left_sleeve_back',
+                    back_view_tank_top.tank_left_sleeve_back.x_point,
+                    back_view_tank_top.tank_left_sleeve_back.y_point,
                 )
             }
         }
-    }
-
-    const leftImageLoad = (e) => {
-        clearCanvas()
-        let left = JSON.parse(localStorage.getItem('left'))
-
-        if (left?.left_v_body_view?.image) {
-            if (localStorage.getItem('left_v_body_view')) {
-                loadObject(JSON.parse(localStorage.getItem('left_v_body_view')))
+        if (back_view_tank_top.tank_right_sleeve_back?.image) {
+            if (localStorage.getItem('tank_right_sleeve_back')) {
+                loadObject(JSON.parse(localStorage.getItem('tank_right_sleeve_back')))
             } else {
                 loadImage(
-                    left.left_v_body_view.image,
-                    'left_v_body_view',
-                    left.left_v_body_view.x_point,
-                    left.left_v_body_view.y_point,
-                )
-            }
-
-        }
-
-        if (left.left_v_upper_part?.image) {
-            if (localStorage.getItem('left_v_upper_part')) {
-                loadObject(JSON.parse(localStorage.getItem('left_v_upper_part')))
-            } else {
-                loadImage(
-                    left.left_v_upper_part.image,
-                    'left_v_upper_part',
-                    left.left_v_upper_part.x_point,
-                    left.left_v_upper_part.y_point,
+                    back_view_tank_top.tank_right_sleeve_back.image,
+                    'tank_right_sleeve_back',
+                    back_view_tank_top.tank_right_sleeve_back.x_point,
+                    back_view_tank_top.tank_right_sleeve_back.y_point,
                 )
             }
         }
-
-        if (left?.left_v_lower_part?.image) {
-            if (localStorage.getItem('left_v_lower_part')) {
-                loadObject(JSON.parse(localStorage.getItem('left_v_lower_part')))
-            } else {
-                loadImage(
-                    left.left_v_lower_part.image,
-                    'left_v_lower_part',
-                    left.left_v_lower_part.x_point,
-                    left.left_v_lower_part.y_point,
-                )
-            }
-        }
-
-        if (left?.left_v_left_s_upper?.image) {
-            if (localStorage.getItem('left_v_left_s_upper')) {
-                loadObject(JSON.parse(localStorage.getItem('left_v_left_s_upper')))
-            } else {
-                loadImage(
-                    left.left_v_left_s_upper.image,
-                    'left_v_left_s_upper',
-                    left.left_v_left_s_upper.x_point,
-                    left.left_v_left_s_upper.y_point,
-                )
-            }
-        }
-
-        if (left?.left_v_left_s_lower?.image) {
-            if (localStorage.getItem('left_v_left_s_lower')) {
-                loadObject(JSON.parse(localStorage.getItem('left_v_left_s_lower')))
-            } else {
-                loadImage(
-                    left.left_v_left_s_lower.image,
-                    'left_v_left_s_lower',
-                    left.left_v_left_s_lower.x_point,
-                    left.left_v_left_s_lower.y_point,
-                )
-            }
-        }
-
-        if (left?.left_v_right_s_upper?.image) {
-            if (localStorage.getItem('left_v_right_s_upper')) {
-                loadObject(JSON.parse(localStorage.getItem('left_v_right_s_upper')))
-            } else {
-                loadImage(
-                    left.left_v_right_s_upper.image,
-                    'left_v_right_s_upper',
-                    left.left_v_right_s_upper.x_point,
-                    left.left_v_right_s_upper.y_point,
-                )
-            }
-        }
-
-        if (left?.left_v_right_s_lower?.image) {
-            if (localStorage.getItem('left_v_right_s_lower')) {
-                loadObject(JSON.parse(localStorage.getItem('left_v_right_s_lower')))
-            } else {
-                loadImage(
-                    left.left_v_right_s_lower.image,
-                    'left_v_right_s_lower',
-                    left.left_v_right_s_lower.x_point,
-                    left.left_v_right_s_lower.y_point,
-                )
-            }
-        }
-
-    }
-
-
-
-    const rightImageLoad = (e) => {
-        clearCanvas()
-        let right = JSON.parse(localStorage.getItem('right'))
-
-        if (right.right_v_body_view?.image) {
-            if (localStorage.getItem('right_v_body_view')) {
-                loadObject(JSON.parse(localStorage.getItem('right_v_body_view')))
-            } else {
-                loadImage(
-                    right.right_v_body_view.image,
-                    'right_v_body_view',
-                    right.right_v_body_view.x_point,
-                    right.right_v_body_view.y_point,
-                )
-            }
-        }
-        if (right.right_v_upper_part?.image) {
-            if (localStorage.getItem('right_v_upper_part')) {
-                loadObject(JSON.parse(localStorage.getItem('right_v_upper_part')))
-            } else {
-                loadImage(
-                    right.right_v_upper_part.image,
-                    'right_v_upper_part',
-                    right.right_v_upper_part.x_point,
-                    right.right_v_upper_part.y_point,
-                )
-            }
-        }
-
-        if (right.right_v_lower_part?.image) {
-            if (localStorage.getItem('right_v_upper_part')){
-                loadObject(JSON.parse(localStorage.getItem('right_v_lower_part')))
-            }
-            else if(localStorage.getItem(right.right_v_lower_part?.image)){
-
-            }
-            else {
-                loadImage(
-                    right.right_v_lower_part.image,
-                    'right_v_lower_part',
-                    right.right_v_lower_part.x_point,
-                    right.right_v_lower_part.y_point,
-                )
-            }
-        }
-
-        if (right.right_v_left_s_upper?.image) {
-            if (localStorage.getItem('right_v_left_s_upper')) {
-                loadObject(JSON.parse(localStorage.getItem('right_v_left_s_upper')))
-            } else {
-                loadImage(
-                    right.right_v_left_s_upper.image,
-                    'right_v_left_s_upper',
-                    right.right_v_left_s_upper.x_point,
-                    right.right_v_left_s_upper.y_point,
-                )
-            }
-        }
-
-        if (right.right_v_left_s_lower?.image) {
-            if (localStorage.getItem('right_v_left_s_lower')) {
-                loadObject(JSON.parse(localStorage.getItem('right_v_left_s_lower')))
-            } else {
-                loadImage(
-                    right.right_v_left_s_lower.image,
-                    'right_v_left_s_lower',
-                    right.right_v_left_s_lower.x_point,
-                    right.right_v_left_s_lower.y_point,
-                )
-            }
-        }
-
-        if (right.right_v_right_s_upper?.image) {
-            if (localStorage.getItem('right_v_right_s_upper')) {
-                loadObject(JSON.parse(localStorage.getItem('right_v_right_s_upper')))
-            } else {
-                loadImage(
-                    right.right_v_right_s_upper.image,
-                    'right_v_right_s_upper',
-                    right.right_v_right_s_upper.x_point,
-                    right.right_v_right_s_upper.y_point,
-                )
-            }
-        }
-
-        if (right.right_v_right_s_lower?.image) {
-            if (localStorage.getItem('right_v_right_s_lower')) {
-                loadObject(JSON.parse(localStorage.getItem('right_v_right_s_lower')))
-            } else {
-                loadImage(
-                    right.right_v_right_s_lower.image,
-                    'right_v_right_s_lower',
-                    right.right_v_right_s_lower.x_point,
-                    right.right_v_right_s_lower.y_point,
-                )
-            }
-        }
-
-
-
     }
 
     const getSampleImages = (s) => {
@@ -750,8 +575,6 @@ function SamLocalEditorTankTopFront(props) {
                 >
                     <Tab label="Front View"/>
                     <Tab label="Back View"/>
-                    <Tab label="Right side"/>
-                    <Tab label="Left Side"/>
                 </Tabs>
             </AppBar>
             {/* front view*/}
@@ -992,129 +815,10 @@ function SamLocalEditorTankTopFront(props) {
                     </div>
                     }
 
-                    {/*<form action="">*/}
-                    {/*    <label htmlFor="patterns" style={{marginTop: "20px"}}></label>*/}
-                    {/*    <select name="patterns" id="patterns" style={{*/}
-                    {/*        width: "150px",*/}
-                    {/*        height: "30px",*/}
-                    {/*        borderWidth: "1px",*/}
-                    {/*        borderStyle: "solid",*/}
-                    {/*        margin: "10px"*/}
-                    {/*    }}>*/}
-                    {/*        <option value="image1">Image1</option>*/}
-                    {/*        <option value="image2">Image2</option>*/}
-                    {/*        <option value="image3">Image3</option>*/}
-                    {/*        <option value="image4">Image4</option>*/}
-                    {/*    </select>*/}
-                    {/*    <input type="submit" value="Submit"></input>*/}
-                    {/*</form>*/}
-
-                    {/*<button type='button'*/}
-                    {/*        name='upload_logo'*/}
-                    {/*    // onClick={load_logo}*/}
-                    {/*        style={{*/}
-                    {/*            backgroundColor: "#767FE0",*/}
-                    {/*            color: "white",*/}
-                    {/*            border: "none",*/}
-                    {/*            borderRadius: "50px",*/}
-                    {/*            width: "120px",*/}
-                    {/*            height: "30px",*/}
-                    {/*            margin: "10px"*/}
-                    {/*        }}>*/}
-                    {/*    Load Logo*/}
-                    {/*</button>*/}
-                    {/*<br></br>*/}
-                    {/*<button type="button"*/}
-                    {/*        onClick={download_Image}*/}
-                    {/*        style={{*/}
-                    {/*            backgroundColor: "#767FE0",*/}
-                    {/*            color: "white",*/}
-                    {/*            border: "none",*/}
-                    {/*            borderRadius: "50px",*/}
-                    {/*            width: "120px",*/}
-                    {/*            height: "30px",*/}
-                    {/*            margin: "10px"*/}
-                    {/*        }}>Download Image*/}
-                    {/*</button>*/}
-
                 </div>
                 }
                 {/* back view */}
                 {selectedTab === 1 &&
-                // <div className='row' style={{width:"100%"}}>
-                //     <div className="btn-group" role="group" aria-label="Basic example" style={{width:"100%"}}>
-                //         <button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('back_second_part')}}>Back</button>
-                //         {/*<button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('front-collar')}}>Collar</button>*/}
-                //         <button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('sleeve')}}>Sleeve</button>
-                //     </div>
-                //     {colorShow &&
-                //     <div style={{marginLeft:"50px", display:"inline"}}>
-                //      <p> Choose color</p>
-                //
-                //     <CirclePicker
-                //         color={ color }
-                //         onChangeComplete={ handleChangeComplete}
-                //     />
-                //     <br></br>
-                //         <div id="output-text">
-                //             <input onChange={handleInput} placeholder="Enter text"/>
-                //                     <button type='button'
-                //                             name='text_show'
-                //                             onClick={textShow}
-                //                             style={{
-                //                                 backgroundColor: "#767FE0",
-                //                                 color: "white",
-                //                                 border: "none",
-                //                                 borderRadius: "50px",
-                //                                 width: "120px",
-                //                                 height: "30px",
-                //                                 margin: "10px"
-                //                             }}>
-                //                         Add Text
-                //                     </button>
-                //             <br></br>
-                //
-                //             <select id="input-font" onChange={changeFontStyle (this)}>
-                //
-                //             <option value="Comic Sans"
-                //                     selected="selected">
-                //                 Comic Sans
-                //             </option>
-                //             <option value="Arial">Arial</option>
-                //             <option value="fantasy">Fantasy</option>
-                //             <option value="cursive">cursive</option>
-                //         </select>
-                //             <select id="input-font" style={{marginLeft:"10px"}}>
-                //
-                //             <option value="Normal"
-                //                     selected="selected">
-                //                 Normal
-                //             </option>
-                //             <option value="Arial" style={{fontStyle:"bolder"}}>Bold</option>
-                //             <option value="fantasy" style={{fontStyle:"italic"}}>Italic</option>
-                //             <option value="cursive" style={{fontStyle:"underline"}}>Underline</option>
-                //         </select>
-                //             <br></br>
-                //             <div style={{width:"300px", float:"right"}}>
-                //             <div style={{width:"300px", height:"300px", border:"solid", borderColor:"black", borderWidth:"1px", float:"right", marginRight:"-980px", marginTop:"-200px"}}>
-                //                 <button onClick={getSampleImages}>Load Images</button>
-                //                 {
-                //                     img?
-                //                     img.map((s) =>
-                //                              <img src={s.image} alt={''} style={{width:"50px", height:"50px"}} onClick={()=> {load_logo(s.image)}}/>
-                //
-                //                     )
-                //                 :null}
-                //             </div>
-                //
-                //         </div>
-                //             <br></br>
-                //
-                //         </div>
-                //     </div>
-                //     }
-                // </div>
-                // <SamLocalEditorBack/>
                     <SamLocalEditorPantBack/>
                 }
 
