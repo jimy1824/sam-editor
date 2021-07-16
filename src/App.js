@@ -8,6 +8,20 @@ import SamEditor from "./components/editor";
 import Welcome from "./components/welcome";
 import MyEditor from "./components/image";
 import SamLocalEditor from "./components/local_stroge_editor";
+import SamLocalEditorTowelFront from "./components/towel/towel_front"
+import SamLocalEditorBagFront from "./components/Bag/bag_back";
+import SamLocalEditorVestFront from "./components/Vest/vest_front";
+import SamLocalEditorApron from "./components/Apron/apron";
+import SamLocalEditorBaseBJacFront from "./components/Base Ball Jacket/base_b_jac_front";
+import SamLocalEditorBaseBShirtFront from "./components/Base Ball Shirt/base_b_shirt_front";
+import SamLocalEditorBomberJacFront from "./components/Bomber Jacket/bomber_jac_front";
+import SamLocalEditorCoachJacFront from "./components/Coach Jacket/coach_jac_front";
+import SamLocalEditorHatFront from "./components/Hat/hat_front";
+import SamLocalEditorHoodieFront from "./components/Hoodie/hoodie_front";
+import SamLocalEditorPantFront from "./components/Pants/pant_front";
+import SamLocalEditorTankTopFront from "./components/Tank Top/tank_top_front";
+import SamLocalEditorBack from "./components/back_canvas";
+import SamLocalEditorRight from "./components/right_canvas";
 
 // function App() {
 //
@@ -70,9 +84,81 @@ function App() {
                 {/*/>*/}
                 <Route
                     exact
-                    path="/editor/:id"
+                    path="/editor/shirt/:id"
                     component={SamLocalEditor}
                     render={(props) => <SamLocalEditor {...props} />}
+                />
+                <Route
+                    exact
+                    path="/editor/towel/:id"
+                    component={SamLocalEditorApron}
+                    render={(props) => <SamLocalEditorApron {...props} />}
+                />
+                <Route
+                    exact
+                    path="/editor/bag/:id"
+                    component={SamLocalEditorBagFront}
+                    render={(props) => <SamLocalEditorBagFront {...props} />}
+                />
+                <Route
+                    exact
+                    path="/editor/bag/:id"
+                    component={SamLocalEditorBaseBJacFront}
+                    render={(props) => <SamLocalEditorBaseBJacFront {...props} />}
+                />
+                <Route
+                    exact
+                    path="/editor/bag/:id"
+                    component={SamLocalEditorBaseBShirtFront}
+                    render={(props) => <SamLocalEditorBaseBShirtFront {...props} />}
+                />
+                <Route
+                    exact
+                    path="/editor/bag/:id"
+                    component={SamLocalEditorBomberJacFront}
+                    render={(props) => <SamLocalEditorBomberJacFront {...props} />}
+                />
+                <Route
+                    exact
+                    path="/editor/bag/:id"
+                    component={SamLocalEditorCoachJacFront}
+                    render={(props) => <SamLocalEditorCoachJacFront {...props} />}
+                />
+                <Route
+                    exact
+                    path="/editor/bag/:id"
+                    component={SamLocalEditorHatFront}
+                    render={(props) => <SamLocalEditorHatFront {...props} />}
+                />
+                <Route
+                    exact
+                    path="/editor/bag/:id"
+                    component={SamLocalEditorHoodieFront}
+                    render={(props) => <SamLocalEditorHoodieFront {...props} />}
+                />
+                <Route
+                    exact
+                    path="/editor/bag/:id"
+                    component={SamLocalEditorPantFront}
+                    render={(props) => <SamLocalEditorPantFront {...props} />}
+                />
+                <Route
+                    exact
+                    path="/editor/bag/:id"
+                    component={SamLocalEditorTankTopFront}
+                    render={(props) => <SamLocalEditorTankTopFront {...props} />}
+                />
+                <Route
+                    exact
+                    path="/editor/towel/:id"
+                    component={SamLocalEditorTowelFront}
+                    render={(props) => <SamLocalEditorTowelFront {...props} />}
+                />
+                <Route
+                    exact
+                    path="/editor/vest/:id"
+                    component={SamLocalEditorVestFront}
+                    render={(props) => <SamLocalEditorVestFront {...props} />}
                 />
                 <Route
                     path="/"

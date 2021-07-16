@@ -1,7 +1,4 @@
 import React, {useEffect, useState, useRef} from "react";
-import SamLocalEditorRight from "./right_canvas";
-import SamLocalEditorBack from "./back_canvas";
-import SamLocalEditorLeft from "./left_canvas";
 // import THREELib from "three-js";
 import {fabric} from "fabric";
 import {saveAs} from 'file-saver'
@@ -11,30 +8,28 @@ import $ from "jquery";
 import { CirclePicker } from 'react-color';
 import {Tabs, Tab, AppBar} from "@material-ui/core";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import {getProductDetail} from "../apiService";
+import {getProductDetail} from "../../apiService";
 
 const viewOptions = [
     'front',
     'back',
-    'left',
-    'right'
 ]
 var fonts = ["Pacifico", "VT323", "Quicksand", "Inconsolata"];
 var logo_img
 
-function SamLocalEditor(props) {
-    let {id} = props.match.params
+function SamLocalEditorBagBack(props) {
+    // let {id} = props.match.params
     const [product, setProduct] = useState(null);
-    useEffect(() => {
-        getProductDetail(id)
-            .then(items => {
-                localStorage.setItem('body', JSON.stringify(items.front_view));
-                localStorage.setItem('back', JSON.stringify(items.back_view));
-                localStorage.setItem('left', JSON.stringify(items.left_view));
-                localStorage.setItem('right', JSON.stringify(items.right_view));
-                setProduct(items)
-            })
-    }, [])
+    // useEffect(() => {
+    //     getProductDetail(id)
+    //         .then(items => {
+    //             localStorage.setItem('body', JSON.stringify(items.front_view));
+    //             localStorage.setItem('back', JSON.stringify(items.back_view));
+    //             localStorage.setItem('left', JSON.stringify(items.left_view));
+    //             localStorage.setItem('right', JSON.stringify(items.right_view));
+    //             setProduct(items)
+    //         })
+    // }, [])
 
     const [canvas, setCanvas] = useState(null)
      const [name, setName] = useState(null);
@@ -47,24 +42,24 @@ function SamLocalEditor(props) {
     const [color, setColor] = React.useState('#fff');
     const [selectedComponentId, setSelectedComponentId] = React.useState(null);
     const [colorShow, setColorShow] = React.useState(false);
-    const handleTabChange = (event, newValue) => {
-        setSelectedTab(newValue);
-        if (newValue === 0) {
-            frontImageLoad()
-            // imageSaved()
-        }
-        if (newValue === 1) {
-            backImageLoad()
-        }
-        if (newValue === 2) {
-            rightImageLoad()
-        }
-        if (newValue === 3) {
-            leftImageLoad()
-        }
-
-
-    }
+    // const handleTabChange = (event, newValue) => {
+    //     setSelectedTab(newValue);
+    //     if (newValue === 0) {
+    //         frontImageLoad()
+    //         // imageSaved()
+    //     }
+    //     if (newValue === 1) {
+    //         backImageLoad()
+    //     }
+    //     if (newValue === 2) {
+    //         rightImageLoad()
+    //     }
+    //     if (newValue === 3) {
+    //         leftImageLoad()
+    //     }
+    //
+    //
+    // }
 
     const initCanvas = (name) =>
         new fabric.Canvas(name, {
@@ -79,7 +74,7 @@ function SamLocalEditor(props) {
     }, []);
     useEffect(() => {
         if (product) {
-            frontImageLoad()
+            // frontImageLoad()
         }
     }, [product])
 
@@ -154,7 +149,6 @@ function SamLocalEditor(props) {
                     left: left,
                     top: top,
                     selectable: false,
-
 
                 })
             console.log(imageId)
@@ -305,339 +299,123 @@ function SamLocalEditor(props) {
     //     link.click();
     // }
 
-    function frontImageLoad() {
-        clearCanvas()
-        let body = JSON.parse(localStorage.getItem('body'))
-        if (body.body_first_section?.image) {
-            if (localStorage.getItem('body_first_section')) {
-                loadObject(JSON.parse(localStorage.getItem('body_first_section')))
-            } else {
-                loadImage(body.body_first_section.image, 'body_first_section', body.body_first_section.x_point, body.body_first_section.y_point)
-            }
+    // function frontImageLoad() {
+    //     clearCanvas()
+    //     let bag_front = JSON.parse(localStorage.getItem('body'))
+    //     if (bag_front.bag_handle_front?.image) {
+    //         if (localStorage.getItem('bag_handle_front')) {
+    //             loadObject(JSON.parse(localStorage.getItem('bag_handle_front')))
+    //         } else {
+    //             loadImage(bag_front.bag_handle_front.image, 'bag_handle_front',
+    //                 bag_front.bag_handle_front.x_point, bag_front.bag_handle_front.y_point)
+    //         }
+    //
+    //     }
+    //     if (bag_front.bag_full_front_body?.image) {
+    //         if (localStorage.getItem('bag_full_front_body')) {
+    //             loadObject(JSON.parse(localStorage.getItem('bag_full_front_body')))
+    //         } else {
+    //             loadImage(bag_front.bag_full_front_body.image, 'bag_full_front_body',
+    //                 bag_front.bag_full_front_body.x_point,
+    //                 bag_front.bag_full_front_body.y_point)
+    //         }
+    //     }
+    //     if (bag_front.bag_top_front_body?.image) {
+    //         if (localStorage.getItem('bag_top_front_body')) {
+    //             loadObject(JSON.parse(localStorage.getItem('bag_top_front_body')))
+    //         } else {
+    //             loadImage(bag_front.bag_top_front_body.image, 'bag_top_front_body',
+    //                 bag_front.bag_top_front_body.x_point, bag_front.bag_top_front_body.y_point)
+    //         }
+    //     }
+    //     if (bag_front.bag_mid_front_body?.image) {
+    //         if (localStorage.getItem('front-bag_mid_front_body')) {
+    //             loadObject(JSON.parse(localStorage.getItem('front-bag_mid_front_body')))
+    //         } else {
+    //             loadImage(bag_front.bag_mid_front_body.image, 'front-bag_mid_front_body', bag_front.bag_mid_front_body.x_point,
+    //                 bag_front.bag_mid_front_body.y_point)
+    //         }
+    //     }
+    //     if (bag_front.bag_bottom_front_body?.image) {
+    //         if (localStorage.getItem('bag_bottom_front_body')) {
+    //             loadObject(JSON.parse(localStorage.getItem('bag_bottom_front_body')))
+    //         } else {
+    //             loadImage(bag_front.bag_bottom_front_body.image, 'bag_bottom_front_body',
+    //                 bag_front.bag_bottom_front_body.x_point, bag_front.bag_bottom_front_body.y_point)
+    //         }
+    //     }
+    // }
+    //
+    // function backImageLoad() {
+    //     clearCanvas()
+    //     let bag = JSON.parse(localStorage.getItem('back'))
+    //     if (bag.bag_handle_back?.image) {
+    //         if (localStorage.getItem('bag_handle_back')) {
+    //             loadObject(JSON.parse(localStorage.getItem('bag_handle_back')))
+    //         } else {
+    //             loadImage(
+    //                 bag.bag_handle_back.image,
+    //                 'bag_handle_back',
+    //                 bag.bag_handle_back.x_point,
+    //                 bag.bag_handle_back.y_point,
+    //             )
+    //         }
+    //
+    //     }
+    //
+    //     if (bag.bag_full_back_body?.image) {
+    //         if (localStorage.getItem('bag_full_back_body')) {
+    //             loadObject(JSON.parse(localStorage.getItem('bag_full_back_body')))
+    //         } else {
+    //             loadImage(
+    //                 bag.bag_full_back_body.image,
+    //                 'bag_full_back_body',
+    //                 bag.bag_full_back_body.x_point,
+    //                 bag.bag_full_back_body.y_point,
+    //             )
+    //         }
+    //     }
+    //
+    //     if (bag.bag_top_back_body?.image) {
+    //         if (localStorage.getItem('bag_top_back_body')) {
+    //             loadObject(JSON.parse(localStorage.getItem('bag_top_back_body')))
+    //         } else {
+    //             loadImage(
+    //                 bag.bag_top_back_body.image,
+    //                 'bag_top_back_body',
+    //                 bag.bag_top_back_body.x_point,
+    //                 bag.bag_top_back_body.y_point,
+    //             )
+    //         }
+    //     }
+    //
+    //     if (bag.bag_mid_back_body?.image) {
+    //         if (localStorage.getItem('bag_mid_back_body')) {
+    //             loadObject(JSON.parse(localStorage.getItem('bag_mid_back_body')))
+    //         } else {
+    //             loadImage(
+    //                 bag.bag_mid_back_body.image,
+    //                 'bag_mid_back_body',
+    //                 bag.bag_mid_back_body.x_point,
+    //                 bag.bag_mid_back_body.y_point,
+    //             )
+    //         }
+    //     }
+    //
+    //     if (bag.bag_bottom_back_body?.image) {
+    //         if (localStorage.getItem('bag_bottom_back_body')) {
+    //             loadObject(JSON.parse(localStorage.getItem('bag_bottom_back_body')))
+    //         } else {
+    //             loadImage(
+    //                 bag.bag_bottom_back_body.image,
+    //                 'bag_bottom_back_body',
+    //                 bag.bag_bottom_back_body.x_point,
+    //                 bag.bag_bottom_back_body.y_point,
+    //             )
+    //         }
+    //     }
+    // }
 
-        }
-        if (body.body_second_section?.image) {
-            if (localStorage.getItem('body_second_section')) {
-                loadObject(JSON.parse(localStorage.getItem('body_second_section')))
-            } else {
-                loadImage(body.body_second_section.image, 'body_second_section', body.body_second_section.x_point, body.body_second_section.y_point)
-            }
-        }
-        if (body.body_third_section?.image) {
-            if (localStorage.getItem('body_third_section')) {
-                loadObject(JSON.parse(localStorage.getItem('body_third_section')))
-            } else {
-                loadImage(body.body_third_section.image, 'body_third_section', body.body_third_section.x_point, body.body_third_section.y_point)
-            }
-        }
-        if (body.collar?.image) {
-            if (localStorage.getItem('front-collar')) {
-                loadObject(JSON.parse(localStorage.getItem('front-collar')))
-            } else {
-                loadImage(body.collar.image, 'front-collar', body.collar.x_point, body.collar.y_point)
-            }
-        }
-        if (body.right_sleeve?.image) {
-            if (localStorage.getItem('right_sleeve')) {
-                loadObject(JSON.parse(localStorage.getItem('right_sleeve')))
-            } else {
-                loadImage(body.right_sleeve.image, 'right_sleeve', body.right_sleeve.x_point, body.right_sleeve.y_point)
-            }
-        }
-
-        if (body.left_sleeve?.image) {
-            if (localStorage.getItem('left_sleeve')) {
-                loadObject(JSON.parse(localStorage.getItem('left_sleeve')))
-            } else {
-                loadImage(body.left_sleeve.image, 'left_sleeve', body.left_sleeve.x_point, body.left_sleeve.y_point)
-
-            }
-        }
-
-        if (body.towel_front?.image) {
-            if (localStorage.getItem('towel_front')) {
-                loadObject(JSON.parse(localStorage.getItem('towel_front')))
-            } else {
-                loadImage(body.towel_front.image,
-                    'towel_front',
-                    body.towel_front.x_point,
-                    body.towel_front.y_point)
-            }
-
-        }
-    }
-
-    function backImageLoad() {
-        clearCanvas()
-        let back = JSON.parse(localStorage.getItem('back'))
-        if (back.back_first_part?.image) {
-            if (localStorage.getItem('back_first_part')) {
-                loadObject(JSON.parse(localStorage.getItem('back_first_part')))
-            } else {
-                loadImage(
-                    back.back_first_part.image,
-                    'back_first_part',
-                    back.back_first_part.x_point,
-                    back.back_first_part.y_point,
-                )
-            }
-
-        }
-
-        if (back.back_second_part?.image) {
-            if (localStorage.getItem('back_second_part')) {
-                loadObject(JSON.parse(localStorage.getItem('back_second_part')))
-            } else {
-                loadImage(
-                    back.back_second_part.image,
-                    'back_second_part',
-                    back.back_second_part.x_point,
-                    back.back_second_part.y_point,
-                )
-            }
-        }
-
-        if (back.back_third_part?.image) {
-            if (localStorage.getItem('back_third_part')) {
-                loadObject(JSON.parse(localStorage.getItem('back_third_part')))
-            } else {
-                loadImage(
-                    back.back_third_part.image,
-                    'back_third_part',
-                    back.back_third_part.x_point,
-                    back.back_third_part.y_point,
-                )
-            }
-        }
-
-        if (back.back_left_sleeve?.image) {
-            if (localStorage.getItem('back_left_sleeve')) {
-                loadObject(JSON.parse(localStorage.getItem('back_left_sleeve')))
-            } else {
-                loadImage(
-                    back.back_left_sleeve.image,
-                    'back_left_sleeve',
-                    back.back_left_sleeve.x_point,
-                    back.back_left_sleeve.y_point,
-                )
-            }
-        }
-
-        if (back.back_right_sleeve?.image) {
-            if (localStorage.getItem('back_right_sleeve')) {
-                loadObject(JSON.parse(localStorage.getItem('back_right_sleeve')))
-            } else {
-                loadImage(
-                    back.back_right_sleeve.image,
-                    'back_right_sleeve',
-                    back.back_right_sleeve.x_point,
-                    back.back_right_sleeve.y_point,
-                )
-            }
-        }
-    }
-
-    const leftImageLoad = (e) => {
-        clearCanvas()
-        let left = JSON.parse(localStorage.getItem('left'))
-
-        if (left?.left_v_body_view?.image) {
-            if (localStorage.getItem('left_v_body_view')) {
-                loadObject(JSON.parse(localStorage.getItem('left_v_body_view')))
-            } else {
-                loadImage(
-                    left.left_v_body_view.image,
-                    'left_v_body_view',
-                    left.left_v_body_view.x_point,
-                    left.left_v_body_view.y_point,
-                )
-            }
-
-        }
-
-        if (left.left_v_upper_part?.image) {
-            if (localStorage.getItem('left_v_upper_part')) {
-                loadObject(JSON.parse(localStorage.getItem('left_v_upper_part')))
-            } else {
-                loadImage(
-                    left.left_v_upper_part.image,
-                    'left_v_upper_part',
-                    left.left_v_upper_part.x_point,
-                    left.left_v_upper_part.y_point,
-                )
-            }
-        }
-
-        if (left?.left_v_lower_part?.image) {
-            if (localStorage.getItem('left_v_lower_part')) {
-                loadObject(JSON.parse(localStorage.getItem('left_v_lower_part')))
-            } else {
-                loadImage(
-                    left.left_v_lower_part.image,
-                    'left_v_lower_part',
-                    left.left_v_lower_part.x_point,
-                    left.left_v_lower_part.y_point,
-                )
-            }
-        }
-
-        if (left?.left_v_left_s_upper?.image) {
-            if (localStorage.getItem('left_v_left_s_upper')) {
-                loadObject(JSON.parse(localStorage.getItem('left_v_left_s_upper')))
-            } else {
-                loadImage(
-                    left.left_v_left_s_upper.image,
-                    'left_v_left_s_upper',
-                    left.left_v_left_s_upper.x_point,
-                    left.left_v_left_s_upper.y_point,
-                )
-            }
-        }
-
-        if (left?.left_v_left_s_lower?.image) {
-            if (localStorage.getItem('left_v_left_s_lower')) {
-                loadObject(JSON.parse(localStorage.getItem('left_v_left_s_lower')))
-            } else {
-                loadImage(
-                    left.left_v_left_s_lower.image,
-                    'left_v_left_s_lower',
-                    left.left_v_left_s_lower.x_point,
-                    left.left_v_left_s_lower.y_point,
-                )
-            }
-        }
-
-        if (left?.left_v_right_s_upper?.image) {
-            if (localStorage.getItem('left_v_right_s_upper')) {
-                loadObject(JSON.parse(localStorage.getItem('left_v_right_s_upper')))
-            } else {
-                loadImage(
-                    left.left_v_right_s_upper.image,
-                    'left_v_right_s_upper',
-                    left.left_v_right_s_upper.x_point,
-                    left.left_v_right_s_upper.y_point,
-                )
-            }
-        }
-
-        if (left?.left_v_right_s_lower?.image) {
-            if (localStorage.getItem('left_v_right_s_lower')) {
-                loadObject(JSON.parse(localStorage.getItem('left_v_right_s_lower')))
-            } else {
-                loadImage(
-                    left.left_v_right_s_lower.image,
-                    'left_v_right_s_lower',
-                    left.left_v_right_s_lower.x_point,
-                    left.left_v_right_s_lower.y_point,
-                )
-            }
-        }
-
-    }
-
-
-
-    const rightImageLoad = (e) => {
-        clearCanvas()
-        let right = JSON.parse(localStorage.getItem('right'))
-
-        if (right.right_v_body_view?.image) {
-            if (localStorage.getItem('right_v_body_view')) {
-                loadObject(JSON.parse(localStorage.getItem('right_v_body_view')))
-            } else {
-                loadImage(
-                    right.right_v_body_view.image,
-                    'right_v_body_view',
-                    right.right_v_body_view.x_point,
-                    right.right_v_body_view.y_point,
-                )
-            }
-        }
-        if (right.right_v_upper_part?.image) {
-            if (localStorage.getItem('right_v_upper_part')) {
-                loadObject(JSON.parse(localStorage.getItem('right_v_upper_part')))
-            } else {
-                loadImage(
-                    right.right_v_upper_part.image,
-                    'right_v_upper_part',
-                    right.right_v_upper_part.x_point,
-                    right.right_v_upper_part.y_point,
-                )
-            }
-        }
-
-        if (right.right_v_lower_part?.image) {
-            if (localStorage.getItem('right_v_upper_part')){
-                loadObject(JSON.parse(localStorage.getItem('right_v_lower_part')))
-            }
-            else if(localStorage.getItem(right.right_v_lower_part?.image)){
-
-            }
-            else {
-                loadImage(
-                    right.right_v_lower_part.image,
-                    'right_v_lower_part',
-                    right.right_v_lower_part.x_point,
-                    right.right_v_lower_part.y_point,
-                )
-            }
-        }
-
-        if (right.right_v_left_s_upper?.image) {
-            if (localStorage.getItem('right_v_left_s_upper')) {
-                loadObject(JSON.parse(localStorage.getItem('right_v_left_s_upper')))
-            } else {
-                loadImage(
-                    right.right_v_left_s_upper.image,
-                    'right_v_left_s_upper',
-                    right.right_v_left_s_upper.x_point,
-                    right.right_v_left_s_upper.y_point,
-                )
-            }
-        }
-
-        if (right.right_v_left_s_lower?.image) {
-            if (localStorage.getItem('right_v_left_s_lower')) {
-                loadObject(JSON.parse(localStorage.getItem('right_v_left_s_lower')))
-            } else {
-                loadImage(
-                    right.right_v_left_s_lower.image,
-                    'right_v_left_s_lower',
-                    right.right_v_left_s_lower.x_point,
-                    right.right_v_left_s_lower.y_point,
-                )
-            }
-        }
-
-        if (right.right_v_right_s_upper?.image) {
-            if (localStorage.getItem('right_v_right_s_upper')) {
-                loadObject(JSON.parse(localStorage.getItem('right_v_right_s_upper')))
-            } else {
-                loadImage(
-                    right.right_v_right_s_upper.image,
-                    'right_v_right_s_upper',
-                    right.right_v_right_s_upper.x_point,
-                    right.right_v_right_s_upper.y_point,
-                )
-            }
-        }
-
-        if (right.right_v_right_s_lower?.image) {
-            if (localStorage.getItem('right_v_right_s_lower')) {
-                loadObject(JSON.parse(localStorage.getItem('right_v_right_s_lower')))
-            } else {
-                loadImage(
-                    right.right_v_right_s_lower.image,
-                    'right_v_right_s_lower',
-                    right.right_v_right_s_lower.x_point,
-                    right.right_v_right_s_lower.y_point,
-                )
-            }
-        }
-
-
-
-    }
 
     const getSampleImages = (s) => {
         var url = 'http://localhost:8000/api/logos';
@@ -740,21 +518,21 @@ function SamLocalEditor(props) {
 
         <div>
 
-            <AppBar position="static" color="default">
-                <Tabs
-                    value={selectedTab}
-                    onChange={handleTabChange}
-                    indicatorColor="primary"
-                    textColor="primary"
-                    scrollable
-                    scrollButtons="auto"
-                >
-                    <Tab label="Front View"/>
-                    <Tab label="Back View"/>
-                    <Tab label="Right side"/>
-                    <Tab label="Left Side"/>
-                </Tabs>
-            </AppBar>
+            {/*<AppBar position="static" color="default">*/}
+            {/*    <Tabs*/}
+            {/*        value={selectedTab}*/}
+            {/*        onChange={handleTabChange}*/}
+            {/*        indicatorColor="primary"*/}
+            {/*        textColor="primary"*/}
+            {/*        scrollable*/}
+            {/*        scrollButtons="auto"*/}
+            {/*    >*/}
+            {/*        <Tab label="Front View"/>*/}
+            {/*        <Tab label="Back View"/>*/}
+            {/*        <Tab label="Right side"/>*/}
+            {/*        <Tab label="Left Side"/>*/}
+            {/*    </Tabs>*/}
+            {/*</AppBar>*/}
             {/* front view*/}
             <div>
                 {selectedTab === 0 &&
@@ -1280,5 +1058,5 @@ function SamLocalEditor(props) {
 
 }
 
-export default SamLocalEditor;
+export default SamLocalEditorBagBack;
 

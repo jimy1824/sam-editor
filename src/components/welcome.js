@@ -10,6 +10,7 @@ function Welcome(props){
     const [categoryList, setCategoryList] = useState(null);
     const [selectedcategory, setSelectedcategory] = useState(null);
     const [productDesignsList, setProductDesignsList] = useState(null);
+    const [towelList, setTowelList] = useState(null);
 
     useEffect(() => {
         let mounted = true;
@@ -19,16 +20,28 @@ function Welcome(props){
                     setCategoryList(items)
                 }
             })
+        console.log(categoryList, "categry list")
         return () => mounted = false;
     }, [])
 
     useEffect(() => {
         if(selectedcategory){
+            console.log()
+            console.log(productDesignsList,"selected Category")
             setProductDesignsList(selectedcategory.designs)
+            console.log(productDesignsList, "abc")
         }
 
     }, [selectedcategory]);
 
+    console.log(selectedcategory, "selected Catogory")
+
+    useEffect(() => {
+        if(selectedcategory){
+            setTowelList(selectedcategory.designs)
+        }
+
+    }, [selectedcategory]);
     // const setProductDesigns=()=>{
     //
     // }
@@ -61,16 +74,16 @@ function Welcome(props){
                   )}
           </div>
           <div style={{width:"1200px", display:"inline-flex", height:"max-content", border:"black", borderStyle:"solid", borderWidth:"1px", marginTop:"10px"}} id="shirt_div">
-              { productDesignsList &&
-                   productDesignsList.map((item,index) => {
+              { towelList &&
+                   towelList.map((item,index) => {
                       return (
                           <div key={index} style={{height:"270px", width:"230px", border: "black", borderStyle:"solid", borderWidth:"1px", marginLeft:"0px"}}>
                               <Link   to={{
-                                  pathname: `/editor/${item.id}`,
+                                  pathname: `/editor/${item.key}/${item.id}`,
                                   query:item
-                              }} >
+                              }}>
 
-                                  <img key={index} src={item.display_image}
+                                  <img key={index} src={`http://localhost:8000${item.display_image}`}
                                        alt={""}
                                        style={{width:"200px", height:"200px", marginTop:"10px", marginLeft:"10px"}}>
                                   </img>
@@ -80,6 +93,28 @@ function Welcome(props){
                           )
                       })
               }
+
+
+
+              {/*{ towelList &&*/}
+              {/*     towelList.map((item,index) => {*/}
+              {/*        return (*/}
+              {/*            <div key={index} style={{height:"270px", width:"230px", border: "black", borderStyle:"solid", borderWidth:"1px", marginLeft:"0px"}}>*/}
+              {/*                <Link   to={{*/}
+              {/*                    pathname: `/editor/${item.id}`,*/}
+              {/*                    query:item*/}
+              {/*                }} >*/}
+
+              {/*                    <img key={index} src={item.display_image}*/}
+              {/*                         alt={""}*/}
+              {/*                         style={{width:"200px", height:"200px", marginTop:"10px", marginLeft:"10px"}}>*/}
+              {/*                    </img>*/}
+              {/*                    <p style={{textAlign:"center"}}>{item.name}</p>*/}
+              {/*                </Link>*/}
+              {/*            </div>*/}
+              {/*            )*/}
+              {/*        })*/}
+              {/*}*/}
           </div>
       </div>
     );

@@ -12,7 +12,7 @@ export async function getCategories(){
 }
 
 export async function getProductDetail(productId){
-    const url='product/'+productId
+    const url='product/'+productId+'/product_detail'
     return  await http
         .get(url)
         .then(res =>
