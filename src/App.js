@@ -120,7 +120,7 @@ function App() {
                 />
                 <Route
                     exact
-                    path="/editor/bag/:id"
+                    path="/editor/coach-jacket/:id"
                     component={SamLocalEditorCoachJacFront}
                     render={(props) => <SamLocalEditorCoachJacFront {...props} />}
                 />
