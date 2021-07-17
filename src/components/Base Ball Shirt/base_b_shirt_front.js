@@ -90,8 +90,29 @@ function SamLocalEditorBaseBShirtFront(props) {
         canvas.renderAll()
     }
 
+    const loadImage = (url, imageId, left, top) => {
+
+        fabric.Image.fromURL(url, function (img) {
+            img.id = imageId;
+            img.filters = [new fabric.Image.filters.HueRotation()];
+            img.applyFilters()
+            var cor = img.set(
+                {
+                    left: left,
+                    top: top,
+                    selectable: false,
+
+
+                })
+            localStorage.setItem(imageId, JSON.stringify(img));
+            canvas.add(img);
+            // canvas.centerObject(img)
+
+        }, {crossOrigin: 'anonymous'})
+
+    }
+
     const loadObject = (obj, id) => {
-        console.log(id)
         fabric.Image.fromURL(obj.src, function (img) {
             img.id = id;
             img.filters = [new fabric.Image.filters.HueRotation()];
@@ -122,7 +143,6 @@ function SamLocalEditorBaseBShirtFront(props) {
     }
 
     const textShow = (text) => {
-        console.log(text)
         var text = new fabric.Textbox(name, {
             fontFamily: 'Pacifico',
             fontSize: 20,
@@ -132,7 +152,6 @@ function SamLocalEditorBaseBShirtFront(props) {
             visible: true,
             fontWeight:"bold",
         });
-        console.log(text)
         localStorage.setItem(text, JSON.stringify(text))
         canvas.add(text);
 
@@ -143,28 +162,7 @@ function SamLocalEditorBaseBShirtFront(props) {
            //              .style.fontWeight = "italic";
         }
 
-    const loadImage = (url, imageId, left, top) => {
 
-        fabric.Image.fromURL(url, function (img) {
-            img.id = imageId;
-            img.filters = [new fabric.Image.filters.HueRotation()];
-            img.applyFilters()
-            var cor = img.set(
-                {
-                    left: left,
-                    top: top,
-                    selectable: false,
-
-
-                })
-            console.log(imageId)
-            localStorage.setItem(imageId, JSON.stringify(img));
-            canvas.add(img);
-            canvas.centerObject(img)
-
-        }, {crossOrigin: 'anonymous'})
-
-    }
 
     // const loadSample = (url, imgId, left, top) => {
     //     fabric.Image.fromURL(url, function(sample_img){
@@ -190,7 +188,6 @@ function SamLocalEditorBaseBShirtFront(props) {
         }
     }
     const handleChangeComplete = (color) => {
-        console.log(selectedComponentId, "selectedID")
         if(selectedComponentId==='sleeve'){
 
             setColor(color)
@@ -208,14 +205,11 @@ function SamLocalEditorBaseBShirtFront(props) {
         }else {
             if(selectedComponentId){
                 var obj=JSON.parse(localStorage.getItem(selectedComponentId))
-                // debugger;
-                console.log("Color_object", obj)
                 obj.color=color
                 localStorage.setItem(selectedComponentId, JSON.stringify(obj))
             }
             setColor(color)
             addColor()
-            console.log("else Part")
         }
 
 
@@ -231,7 +225,6 @@ function SamLocalEditorBaseBShirtFront(props) {
 
         var samImg = new Image();
         samImg.onload = function (imge) {
-            console.log("inside function")
             var pug = new fabric.Image(samImg, {
                 id:"imageID",
                 width: samImg.width,
@@ -247,14 +240,12 @@ function SamLocalEditorBaseBShirtFront(props) {
 
 
             canvas.add(pug);
-            console.log(pug, "lll")
         };
 
         samImg.src = l;
 
         var l_logo = new Image();
         l_logo.onload = function (left_logo){
-            console.log("Inside Left Logo")
             var left = new fabric.Image(l_logo, {
                 id:"image_left_logo",
                 width:l_logo.width/2,
@@ -268,13 +259,11 @@ function SamLocalEditorBaseBShirtFront(props) {
                 selectable:false,
             });
             canvas.add(left);
-            console.log(left, "left")
         }
         l_logo.src = l;
 
          var r_logo = new Image();
         r_logo.onload = function (left_logo){
-            console.log("Inside Right Logo")
             var right = new fabric.Image(r_logo, {
                 id:"image_left_logo",
                 width:r_logo.width/2,
@@ -287,14 +276,9 @@ function SamLocalEditorBaseBShirtFront(props) {
                 selectable:false,
             });
             canvas.add(right);
-            console.log(right, "left")
         }
         r_logo.src = l;
-
-        console.log("Image Clicked", l)
     }
-
-    console.log(img, "222")
 
     // function download_Image() {
     //     var canvas = document.getElementById("canv");
@@ -310,8 +294,10 @@ function SamLocalEditorBaseBShirtFront(props) {
         let front_view_base_b_shirt = JSON.parse(localStorage.getItem('front_view_base_b_shirt'))
         if (front_view_base_b_shirt.base_b_shirt_body_front?.image) {
             if (localStorage.getItem('base_b_shirt_body_front')) {
+                console.log('load object ')
                 loadObject(JSON.parse(localStorage.getItem('base_b_shirt_body_front')))
             } else {
+                console.log('load loadImage ')
                 loadImage(
                     front_view_base_b_shirt.base_b_shirt_body_front.image,
                     'base_b_shirt_body_front',
@@ -538,7 +524,6 @@ function SamLocalEditorBaseBShirtFront(props) {
                 return response.json();
             })
             .then(function (data){
-                console.log(data)
                 setImg(data)
 
             })

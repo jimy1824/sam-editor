@@ -161,7 +161,7 @@ function SamLocalEditor(props) {
             console.log(imageId)
             localStorage.setItem(imageId, JSON.stringify(img));
             canvas.add(img);
-            canvas.centerObject(img)
+            // canvas.centerObject(img)
 
         }, {crossOrigin: 'anonymous'})
 
