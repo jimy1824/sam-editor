@@ -91,8 +91,8 @@ function App() {
                 <Route
                     exact
                     path="/editor/towel/:id"
-                    component={SamLocalEditorApron}
-                    render={(props) => <SamLocalEditorApron {...props} />}
+                    component={SamLocalEditorTowelFront}
+                    render={(props) => <SamLocalEditorTowelFront {...props} />}
                 />
                 <Route
                     exact

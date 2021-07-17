@@ -27,8 +27,8 @@ function SamLocalEditorTowelFront(props) {
     useEffect(() => {
         getProductDetail(id)
             .then(items => {
-                localStorage.setItem('body', JSON.stringify(items.front_view_towel));
-                localStorage.setItem('back', JSON.stringify(items.back_view_towel));
+                localStorage.setItem('front_view_towel', JSON.stringify(items.front_view_towel));
+                localStorage.setItem('back_view_towel', JSON.stringify(items.back_view_towel));
                 setProduct(items)
             })
     }, [])
@@ -148,7 +148,7 @@ function SamLocalEditorTowelFront(props) {
             console.log(imageId)
             localStorage.setItem(imageId, JSON.stringify(img));
             canvas.add(img);
-            canvas.centerObject(img)
+            // canvas.centerObject(img)
 
         }, {crossOrigin: 'anonymous'})
 
@@ -236,7 +236,6 @@ function SamLocalEditorTowelFront(props) {
         console.log("Image Clicked", l)
     }
 
-    console.log(img, "222")
 
     // function download_Image() {
     //     var canvas = document.getElementById("canv");
@@ -249,15 +248,16 @@ function SamLocalEditorTowelFront(props) {
 
     function frontImageLoad() {
         clearCanvas()
-        let towel = JSON.parse(localStorage.getItem('body'))
-        if (towel.towel_front?.image) {
+        let front_view_towel = JSON.parse(localStorage.getItem('front_view_towel'))
+        if (front_view_towel.towel_front?.image) {
             if (localStorage.getItem('towel_front')) {
                 loadObject(JSON.parse(localStorage.getItem('towel_front')))
             } else {
-                loadImage(towel.towel_front.image,
+                loadImage(
+                    front_view_towel.towel_front.image,
                     'towel_front',
-                    towel.towel_front.x_point,
-                    towel.towel_front.y_point)
+                    front_view_towel.towel_front.x_point,
+                    front_view_towel.towel_front.y_point)
             }
 
         }
@@ -266,15 +266,16 @@ function SamLocalEditorTowelFront(props) {
 
     function backImageLoad() {
         clearCanvas()
-        let towel = JSON.parse(localStorage.getItem('back'))
-        if (towel.towel_back?.image) {
+        let back_view_towel = JSON.parse(localStorage.getItem('back_view_towel'))
+        if (back_view_towel.towel_back?.image) {
             if (localStorage.getItem('towel_back')) {
                 loadObject(JSON.parse(localStorage.getItem('towel_back')))
             } else {
-                loadImage(towel.towel_back.image,
+                loadImage(
+                    back_view_towel.towel_back.image,
                     'towel_back',
-                    towel.towel_back.x_point,
-                    towel.towel_back.y_point)
+                    back_view_towel.towel_back.x_point,
+                    back_view_towel.towel_back.y_point)
             }
         }
     }
