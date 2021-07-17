@@ -237,8 +237,8 @@ function SamLocalEditorHatFront(props) {
                 height: samImg.height,
                 scaleX : 60/samImg.width,
                 scaleY : 60/samImg.height,
-                top:120,
-                left:130,
+                top:340,
+                left:380,
                 innerWidth:200,
                 innerHeight:200,
 
@@ -250,45 +250,6 @@ function SamLocalEditorHatFront(props) {
         };
 
         samImg.src = l;
-
-        var l_logo = new Image();
-        l_logo.onload = function (left_logo){
-            console.log("Inside Left Logo")
-            var left = new fabric.Image(l_logo, {
-                id:"image_left_logo",
-                width:l_logo.width/2,
-                height:l_logo.height,
-                scaleX : 30/samImg.width,
-                scaleY : 30/samImg.height,
-                angle:30,
-                flipX:true,
-                top:45,
-                left:72,
-                selectable:false,
-            });
-            canvas.add(left);
-            console.log(left, "left")
-        }
-        l_logo.src = l;
-
-         var r_logo = new Image();
-        r_logo.onload = function (left_logo){
-            console.log("Inside Right Logo")
-            var right = new fabric.Image(r_logo, {
-                id:"image_left_logo",
-                width:r_logo.width/2,
-                height:r_logo.height,
-                scaleX : 30/samImg.width,
-                scaleY : 30/samImg.height,
-                angle:-30,
-                top:55,
-                left:228,
-                selectable:false,
-            });
-            canvas.add(right);
-            console.log(right, "left")
-        }
-        r_logo.src = l;
 
         console.log("Image Clicked", l)
     }
@@ -409,46 +370,6 @@ function SamLocalEditorHatFront(props) {
         clearCanvas()
         let left_view_hat = JSON.parse(localStorage.getItem('left_view_hat'))
 
-        if (left_view_hat?.hat_dot_left_left?.image) {
-            if (localStorage.getItem('hat_dot_left_left')) {
-                loadObject(JSON.parse(localStorage.getItem('hat_dot_left_left')))
-            } else {
-                loadImage(
-                    left_view_hat.hat_dot_left_left.image,
-                    'hat_dot_left_left',
-                    left_view_hat.hat_dot_left_left.x_point,
-                    left_view_hat.hat_dot_left_left.y_point,
-                )
-            }
-
-        }
-
-        if (left_view_hat.hat_dot_right_left?.image) {
-            if (localStorage.getItem('hat_dot_right_left')) {
-                loadObject(JSON.parse(localStorage.getItem('hat_dot_right_left')))
-            } else {
-                loadImage(
-                    left_view_hat.hat_dot_right_left.image,
-                    'hat_dot_right_left',
-                    left_view_hat.hat_dot_right_left.x_point,
-                    left_view_hat.hat_dot_right_left.y_point,
-                )
-            }
-        }
-
-        if (left_view_hat?.hat_dot_right_left?.image) {
-            if (localStorage.getItem('hat_dot_right_left')) {
-                loadObject(JSON.parse(localStorage.getItem('hat_dot_right_left')))
-            } else {
-                loadImage(
-                    left_view_hat.hat_dot_right_left.image,
-                    'hat_dot_right_left',
-                    left_view_hat.hat_dot_right_left.x_point,
-                    left_view_hat.hat_dot_right_left.y_point,
-                )
-            }
-        }
-
         if (left_view_hat?.hat_upper_part_left?.image) {
             if (localStorage.getItem('hat_upper_part_left')) {
                 loadObject(JSON.parse(localStorage.getItem('hat_upper_part_left')))
@@ -484,6 +405,33 @@ function SamLocalEditorHatFront(props) {
                     'hat_top_button_left',
                     left_view_hat.hat_top_button_left.x_point,
                     left_view_hat.hat_top_button_left.y_point,
+                )
+            }
+        }
+
+        if (left_view_hat?.hat_dot_left_left?.image) {
+            if (localStorage.getItem('hat_dot_left_left')) {
+                loadObject(JSON.parse(localStorage.getItem('hat_dot_left_left')))
+            } else {
+                loadImage(
+                    left_view_hat.hat_dot_left_left.image,
+                    'hat_dot_left_left',
+                    left_view_hat.hat_dot_left_left.x_point,
+                    left_view_hat.hat_dot_left_left.y_point,
+                )
+            }
+
+        }
+
+        if (left_view_hat.hat_dot_right_left?.image) {
+            if (localStorage.getItem('hat_dot_right_left')) {
+                loadObject(JSON.parse(localStorage.getItem('hat_dot_right_left')))
+            } else {
+                loadImage(
+                    left_view_hat.hat_dot_right_left.image,
+                    'hat_dot_right_left',
+                    left_view_hat.hat_dot_right_left.x_point,
+                    left_view_hat.hat_dot_right_left.y_point,
                 )
             }
         }
