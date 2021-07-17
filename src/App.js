@@ -9,7 +9,7 @@ import Welcome from "./components/welcome";
 import MyEditor from "./components/image";
 import SamLocalEditor from "./components/local_stroge_editor";
 import SamLocalEditorTowelFront from "./components/towel/towel_front"
-import SamLocalEditorBagFront from "./components/Bag/bag_back";
+import SamLocalEditorBagFront from "./components/Bag/bag_front";
 import SamLocalEditorVestFront from "./components/Vest/vest_front";
 import SamLocalEditorApron from "./components/Apron/apron";
 import SamLocalEditorBaseBJacFront from "./components/Base Ball Jacket/base_b_jac_front";
@@ -132,7 +132,7 @@ function App() {
                 />
                 <Route
                     exact
-                    path="/editor/bag/:id"
+                    path="/editor/hoodies/:id"
                     component={SamLocalEditorHoodieFront}
                     render={(props) => <SamLocalEditorHoodieFront {...props} />}
                 />

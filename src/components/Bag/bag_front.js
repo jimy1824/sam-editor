@@ -24,8 +24,8 @@ function SamLocalEditorBagFront(props) {
     useEffect(() => {
         getProductDetail(id)
             .then(items => {
-                localStorage.setItem('body', JSON.stringify(items.front_view));
-                localStorage.setItem('back', JSON.stringify(items.back_view));
+                localStorage.setItem('front_view_bag', JSON.stringify(items.front_view_bag));
+                localStorage.setItem('back_view_bag', JSON.stringify(items.back_view_bag));
                 setProduct(items)
             })
     }, [])
@@ -253,116 +253,130 @@ function SamLocalEditorBagFront(props) {
 
     function frontImageLoad() {
         clearCanvas()
-        let bag_front = JSON.parse(localStorage.getItem('body'))
-        if (bag_front.bag_handle_front?.image) {
+        let front_view_bag = JSON.parse(localStorage.getItem('front_view_bag'))
+        if (front_view_bag.bag_handle_front?.image) {
             if (localStorage.getItem('bag_handle_front')) {
                 loadObject(JSON.parse(localStorage.getItem('bag_handle_front')))
             } else {
-                loadImage(bag_front.bag_handle_front.image, 'bag_handle_front',
-                    bag_front.bag_handle_front.x_point, bag_front.bag_handle_front.y_point)
+                loadImage(
+                    front_view_bag.bag_handle_front.image,
+                    'bag_handle_front',
+                    front_view_bag.bag_handle_front.x_point,
+                    front_view_bag.bag_handle_front.y_point)
             }
 
         }
-        if (bag_front.bag_full_front_body?.image) {
+        if (front_view_bag.bag_full_front_body?.image) {
             if (localStorage.getItem('bag_full_front_body')) {
                 loadObject(JSON.parse(localStorage.getItem('bag_full_front_body')))
             } else {
-                loadImage(bag_front.bag_full_front_body.image, 'bag_full_front_body',
-                    bag_front.bag_full_front_body.x_point,
-                    bag_front.bag_full_front_body.y_point)
+                loadImage(
+                    front_view_bag.bag_full_front_body.image,
+                    'bag_full_front_body',
+                    front_view_bag.bag_full_front_body.x_point,
+                    front_view_bag.bag_full_front_body.y_point)
             }
         }
-        if (bag_front.bag_top_front_body?.image) {
+        if (front_view_bag.bag_top_front_body?.image) {
             if (localStorage.getItem('bag_top_front_body')) {
                 loadObject(JSON.parse(localStorage.getItem('bag_top_front_body')))
             } else {
-                loadImage(bag_front.bag_top_front_body.image, 'bag_top_front_body',
-                    bag_front.bag_top_front_body.x_point, bag_front.bag_top_front_body.y_point)
+                loadImage(
+                    front_view_bag.bag_top_front_body.image,
+                    'bag_top_front_body',
+                    front_view_bag.bag_top_front_body.x_point,
+                    front_view_bag.bag_top_front_body.y_point)
             }
         }
-        if (bag_front.bag_mid_front_body?.image) {
+        if (front_view_bag.bag_mid_front_body?.image) {
             if (localStorage.getItem('front-bag_mid_front_body')) {
                 loadObject(JSON.parse(localStorage.getItem('front-bag_mid_front_body')))
             } else {
-                loadImage(bag_front.bag_mid_front_body.image, 'front-bag_mid_front_body', bag_front.bag_mid_front_body.x_point,
-                    bag_front.bag_mid_front_body.y_point)
+                loadImage(
+                    front_view_bag.bag_mid_front_body.image,
+                    'front-bag_mid_front_body',
+                    front_view_bag.bag_mid_front_body.x_point,
+                    front_view_bag.bag_mid_front_body.y_point)
             }
         }
-        if (bag_front.bag_bottom_front_body?.image) {
+        if (front_view_bag.bag_bottom_front_body?.image) {
             if (localStorage.getItem('bag_bottom_front_body')) {
                 loadObject(JSON.parse(localStorage.getItem('bag_bottom_front_body')))
             } else {
-                loadImage(bag_front.bag_bottom_front_body.image, 'bag_bottom_front_body',
-                    bag_front.bag_bottom_front_body.x_point, bag_front.bag_bottom_front_body.y_point)
+                loadImage(
+                    front_view_bag.bag_bottom_front_body.image,
+                    'bag_bottom_front_body',
+                    front_view_bag.bag_bottom_front_body.x_point,
+                    front_view_bag.bag_bottom_front_body.y_point)
             }
         }
     }
 
     function backImageLoad() {
         clearCanvas()
-        let bag = JSON.parse(localStorage.getItem('back'))
-        if (bag.bag_handle_back?.image) {
+        let back_view_bag = JSON.parse(localStorage.getItem('back_view_bag'))
+        if (back_view_bag.bag_handle_back?.image) {
             if (localStorage.getItem('bag_handle_back')) {
                 loadObject(JSON.parse(localStorage.getItem('bag_handle_back')))
             } else {
                 loadImage(
-                    bag.bag_handle_back.image,
+                    back_view_bag.bag_handle_back.image,
                     'bag_handle_back',
-                    bag.bag_handle_back.x_point,
-                    bag.bag_handle_back.y_point,
+                    back_view_bag.bag_handle_back.x_point,
+                    back_view_bag.bag_handle_back.y_point,
                 )
             }
 
         }
 
-        if (bag.bag_full_back_body?.image) {
+        if (back_view_bag.bag_full_back_body?.image) {
             if (localStorage.getItem('bag_full_back_body')) {
                 loadObject(JSON.parse(localStorage.getItem('bag_full_back_body')))
             } else {
                 loadImage(
-                    bag.bag_full_back_body.image,
+                    back_view_bag.bag_full_back_body.image,
                     'bag_full_back_body',
-                    bag.bag_full_back_body.x_point,
-                    bag.bag_full_back_body.y_point,
+                    back_view_bag.bag_full_back_body.x_point,
+                    back_view_bag.bag_full_back_body.y_point,
                 )
             }
         }
 
-        if (bag.bag_top_back_body?.image) {
+        if (back_view_bag.bag_top_back_body?.image) {
             if (localStorage.getItem('bag_top_back_body')) {
                 loadObject(JSON.parse(localStorage.getItem('bag_top_back_body')))
             } else {
                 loadImage(
-                    bag.bag_top_back_body.image,
+                    back_view_bag.bag_top_back_body.image,
                     'bag_top_back_body',
-                    bag.bag_top_back_body.x_point,
-                    bag.bag_top_back_body.y_point,
+                    back_view_bag.bag_top_back_body.x_point,
+                    back_view_bag.bag_top_back_body.y_point,
                 )
             }
         }
 
-        if (bag.bag_mid_back_body?.image) {
+        if (back_view_bag.bag_mid_back_body?.image) {
             if (localStorage.getItem('bag_mid_back_body')) {
                 loadObject(JSON.parse(localStorage.getItem('bag_mid_back_body')))
             } else {
                 loadImage(
-                    bag.bag_mid_back_body.image,
+                    back_view_bag.bag_mid_back_body.image,
                     'bag_mid_back_body',
-                    bag.bag_mid_back_body.x_point,
-                    bag.bag_mid_back_body.y_point,
+                    back_view_bag.bag_mid_back_body.x_point,
+                    back_view_bag.bag_mid_back_body.y_point,
                 )
             }
         }
 
-        if (bag.bag_bottom_back_body?.image) {
+        if (back_view_bag.bag_bottom_back_body?.image) {
             if (localStorage.getItem('bag_bottom_back_body')) {
                 loadObject(JSON.parse(localStorage.getItem('bag_bottom_back_body')))
             } else {
                 loadImage(
-                    bag.bag_bottom_back_body.image,
+                    back_view_bag.bag_bottom_back_body.image,
                     'bag_bottom_back_body',
-                    bag.bag_bottom_back_body.x_point,
-                    bag.bag_bottom_back_body.y_point,
+                    back_view_bag.bag_bottom_back_body.x_point,
+                    back_view_bag.bag_bottom_back_body.y_point,
                 )
             }
         }
@@ -481,8 +495,6 @@ function SamLocalEditorBagFront(props) {
                 >
                     <Tab label="Front View"/>
                     <Tab label="Back View"/>
-                    <Tab label="Right side"/>
-                    <Tab label="Left Side"/>
                 </Tabs>
             </AppBar>
             {/* front view*/}
