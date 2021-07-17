@@ -244,40 +244,7 @@ function SamLocalEditorBaseBShirtFront(props) {
 
         samImg.src = l;
 
-        var l_logo = new Image();
-        l_logo.onload = function (left_logo){
-            var left = new fabric.Image(l_logo, {
-                id:"image_left_logo",
-                width:l_logo.width/2,
-                height:l_logo.height,
-                scaleX : 30/samImg.width,
-                scaleY : 30/samImg.height,
-                angle:30,
-                flipX:true,
-                top:45,
-                left:72,
-                selectable:false,
-            });
-            canvas.add(left);
-        }
-        l_logo.src = l;
 
-         var r_logo = new Image();
-        r_logo.onload = function (left_logo){
-            var right = new fabric.Image(r_logo, {
-                id:"image_left_logo",
-                width:r_logo.width/2,
-                height:r_logo.height,
-                scaleX : 30/samImg.width,
-                scaleY : 30/samImg.height,
-                angle:-30,
-                top:55,
-                left:228,
-                selectable:false,
-            });
-            canvas.add(right);
-        }
-        r_logo.src = l;
     }
 
     // function download_Image() {
