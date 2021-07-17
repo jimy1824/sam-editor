@@ -21,7 +21,7 @@ function SamLocalEditorApron(props) {
     useEffect(() => {
         getProductDetail(id)
             .then(items => {
-                localStorage.setItem('body', JSON.stringify(items.front_view));
+                localStorage.setItem('front_view_apron', JSON.stringify(items.front_view_apron));
                 setProduct(items)
             })
     }, [])
@@ -41,18 +41,7 @@ function SamLocalEditorApron(props) {
         setSelectedTab(newValue);
         if (newValue === 0) {
             frontImageLoad()
-            // imageSaved()
         }
-        // if (newValue === 1) {
-        //     backImageLoad()
-        // }
-        // if (newValue === 2) {
-        //     rightImageLoad()
-        // }
-        // if (newValue === 3) {
-        //     leftImageLoad()
-        // }
-
 
     }
 
@@ -255,67 +244,85 @@ function SamLocalEditorApron(props) {
 
     function frontImageLoad() {
         clearCanvas()
-        let apron = JSON.parse(localStorage.getItem('body'))
-        if (apron.collar_strip?.image) {
+        let front_view_apron = JSON.parse(localStorage.getItem('front_view_apron'))
+        if (front_view_apron.collar_strip?.image) {
             if (localStorage.getItem('collar_strip')) {
                 loadObject(JSON.parse(localStorage.getItem('collar_strip')))
             } else {
-                loadImage(apron.collar_strip.image, 'collar_strip',
-                    apron.collar_strip.x_point, apron.collar_strip.y_point)
+                loadImage(
+                    front_view_apron.collar_strip.image,
+                    'collar_strip',
+                    front_view_apron.collar_strip.x_point,
+                    front_view_apron.collar_strip.y_point)
             }
 
         }
-        if (apron.collar_strip_side?.image) {
+        if (front_view_apron.collar_strip_side?.image) {
             if (localStorage.getItem('collar_strip_side')) {
                 loadObject(JSON.parse(localStorage.getItem('collar_strip_side')))
             } else {
-                loadImage(apron.collar_strip_side.image, 'collar_strip_side',
-                    apron.collar_strip_side.x_point, apron.collar_strip_side.y_point)
+                loadImage(
+                    front_view_apron.collar_strip_side.image,
+                    'collar_strip_side',
+                    front_view_apron.collar_strip_side.x_point,
+                    front_view_apron.collar_strip_side.y_point)
             }
         }
-        if (apron.bukkle?.image) {
+        if (front_view_apron.bukkle?.image) {
             if (localStorage.getItem('bukkle')) {
                 loadObject(JSON.parse(localStorage.getItem('bukkle')))
             } else {
-                loadImage(apron.bukkle.image, 'bukkle',
-                    apron.bukkle.x_point, apron.bukkle.y_point)
+                loadImage(
+                    front_view_apron.bukkle.image,
+                    'bukkle',
+                    front_view_apron.bukkle.x_point,
+                    front_view_apron.bukkle.y_point)
             }
         }
-        if (apron.body?.image) {
-            if (localStorage.getItem('body')) {
-                loadObject(JSON.parse(localStorage.getItem('body')))
+        if (front_view_apron.appren_body?.image) {
+            if (localStorage.getItem('appren_body')) {
+                loadObject(JSON.parse(localStorage.getItem('appren_body')))
             } else {
-                loadImage(apron.body.image, 'body',
-                    apron.body.x_point, apron.body.y_point)
+                loadImage(
+                    front_view_apron.appren_body.image,
+                    'body',
+                    front_view_apron.appren_body.x_point,
+                    front_view_apron.appren_body.y_point)
             }
         }
-        if (apron.left_strip?.image) {
+        if (front_view_apron.left_strip?.image) {
             if (localStorage.getItem('left_strip')) {
                 loadObject(JSON.parse(localStorage.getItem('left_strip')))
             } else {
-                loadImage(apron.left_strip.image, 'left_strip',
-                    apron.left_strip.x_point, apron.left_strip.y_point)
+                loadImage(
+                    front_view_apron.left_strip.image,
+                    'left_strip',
+                    front_view_apron.left_strip.x_point,
+                    front_view_apron.left_strip.y_point)
             }
         }
 
-        if (apron.right_strip?.image) {
+        if (front_view_apron.right_strip?.image) {
             if (localStorage.getItem('right_strip')) {
                 loadObject(JSON.parse(localStorage.getItem('right_strip')))
             } else {
-                loadImage(apron.right_strip.image, 'right_strip',
-                    apron.right_strip.x_point, apron.right_strip.y_point)
+                loadImage(
+                    front_view_apron.right_strip.image, 'right_strip',
+                    front_view_apron.right_strip.x_point,
+                    front_view_apron.right_strip.y_point)
 
             }
         }
 
-        if (apron.pocket?.image) {
+        if (front_view_apron.pocket?.image) {
             if (localStorage.getItem('pocket')) {
                 loadObject(JSON.parse(localStorage.getItem('pocket')))
             } else {
-                loadImage(apron.pocket.image,
+                loadImage(
+                    front_view_apron.pocket.image,
                     'pocket',
-                    apron.pocket.x_point,
-                    apron.pocket.y_point)
+                    front_view_apron.pocket.x_point,
+                    front_view_apron.pocket.y_point)
             }
 
         }
@@ -432,9 +439,6 @@ function SamLocalEditorApron(props) {
                     scrollButtons="auto"
                 >
                     <Tab label="Front View"/>
-                    <Tab label="Back View"/>
-                    <Tab label="Right side"/>
-                    <Tab label="Left Side"/>
                 </Tabs>
             </AppBar>
             {/* front view*/}
