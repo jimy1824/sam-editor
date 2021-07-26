@@ -334,9 +334,18 @@ const initCanvas = (name) =>
 
                 <div className='row' style={{width:"100%"}}>
                     <div className="btn-group" role="group" aria-label="Basic example" style={{width:"100%"}}>
-                        <button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('back_second_part')}}>Back</button>
-                        {/*<button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('front-collar')}}>Collar</button>*/}
-                        <button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('sleeve')}}>Sleeve</button>
+                        <button type="button" className="btn btn-secondary" onClick={() => {
+                            onComponentClick('base_b_shirt_body_back')
+                        }}>Body
+                        </button>
+                        <button type="button" className="btn btn-secondary" onClick={() => {
+                            onComponentClick('base_b_shirt_left_sleeve_back')
+                        }}>Left Sleeve
+                        </button>
+                        <button type="button" className="btn btn-secondary" onClick={() => {
+                            onComponentClick('base_b_shirt_right_sleeve_back')
+                        }}>Right Sleeve
+                        </button>
                     </div>
                     {colorShow &&
                     <div style={{marginLeft:"50px", display:"inline"}}>

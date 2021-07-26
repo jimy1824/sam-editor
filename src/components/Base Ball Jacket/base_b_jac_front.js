@@ -718,7 +718,7 @@ function SamLocalEditorBaseBJacFront(props) {
                 )
             }
         }
-        if (left_view_base_b_jacket?.base_b_jac_right_cuff_left?.image) {
+        if (left_view_base_b_jacket?.base_b_jac_right_cuff_strips_left?.image) {
             if (localStorage.getItem('base_b_jac_right_cuff_strips_left')) {
                 loadObject(JSON.parse(localStorage.getItem('base_b_jac_right_cuff_strips_left')))
             } else {

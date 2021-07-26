@@ -812,7 +812,101 @@ function SamLocalEditorTankTopFront(props) {
                 }
                 {/* back view */}
                 {selectedTab === 1 &&
-                <SamLocalEditorPantBack/>
+                // <SamLocalEditorTankTopBack/>
+                    <div className='row' style={{width:"100%"}}>
+                    <div className="btn-group" role="group" aria-label="Basic example" style={{width:"100%"}}>
+                       <button type="button" className="btn btn-secondary" onClick={() => {
+                            onComponentClick('tank_collar_back')
+                        }}>Collar
+                        </button>
+                        <button type="button" className="btn btn-secondary" onClick={() => {
+                            onComponentClick('tank_top_back')
+                        }}>Top
+                        </button>
+                        <button type="button" className="btn btn-secondary" onClick={() => {
+                            onComponentClick('tank_mid_back')
+                        }}>Mid
+                        </button>
+                        <button type="button" className="btn btn-secondary" onClick={() => {
+                            onComponentClick('tank_bottom_back')
+                        }}>Bottom
+                        </button>
+                        <button type="button" className="btn btn-secondary" onClick={() => {
+                            onComponentClick('tank_left_sleeve_back')
+                        }}>Left Sleeve
+                        </button>
+                        <button type="button" className="btn btn-secondary" onClick={() => {
+                            onComponentClick('tank_right_sleeve_back')
+                        }}>Right Sleeve
+                        </button>
+                    </div>
+                    {colorShow &&
+                    <div style={{marginLeft:"50px", display:"inline"}}>
+                     <p> Choose color</p>
+
+                    <CirclePicker
+                        color={ color }
+                        onChangeComplete={ handleChangeComplete}
+                    />
+                    <br></br>
+                        <div id="output-text">
+                            <input onChange={handleInput} placeholder="Enter text"/>
+                                    <button type='button'
+                                            name='text_show'
+                                            onClick={textShow}
+                                            style={{
+                                                backgroundColor: "#767FE0",
+                                                color: "white",
+                                                border: "none",
+                                                borderRadius: "50px",
+                                                width: "120px",
+                                                height: "30px",
+                                                margin: "10px"
+                                            }}>
+                                        Add Text
+                                    </button>
+                            <br></br>
+
+                            <select id="input-font" onChange={changeFontStyle (this)}>
+
+                            <option value="Comic Sans"
+                                    selected="selected">
+                                Comic Sans
+                            </option>
+                            <option value="Arial">Arial</option>
+                            <option value="fantasy">Fantasy</option>
+                            <option value="cursive">cursive</option>
+                        </select>
+                            <select id="input-font" style={{marginLeft:"10px"}}>
+
+                            <option value="Normal"
+                                    selected="selected">
+                                Normal
+                            </option>
+                            <option value="Arial" style={{fontStyle:"bolder"}}>Bold</option>
+                            <option value="fantasy" style={{fontStyle:"italic"}}>Italic</option>
+                            <option value="cursive" style={{fontStyle:"underline"}}>Underline</option>
+                        </select>
+                            <br></br>
+                            <div style={{width:"300px", float:"right"}}>
+                            <div style={{width:"300px", height:"300px", border:"solid", borderColor:"black", borderWidth:"1px", float:"right", marginRight:"-980px", marginTop:"-200px"}}>
+                                <button onClick={getSampleImages}>Load Images</button>
+                                {
+                                    img?
+                                    img.map((s) =>
+                                             <img src={s.image} alt={''} style={{width:"50px", height:"50px"}} onClick={()=> {load_logo(s.image)}}/>
+
+                                    )
+                                :null}
+                            </div>
+
+                        </div>
+                            <br></br>
+
+                        </div>
+                    </div>
+                    }
+                </div>
                 }
 
             </div>

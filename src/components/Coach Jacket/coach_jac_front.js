@@ -464,7 +464,7 @@ function SamLocalEditorCoachJacFront(props) {
                 )
             }
         }
-        if (back_view_base_coach_jac.tank_right_sleeve_back?.image) {
+        if (back_view_base_coach_jac.coach_jac_left_cuff_back?.image) {
             if (localStorage.getItem('tank_right_sleeve_back')) {
                 loadObject(JSON.parse(localStorage.getItem('tank_right_sleeve_back')))
             } else {
@@ -854,16 +854,48 @@ function SamLocalEditorCoachJacFront(props) {
                 <div className='row'>
                     <div className="btn-group" role="group" aria-label="Basic example" style={{width: "100%"}}>
                         <button type="button" className="btn btn-secondary" onClick={() => {
-                            onComponentClick('body_first_section')
+                            onComponentClick('coach_jac_body_front')
                         }}>Body
                         </button>
                         <button type="button" className="btn btn-secondary" onClick={() => {
-                            onComponentClick('front-collar')
+                            onComponentClick('coach_jac_collar_front')
                         }}>Collar
                         </button>
                         <button type="button" className="btn btn-secondary" onClick={() => {
-                            onComponentClick('sleeve')
-                        }}>sleeve
+                            onComponentClick('coach_jac_collar_inner_front')
+                        }}>Collar Inner
+                        </button>
+                        {/*<button type="button" className="btn btn-secondary" onClick={() => {*/}
+                        {/*    onComponentClick('coach_jac_button_front')*/}
+                        {/*}}>Button*/}
+                        {/*</button>*/}
+                        <button type="button" className="btn btn-secondary" onClick={() => {
+                            onComponentClick('coach_jac_left_pocket_front')
+                        }}>Left Pocket
+                        </button>
+                        <button type="button" className="btn btn-secondary" onClick={() => {
+                            onComponentClick('coach_jac_right_pocket_front')
+                        }}>Right Pocket
+                        </button>
+                        <button type="button" className="btn btn-secondary" onClick={() => {
+                            onComponentClick('coach_jac_hem_front')
+                        }}>Hem
+                        </button>
+                        <button type="button" className="btn btn-secondary" onClick={() => {
+                            onComponentClick('coach_jac_left_sleeve_front')
+                        }}>Left Sleeve
+                        </button>
+                        <button type="button" className="btn btn-secondary" onClick={() => {
+                            onComponentClick('coach_jac_right_sleeve_front')
+                        }}>Right Sleeve
+                        </button>
+                        <button type="button" className="btn btn-secondary" onClick={() => {
+                            onComponentClick('coach_jac_left_cuff_front')
+                        }}>Left Cuff
+                        </button>
+                        <button type="button" className="btn btn-secondary" onClick={() => {
+                            onComponentClick('coach_jac_right_cuff_front')
+                        }}>Right Cuff
                         </button>
                     </div>
 

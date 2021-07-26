@@ -897,16 +897,52 @@ function SamLocalEditorBomberJacFront(props) {
                 <div className='row'>
                     <div className="btn-group" role="group" aria-label="Basic example" style={{width: "100%"}}>
                         <button type="button" className="btn btn-secondary" onClick={() => {
-                            onComponentClick('body_first_section')
+                            onComponentClick('bomber_jac_body_front')
                         }}>Body
                         </button>
                         <button type="button" className="btn btn-secondary" onClick={() => {
-                            onComponentClick('front-collar')
+                            onComponentClick('bomber_jac_collar_front')
                         }}>Collar
                         </button>
                         <button type="button" className="btn btn-secondary" onClick={() => {
-                            onComponentClick('sleeve')
-                        }}>sleeve
+                            onComponentClick('bomber_jac_collar_inner_front')
+                        }}>Collar Inner
+                        </button>
+                        <button type="button" className="btn btn-secondary" onClick={() => {
+                            onComponentClick('bomber_jac_left_pocket_front')
+                        }}>Left Pocket
+                        </button>
+                        <button type="button" className="btn btn-secondary" onClick={() => {
+                            onComponentClick('bomber_jac_right_pocket_front')
+                        }}>Right Pocket
+                        </button>
+                        <button type="button" className="btn btn-secondary" onClick={() => {
+                            onComponentClick('bomber_jac_left_sleeve_front')
+                        }}>Left Sleeve
+                        </button>
+                        <button type="button" className="btn btn-secondary" onClick={() => {
+                            onComponentClick('bomber_jac_right_sleeve_front')
+                        }}>Right Sleeve
+                        </button>
+                        <button type="button" className="btn btn-secondary" onClick={() => {
+                            onComponentClick('bomber_jac_left_cuff_front')
+                        }}>Left Cuff
+                        </button>
+                        <button type="button" className="btn btn-secondary" onClick={() => {
+                            onComponentClick('bomber_jac_right_cuff_front')
+                        }}>Right Cuff
+                        </button>
+                        <button type="button" className="btn btn-secondary" onClick={() => {
+                            onComponentClick('bomber_jac_right_sleeve_design_front')
+                        }}>Right S. Design
+                        </button>
+                        <button type="button" className="btn btn-secondary" onClick={() => {
+                            onComponentClick('bomber_jac_hem_front')
+                        }}>Hem
+                        </button>
+                        <button type="button" className="btn btn-secondary" onClick={() => {
+                            onComponentClick('bomber_jac_zip_front')
+                        }}>Zip
                         </button>
                     </div>
 

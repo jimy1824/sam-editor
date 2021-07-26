@@ -370,9 +370,22 @@ const initCanvas = (name) =>
 
                 <div className='row' style={{width:"100%"}}>
                     <div className="btn-group" role="group" aria-label="Basic example" style={{width:"100%"}}>
-                        <button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('left_v_upper_part')}}>Left Sleeve</button>
-                        {/*<button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('front-collar')}}>Collar</button>*/}
-                        <button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('left_v_lower_part')}}>Right Sleeve</button>
+                        <button type="button" className="btn btn-secondary" onClick={() => {
+                            onComponentClick('base_b_shirt_mid_right')
+                        }}>Mid Sleeve
+                        </button>
+                        <button type="button" className="btn btn-secondary" onClick={() => {
+                            onComponentClick('base_b_shirt_left_sleeve_right')
+                        }}>Left Sleeve
+                        </button>
+                        <button type="button" className="btn btn-secondary" onClick={() => {
+                            onComponentClick('base_b_shirt_right_sleeve_right')
+                        }}>Right Sleeve
+                        </button>
+                        <button type="button" className="btn btn-secondary" onClick={() => {
+                            onComponentClick('base_b_shirt_bottom_sleeve_right')
+                        }}>Bottom Sleeve
+                        </button>
                     </div>
                     {colorShow &&
                     <div style={{marginLeft:"50px", display:"inline"}}>

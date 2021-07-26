@@ -588,9 +588,54 @@ const initCanvas = (name) =>
 
                 <div className='row' style={{width:"100%"}}>
                     <div className="btn-group" role="group" aria-label="Basic example" style={{width:"100%"}}>
-                        <button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('left_v_upper_part')}}>Left Sleeve</button>
-                        {/*<button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('front-collar')}}>Collar</button>*/}
-                        <button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('left_v_lower_part')}}>Right Sleeve</button>
+                        <button type="button" className="btn btn-secondary" onClick={() => {
+                            onComponentClick('base_b_jac_mid_body_left')
+                        }}>Mid Sleeve
+                        </button>
+                        <button type="button" className="btn btn-secondary" onClick={() => {
+                            onComponentClick('base_b_jac_mid_cuff_left')
+                        }}>Mid Cuff
+                        </button>
+                        <button type="button" className="btn btn-secondary" onClick={() => {
+                            onComponentClick('base_b_jac_mid_cuff_strips_left')
+                        }}>Mid Cuff Strips
+                        </button>
+                        <button type="button" className="btn btn-secondary" onClick={() => {
+                            onComponentClick('base_b_jac_left_body_left')
+                        }}>Left Sleeve
+                        </button>
+                        <button type="button" className="btn btn-secondary" onClick={() => {
+                            onComponentClick('base_b_jac_left_cuff_left')
+                        }}>Left Cuff
+                        </button>
+                        <button type="button" className="btn btn-secondary" onClick={() => {
+                            onComponentClick('base_b_jac_left_cuff_strips_left')
+                        }}>Left Cuff Strips
+                        </button>
+                        <button type="button" className="btn btn-secondary" onClick={() => {
+                            onComponentClick('base_b_jac_right_body_left')
+                        }}>Right Sleeve
+                        </button>
+                        <button type="button" className="btn btn-secondary" onClick={() => {
+                            onComponentClick('base_b_jac_right_cuff_left')
+                        }}>Right Cuff
+                        </button>
+                        <button type="button" className="btn btn-secondary" onClick={() => {
+                            onComponentClick('base_b_jac_right_cuff_strips_left')
+                        }}>Right Cuff Strips
+                        </button>
+                        <button type="button" className="btn btn-secondary" onClick={() => {
+                            onComponentClick('base_b_jac_bottom_body_left')
+                        }}>Bottom Body
+                        </button>
+                        <button type="button" className="btn btn-secondary" onClick={() => {
+                            onComponentClick('base_b_jac_bottom_cuff_left')
+                        }}>Bottom Cuff
+                        </button>
+                        <button type="button" className="btn btn-secondary" onClick={() => {
+                            onComponentClick('base_b_jac_bottom_cuff_strips_left')
+                        }}>Bottom Cuff Strips
+                        </button>
                     </div>
                     {colorShow &&
                     <div style={{marginLeft:"50px", display:"inline"}}>
