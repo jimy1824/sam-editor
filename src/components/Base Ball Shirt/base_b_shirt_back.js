@@ -9,6 +9,7 @@ import { CirclePicker } from 'react-color';
 import {Tabs, Tab, AppBar} from "@material-ui/core";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {getProductDetail} from "../../apiService";
+import {BASE_URL} from "../.././services";
 
 
 function SamLocalEditorBaseBShirtBack(props){
@@ -257,7 +258,7 @@ const initCanvas = (name) =>
     console.log(img, "222")
 
     const getSampleImages = (s) => {
-        var url = 'http://localhost:8000/api/logos';
+        var url = BASE_URL+'logos';
 
         fetch(url)
             .then(function(response){
@@ -329,151 +330,7 @@ const initCanvas = (name) =>
     return(
         <div>
             <div>
-                {/*/!*{selectedTab === 0 &&*!/*/}
-                {/*<div className='row'>*/}
-                {/*    <div className="btn-group" role="group" aria-label="Basic example" style={{width:"100%"}}>*/}
-                {/*        <button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('body_first_section')}}>Body</button>*/}
-                {/*        <button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('front-collar')}}>Collar</button>*/}
-                {/*        <button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('sleeve')}}>sleeve</button>*/}
-                {/*    </div>*/}
-                {/*</div>*/}
-                {/*//     {colorShow &&*/}
-                {/*//     <div>*/}
-                {/*//         <div style={{width:"400px", float:"left", marginLeft:"20px"}}>*/}
-                {/*//      <p> Choose Body color</p>*/}
-                {/*//     <CirclePicker*/}
-                {/*//         color={ color }*/}
-                {/*/!*        onChangeComplete={ handleChangeComplete}*!/*/}
-                {/*/!*    />*!/*/}
-                {/*/!*    <br></br>*!/*/}
-                {/*/!*        <div id="output-text">*!/*/}
-                {/*//             <input onChange={handleInput} placeholder="Enter text"/>*/}
-                {/*//                     <button type='button'*/}
-                {/*/!*                            name='text_show'*!/*/}
-                {/*/!*                            onClick={textShow}*!/*/}
-                {/*//                             style={{*/}
-                {/*/!*                                backgroundColor: "#767FE0",*!/*/}
-                {/*/!*                                color: "white",*!/*/}
-                {/*/!*                                border: "none",*!/*/}
-                {/*/!*                                borderRadius: "50px",*!/*/}
-                {/*/!*                                width: "120px",*!/*/}
-                {/*/!*                                height: "30px",*!/*/}
-                {/*//                                 margin: "10px"*/}
-                {/*//                             }}>*/}
-                {/*//                         Add Text*/}
-                {/*//                     </button>*/}
-                {/*//             <br></br>*/}
-                {/*//*/}
-                {/*//             <select id="input-font" onChange={changeFontStyle (this)}>*/}
-                {/*//*/}
-                {/*//             <option value="Comic Sans"*/}
-                {/*//                     selected="selected">*/}
-                {/*//                 Comic Sans*/}
-                {/*//             </option>*/}
-                {/*//             <option value="Arial">Arial</option>*/}
-                {/*//             <option value="fantasy">Fantasy</option>*/}
-                {/*//             <option value="cursive">cursive</option>*/}
-                {/*//         </select>*/}
-                {/*//             <select id="input-font" style={{marginLeft:"10px"}}>*/}
-                {/*//*/}
-                {/*//             <option value="Normal"*/}
-                {/*//                     selected="selected">*/}
-                {/*//                 Normal*/}
-                {/*//             </option>*/}
-                {/*//             <option value="Arial" style={{fontStyle:"bolder"}}>Bold</option>*/}
-                {/*//             <option value="fantasy" style={{fontStyle:"italic"}}>Italic</option>*/}
-                {/*//             <option value="cursive" style={{fontStyle:"underline"}}>Underline</option>*/}
-                {/*/!*        </select>*!/*/}
 
-                {/*/!*        </div>*!/*/}
-                {/*/!*            <br></br>*!/*/}
-                {/*/!*    /!*    <CirclePicker*!/*!/*/}
-                {/*//     /!*    // color={ name }*!/*/}
-                {/*//     /!*    // onChangeComplete={ handleChangeComplete}*!/*/}
-
-                {/*//     <br></br>*/}
-                {/*//*/}
-                {/*//     <input type="file"/>*/}
-                {/*//     /!*<button type='button'*!/*/}
-                {/*//     /!*                        name='text_show'*!/*/}
-                {/*/!*    /!*                        onClick={download_Image}*!/*!/*/}
-                {/*//     /!*                        style={{*!/*/}
-                {/*//     /!*                            backgroundColor: "#767FE0",*!/*/}
-                {/*//     /!*                            color: "white",*!/*/}
-                {/*/!*    /!*                            border: "none",*!/*!/*/}
-                {/*/!*    /!*                            borderRadius: "50px",*!/*!/*/}
-                {/*/!*    /!*                            width: "120px",*!/*!/*/}
-                {/*//     /!*                            height: "30px",*!/*/}
-                {/*//     /!*                            margin: "10px"*!/*/}
-                {/*//     /!*                        }}>*!/*/}
-                {/*//     /!*                    Download Design*!/*/}
-                {/*/!*    /!*                </button>*!/*!/*/}
-                {/*//         </div>*/}
-                {/*/!*        <div style={{width:"300px", float:"right"}}>*!/*/}
-                {/*/!*            <div style={{width:"300px", height:"300px", border:"solid", borderColor:"black", borderWidth:"1px", float:"right", marginRight:"-500px", marginTop:"10px"}}>*!/*/}
-                {/*/!*                <button onClick={getSampleImages}>Load Images</button>*!/*/}
-                {/*/!*                {*!/*/}
-                {/*/!*                    img?*!/*/}
-                {/*/!*                    img.map((s) =>*!/*/}
-                {/*//                              <img src={s.image} alt={''} style={{width:"50px", height:"50px"}} onClick={()=> {load_logo(s.image)}}/>*/}
-                {/*//*/}
-                {/*//                     )*/}
-                {/*/!*                :null}*!/*/}
-                {/*/!*            </div>*!/*/}
-
-                {/*/!*        </div>*!/*/}
-                {/*//     </div>*/}
-                {/*/!*    }*!/*/}
-
-                {/*/!*    /!*<form action="">*!/*!/*/}
-                {/*/!*    /!*    <label htmlFor="patterns" style={{marginTop: "20px"}}></label>*!/*!/*/}
-                {/*/!*    /!*    <select name="patterns" id="patterns" style={{*!/*!/*/}
-                {/*/!*    /!*        width: "150px",*!/*!/*/}
-                {/*/!*    /!*        height: "30px",*!/*!/*/}
-                {/*//     /!*        borderWidth: "1px",*!/*/}
-                {/*//     /!*        borderStyle: "solid",*!/*/}
-                {/*//     /!*        margin: "10px"*!/*/}
-                {/*//     /!*    }}>*!/*/}
-                {/*//     /!*        <option value="image1">Image1</option>*!/*/}
-                {/*//     /!*        <option value="image2">Image2</option>*!/*/}
-                {/*//     /!*        <option value="image3">Image3</option>*!/*/}
-                {/*/!*    /!*        <option value="image4">Image4</option>*!/*!/*/}
-                {/*//     /!*    </select>*!/*/}
-                {/*//     /!*    <input type="submit" value="Submit"></input>*!/*/}
-                {/*//     /!*</form>*!/*/}
-                {/*//*/}
-                {/*//     /!*<button type='button'*!/*/}
-                {/*//     /!*        name='upload_logo'*!/*/}
-                {/*//     /!*    // onClick={load_logo}*!/*/}
-                {/*//     /!*        style={{*!/*/}
-                {/*//     /!*            backgroundColor: "#767FE0",*!/*/}
-                {/*//     /!*            color: "white",*!/*/}
-                {/*//     /!*            border: "none",*!/*/}
-                {/*//     /!*            borderRadius: "50px",*!/*/}
-                {/*/!*    /!*            width: "120px",*!/*!/*/}
-                {/*/!*    /!*            height: "30px",*!/*!/*/}
-                {/*/!*    /!*            margin: "10px"*!/*!/*/}
-                {/*//     /!*        }}>*!/*/}
-                {/*//     /!*    Load Logo*!/*/}
-                {/*//     /!*</button>*!/*/}
-                {/*//     /!*<br></br>*!/*/}
-                {/*//     /!*<button type="button"*!/*/}
-                {/*//     /!*        onClick={download_Image}*!/*/}
-                {/*/!*    /!*        style={{*!/*!/*/}
-                {/*/!*    /!*            backgroundColor: "#767FE0",*!/*!/*/}
-                {/*/!*    /!*            color: "white",*!/*!/*/}
-                {/*//     /!*            border: "none",*!/*/}
-                {/*//     /!*            borderRadius: "50px",*!/*/}
-                {/*//     /!*            width: "120px",*!/*/}
-                {/*//     /!*            height: "30px",*!/*/}
-                {/*//     /!*            margin: "10px"*!/*/}
-                {/*//     /!*        }}>Download Image*!/*/}
-                {/*/!*    /!*</button>*!/*!/*/}
-
-                {/*/!*</div>*!/*/}
-
-
-                {/* back view */}
 
                 <div className='row' style={{width:"100%"}}>
                     <div className="btn-group" role="group" aria-label="Basic example" style={{width:"100%"}}>
@@ -548,82 +405,6 @@ const initCanvas = (name) =>
                     </div>
                     }
                 </div>
-
-                {/*{selectedTab === 2 &&*/}
-                {/*<div className='row' style={{width:"100%"}}>*/}
-                {/*    <div className="btn-group" role="group" aria-label="Basic example" style={{width:"100%"}}>*/}
-                {/*        <button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('left_v_upper_part')}}>Left Sleeve</button>*/}
-                {/*        /!*<button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('front-collar')}}>Collar</button>*!/*/}
-                {/*        <button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('left_v_lower_part')}}>Right Sleeve</button>*/}
-                {/*    </div>*/}
-                {/*    {colorShow &&*/}
-                {/*    <div style={{marginLeft:"50px", display:"inline"}}>*/}
-                {/*     <p> Choose color</p>*/}
-
-                {/*    <CirclePicker*/}
-                {/*        color={ color }*/}
-                {/*        onChangeComplete={ handleChangeComplete }*/}
-                {/*    />*/}
-                {/*    <br></br>*/}
-                {/*        <div id="output-text">*/}
-                {/*            <input onChange={handleInput} placeholder="Enter text"/>*/}
-                {/*                    <button type='button'*/}
-                {/*                            name='text_show'*/}
-                {/*                            onClick={textShow}*/}
-                {/*                            style={{*/}
-                {/*                                backgroundColor: "#767FE0",*/}
-                {/*                                color: "white",*/}
-                {/*                                border: "none",*/}
-                {/*                                borderRadius: "50px",*/}
-                {/*                                width: "120px",*/}
-                {/*                                height: "30px",*/}
-                {/*                                margin: "10px"*/}
-                {/*                            }}>*/}
-                {/*                        Add Text*/}
-                {/*                    </button>*/}
-                {/*            <br></br>*/}
-
-                {/*            <select id="input-font" onChange={changeFontStyle (this)}>*/}
-
-                {/*            <option value="Comic Sans"*/}
-                {/*                    selected="selected">*/}
-                {/*                Comic Sans*/}
-                {/*            </option>*/}
-                {/*            <option value="Arial">Arial</option>*/}
-                {/*            <option value="fantasy">Fantasy</option>*/}
-                {/*            <option value="cursive">cursive</option>*/}
-                {/*        </select>*/}
-                {/*            <select id="input-font" style={{marginLeft:"10px"}}>*/}
-
-                {/*            <option value="Normal"*/}
-                {/*                    selected="selected">*/}
-                {/*                Normal*/}
-                {/*            </option>*/}
-                {/*            <option value="Arial" style={{fontStyle:"bolder"}}>Bold</option>*/}
-                {/*            <option value="fantasy" style={{fontStyle:"italic"}}>Italic</option>*/}
-                {/*            <option value="cursive" style={{fontStyle:"underline"}}>Underline</option>*/}
-                {/*        </select>*/}
-                {/*            <br></br>*/}
-                {/*            <div style={{width:"300px", float:"right"}}>*/}
-                {/*            <div style={{width:"300px", height:"300px", border:"solid", borderColor:"black", borderWidth:"1px", float:"right", marginRight:"-900px", marginTop:"-150px"}}>*/}
-                {/*                <button onClick={getSampleImages}>Load Images</button>*/}
-                {/*                {*/}
-                {/*                    img?*/}
-                {/*                    img.map((s) =>*/}
-                {/*                             <img src={s.image} alt={''} style={{width:"50px", height:"50px"}} onClick={()=> {load_logo(s.image)}}/>*/}
-                {/*                    )*/}
-                {/*                :null}*/}
-                {/*            </div>*/}
-
-                {/*        </div>*/}
-                {/*            <br></br>*/}
-
-                {/*        </div>*/}
-                {/*    </div>*/}
-                {/*    }*/}
-                {/*</div>*/}
-                {/*}*/}
-                {/*{selectedTab === 3 && <div>Left</div>}*/}
             </div>
             <canvas id='canvas'>
                 <div id="ans"></div>
