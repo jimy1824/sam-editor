@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import {Link} from "react-router-dom";
 import {http} from '../services'
 import {getCategories} from  '../apiService'
+import {MEDIA_URL} from '../services'
 
 
 
@@ -84,7 +85,7 @@ function Welcome(props){
                                   query:item
                               }}>
 
-                                  <img key={index} src={`http://44.192.67.250x${item.display_image}`}
+                                  <img key={index} src={`${MEDIA_URL}${item.display_image}`}
                                        alt={""}
                                        style={{width:"200px", height:"200px", marginTop:"10px", marginLeft:"10px"}}>
                                   </img>
