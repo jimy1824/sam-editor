@@ -21,6 +21,7 @@ function Welcome(props){
                 }
             })
         console.log(categoryList, "categry list")
+        localStorage.clear()
         return () => mounted = false;
     }, [])
 
@@ -83,7 +84,7 @@ function Welcome(props){
                                   query:item
                               }}>
 
-                                  <img key={index} src={`http://localhost:8000${item.display_image}`}
+                                  <img key={index} src={`http://44.192.67.250x${item.display_image}`}
                                        alt={""}
                                        style={{width:"200px", height:"200px", marginTop:"10px", marginLeft:"10px"}}>
                                   </img>
