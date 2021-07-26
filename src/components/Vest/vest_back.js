@@ -369,7 +369,7 @@ function SamLocalEditorVestBack(props) {
 
 
     const getSampleImages = (s) => {
-        var url = 'http://localhost:8000/api/logos';
+        var url = 'http://44.192.67.250/api/logos';
 
         fetch(url)
             .then(function (response) {

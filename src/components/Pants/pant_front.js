@@ -612,17 +612,37 @@ function SamLocalEditorPantFront(props) {
                 <div className='row'>
                     <div className="btn-group" role="group" aria-label="Basic example" style={{width: "100%"}}>
                         <button type="button" className="btn btn-secondary" onClick={() => {
-                            onComponentClick('body_first_section')
-                        }}>Body
-                        </button>
-                        <button type="button" className="btn btn-secondary" onClick={() => {
-                            onComponentClick('front-collar')
-                        }}>Collar
-                        </button>
-                        <button type="button" className="btn btn-secondary" onClick={() => {
-                            onComponentClick('sleeve')
-                        }}>sleeve
-                        </button>
+                                            onComponentClick('pant_upper_waist_front')
+                                        }}>Waist Upper
+                                        </button>
+                                        <button type="button" className="btn btn-secondary" onClick={() => {
+                                            onComponentClick('pant_lower_waist_front')
+                                        }}>Waiste Lower
+                                        </button>
+                                        <button type="button" className="btn btn-secondary" onClick={() => {
+                                            onComponentClick('pant_thai_left_front')
+                                        }}>Thai Left
+                                        </button>
+                                        <button type="button" className="btn btn-secondary" onClick={() => {
+                                            onComponentClick('pant_thai_right_front')
+                                        }}>Thai Right
+                                        </button>
+                                        <button type="button" className="btn btn-secondary" onClick={() => {
+                                            onComponentClick('pant_knees_left_front')
+                                        }}>Knee Left
+                                        </button>
+                                        <button type="button" className="btn btn-secondary" onClick={() => {
+                                            onComponentClick('pant_knees_right_front')
+                                        }}>Knee Right
+                                        </button>
+                                        <button type="button" className="btn btn-secondary" onClick={() => {
+                                            onComponentClick('pant_bottom_left_front')
+                                        }}>Bottom Left
+                                        </button>
+                                        <button type="button" className="btn btn-secondary" onClick={() => {
+                                            onComponentClick('pant_bottom_right_front')
+                                        }}>Bottom Right
+                                        </button>
                     </div>
 
                     {colorShow &&

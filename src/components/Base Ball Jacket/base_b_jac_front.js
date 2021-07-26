@@ -1049,16 +1049,68 @@ function SamLocalEditorBaseBJacFront(props) {
                 <div className='row'>
                     <div className="btn-group" role="group" aria-label="Basic example" style={{width: "100%"}}>
                         <button type="button" className="btn btn-secondary" onClick={() => {
-                            onComponentClick('body_first_section')
+                            onComponentClick('base_b_jac_front_body')
                         }}>Body
                         </button>
                         <button type="button" className="btn btn-secondary" onClick={() => {
-                            onComponentClick('front-collar')
+                            onComponentClick('base_b_jac_front_collar')
                         }}>Collar
                         </button>
                         <button type="button" className="btn btn-secondary" onClick={() => {
-                            onComponentClick('sleeve')
-                        }}>sleeve
+                            onComponentClick('base_b_jac_front_collar_inner')
+                        }}>Collar Inner
+                        </button>
+                        <button type="button" className="btn btn-secondary" onClick={() => {
+                            onComponentClick('base_b_jac_front_hem')
+                        }}>Hem
+                        </button>
+                        <button type="button" className="btn btn-secondary" onClick={() => {
+                            onComponentClick('base_b_jac_front_hem_strips')
+                        }}>Hem Strip
+                        </button>
+                        <button type="button" className="btn btn-secondary" onClick={() => {
+                            onComponentClick('base_b_jac_front_hem_mid')
+                        }}>Hem Mid
+                        </button>
+                        <button type="button" className="btn btn-secondary" onClick={() => {
+                            onComponentClick('base_b_jac_front_button_body')
+                        }}>Button
+                        </button>
+                        <button type="button" className="btn btn-secondary" onClick={() => {
+                            onComponentClick('base_b_jac_front_button_hem')
+                        }}>Hem Buttom
+                        </button>
+                        <button type="button" className="btn btn-secondary" onClick={() => {
+                            onComponentClick('base_b_jac_left_pocket_front')
+                        }}>L. Pocket
+                        </button>
+                        <button type="button" className="btn btn-secondary" onClick={() => {
+                            onComponentClick('base_b_jac_right_pocket_front')
+                        }}>R. Pocket
+                        </button>
+                        <button type="button" className="btn btn-secondary" onClick={() => {
+                            onComponentClick('base_b_jac_left_sleeve_front')
+                        }}>L.Sleeve
+                        </button>
+                        <button type="button" className="btn btn-secondary" onClick={() => {
+                            onComponentClick('base_b_jac_left_cuff_front')
+                        }}>L.S.Cuff
+                        </button>
+                        <button type="button" className="btn btn-secondary" onClick={() => {
+                            onComponentClick('base_b_jac_left_cuff_front_strips')
+                        }}>L.S.Cuff.St
+                        </button>
+                        <button type="button" className="btn btn-secondary" onClick={() => {
+                            onComponentClick('base_b_jac_right_sleeve_front')
+                        }}>R. Sleeve
+                        </button>
+                        <button type="button" className="btn btn-secondary" onClick={() => {
+                            onComponentClick('base_b_jac_right_cuff_front')
+                        }}>R.Cuff
+                        </button>
+                        <button type="button" className="btn btn-secondary" onClick={() => {
+                            onComponentClick('base_b_jac_right_cuff_front_strips')
+                        }}>R.Cuff.St
                         </button>
                     </div>
 

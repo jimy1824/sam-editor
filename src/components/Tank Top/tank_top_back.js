@@ -257,7 +257,7 @@ const initCanvas = (name) =>
     console.log(img, "222")
 
     const getSampleImages = (s) => {
-        var url = 'http://localhost:8000/api/logos';
+        var url = 'http://44.192.67.250/api/logos';
 
         fetch(url)
             .then(function(response){
@@ -477,9 +477,30 @@ const initCanvas = (name) =>
 
                 <div className='row' style={{width:"100%"}}>
                     <div className="btn-group" role="group" aria-label="Basic example" style={{width:"100%"}}>
-                        <button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('back_second_part')}}>Back</button>
-                        {/*<button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('front-collar')}}>Collar</button>*/}
-                        <button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('sleeve')}}>Sleeve</button>
+                       <button type="button" className="btn btn-secondary" onClick={() => {
+                            onComponentClick('tank_collar_back')
+                        }}>Collar
+                        </button>
+                        <button type="button" className="btn btn-secondary" onClick={() => {
+                            onComponentClick('tank_top_back')
+                        }}>Top
+                        </button>
+                        <button type="button" className="btn btn-secondary" onClick={() => {
+                            onComponentClick('tank_mid_back')
+                        }}>Mid
+                        </button>
+                        <button type="button" className="btn btn-secondary" onClick={() => {
+                            onComponentClick('tank_bottom_back')
+                        }}>Bottom
+                        </button>
+                        <button type="button" className="btn btn-secondary" onClick={() => {
+                            onComponentClick('tank_left_sleeve_back')
+                        }}>Left Sleeve
+                        </button>
+                        <button type="button" className="btn btn-secondary" onClick={() => {
+                            onComponentClick('tank_right_sleeve_back')
+                        }}>Right Sleeve
+                        </button>
                     </div>
                     {colorShow &&
                     <div style={{marginLeft:"50px", display:"inline"}}>

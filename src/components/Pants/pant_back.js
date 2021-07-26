@@ -5,13 +5,13 @@ import {saveAs} from 'file-saver'
 import {v1 as uuid} from 'uuid';
 import * as PIXI from 'pixi.js'
 import $ from "jquery";
-import { CirclePicker } from 'react-color';
+import {CirclePicker} from 'react-color';
 import {Tabs, Tab, AppBar} from "@material-ui/core";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {getProductDetail} from "../../apiService";
 
 
-function SamLocalEditorPantBack(props){
+function SamLocalEditorPantBack(props) {
     // let {id} = props.match.params
     const [product, setProduct] = useState(null);
     // useEffect(() => {
@@ -26,7 +26,7 @@ function SamLocalEditorPantBack(props){
     // }, [])
 
     const [canvas, setCanvas] = useState(null)
-     const [name, setName] = useState(null);
+    const [name, setName] = useState(null);
     let [image, setImage] = useState(null);
 
     const [img, setImg] = useState(null);
@@ -52,7 +52,7 @@ function SamLocalEditorPantBack(props){
     //     //     leftImageLoad()
     //     // }
     // }
-const initCanvas = (name) =>
+    const initCanvas = (name) =>
         new fabric.Canvas(name, {
             height: 800,
             width: 800,
@@ -81,8 +81,8 @@ const initCanvas = (name) =>
         fabric.Image.fromURL(obj.src, function (img) {
             img.id = id;
             img.filters = [new fabric.Image.filters.HueRotation()];
-            if(obj.color){
-                var hue=hexatoHSL(obj.color.hex)
+            if (obj.color) {
+                var hue = hexatoHSL(obj.color.hex)
                 img.filters[0].rotation = hue
             }
 
@@ -112,11 +112,11 @@ const initCanvas = (name) =>
         var text = new fabric.Textbox(name, {
             fontFamily: 'Pacifico',
             fontSize: 20,
-            top:120,
-            left:130,
+            top: 120,
+            left: 130,
             fill: "#00ffff",
             visible: true,
-            fontWeight:"bold",
+            fontWeight: "bold",
         });
         console.log(text)
         localStorage.setItem(text, JSON.stringify(text))
@@ -125,9 +125,9 @@ const initCanvas = (name) =>
     }
 
     var changeFontStyle = function (font) {
-           // document.getElementById("output-text")
-           //              .style.fontWeight = "italic";
-        }
+        // document.getElementById("output-text")
+        //              .style.fontWeight = "italic";
+    }
 
     const loadImage = (url, imageId, left, top) => {
 
@@ -151,26 +151,26 @@ const initCanvas = (name) =>
     }
     const handleChangeComplete = (color) => {
         console.log(selectedComponentId, "selectedID")
-        if(selectedComponentId==='sleeve'){
+        if (selectedComponentId === 'sleeve') {
 
             setColor(color)
 
-            var obj=JSON.parse(localStorage.getItem('right_sleeve'))
-            obj.color=color
+            var obj = JSON.parse(localStorage.getItem('right_sleeve'))
+            obj.color = color
             localStorage.setItem('right_sleeve', JSON.stringify(obj))
 
 
-            var obj=JSON.parse(localStorage.getItem('left_sleeve'))
-            obj.color=color
+            var obj = JSON.parse(localStorage.getItem('left_sleeve'))
+            obj.color = color
             localStorage.setItem('left_sleeve', JSON.stringify(obj))
 
 
-        }else {
-            if(selectedComponentId){
-                var obj=JSON.parse(localStorage.getItem(selectedComponentId))
+        } else {
+            if (selectedComponentId) {
+                var obj = JSON.parse(localStorage.getItem(selectedComponentId))
                 // debugger;
                 console.log("Color_object", obj)
-                obj.color=color
+                obj.color = color
                 localStorage.setItem(selectedComponentId, JSON.stringify(obj))
             }
             setColor(color)
@@ -180,7 +180,7 @@ const initCanvas = (name) =>
 
 
     };
-    const onComponentClick=(componentId)=>{
+    const onComponentClick = (componentId) => {
         setSelectedComponentId(componentId)
 
         // setColor()
@@ -193,15 +193,15 @@ const initCanvas = (name) =>
         samImg.onload = function (imge) {
             console.log("inside function")
             var pug = new fabric.Image(samImg, {
-                id:"imageID",
+                id: "imageID",
                 width: samImg.width,
                 height: samImg.height,
-                scaleX : 60/samImg.width,
-                scaleY : 60/samImg.height,
-                top:120,
-                left:130,
-                innerWidth:200,
-                innerHeight:200,
+                scaleX: 60 / samImg.width,
+                scaleY: 60 / samImg.height,
+                top: 120,
+                left: 130,
+                innerWidth: 200,
+                innerHeight: 200,
 
             });
 
@@ -260,21 +260,21 @@ const initCanvas = (name) =>
         var url = 'http://localhost:8000/api/logos';
 
         fetch(url)
-            .then(function(response){
+            .then(function (response) {
                 return response.json();
             })
-            .then(function (data){
+            .then(function (data) {
                 console.log(data)
                 setImg(data)
 
             })
     }
 
-    function displaySample(img_sample){
+    function displaySample(img_sample) {
         document.getElementById('sample_images').src = img_sample;
     }
 
-    function imageSaved(i){
+    function imageSaved(i) {
         let logo = JSON.parse(localStorage.getItem('samImage'))
 
         if (logo.image1?.image) {
@@ -293,7 +293,7 @@ const initCanvas = (name) =>
     }
 
 
-    const hexatoHSL=(hex)=> {
+    const hexatoHSL = (hex) => {
         var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
         var r = parseInt(result[1], 16);
         var g = parseInt(result[2], 16);
@@ -322,11 +322,11 @@ const initCanvas = (name) =>
         s = Math.round(s);
         l = l * 100;
         l = Math.round(l);
-        var colorInHSL =  h;
+        var colorInHSL = h;
         return colorInHSL
     }
 
-    return(
+    return (
         <div>
             <div>
                 {/*/!*{selectedTab === 0 &&*!/*/}
@@ -475,73 +475,121 @@ const initCanvas = (name) =>
 
                 {/* back view */}
 
-                <div className='row' style={{width:"100%"}}>
-                    <div className="btn-group" role="group" aria-label="Basic example" style={{width:"100%"}}>
-                        <button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('back_second_part')}}>Back</button>
-                        {/*<button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('front-collar')}}>Collar</button>*/}
-                        <button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('sleeve')}}>Sleeve</button>
+                <div className='row' style={{width: "100%"}}>
+                    <div className="btn-group" role="group" aria-label="Basic example" style={{width: "100%"}}>
+                        <button type="button" className="btn btn-secondary" onClick={() => {
+                            onComponentClick('pant_upper_waist_back')
+                        }}>Waist Upper
+                        </button>
+                        <button type="button" className="btn btn-secondary" onClick={() => {
+                            onComponentClick('pant_lower_waist_back')
+                        }}>Waist Lower
+                        </button>
+                        <button type="button" className="btn btn-secondary" onClick={() => {
+                            onComponentClick('pant_thai_right_back')
+                        }}>Thai Right
+                        </button>
+                        <button type="button" className="btn btn-secondary" onClick={() => {
+                            onComponentClick('pant_thai_left_back')
+                        }}>Thai Left
+                        </button>
+                        <button type="button" className="btn btn-secondary" onClick={() => {
+                            onComponentClick('pant_knees_left_back')
+                        }}>Knee Left
+                        </button>
+                        <button type="button" className="btn btn-secondary" onClick={() => {
+                            onComponentClick('pant_knees_right_back')
+                        }}>Knee Right
+                        </button>
+                        <button type="button" className="btn btn-secondary" onClick={() => {
+                            onComponentClick('pant_bottom_left_back')
+                        }}>Bottom Left
+                        </button>
+                        <button type="button" className="btn btn-secondary" onClick={() => {
+                            onComponentClick('pant_bottom_right_back')
+                        }}>Bottom Right
+                        </button>
+                        <button type="button" className="btn btn-secondary" onClick={() => {
+                            onComponentClick('pant_pocket_left_back')
+                        }}>Pocket Left
+                        </button>
+                        <button type="button" className="btn btn-secondary" onClick={() => {
+                            onComponentClick('pant_pocket_right_back')
+                        }}>Pocket Right
+                        </button>
                     </div>
                     {colorShow &&
-                    <div style={{marginLeft:"50px", display:"inline"}}>
-                     <p> Choose color</p>
+                    <div style={{marginLeft: "50px", display: "inline"}}>
+                        <p> Choose color</p>
 
-                    <CirclePicker
-                        color={ color }
-                        onChangeComplete={ handleChangeComplete}
-                    />
-                    <br></br>
+                        <CirclePicker
+                            color={color}
+                            onChangeComplete={handleChangeComplete}
+                        />
+                        <br></br>
                         <div id="output-text">
                             <input onChange={handleInput} placeholder="Enter text"/>
-                                    <button type='button'
-                                            name='text_show'
-                                            onClick={textShow}
-                                            style={{
-                                                backgroundColor: "#767FE0",
-                                                color: "white",
-                                                border: "none",
-                                                borderRadius: "50px",
-                                                width: "120px",
-                                                height: "30px",
-                                                margin: "10px"
-                                            }}>
-                                        Add Text
-                                    </button>
+                            <button type='button'
+                                    name='text_show'
+                                    onClick={textShow}
+                                    style={{
+                                        backgroundColor: "#767FE0",
+                                        color: "white",
+                                        border: "none",
+                                        borderRadius: "50px",
+                                        width: "120px",
+                                        height: "30px",
+                                        margin: "10px"
+                                    }}>
+                                Add Text
+                            </button>
                             <br></br>
 
-                            <select id="input-font" onChange={changeFontStyle (this)}>
+                            <select id="input-font" onChange={changeFontStyle(this)}>
 
-                            <option value="Comic Sans"
-                                    selected="selected">
-                                Comic Sans
-                            </option>
-                            <option value="Arial">Arial</option>
-                            <option value="fantasy">Fantasy</option>
-                            <option value="cursive">cursive</option>
-                        </select>
-                            <select id="input-font" style={{marginLeft:"10px"}}>
+                                <option value="Comic Sans"
+                                        selected="selected">
+                                    Comic Sans
+                                </option>
+                                <option value="Arial">Arial</option>
+                                <option value="fantasy">Fantasy</option>
+                                <option value="cursive">cursive</option>
+                            </select>
+                            <select id="input-font" style={{marginLeft: "10px"}}>
 
-                            <option value="Normal"
-                                    selected="selected">
-                                Normal
-                            </option>
-                            <option value="Arial" style={{fontStyle:"bolder"}}>Bold</option>
-                            <option value="fantasy" style={{fontStyle:"italic"}}>Italic</option>
-                            <option value="cursive" style={{fontStyle:"underline"}}>Underline</option>
-                        </select>
+                                <option value="Normal"
+                                        selected="selected">
+                                    Normal
+                                </option>
+                                <option value="Arial" style={{fontStyle: "bolder"}}>Bold</option>
+                                <option value="fantasy" style={{fontStyle: "italic"}}>Italic</option>
+                                <option value="cursive" style={{fontStyle: "underline"}}>Underline</option>
+                            </select>
                             <br></br>
-                            <div style={{width:"300px", float:"right"}}>
-                            <div style={{width:"300px", height:"300px", border:"solid", borderColor:"black", borderWidth:"1px", float:"right", marginRight:"-980px", marginTop:"-200px"}}>
-                                <button onClick={getSampleImages}>Load Images</button>
-                                {
-                                    img?
-                                    img.map((s) =>
-                                             <img src={s.image} alt={''} style={{width:"50px", height:"50px"}} onClick={()=> {load_logo(s.image)}}/>
+                            <div style={{width: "300px", float: "right"}}>
+                                <div style={{
+                                    width: "300px",
+                                    height: "300px",
+                                    border: "solid",
+                                    borderColor: "black",
+                                    borderWidth: "1px",
+                                    float: "right",
+                                    marginRight: "-980px",
+                                    marginTop: "-200px"
+                                }}>
+                                    <button onClick={getSampleImages}>Load Images</button>
+                                    {
+                                        img ?
+                                            img.map((s) =>
+                                                <img src={s.image} alt={''} style={{width: "50px", height: "50px"}}
+                                                     onClick={() => {
+                                                         load_logo(s.image)
+                                                     }}/>
+                                            )
+                                            : null}
+                                </div>
 
-                                    )
-                                :null}
                             </div>
-
-                        </div>
                             <br></br>
 
                         </div>
