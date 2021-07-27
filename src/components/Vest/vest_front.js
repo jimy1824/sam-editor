@@ -9,6 +9,9 @@ import $ from "jquery";
 import { CirclePicker } from 'react-color';
 import {Tabs, Tab, AppBar} from "@material-ui/core";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import {Link} from "react-router-dom";
+import {MEDIA_URL} from "../../services";
+import {BASE_URL} from "../../services";
 import {getProductDetail} from "../../apiService";
 
 const viewOptions = [
@@ -17,6 +20,8 @@ const viewOptions = [
 ]
 var fonts = ["Pacifico", "VT323", "Quicksand", "Inconsolata"];
 var logo_img
+
+let addingComponent =null
 
 function SamLocalEditorVestFront(props) {
     let {id} = props.match.params
@@ -36,6 +41,8 @@ function SamLocalEditorVestFront(props) {
 
     const [img, setImg] = useState(null);
 
+    const [displyComponents, setDisplyComponents] = useState([null])
+
     // tabs
     const [selectedTab, setSelectedTab] = React.useState(0);
     const [color, setColor] = React.useState('#fff');
@@ -45,11 +52,30 @@ function SamLocalEditorVestFront(props) {
         setSelectedTab(newValue);
         if (newValue === 0) {
             frontImageLoad()
+            setComponents('body')
+            setSelectedComponentId(null)
+            setColorShow(false)
             // imageSaved()
         }
         if (newValue === 1) {
             backImageLoad()
+            setComponents('back')
+            setSelectedComponentId(null)
+            setColorShow(false)
         }
+    }
+
+    const setComponents = (name) => {
+        let productView = JSON.parse(localStorage.getItem(name))
+        let components = []
+        for (const [key, value] of Object.entries(productView)) {
+            if (key === 'name' || key === 'id') {
+
+            } else if (value != null) {
+                components.push(key)
+            }
+        }
+        setDisplyComponents(components)
     }
 
     const initCanvas = (name) =>
@@ -66,6 +92,7 @@ function SamLocalEditorVestFront(props) {
     useEffect(() => {
         if (product) {
             frontImageLoad()
+            setComponents('body')
         }
     }, [product])
 
@@ -76,10 +103,9 @@ function SamLocalEditorVestFront(props) {
         canvas.renderAll()
     }
 
-    const loadObject = (obj, id) => {
-        console.log(id)
+    const loadObject = (obj) => {
         fabric.Image.fromURL(obj.src, function (img) {
-            img.id = id;
+            // img.id = id;
             img.filters = [new fabric.Image.filters.HueRotation()];
             if(obj.color){
                 var hue=hexatoHSL(obj.color.hex)
@@ -95,6 +121,18 @@ function SamLocalEditorVestFront(props) {
 
                 })
             canvas.add(img);
+            if(obj.logo){
+                fabric.Image.fromObject(obj.logo,function (logo) {
+                    canvas.add(logo);
+                })
+
+            }
+            if(obj.text){
+                fabric.Textbox.fromObject(obj.text,function (text) {
+                    canvas.add(text);
+                })
+
+            }
 
         }, {crossOrigin: 'anonymous'})
     }
@@ -121,8 +159,55 @@ function SamLocalEditorVestFront(props) {
         console.log(text)
         localStorage.setItem(text, JSON.stringify(text))
         canvas.add(text);
+        if (selectedComponentId) {
+            var obj = JSON.parse(localStorage.getItem(selectedComponentId))
+            obj.text = text
+            localStorage.setItem(selectedComponentId, JSON.stringify(obj))
+            addingComponent='text';
+        }
 
     }
+
+    canvas?.on('after:render', function() {
+        var ao = canvas.getActiveObject();
+        if (ao) {
+            var bound = ao.getBoundingRect();
+            console.log(bound.scaleY)
+            if (addingComponent !== null) {
+                if (addingComponent === 'logo') {
+                    if (selectedComponentId) {
+                        var obj = JSON.parse(localStorage.getItem(selectedComponentId))
+                        obj.logo.left = bound.left
+                        obj.logo.top = bound.top
+
+                        fabric.Image.fromObject(obj.logo,function (test) {
+                            test.scaleToHeight(bound.height)
+                            test.scaleToWidth(bound.width);
+                            obj.logo.scaleY=test.scaleY
+                            obj.logo.scaleX=test.scaleX
+                            localStorage.setItem(selectedComponentId, JSON.stringify(obj))
+
+                        })
+
+                        // obj.logo.height = bound.height
+                        // obj.logo.width = bound.width
+                        // obj.logo.scaleX= 2/bound.height
+                        // obj.logo.scaleY= 2/bound.width
+                        // localStorage.setItem(selectedComponentId, JSON.stringify(obj))
+                    }
+                } else if (addingComponent === 'text') {
+                    if (selectedComponentId) {
+                        var text = JSON.parse(localStorage.getItem(selectedComponentId))
+
+                        text.text.left = bound.left
+                        text.text.top = bound.top
+                        localStorage.setItem(selectedComponentId, JSON.stringify(text))
+                    }
+                }
+            }
+
+        }
+    });
 
     var changeFontStyle = function (font) {
            // document.getElementById("output-text")
@@ -213,31 +298,48 @@ function SamLocalEditorVestFront(props) {
     }
 
     const load_logo = (l) => {
+        // var samImg = new Image();
+        // samImg.onload = function (imge) {
+        //     var pug = new fabric.Image(samImg, {
+        //         id: "imageID",
+        //         width: samImg.width,
+        //         height: samImg.height,
+        //         scaleX: 60 / samImg.width,
+        //         scaleY: 60 / samImg.height,
+        //         top: 120,
+        //         left: 130,
+        //         innerWidth: 200,
+        //         innerHeight: 200,
+        //
+        //     });
+        //     canvas.add(pug);
+        // };
+        //
+        // samImg.src = l;
 
-        var samImg = new Image();
-        samImg.onload = function (imge) {
-            console.log("inside function")
-            var pug = new fabric.Image(samImg, {
-                id:"imageID",
-                width: samImg.width,
-                height: samImg.height,
-                scaleX : 60/samImg.width,
-                scaleY : 60/samImg.height,
-                top:120,
-                left:130,
-                innerWidth:200,
-                innerHeight:200,
 
-            });
+        fabric.Image.fromURL(l, function (img) {
+            var cor = img.set(
+                {
+
+                    scaleX: 40 / 200,
+                    scaleY: 40 / 200,
+                    top: 120,
+                    left: 130,
+                    selectable: true,
 
 
-            canvas.add(pug);
-            console.log(pug, "lll")
-        };
+                })
+            canvas.add(img);
+            if (selectedComponentId) {
+                var obj = JSON.parse(localStorage.getItem(selectedComponentId))
 
-        samImg.src = l;
+                obj.logo = img
+                localStorage.setItem(selectedComponentId, JSON.stringify(obj))
+                addingComponent = 'logo';
+            }
 
-        console.log("Image Clicked", l)
+        }, {crossOrigin: 'anonymous'})
     }
 
     console.log(img, "222")
@@ -590,47 +692,64 @@ function SamLocalEditorVestFront(props) {
                 {selectedTab === 0 &&
                 <div className='row'>
                     <div className="btn-group" role="group" aria-label="Basic example" style={{width: "100%"}}>
-                        <button type="button" className="btn btn-secondary" onClick={() => {
-                            onComponentClick('collar_vest')
-                        }}>Collar
-                        </button>
-                        <button type="button" className="btn btn-secondary" onClick={() => {
-                            onComponentClick('zip_vest')
-                        }}>Zip
-                        </button>
-                        <button type="button" className="btn btn-secondary" onClick={() => {
-                            onComponentClick('vest_top')
-                        }}>Top Section
-                        </button>
-                        <button type="button" className="btn btn-secondary" onClick={() => {
-                            onComponentClick('vest_mid')
-                        }}>Mid Section
-                        </button>
-                        <button type="button" className="btn btn-secondary" onClick={() => {
-                            onComponentClick('vest_bottom')
-                        }}>Bottom Section
-                        </button>
-                        <button type="button" className="btn btn-secondary" onClick={() => {
-                            onComponentClick('vest_pocket_left')
-                        }}>Left Pocket
-                        </button>
-                        <button type="button" className="btn btn-secondary" onClick={() => {
-                            onComponentClick('vest_pocket_right')
-                        }}>Right Pocket
-                        </button>
-                        <button type="button" className="btn btn-secondary" onClick={() => {
-                            onComponentClick('vest_hem')
-                        }}>Hem
-                        </button>
-                        <button type="button" className="btn btn-secondary" onClick={() => {
-                            onComponentClick('vest_left_sleeve')
-                        }}>Left Sleeve
-                        </button>
-                        <button type="button" className="btn btn-secondary" onClick={() => {
-                            onComponentClick('vest_right_sleeve')
-                        }}>Right Sleeve
-                        </button>
+                        {displyComponents &&
+                        displyComponents.map((item, index) => {
+                            return (
+                                <button key={index} type="button" className="btn btn-secondary" onClick={() => {
+                                    onComponentClick(item)
+                                }}>{item}</button>
+                            )
+                        })
+                        }
+                        {/*<button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('body_first_section')}}>Body First Section</button>*/}
+                        {/*<button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('body_second_section')}}>Body second section</button>*/}
+                        {/*<button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('body_third_section')}}>Body Third Section</button>*/}
+                        {/*<button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('front-collar')}}>Collar</button>*/}
+                        {/*<button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('sleeve')}}>sleeve</button>*/}
                     </div>
+
+                    {/*<div className="btn-group" role="group" aria-label="Basic example" style={{width: "100%"}}>*/}
+                    {/*    <button type="button" className="btn btn-secondary" onClick={() => {*/}
+                    {/*        onComponentClick('collar_vest')*/}
+                    {/*    }}>Collar*/}
+                    {/*    </button>*/}
+                    {/*    <button type="button" className="btn btn-secondary" onClick={() => {*/}
+                    {/*        onComponentClick('zip_vest')*/}
+                    {/*    }}>Zip*/}
+                    {/*    </button>*/}
+                    {/*    <button type="button" className="btn btn-secondary" onClick={() => {*/}
+                    {/*        onComponentClick('vest_top')*/}
+                    {/*    }}>Top Section*/}
+                    {/*    </button>*/}
+                    {/*    <button type="button" className="btn btn-secondary" onClick={() => {*/}
+                    {/*        onComponentClick('vest_mid')*/}
+                    {/*    }}>Mid Section*/}
+                    {/*    </button>*/}
+                    {/*    <button type="button" className="btn btn-secondary" onClick={() => {*/}
+                    {/*        onComponentClick('vest_bottom')*/}
+                    {/*    }}>Bottom Section*/}
+                    {/*    </button>*/}
+                    {/*    <button type="button" className="btn btn-secondary" onClick={() => {*/}
+                    {/*        onComponentClick('vest_pocket_left')*/}
+                    {/*    }}>Left Pocket*/}
+                    {/*    </button>*/}
+                    {/*    <button type="button" className="btn btn-secondary" onClick={() => {*/}
+                    {/*        onComponentClick('vest_pocket_right')*/}
+                    {/*    }}>Right Pocket*/}
+                    {/*    </button>*/}
+                    {/*    <button type="button" className="btn btn-secondary" onClick={() => {*/}
+                    {/*        onComponentClick('vest_hem')*/}
+                    {/*    }}>Hem*/}
+                    {/*    </button>*/}
+                    {/*    <button type="button" className="btn btn-secondary" onClick={() => {*/}
+                    {/*        onComponentClick('vest_left_sleeve')*/}
+                    {/*    }}>Left Sleeve*/}
+                    {/*    </button>*/}
+                    {/*    <button type="button" className="btn btn-secondary" onClick={() => {*/}
+                    {/*        onComponentClick('vest_right_sleeve')*/}
+                    {/*    }}>Right Sleeve*/}
+                    {/*    </button>*/}
+                    {/*</div>*/}
 
                     {colorShow &&
                     <div>
@@ -900,93 +1019,108 @@ function SamLocalEditorVestFront(props) {
                 }
                 {/* back view */}
                 {selectedTab === 1 &&
-                // <div className='row' style={{width:"100%"}}>
-                //     <div className="btn-group" role="group" aria-label="Basic example" style={{width:"100%"}}>
-                //        <button type="button" className="btn btn-secondary" onClick={() => {
-                //             onComponentClick('bag_handle_back')
-                //         }}>Bag Handle
-                //         </button>
-                //         <button type="button" className="btn btn-secondary" onClick={() => {
-                //             onComponentClick('bag_top_back_body')
-                //         }}>Bag Top Section
-                //         </button>
-                //         <button type="button" className="btn btn-secondary" onClick={() => {
-                //             onComponentClick('bag_mid_back_body')
-                //         }}>Bag Mid Section
-                //         </button>
-                //         <button type="button" className="btn btn-secondary" onClick={() => {
-                //             onComponentClick('bag_bottom_back_body')
-                //         }}>Bag Bottom Section
-                //         </button>
-                //     </div>
-                //     {colorShow &&
-                //     <div style={{marginLeft:"50px", display:"inline"}}>
-                //      <p> Choose color</p>
-                //
-                //     <CirclePicker
-                //         color={ color }
-                //         onChangeComplete={ handleChangeComplete}
-                //     />
-                //     <br></br>
-                //         <div id="output-text">
-                //             <input onChange={handleInput} placeholder="Enter text"/>
-                //                     <button type='button'
-                //                             name='text_show'
-                //                             onClick={textShow}
-                //                             style={{
-                //                                 backgroundColor: "#767FE0",
-                //                                 color: "white",
-                //                                 border: "none",
-                //                                 borderRadius: "50px",
-                //                                 width: "120px",
-                //                                 height: "30px",
-                //                                 margin: "10px"
-                //                             }}>
-                //                         Add Text
-                //                     </button>
-                //             <br></br>
-                //
-                //             <select id="input-font" onChange={changeFontStyle (this)}>
-                //
-                //             <option value="Comic Sans"
-                //                     selected="selected">
-                //                 Comic Sans
-                //             </option>
-                //             <option value="Arial">Arial</option>
-                // /*            <option value="fantasy">Fantasy</option>*/
-                // {/*            <option value="cursive">cursive</option>*/}
-                // {/*        </select>*/}
-                // {/*            <select id="input-font" style={{marginLeft:"10px"}}>*/}
-                //
-                // {/*            <option value="Normal"*/}
-                // {/*                    selected="selected">*/}
-                // //                 Normal
-                // {/*            </option>*/}
-                // {/*            <option value="Arial" style={{fontStyle:"bolder"}}>Bold</option>*/}
-                // {/*            <option value="fantasy" style={{fontStyle:"italic"}}>Italic</option>*/}
-                // {/*            <option value="cursive" style={{fontStyle:"underline"}}>Underline</option>*/}
-                // {/*        </select>*/}
-                // //             <br></br>
-                // //             <div style={{width:"300px", float:"right"}}>
-                // {/*            <div style={{width:"300px", height:"300px", border:"solid", borderColor:"black", borderWidth:"1px", float:"right", marginRight:"-980px", marginTop:"-200px"}}>*/}
-                // {/*                <button onClick={getSampleImages}>Load Images</button>*/}
-                // {/*                {*/}
-                // {/*                    img?*/}
-                // {/*                    img.map((s) =>*/}
-                // {/*                             <img src={s.image} alt={''} style={{width:"50px", height:"50px"}} onClick={()=> {load_logo(s.image)}}/>*/}
+                <div className='row' style={{width:"100%"}}>
+                    <div className="btn-group" role="group" aria-label="Basic example" style={{width: "100%"}}>
+                        {displyComponents &&
+                        displyComponents.map((item, index) => {
+                            return (
+                                <button key={index} type="button" className="btn btn-secondary" onClick={() => {
+                                    onComponentClick(item)
+                                }}>{item}</button>
+                            )
+                        })
+                        }
+                        {/*<button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('body_first_section')}}>Body First Section</button>*/}
+                        {/*<button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('body_second_section')}}>Body second section</button>*/}
+                        {/*<button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('body_third_section')}}>Body Third Section</button>*/}
+                        {/*<button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('front-collar')}}>Collar</button>*/}
+                        {/*<button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('sleeve')}}>sleeve</button>*/}
+                    </div>
+                    {/*<div className="btn-group" role="group" aria-label="Basic example" style={{width:"100%"}}>*/}
+                    {/*   <button type="button" className="btn btn-secondary" onClick={() => {*/}
+                    {/*        onComponentClick('bag_handle_back')*/}
+                    {/*    }}>Bag Handle*/}
+                    {/*    </button>*/}
+                    {/*    <button type="button" className="btn btn-secondary" onClick={() => {*/}
+                    {/*        onComponentClick('bag_top_back_body')*/}
+                    {/*    }}>Bag Top Section*/}
+                    {/*    </button>*/}
+                    {/*    <button type="button" className="btn btn-secondary" onClick={() => {*/}
+                    {/*        onComponentClick('bag_mid_back_body')*/}
+                    {/*    }}>Bag Mid Section*/}
+                    {/*    </button>*/}
+                    {/*    <button type="button" className="btn btn-secondary" onClick={() => {*/}
+                    {/*        onComponentClick('bag_bottom_back_body')*/}
+                    {/*    }}>Bag Bottom Section*/}
+                    {/*    </button>*/}
+                    {/*</div>*/}
+                    {colorShow &&
+                    <div style={{marginLeft:"50px", display:"inline"}}>
+                     <p> Choose color</p>
 
-                //                     )
-                //                 :null}
-                //             </div>
-                //
-                //         </div>
+                    <CirclePicker
+                        color={ color }
+                        onChangeComplete={ handleChangeComplete}
+                    />
+                    <br></br>
+                        <div id="output-text">
+                            <input onChange={handleInput} placeholder="Enter text"/>
+                                    <button type='button'
+                                            name='text_show'
+                                            onClick={textShow}
+                                            style={{
+                                                backgroundColor: "#767FE0",
+                                                color: "white",
+                                                border: "none",
+                                                borderRadius: "50px",
+                                                width: "120px",
+                                                height: "30px",
+                                                margin: "10px"
+                                            }}>
+                                        Add Text
+                                    </button>
+                            <br></br>
+
+                            <select id="input-font" onChange={changeFontStyle (this)}>
+
+                            <option value="Comic Sans"
+                                    selected="selected">
+                                Comic Sans
+                            </option>
+                            <option value="Arial">Arial</option>
+                            <option value="fantasy">Fantasy</option>*/
+                            <option value="cursive">cursive</option>
+                        </select>
+                            <select id="input-font" style={{marginLeft:"10px"}}>
+
+                            <option value="Normal"
+                                    selected="selected">
+                                Normal
+                            </option>
+                            <option value="Arial" style={{fontStyle:"bolder"}}>Bold</option>
+                            <option value="fantasy" style={{fontStyle:"italic"}}>Italic</option>
+                            <option value="cursive" style={{fontStyle:"underline"}}>Underline</option>
+                        </select>
                 //             <br></br>
-                //
-                //{/*        </div>*/}
-                //{/*    </div>*/}
-                //{/*    }*/}
-                //{/*</div>*/}
-                <SamLocalEditorVestBack/>
+                //             <div style={{width:"300px", float:"right"}}>
+                            <div style={{width:"300px", height:"300px", border:"solid", borderColor:"black", borderWidth:"1px", float:"right", marginRight:"-980px", marginTop:"-200px"}}>
+                                <button onClick={getSampleImages}>Load Images</button>
+                                {
+                                    img?
+                                    img.map((s) =>
+                                             <img src={s.image} alt={''} style={{width:"50px", height:"50px"}} onClick={()=> {load_logo(s.image)}}/>
+
+                                    )
+                                :null}
+                            </div>
+
+                        </div>
+                            <br></br>
+
+                        </div>
+                    </div>
+                    }
+                </div>
                 }
 
             </div>

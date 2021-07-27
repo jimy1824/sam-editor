@@ -671,8 +671,6 @@ const initCanvas = (name) =>
                     </div>
                     }
                 </div>
-
-                {/*{selectedTab === 3 && <div>Left</div>}*/}
             </div>
             <canvas id='canvas'>
                 <div id="ans"></div>

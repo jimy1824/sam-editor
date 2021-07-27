@@ -1,7 +1,4 @@
 import React, {useEffect, useState, useRef} from "react";
-import SamLocalEditorRight from "./right_canvas";
-import SamLocalEditorBack from "./back_canvas";
-import SamLocalEditorLeft from "./left_canvas";
 // import THREELib from "three-js";
 import {fabric} from "fabric";
 import {saveAs} from 'file-saver'
@@ -46,7 +43,7 @@ function SamLocalEditor(props) {
     let [image, setImage] = useState(null);
 
     const [img, setImg] = useState(null);
-    const [displyComponents, setDisplyComponents] = useState([])
+    const [displyComponents, setDisplyComponents] = useState([null])
 
     // tabs
     const [selectedTab, setSelectedTab] = React.useState(0);
@@ -384,8 +381,8 @@ function SamLocalEditor(props) {
                 scaleY: 30 / samImg.height,
                 angle: 30,
                 flipX: true,
-                top: 45,
-                left: 72,
+                top: 46,
+                left: 69,
                 selectable: false,
             });
             canvas.add(left);
@@ -401,8 +398,8 @@ function SamLocalEditor(props) {
                 scaleX: 30 / samImg.width,
                 scaleY: 30 / samImg.height,
                 angle: -30,
-                top: 55,
-                left: 228,
+                top: 56,
+                left: 224,
                 selectable: false,
             });
             canvas.add(right);
@@ -1264,7 +1261,6 @@ function SamLocalEditor(props) {
                     </div>
                     }
                 </div>
-                    // <SamLocalEditorBack/>
                 }
                 {selectedTab === 2 &&
                 <div className='row' style={{width: "100%"}}>
@@ -1360,10 +1356,8 @@ function SamLocalEditor(props) {
                     </div>
                     }
                 </div>
-                    // <SamLocalEditorRight/>
                 }
                 {selectedTab === 3 && <div>
-
                     <div className='row' style={{width: "100%"}}>
                         <div className="btn-group" role="group" aria-label="Basic example" style={{width: "100%"}}>
                             {displyComponents &&
@@ -1427,6 +1421,30 @@ function SamLocalEditor(props) {
                                     <option value="cursive" style={{fontStyle: "underline"}}>Underline</option>
                                 </select>
                                 <br></br>
+                                <div style={{width: "300px", float: "right"}}>
+                                <div style={{
+                                    width: "300px",
+                                    height: "300px",
+                                    border: "solid",
+                                    borderColor: "black",
+                                    borderWidth: "1px",
+                                    float: "right",
+                                    marginRight: "-900px",
+                                    marginTop: "-150px"
+                                }}>
+                                    <button onClick={getSampleImages}>Load Images</button>
+                                    {
+                                        img ?
+                                            img.map((s) =>
+                                                <img src={s.image} alt={''} style={{width: "50px", height: "50px"}}
+                                                     onClick={() => {
+                                                         load_sleeve_logo(s.image)
+                                                     }}/>
+                                            )
+                                            : null}
+                                </div>
+
+                            </div>
                                 <br></br>
 
                             </div>

@@ -11,6 +11,9 @@ import $ from "jquery";
 import { CirclePicker } from 'react-color';
 import {Tabs, Tab, AppBar} from "@material-ui/core";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import {Link} from "react-router-dom";
+import {MEDIA_URL} from "../../services";
+import {BASE_URL} from "../../services";
 import {getProductDetail} from "../../apiService";
 
 const viewOptions = [
@@ -21,6 +24,8 @@ const viewOptions = [
 ]
 var fonts = ["Pacifico", "VT323", "Quicksand", "Inconsolata"];
 var logo_img
+
+let addingComponent =null
 
 function SamLocalEditorCoachJacFront(props) {
     let {id} = props.match.params
@@ -42,6 +47,8 @@ function SamLocalEditorCoachJacFront(props) {
 
     const [img, setImg] = useState(null);
 
+    const [displyComponents, setDisplyComponents] = useState([null])
+
     // tabs
     const [selectedTab, setSelectedTab] = React.useState(0);
     const [color, setColor] = React.useState('#fff');
@@ -51,17 +58,42 @@ function SamLocalEditorCoachJacFront(props) {
         setSelectedTab(newValue);
         if (newValue === 0) {
             frontImageLoad()
+            setComponents('front_view_coach_jac')
+            setSelectedComponentId(null)
+            setColorShow(false)
             // imageSaved()
         }
         if (newValue === 1) {
             backImageLoad()
+            setComponents('back_view_base_coach_jac')
+            setSelectedComponentId(null)
+            setColorShow(false)
         }
         if (newValue === 2) {
             rightImageLoad()
+            setComponents('right_view_coach_jac')
+            setSelectedComponentId(null)
+            setColorShow(false)
         }
         if (newValue === 3) {
             leftImageLoad()
+            setComponents('left_view_coach_jac')
+            setSelectedComponentId(null)
+            setColorShow(false)
         }
+    }
+
+    const setComponents = (name) => {
+        let productView = JSON.parse(localStorage.getItem(name))
+        let components = []
+        for (const [key, value] of Object.entries(productView)) {
+            if (key === 'name' || key === 'id') {
+
+            } else if (value != null) {
+                components.push(key)
+            }
+        }
+        setDisplyComponents(components)
     }
 
     const initCanvas = (name) =>
@@ -78,6 +110,7 @@ function SamLocalEditorCoachJacFront(props) {
     useEffect(() => {
         if (product) {
             frontImageLoad()
+            setComponents('front_view_coach_jac')
         }
     }, [product])
 
@@ -88,10 +121,9 @@ function SamLocalEditorCoachJacFront(props) {
         canvas.renderAll()
     }
 
-    const loadObject = (obj, id) => {
-        console.log(id)
+    const loadObject = (obj) => {
         fabric.Image.fromURL(obj.src, function (img) {
-            img.id = id;
+            // img.id = id;
             img.filters = [new fabric.Image.filters.HueRotation()];
             if(obj.color){
                 var hue=hexatoHSL(obj.color.hex)
@@ -107,6 +139,18 @@ function SamLocalEditorCoachJacFront(props) {
 
                 })
             canvas.add(img);
+            if(obj.logo){
+                fabric.Image.fromObject(obj.logo,function (logo) {
+                    canvas.add(logo);
+                })
+
+            }
+            if(obj.text){
+                fabric.Textbox.fromObject(obj.text,function (text) {
+                    canvas.add(text);
+                })
+
+            }
 
         }, {crossOrigin: 'anonymous'})
     }
@@ -133,8 +177,55 @@ function SamLocalEditorCoachJacFront(props) {
         console.log(text)
         localStorage.setItem(text, JSON.stringify(text))
         canvas.add(text);
+        if (selectedComponentId) {
+            var obj = JSON.parse(localStorage.getItem(selectedComponentId))
+            obj.text = text
+            localStorage.setItem(selectedComponentId, JSON.stringify(obj))
+            addingComponent='text';
+        }
 
     }
+
+    canvas?.on('after:render', function() {
+        var ao = canvas.getActiveObject();
+        if (ao) {
+            var bound = ao.getBoundingRect();
+            console.log(bound.scaleY)
+            if (addingComponent !== null) {
+                if (addingComponent === 'logo') {
+                    if (selectedComponentId) {
+                        var obj = JSON.parse(localStorage.getItem(selectedComponentId))
+                        obj.logo.left = bound.left
+                        obj.logo.top = bound.top
+
+                        fabric.Image.fromObject(obj.logo,function (test) {
+                            test.scaleToHeight(bound.height)
+                            test.scaleToWidth(bound.width);
+                            obj.logo.scaleY=test.scaleY
+                            obj.logo.scaleX=test.scaleX
+                            localStorage.setItem(selectedComponentId, JSON.stringify(obj))
+
+                        })
+
+                        // obj.logo.height = bound.height
+                        // obj.logo.width = bound.width
+                        // obj.logo.scaleX= 2/bound.height
+                        // obj.logo.scaleY= 2/bound.width
+                        // localStorage.setItem(selectedComponentId, JSON.stringify(obj))
+                    }
+                } else if (addingComponent === 'text') {
+                    if (selectedComponentId) {
+                        var text = JSON.parse(localStorage.getItem(selectedComponentId))
+
+                        text.text.left = bound.left
+                        text.text.top = bound.top
+                        localStorage.setItem(selectedComponentId, JSON.stringify(text))
+                    }
+                }
+            }
+
+        }
+    });
 
     var changeFontStyle = function (font) {
            // document.getElementById("output-text")
@@ -226,31 +317,121 @@ function SamLocalEditorCoachJacFront(props) {
     }
 
     const load_logo = (l) => {
+        // var samImg = new Image();
+        // samImg.onload = function (imge) {
+        //     var pug = new fabric.Image(samImg, {
+        //         id: "imageID",
+        //         width: samImg.width,
+        //         height: samImg.height,
+        //         scaleX: 60 / samImg.width,
+        //         scaleY: 60 / samImg.height,
+        //         top: 120,
+        //         left: 130,
+        //         innerWidth: 200,
+        //         innerHeight: 200,
+        //
+        //     });
+        //     canvas.add(pug);
+        // };
+        //
+        // samImg.src = l;
+
+
+        fabric.Image.fromURL(l, function (img) {
+            var cor = img.set(
+                {
+
+                    scaleX: 40 / 200,
+                    scaleY: 40 / 200,
+                    top: 120,
+                    left: 130,
+                    selectable: true,
+
+
+                })
+            canvas.add(img);
+            if (selectedComponentId) {
+                var obj = JSON.parse(localStorage.getItem(selectedComponentId))
+
+                obj.logo = img
+                localStorage.setItem(selectedComponentId, JSON.stringify(obj))
+                addingComponent = 'logo';
+            }
+
+        }, {crossOrigin: 'anonymous'})
+    }
+
+    const load_sleeve_logo = (l) => {
 
         var samImg = new Image();
         samImg.onload = function (imge) {
-            console.log("inside function")
             var pug = new fabric.Image(samImg, {
-                id:"imageID",
+                id: "imageID",
                 width: samImg.width,
                 height: samImg.height,
-                scaleX : 60/samImg.width,
-                scaleY : 60/samImg.height,
-                top:120,
-                left:130,
-                innerWidth:200,
-                innerHeight:200,
+                scaleX: 40 / samImg.width,
+                scaleY: 40 / samImg.height,
+                top: 375,
+                left: 360,
+                innerWidth: 200,
+                innerHeight: 200,
 
             });
-
-
             canvas.add(pug);
-            console.log(pug, "lll")
         };
 
         samImg.src = l;
 
-        console.log("Image Clicked", l)
+        var l_logo = new Image();
+        l_logo.onload = function (left_logo) {
+            var left = new fabric.Image(l_logo, {
+                id: "image_left_logo",
+                width: l_logo.width / 2,
+                height: l_logo.height,
+                scaleX: 30 / samImg.width,
+                scaleY: 30 / samImg.height,
+                angle: 53,
+                flipX: true,
+                top: 258,
+                left: 297,
+                selectable: false,
+            });
+            canvas.add(left);
+        }
+        l_logo.src = l;
+
+        var m_logo = new Image();
+        m_logo.onload = function (mid_logo) {
+            var mid = new fabric.Image(m_logo, {
+                id: "image_left_logo",
+                width: m_logo.width,
+                height: m_logo.height,
+                scaleX: 25 / samImg.width,
+                scaleY: 25 / samImg.height,
+                top: 260,
+                left: 369,
+                selectable: false,
+            });
+            canvas.add(mid);
+        }
+        m_logo.src = l;
+
+        var r_logo = new Image();
+        r_logo.onload = function (left_logo) {
+            var right = new fabric.Image(r_logo, {
+                id: "image_left_logo",
+                width: r_logo.width / 2,
+                height: r_logo.height,
+                scaleX: 30 / samImg.width,
+                scaleY: 30 / samImg.height,
+                angle: -51,
+                top: 268,
+                left: 460,
+                selectable: false,
+            });
+            canvas.add(right);
+        }
+        r_logo.src = l;
     }
 
     // function download_Image() {
@@ -490,6 +671,7 @@ function SamLocalEditorCoachJacFront(props) {
         }
 
     }
+
     function leftImageLoad() {
         clearCanvas()
         let left_view_coach_jac = JSON.parse(localStorage.getItem('left_view_coach_jac'))
@@ -853,51 +1035,68 @@ function SamLocalEditorCoachJacFront(props) {
                 {selectedTab === 0 &&
                 <div className='row'>
                     <div className="btn-group" role="group" aria-label="Basic example" style={{width: "100%"}}>
-                        <button type="button" className="btn btn-secondary" onClick={() => {
-                            onComponentClick('coach_jac_body_front')
-                        }}>Body
-                        </button>
-                        <button type="button" className="btn btn-secondary" onClick={() => {
-                            onComponentClick('coach_jac_collar_front')
-                        }}>Collar
-                        </button>
-                        <button type="button" className="btn btn-secondary" onClick={() => {
-                            onComponentClick('coach_jac_collar_inner_front')
-                        }}>Collar Inner
-                        </button>
-                        {/*<button type="button" className="btn btn-secondary" onClick={() => {*/}
-                        {/*    onComponentClick('coach_jac_button_front')*/}
-                        {/*}}>Button*/}
-                        {/*</button>*/}
-                        <button type="button" className="btn btn-secondary" onClick={() => {
-                            onComponentClick('coach_jac_left_pocket_front')
-                        }}>Left Pocket
-                        </button>
-                        <button type="button" className="btn btn-secondary" onClick={() => {
-                            onComponentClick('coach_jac_right_pocket_front')
-                        }}>Right Pocket
-                        </button>
-                        <button type="button" className="btn btn-secondary" onClick={() => {
-                            onComponentClick('coach_jac_hem_front')
-                        }}>Hem
-                        </button>
-                        <button type="button" className="btn btn-secondary" onClick={() => {
-                            onComponentClick('coach_jac_left_sleeve_front')
-                        }}>Left Sleeve
-                        </button>
-                        <button type="button" className="btn btn-secondary" onClick={() => {
-                            onComponentClick('coach_jac_right_sleeve_front')
-                        }}>Right Sleeve
-                        </button>
-                        <button type="button" className="btn btn-secondary" onClick={() => {
-                            onComponentClick('coach_jac_left_cuff_front')
-                        }}>Left Cuff
-                        </button>
-                        <button type="button" className="btn btn-secondary" onClick={() => {
-                            onComponentClick('coach_jac_right_cuff_front')
-                        }}>Right Cuff
-                        </button>
+                        {displyComponents &&
+                        displyComponents.map((item, index) => {
+                            return (
+                                <button key={index} type="button" className="btn btn-secondary" onClick={() => {
+                                    onComponentClick(item)
+                                }}>{item}</button>
+                            )
+                        })
+                        }
+                        {/*<button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('body_first_section')}}>Body First Section</button>*/}
+                        {/*<button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('body_second_section')}}>Body second section</button>*/}
+                        {/*<button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('body_third_section')}}>Body Third Section</button>*/}
+                        {/*<button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('front-collar')}}>Collar</button>*/}
+                        {/*<button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('sleeve')}}>sleeve</button>*/}
                     </div>
+
+                    {/*<div className="btn-group" role="group" aria-label="Basic example" style={{width: "100%"}}>*/}
+                    {/*    <button type="button" className="btn btn-secondary" onClick={() => {*/}
+                    {/*        onComponentClick('coach_jac_body_front')*/}
+                    {/*    }}>Body*/}
+                    {/*    </button>*/}
+                    {/*    <button type="button" className="btn btn-secondary" onClick={() => {*/}
+                    {/*        onComponentClick('coach_jac_collar_front')*/}
+                    {/*    }}>Collar*/}
+                    {/*    </button>*/}
+                    {/*    <button type="button" className="btn btn-secondary" onClick={() => {*/}
+                    {/*        onComponentClick('coach_jac_collar_inner_front')*/}
+                    {/*    }}>Collar Inner*/}
+                    {/*    </button>*/}
+                    {/*    /!*<button type="button" className="btn btn-secondary" onClick={() => {*!/*/}
+                    {/*    /!*    onComponentClick('coach_jac_button_front')*!/*/}
+                    {/*    /!*}}>Button*!/*/}
+                    {/*    /!*</button>*!/*/}
+                    {/*    <button type="button" className="btn btn-secondary" onClick={() => {*/}
+                    {/*        onComponentClick('coach_jac_left_pocket_front')*/}
+                    {/*    }}>Left Pocket*/}
+                    {/*    </button>*/}
+                    {/*    <button type="button" className="btn btn-secondary" onClick={() => {*/}
+                    {/*        onComponentClick('coach_jac_right_pocket_front')*/}
+                    {/*    }}>Right Pocket*/}
+                    {/*    </button>*/}
+                    {/*    <button type="button" className="btn btn-secondary" onClick={() => {*/}
+                    {/*        onComponentClick('coach_jac_hem_front')*/}
+                    {/*    }}>Hem*/}
+                    {/*    </button>*/}
+                    {/*    <button type="button" className="btn btn-secondary" onClick={() => {*/}
+                    {/*        onComponentClick('coach_jac_left_sleeve_front')*/}
+                    {/*    }}>Left Sleeve*/}
+                    {/*    </button>*/}
+                    {/*    <button type="button" className="btn btn-secondary" onClick={() => {*/}
+                    {/*        onComponentClick('coach_jac_right_sleeve_front')*/}
+                    {/*    }}>Right Sleeve*/}
+                    {/*    </button>*/}
+                    {/*    <button type="button" className="btn btn-secondary" onClick={() => {*/}
+                    {/*        onComponentClick('coach_jac_left_cuff_front')*/}
+                    {/*    }}>Left Cuff*/}
+                    {/*    </button>*/}
+                    {/*    <button type="button" className="btn btn-secondary" onClick={() => {*/}
+                    {/*        onComponentClick('coach_jac_right_cuff_front')*/}
+                    {/*    }}>Right Cuff*/}
+                    {/*    </button>*/}
+                    {/*</div>*/}
 
                     {colorShow &&
                     <div>
@@ -1167,13 +1366,323 @@ function SamLocalEditorCoachJacFront(props) {
                 }
                 {/* back view */}
                 {selectedTab === 1 &&
-                    <SamLocalEditorCoachJacBack/>
+                    <div className='row' style={{width:"100%"}}>
+                    <div className="btn-group" role="group" aria-label="Basic example" style={{width:"100%"}}>
+                        <button type="button" className="btn btn-secondary" onClick={() => {
+                            onComponentClick('coach_jac_body_back')
+                        }}>Body
+                        </button>
+                        <button type="button" className="btn btn-secondary" onClick={() => {
+                            onComponentClick('coach_jac_collar_back')
+                        }}>Collar
+                        </button>
+                        <button type="button" className="btn btn-secondary" onClick={() => {
+                            onComponentClick('coach_jac_left_sleeve_back')
+                        }}>Left Sleeve
+                        </button>
+                        {/*<button type="button" className="btn btn-secondary" onClick={() => {*/}
+                        {/*    onComponentClick('coach_jac_button_front')*/}
+                        {/*}}>Button*/}
+                        {/*</button>*/}
+                        <button type="button" className="btn btn-secondary" onClick={() => {
+                            onComponentClick('coach_jac_right_sleeve_back')
+                        }}>Right Sleeve
+                        </button>
+                        <button type="button" className="btn btn-secondary" onClick={() => {
+                            onComponentClick('coach_jac_hem_back')
+                        }}>Hem
+                        </button>
+                        <button type="button" className="btn btn-secondary" onClick={() => {
+                            onComponentClick('coach_jac_left_cuff_back')
+                        }}>Left Cuff
+                        </button>
+                        <button type="button" className="btn btn-secondary" onClick={() => {
+                            onComponentClick('coach_jac_right_cuff_back')
+                        }}>Right Cuff
+                        </button>
+                    </div>
+                    {colorShow &&
+                    <div style={{marginLeft:"50px", display:"inline"}}>
+                     <p> Choose color</p>
+
+                    <CirclePicker
+                        color={ color }
+                        onChangeComplete={ handleChangeComplete}
+                    />
+                    <br></br>
+                        <div id="output-text">
+                            <input onChange={handleInput} placeholder="Enter text"/>
+                                    <button type='button'
+                                            name='text_show'
+                                            onClick={textShow}
+                                            style={{
+                                                backgroundColor: "#767FE0",
+                                                color: "white",
+                                                border: "none",
+                                                borderRadius: "50px",
+                                                width: "120px",
+                                                height: "30px",
+                                                margin: "10px"
+                                            }}>
+                                        Add Text
+                                    </button>
+                            <br></br>
+
+                            <select id="input-font" onChange={changeFontStyle (this)}>
+
+                            <option value="Comic Sans"
+                                    selected="selected">
+                                Comic Sans
+                            </option>
+                            <option value="Arial">Arial</option>
+                            <option value="fantasy">Fantasy</option>
+                            <option value="cursive">cursive</option>
+                        </select>
+                            <select id="input-font" style={{marginLeft:"10px"}}>
+
+                            <option value="Normal"
+                                    selected="selected">
+                                Normal
+                            </option>
+                            <option value="Arial" style={{fontStyle:"bolder"}}>Bold</option>
+                            <option value="fantasy" style={{fontStyle:"italic"}}>Italic</option>
+                            <option value="cursive" style={{fontStyle:"underline"}}>Underline</option>
+                        </select>
+                            <br></br>
+                            <div style={{width:"300px", float:"right"}}>
+                            <div style={{width:"300px", height:"300px", border:"solid", borderColor:"black", borderWidth:"1px", float:"right", marginRight:"-980px", marginTop:"-200px"}}>
+                                <button onClick={getSampleImages}>Load Images</button>
+                                {
+                                    img?
+                                    img.map((s) =>
+                                             <img src={s.image} alt={''} style={{width:"50px", height:"50px"}} onClick={()=> {load_logo(s.image)}}/>
+
+                                    )
+                                :null}
+                            </div>
+
+                        </div>
+                            <br></br>
+
+                        </div>
+                    </div>
+                    }
+                </div>
                 }
                 {selectedTab === 2 &&
-                    <SamLocalEditorCoachJacRight/>
+                    <div className='row' style={{width:"100%"}}>
+                    <div className="btn-group" role="group" aria-label="Basic example" style={{width:"100%"}}>
+                        <button type="button" className="btn btn-secondary" onClick={() => {
+                            onComponentClick('coach_jac_mid_body_right')
+                        }}>Mid Sleeve
+                        </button>
+                        <button type="button" className="btn btn-secondary" onClick={() => {
+                            onComponentClick('coach_jac_left_body_right')
+                        }}>Left Sleeve
+                        </button>
+                        <button type="button" className="btn btn-secondary" onClick={() => {
+                            onComponentClick('coach_jac_right_body_right')
+                        }}>Right Sleeve
+                        </button>
+                        {/*<button type="button" className="btn btn-secondary" onClick={() => {*/}
+                        {/*    onComponentClick('coach_jac_button_front')*/}
+                        {/*}}>Button*/}
+                        {/*</button>*/}
+                        <button type="button" className="btn btn-secondary" onClick={() => {
+                            onComponentClick('coach_jac_bottom_body_right')
+                        }}>Bottom Sleeve
+                        </button>
+                        <button type="button" className="btn btn-secondary" onClick={() => {
+                            onComponentClick('coach_jac_mid_cuff_right')
+                        }}>Mid Cuff
+                        </button>
+                        <button type="button" className="btn btn-secondary" onClick={() => {
+                            onComponentClick('coach_jac_left_cuff_right')
+                        }}>Left Cuff
+                        </button>
+                        <button type="button" className="btn btn-secondary" onClick={() => {
+                            onComponentClick('coach_jac_right_cuff_right')
+                        }}>Right Cuff
+                        </button>
+                        <button type="button" className="btn btn-secondary" onClick={() => {
+                            onComponentClick('coach_jac_bottom_cuff_right')
+                        }}>Bottom Cuff
+                        </button>
+                    </div>
+                    {colorShow &&
+                    <div style={{marginLeft:"50px", display:"inline"}}>
+                     <p> Choose color</p>
+
+                    <CirclePicker
+                        color={ color }
+                        onChangeComplete={ handleChangeComplete }
+                    />
+                    <br></br>
+                        <div id="output-text">
+                            <input onChange={handleInput} placeholder="Enter text"/>
+                                    <button type='button'
+                                            name='text_show'
+                                            onClick={textShow}
+                                            style={{
+                                                backgroundColor: "#767FE0",
+                                                color: "white",
+                                                border: "none",
+                                                borderRadius: "50px",
+                                                width: "120px",
+                                                height: "30px",
+                                                margin: "10px"
+                                            }}>
+                                        Add Text
+                                    </button>
+                            <br></br>
+
+                            <select id="input-font" onChange={changeFontStyle (this)}>
+
+                            <option value="Comic Sans"
+                                    selected="selected">
+                                Comic Sans
+                            </option>
+                            <option value="Arial">Arial</option>
+                            <option value="fantasy">Fantasy</option>
+                            <option value="cursive">cursive</option>
+                        </select>
+                            <select id="input-font" style={{marginLeft:"10px"}}>
+
+                            <option value="Normal"
+                                    selected="selected">
+                                Normal
+                            </option>
+                            <option value="Arial" style={{fontStyle:"bolder"}}>Bold</option>
+                            <option value="fantasy" style={{fontStyle:"italic"}}>Italic</option>
+                            <option value="cursive" style={{fontStyle:"underline"}}>Underline</option>
+                        </select>
+                            <br></br>
+                            <div style={{width:"300px", float:"right"}}>
+                            <div style={{width:"300px", height:"300px", border:"solid", borderColor:"black", borderWidth:"1px", float:"right", marginRight:"-900px", marginTop:"-150px"}}>
+                                <button onClick={getSampleImages}>Load Images</button>
+                                {
+                                    img?
+                                    img.map((s) =>
+                                             <img src={s.image} alt={''} style={{width:"50px", height:"50px"}} onClick={()=> {load_sleeve_logo(s.image)}}/>
+                                    )
+                                :null}
+                            </div>
+
+                        </div>
+                            <br></br>
+
+                        </div>
+                    </div>
+                    }
+                </div>
                 }
                 {selectedTab === 3 &&
-                <SamLocalEditorCoachJacLeft/>
+                    <div className='row' style={{width:"100%"}}>
+                    <div className="btn-group" role="group" aria-label="Basic example" style={{width:"100%"}}>
+                        <button type="button" className="btn btn-secondary" onClick={() => {
+                            onComponentClick('coach_jac_mid_body_left')
+                        }}>Mid Sleeve
+                        </button>
+                        <button type="button" className="btn btn-secondary" onClick={() => {
+                            onComponentClick('coach_jac_left_body_left')
+                        }}>Left Sleeve
+                        </button>
+                        <button type="button" className="btn btn-secondary" onClick={() => {
+                            onComponentClick('coach_jac_right_body_left')
+                        }}>Right Sleeve
+                        </button>
+                        {/*<button type="button" className="btn btn-secondary" onClick={() => {*/}
+                        {/*    onComponentClick('coach_jac_button_front')*/}
+                        {/*}}>Button*/}
+                        {/*</button>*/}
+                        <button type="button" className="btn btn-secondary" onClick={() => {
+                            onComponentClick('coach_jac_bottom_body_left')
+                        }}>Bottom Sleeve
+                        </button>
+                        <button type="button" className="btn btn-secondary" onClick={() => {
+                            onComponentClick('coach_jac_mid_cuff_left')
+                        }}>Mid Cuff
+                        </button>
+                        <button type="button" className="btn btn-secondary" onClick={() => {
+                            onComponentClick('coach_jac_left_cuff_left')
+                        }}>Left Cuff
+                        </button>
+                        <button type="button" className="btn btn-secondary" onClick={() => {
+                            onComponentClick('coach_jac_right_cuff_left')
+                        }}>Right Cuff
+                        </button>
+                        <button type="button" className="btn btn-secondary" onClick={() => {
+                            onComponentClick('coach_jac_bottom_cuff_left')
+                        }}>Bottom Cuff
+                        </button>
+                    </div>
+                    {colorShow &&
+                    <div style={{marginLeft:"50px", display:"inline"}}>
+                     <p> Choose color</p>
+
+                    <CirclePicker
+                        color={ color }
+                        onChangeComplete={ handleChangeComplete }
+                    />
+                    <br></br>
+                        <div id="output-text">
+                            <input onChange={handleInput} placeholder="Enter text"/>
+                                    <button type='button'
+                                            name='text_show'
+                                            onClick={textShow}
+                                            style={{
+                                                backgroundColor: "#767FE0",
+                                                color: "white",
+                                                border: "none",
+                                                borderRadius: "50px",
+                                                width: "120px",
+                                                height: "30px",
+                                                margin: "10px"
+                                            }}>
+                                        Add Text
+                                    </button>
+                            <br></br>
+
+                            <select id="input-font" onChange={changeFontStyle (this)}>
+
+                            <option value="Comic Sans"
+                                    selected="selected">
+                                Comic Sans
+                            </option>
+                            <option value="Arial">Arial</option>
+                            <option value="fantasy">Fantasy</option>
+                            <option value="cursive">cursive</option>
+                        </select>
+                            <select id="input-font" style={{marginLeft:"10px"}}>
+
+                            <option value="Normal"
+                                    selected="selected">
+                                Normal
+                            </option>
+                            <option value="Arial" style={{fontStyle:"bolder"}}>Bold</option>
+                            <option value="fantasy" style={{fontStyle:"italic"}}>Italic</option>
+                            <option value="cursive" style={{fontStyle:"underline"}}>Underline</option>
+                        </select>
+                            <br></br>
+                            <div style={{width:"300px", float:"right"}}>
+                            <div style={{width:"300px", height:"300px", border:"solid", borderColor:"black", borderWidth:"1px", float:"right", marginRight:"-900px", marginTop:"-150px"}}>
+                                <button onClick={getSampleImages}>Load Images</button>
+                                {
+                                    img?
+                                    img.map((s) =>
+                                             <img src={s.image} alt={''} style={{width:"50px", height:"50px"}} onClick={()=> {load_sleeve_logo(s.image)}}/>
+                                    )
+                                :null}
+                            </div>
+
+                        </div>
+                            <br></br>
+
+                        </div>
+                    </div>
+                    }
+                </div>
+                // <SamLocalEditorCoachJacLeft/>
                 }
             </div>
             <canvas id='canvas'>

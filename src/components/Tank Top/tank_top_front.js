@@ -9,8 +9,10 @@ import $ from "jquery";
 import {CirclePicker} from 'react-color';
 import {Tabs, Tab, AppBar} from "@material-ui/core";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import {Link} from "react-router-dom";
+import {MEDIA_URL} from "../../services";
+import {BASE_URL} from "../../services";
 import {getProductDetail} from "../../apiService";
-import SamLocalEditorPantBack from "../Pants/pant_back";
 
 const viewOptions = [
     'front',
@@ -20,6 +22,8 @@ const viewOptions = [
 ]
 var fonts = ["Pacifico", "VT323", "Quicksand", "Inconsolata"];
 var logo_img
+
+let addingComponent =null;
 
 function SamLocalEditorTankTopFront(props) {
     let {id} = props.match.params
@@ -39,6 +43,8 @@ function SamLocalEditorTankTopFront(props) {
 
     const [img, setImg] = useState(null);
 
+    const [displyComponents, setDisplyComponents] = useState([null])
+
     // tabs
     const [selectedTab, setSelectedTab] = React.useState(0);
     const [color, setColor] = React.useState('#fff');
@@ -48,12 +54,29 @@ function SamLocalEditorTankTopFront(props) {
         setSelectedTab(newValue);
         if (newValue === 0) {
             frontImageLoad()
+            setComponents('front_view_tank_top')
+            setSelectedComponentId(null)
+            setColorShow(false)
         }
         if (newValue === 1) {
             backImageLoad()
+            setComponents('back_view_tank_top')
+            setSelectedComponentId(null)
+            setColorShow(false)
         }
+    }
 
+    const setComponents = (name) => {
+        let productView = JSON.parse(localStorage.getItem(name))
+        let components = []
+        for (const [key, value] of Object.entries(productView)) {
+            if (key === 'name' || key === 'id') {
 
+            } else if (value != null) {
+                components.push(key)
+            }
+        }
+        setDisplyComponents(components)
     }
 
     const initCanvas = (name) =>
@@ -70,6 +93,7 @@ function SamLocalEditorTankTopFront(props) {
     useEffect(() => {
         if (product) {
             frontImageLoad()
+            setComponents('front_view_tank_top')
         }
     }, [product])
 
@@ -80,10 +104,9 @@ function SamLocalEditorTankTopFront(props) {
         canvas.renderAll()
     }
 
-    const loadObject = (obj, id) => {
-        console.log(id)
+    const loadObject = (obj) => {
         fabric.Image.fromURL(obj.src, function (img) {
-            img.id = id;
+            // img.id = id;
             img.filters = [new fabric.Image.filters.HueRotation()];
             if (obj.color) {
                 var hue = hexatoHSL(obj.color.hex)
@@ -99,6 +122,18 @@ function SamLocalEditorTankTopFront(props) {
 
                 })
             canvas.add(img);
+            if(obj.logo){
+                fabric.Image.fromObject(obj.logo,function (logo) {
+                    canvas.add(logo);
+                })
+
+            }
+            if(obj.text){
+                fabric.Textbox.fromObject(obj.text,function (text) {
+                    canvas.add(text);
+                })
+
+            }
 
         }, {crossOrigin: 'anonymous'})
     }
@@ -125,8 +160,55 @@ function SamLocalEditorTankTopFront(props) {
         console.log(text)
         localStorage.setItem(text, JSON.stringify(text))
         canvas.add(text);
+        if (selectedComponentId) {
+            var obj = JSON.parse(localStorage.getItem(selectedComponentId))
+            obj.text = text
+            localStorage.setItem(selectedComponentId, JSON.stringify(obj))
+            addingComponent='text';
+        }
 
     }
+
+    canvas?.on('after:render', function() {
+        var ao = canvas.getActiveObject();
+        if (ao) {
+            var bound = ao.getBoundingRect();
+            console.log(bound.scaleY)
+            if (addingComponent !== null) {
+                if (addingComponent === 'logo') {
+                    if (selectedComponentId) {
+                        var obj = JSON.parse(localStorage.getItem(selectedComponentId))
+                        obj.logo.left = bound.left
+                        obj.logo.top = bound.top
+
+                        fabric.Image.fromObject(obj.logo,function (test) {
+                            test.scaleToHeight(bound.height)
+                            test.scaleToWidth(bound.width);
+                            obj.logo.scaleY=test.scaleY
+                            obj.logo.scaleX=test.scaleX
+                            localStorage.setItem(selectedComponentId, JSON.stringify(obj))
+
+                        })
+
+                        // obj.logo.height = bound.height
+                        // obj.logo.width = bound.width
+                        // obj.logo.scaleX= 2/bound.height
+                        // obj.logo.scaleY= 2/bound.width
+                        // localStorage.setItem(selectedComponentId, JSON.stringify(obj))
+                    }
+                } else if (addingComponent === 'text') {
+                    if (selectedComponentId) {
+                        var text = JSON.parse(localStorage.getItem(selectedComponentId))
+
+                        text.text.left = bound.left
+                        text.text.top = bound.top
+                        localStorage.setItem(selectedComponentId, JSON.stringify(text))
+                    }
+                }
+            }
+
+        }
+    });
 
     var changeFontStyle = function (font) {
         // document.getElementById("output-text")
@@ -218,31 +300,48 @@ function SamLocalEditorTankTopFront(props) {
     }
 
     const load_logo = (l) => {
+        // var samImg = new Image();
+        // samImg.onload = function (imge) {
+        //     var pug = new fabric.Image(samImg, {
+        //         id: "imageID",
+        //         width: samImg.width,
+        //         height: samImg.height,
+        //         scaleX: 60 / samImg.width,
+        //         scaleY: 60 / samImg.height,
+        //         top: 120,
+        //         left: 130,
+        //         innerWidth: 200,
+        //         innerHeight: 200,
+        //
+        //     });
+        //     canvas.add(pug);
+        // };
+        //
+        // samImg.src = l;
 
-        var samImg = new Image();
-        samImg.onload = function (imge) {
-            console.log("inside function")
-            var pug = new fabric.Image(samImg, {
-                id: "imageID",
-                width: samImg.width,
-                height: samImg.height,
-                scaleX: 60 / samImg.width,
-                scaleY: 60 / samImg.height,
-                top: 120,
-                left: 130,
-                innerWidth: 200,
-                innerHeight: 200,
 
-            });
+        fabric.Image.fromURL(l, function (img) {
+            var cor = img.set(
+                {
+
+                    scaleX: 40 / 200,
+                    scaleY: 40 / 200,
+                    top: 120,
+                    left: 130,
+                    selectable: true,
 
 
-            canvas.add(pug);
-            console.log(pug, "lll")
-        };
+                })
+            canvas.add(img);
+            if (selectedComponentId) {
+                var obj = JSON.parse(localStorage.getItem(selectedComponentId))
 
-        samImg.src = l;
+                obj.logo = img
+                localStorage.setItem(selectedComponentId, JSON.stringify(obj))
+                addingComponent = 'logo';
+            }
 
-        console.log("Image Clicked", l)
+        }, {crossOrigin: 'anonymous'})
     }
 
     console.log(img, "222")
@@ -543,35 +642,51 @@ function SamLocalEditorTankTopFront(props) {
                 {selectedTab === 0 &&
                 <div className='row'>
                     <div className="btn-group" role="group" aria-label="Basic example" style={{width: "100%"}}>
-                        <button type="button" className="btn btn-secondary" onClick={() => {
-                            onComponentClick('tank_collar_front')
-                        }}>Collar
-                        </button>
-                        <button type="button" className="btn btn-secondary" onClick={() => {
-                            onComponentClick('tank_collar_inner_front')
-                        }}>Collar Inner
-                        </button>
-                        <button type="button" className="btn btn-secondary" onClick={() => {
-                            onComponentClick('tank_top_front')
-                        }}>Top
-                        </button>
-                        <button type="button" className="btn btn-secondary" onClick={() => {
-                            onComponentClick('tank_mid_front')
-                        }}>Mid
-                        </button>
-                        <button type="button" className="btn btn-secondary" onClick={() => {
-                            onComponentClick('tank_bottom_front')
-                        }}>Bottom
-                        </button>
-                        <button type="button" className="btn btn-secondary" onClick={() => {
-                            onComponentClick('tank_left_sleeve_front')
-                        }}>Left Sleeve
-                        </button>
-                        <button type="button" className="btn btn-secondary" onClick={() => {
-                            onComponentClick('tank_right_sleeve_front')
-                        }}>Right Sleeve
-                        </button>
+                        {displyComponents &&
+                        displyComponents.map((item, index) => {
+                            return (
+                                <button key={index} type="button" className="btn btn-secondary" onClick={() => {
+                                    onComponentClick(item)
+                                }}>{item}</button>
+                            )
+                        })
+                        }
+                        {/*<button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('body_first_section')}}>Body First Section</button>*/}
+                        {/*<button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('body_second_section')}}>Body second section</button>*/}
+                        {/*<button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('body_third_section')}}>Body Third Section</button>*/}
+                        {/*<button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('front-collar')}}>Collar</button>*/}
+                        {/*<button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('sleeve')}}>sleeve</button>*/}
                     </div>
+                    {/*<div className="btn-group" role="group" aria-label="Basic example" style={{width: "100%"}}>*/}
+                    {/*    <button type="button" className="btn btn-secondary" onClick={() => {*/}
+                    {/*        onComponentClick('tank_collar_front')*/}
+                    {/*    }}>Collar*/}
+                    {/*    </button>*/}
+                    {/*    <button type="button" className="btn btn-secondary" onClick={() => {*/}
+                    {/*        onComponentClick('tank_collar_inner_front')*/}
+                    {/*    }}>Collar Inner*/}
+                    {/*    </button>*/}
+                    {/*    <button type="button" className="btn btn-secondary" onClick={() => {*/}
+                    {/*        onComponentClick('tank_top_front')*/}
+                    {/*    }}>Top*/}
+                    {/*    </button>*/}
+                    {/*    <button type="button" className="btn btn-secondary" onClick={() => {*/}
+                    {/*        onComponentClick('tank_mid_front')*/}
+                    {/*    }}>Mid*/}
+                    {/*    </button>*/}
+                    {/*    <button type="button" className="btn btn-secondary" onClick={() => {*/}
+                    {/*        onComponentClick('tank_bottom_front')*/}
+                    {/*    }}>Bottom*/}
+                    {/*    </button>*/}
+                    {/*    <button type="button" className="btn btn-secondary" onClick={() => {*/}
+                    {/*        onComponentClick('tank_left_sleeve_front')*/}
+                    {/*    }}>Left Sleeve*/}
+                    {/*    </button>*/}
+                    {/*    <button type="button" className="btn btn-secondary" onClick={() => {*/}
+                    {/*        onComponentClick('tank_right_sleeve_front')*/}
+                    {/*    }}>Right Sleeve*/}
+                    {/*    </button>*/}
+                    {/*</div>*/}
 
                     {colorShow &&
                     <div>
@@ -814,32 +929,48 @@ function SamLocalEditorTankTopFront(props) {
                 {selectedTab === 1 &&
                 // <SamLocalEditorTankTopBack/>
                     <div className='row' style={{width:"100%"}}>
-                    <div className="btn-group" role="group" aria-label="Basic example" style={{width:"100%"}}>
-                       <button type="button" className="btn btn-secondary" onClick={() => {
-                            onComponentClick('tank_collar_back')
-                        }}>Collar
-                        </button>
-                        <button type="button" className="btn btn-secondary" onClick={() => {
-                            onComponentClick('tank_top_back')
-                        }}>Top
-                        </button>
-                        <button type="button" className="btn btn-secondary" onClick={() => {
-                            onComponentClick('tank_mid_back')
-                        }}>Mid
-                        </button>
-                        <button type="button" className="btn btn-secondary" onClick={() => {
-                            onComponentClick('tank_bottom_back')
-                        }}>Bottom
-                        </button>
-                        <button type="button" className="btn btn-secondary" onClick={() => {
-                            onComponentClick('tank_left_sleeve_back')
-                        }}>Left Sleeve
-                        </button>
-                        <button type="button" className="btn btn-secondary" onClick={() => {
-                            onComponentClick('tank_right_sleeve_back')
-                        }}>Right Sleeve
-                        </button>
+                        <div className="btn-group" role="group" aria-label="Basic example" style={{width: "100%"}}>
+                        {displyComponents &&
+                        displyComponents.map((item, index) => {
+                            return (
+                                <button key={index} type="button" className="btn btn-secondary" onClick={() => {
+                                    onComponentClick(item)
+                                }}>{item}</button>
+                            )
+                        })
+                        }
+                        {/*<button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('body_first_section')}}>Body First Section</button>*/}
+                        {/*<button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('body_second_section')}}>Body second section</button>*/}
+                        {/*<button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('body_third_section')}}>Body Third Section</button>*/}
+                        {/*<button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('front-collar')}}>Collar</button>*/}
+                        {/*<button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('sleeve')}}>sleeve</button>*/}
                     </div>
+                    {/*<div className="btn-group" role="group" aria-label="Basic example" style={{width:"100%"}}>*/}
+                    {/*   <button type="button" className="btn btn-secondary" onClick={() => {*/}
+                    {/*        onComponentClick('tank_collar_back')*/}
+                    {/*    }}>Collar*/}
+                    {/*    </button>*/}
+                    {/*    <button type="button" className="btn btn-secondary" onClick={() => {*/}
+                    {/*        onComponentClick('tank_top_back')*/}
+                    {/*    }}>Top*/}
+                    {/*    </button>*/}
+                    {/*    <button type="button" className="btn btn-secondary" onClick={() => {*/}
+                    {/*        onComponentClick('tank_mid_back')*/}
+                    {/*    }}>Mid*/}
+                    {/*    </button>*/}
+                    {/*    <button type="button" className="btn btn-secondary" onClick={() => {*/}
+                    {/*        onComponentClick('tank_bottom_back')*/}
+                    {/*    }}>Bottom*/}
+                    {/*    </button>*/}
+                    {/*    <button type="button" className="btn btn-secondary" onClick={() => {*/}
+                    {/*        onComponentClick('tank_left_sleeve_back')*/}
+                    {/*    }}>Left Sleeve*/}
+                    {/*    </button>*/}
+                    {/*    <button type="button" className="btn btn-secondary" onClick={() => {*/}
+                    {/*        onComponentClick('tank_right_sleeve_back')*/}
+                    {/*    }}>Right Sleeve*/}
+                    {/*    </button>*/}
+                    {/*</div>*/}
                     {colorShow &&
                     <div style={{marginLeft:"50px", display:"inline"}}>
                      <p> Choose color</p>
