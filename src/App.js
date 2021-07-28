@@ -132,7 +132,7 @@ function App() {
                 />
                 <Route
                     exact
-                    path="/editor/hoodies/:id"
+                    path="/editor/hoodie/:id"
                     component={SamLocalEditorHoodieFront}
                     render={(props) => <SamLocalEditorHoodieFront {...props} />}
                 />

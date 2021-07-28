@@ -8,9 +8,12 @@ import {saveAs} from 'file-saver'
 import {v1 as uuid} from 'uuid';
 import * as PIXI from 'pixi.js'
 import $ from "jquery";
-import { CirclePicker } from 'react-color';
+import {CirclePicker} from 'react-color';
 import {Tabs, Tab, AppBar} from "@material-ui/core";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import {Link} from "react-router-dom";
+import {MEDIA_URL} from "../../services";
+import {BASE_URL} from "../../services";
 import {getProductDetail} from "../../apiService";
 
 const viewOptions = [
@@ -22,25 +25,28 @@ const viewOptions = [
 var fonts = ["Pacifico", "VT323", "Quicksand", "Inconsolata"];
 var logo_img
 
+let addingComponent = null
+
 function SamLocalEditorHoodieFront(props) {
     let {id} = props.match.params
     const [product, setProduct] = useState(null);
     useEffect(() => {
         getProductDetail(id)
             .then(items => {
-                localStorage.setItem('body', JSON.stringify(items.front_view));
-                localStorage.setItem('back', JSON.stringify(items.back_view));
-                localStorage.setItem('left', JSON.stringify(items.left_view));
-                localStorage.setItem('right', JSON.stringify(items.right_view));
+                localStorage.setItem('front_view_hoodie', JSON.stringify(items.front_view_hoodie));
+                localStorage.setItem('back_view_hoodie', JSON.stringify(items.back_view_hoodie));
+                localStorage.setItem('left_view_hoodie', JSON.stringify(items.left_view_hoodie));
+                localStorage.setItem('right_view_hoodie', JSON.stringify(items.right_view_hoodie));
                 setProduct(items)
             })
     }, [])
 
     const [canvas, setCanvas] = useState(null)
-     const [name, setName] = useState(null);
+    const [name, setName] = useState(null);
     let [image, setImage] = useState(null);
 
     const [img, setImg] = useState(null);
+    const [displyComponents, setDisplyComponents] = useState([null])
 
     // tabs
     const [selectedTab, setSelectedTab] = React.useState(0);
@@ -51,19 +57,42 @@ function SamLocalEditorHoodieFront(props) {
         setSelectedTab(newValue);
         if (newValue === 0) {
             frontImageLoad()
+            setComponents('front_view_hoodie')
+            setSelectedComponentId(null)
+            setColorShow(false)
             // imageSaved()
         }
         if (newValue === 1) {
             backImageLoad()
+            setComponents('back_view_hoodie')
+            setSelectedComponentId(null)
+            setColorShow(false)
         }
         if (newValue === 2) {
             rightImageLoad()
+            setComponents('right_view_hoodie')
+            setSelectedComponentId(null)
+            setColorShow(false)
         }
         if (newValue === 3) {
             leftImageLoad()
+            setComponents('left_view_hoodie')
+            setSelectedComponentId(null)
+            setColorShow(false)
         }
+    }
 
+    const setComponents = (name) => {
+        let productView = JSON.parse(localStorage.getItem(name))
+        let components = []
+        for (const [key, value] of Object.entries(productView)) {
+            if (key === 'name' || key === 'id') {
 
+            } else if (value != null) {
+                components.push(key)
+            }
+        }
+        setDisplyComponents(components)
     }
 
     const initCanvas = (name) =>
@@ -80,6 +109,7 @@ function SamLocalEditorHoodieFront(props) {
     useEffect(() => {
         if (product) {
             frontImageLoad()
+            setComponents('front_view_hoodie')
         }
     }, [product])
 
@@ -90,13 +120,12 @@ function SamLocalEditorHoodieFront(props) {
         canvas.renderAll()
     }
 
-    const loadObject = (obj, id) => {
-        console.log(id)
+    const loadObject = (obj) => {
         fabric.Image.fromURL(obj.src, function (img) {
-            img.id = id;
+            // img.id = id;
             img.filters = [new fabric.Image.filters.HueRotation()];
-            if(obj.color){
-                var hue=hexatoHSL(obj.color.hex)
+            if (obj.color) {
+                var hue = hexatoHSL(obj.color.hex)
                 img.filters[0].rotation = hue
             }
 
@@ -109,6 +138,18 @@ function SamLocalEditorHoodieFront(props) {
 
                 })
             canvas.add(img);
+            if (obj.logo) {
+                fabric.Image.fromObject(obj.logo, function (logo) {
+                    canvas.add(logo);
+                })
+
+            }
+            if (obj.text) {
+                fabric.Textbox.fromObject(obj.text, function (text) {
+                    canvas.add(text);
+                })
+
+            }
 
         }, {crossOrigin: 'anonymous'})
     }
@@ -126,22 +167,69 @@ function SamLocalEditorHoodieFront(props) {
         var text = new fabric.Textbox(name, {
             fontFamily: 'Pacifico',
             fontSize: 20,
-            top:120,
-            left:130,
+            top: 120,
+            left: 130,
             fill: "#00ffff",
             visible: true,
-            fontWeight:"bold",
+            fontWeight: "bold",
         });
         console.log(text)
         localStorage.setItem(text, JSON.stringify(text))
         canvas.add(text);
 
+        if (selectedComponentId) {
+            var obj = JSON.parse(localStorage.getItem(selectedComponentId))
+            obj.text = text
+            localStorage.setItem(selectedComponentId, JSON.stringify(obj))
+            addingComponent = 'text';
+        }
     }
 
-    var changeFontStyle = function (font) {
-           // document.getElementById("output-text")
-           //              .style.fontWeight = "italic";
+    canvas?.on('after:render', function () {
+        var ao = canvas.getActiveObject();
+        if (ao) {
+            var bound = ao.getBoundingRect();
+            console.log(bound.scaleY)
+            if (addingComponent !== null) {
+                if (addingComponent === 'logo') {
+                    if (selectedComponentId) {
+                        var obj = JSON.parse(localStorage.getItem(selectedComponentId))
+                        obj.logo.left = bound.left
+                        obj.logo.top = bound.top
+
+                        fabric.Image.fromObject(obj.logo, function (test) {
+                            test.scaleToHeight(bound.height)
+                            test.scaleToWidth(bound.width);
+                            obj.logo.scaleY = test.scaleY
+                            obj.logo.scaleX = test.scaleX
+                            localStorage.setItem(selectedComponentId, JSON.stringify(obj))
+
+                        })
+
+                        // obj.logo.height = bound.height
+                        // obj.logo.width = bound.width
+                        // obj.logo.scaleX= 2/bound.height
+                        // obj.logo.scaleY= 2/bound.width
+                        // localStorage.setItem(selectedComponentId, JSON.stringify(obj))
+                    }
+                } else if (addingComponent === 'text') {
+                    if (selectedComponentId) {
+                        var text = JSON.parse(localStorage.getItem(selectedComponentId))
+
+                        text.text.left = bound.left
+                        text.text.top = bound.top
+                        localStorage.setItem(selectedComponentId, JSON.stringify(text))
+                    }
+                }
+            }
+
         }
+    });
+
+    var changeFontStyle = function (font) {
+        // document.getElementById("output-text")
+        //              .style.fontWeight = "italic";
+    }
 
     const loadImage = (url, imageId, left, top) => {
 
@@ -179,38 +267,38 @@ function SamLocalEditorHoodieFront(props) {
     // }
 
     const addColor = () => {
-        if(selectedComponentId==='left_v_upper_part'){
-            var obj=JSON.parse(localStorage.getItem('right_sleeve'))
+        if (selectedComponentId === 'left_v_upper_part') {
+            var obj = JSON.parse(localStorage.getItem('right_sleeve'))
             loadObject(obj)
-            var obj=JSON.parse(localStorage.getItem('left_sleeve'))
+            var obj = JSON.parse(localStorage.getItem('left_sleeve'))
             loadObject(obj)
-        }else {
-            var obj=JSON.parse(localStorage.getItem(selectedComponentId))
+        } else {
+            var obj = JSON.parse(localStorage.getItem(selectedComponentId))
             loadObject(obj)
         }
     }
     const handleChangeComplete = (color) => {
         console.log(selectedComponentId, "selectedID")
-        if(selectedComponentId==='sleeve'){
+        if (selectedComponentId === 'sleeve') {
 
             setColor(color)
 
-            var obj=JSON.parse(localStorage.getItem('right_sleeve'))
-            obj.color=color
+            var obj = JSON.parse(localStorage.getItem('right_sleeve'))
+            obj.color = color
             localStorage.setItem('right_sleeve', JSON.stringify(obj))
 
 
-            var obj=JSON.parse(localStorage.getItem('left_sleeve'))
-            obj.color=color
+            var obj = JSON.parse(localStorage.getItem('left_sleeve'))
+            obj.color = color
             localStorage.setItem('left_sleeve', JSON.stringify(obj))
 
 
-        }else {
-            if(selectedComponentId){
-                var obj=JSON.parse(localStorage.getItem(selectedComponentId))
+        } else {
+            if (selectedComponentId) {
+                var obj = JSON.parse(localStorage.getItem(selectedComponentId))
                 // debugger;
                 console.log("Color_object", obj)
-                obj.color=color
+                obj.color = color
                 localStorage.setItem(selectedComponentId, JSON.stringify(obj))
             }
             setColor(color)
@@ -220,7 +308,7 @@ function SamLocalEditorHoodieFront(props) {
 
 
     };
-    const onComponentClick=(componentId)=>{
+    const onComponentClick = (componentId) => {
         setSelectedComponentId(componentId)
 
         // setColor()
@@ -228,70 +316,106 @@ function SamLocalEditorHoodieFront(props) {
     }
 
     const load_logo = (l) => {
+        // var samImg = new Image();
+        // samImg.onload = function (imge) {
+        //     var pug = new fabric.Image(samImg, {
+        //         id: "imageID",
+        //         width: samImg.width,
+        //         height: samImg.height,
+        //         scaleX: 60 / samImg.width,
+        //         scaleY: 60 / samImg.height,
+        //         top: 120,
+        //         left: 130,
+        //         innerWidth: 200,
+        //         innerHeight: 200,
+        //
+        //     });
+        //     canvas.add(pug);
+        // };
+        //
+        // samImg.src = l;
+
+
+        fabric.Image.fromURL(l, function (img) {
+            var cor = img.set(
+                {
+
+                    scaleX: 40 / 200,
+                    scaleY: 40 / 200,
+                    top: 120,
+                    left: 130,
+                    selectable: true,
+
+
+                })
+            canvas.add(img);
+            if (selectedComponentId) {
+                var obj = JSON.parse(localStorage.getItem(selectedComponentId))
+
+                obj.logo = img
+                localStorage.setItem(selectedComponentId, JSON.stringify(obj))
+                addingComponent = 'logo';
+            }
+
+        }, {crossOrigin: 'anonymous'})
+    }
+
+
+    const load_sleeve_logo = (l) => {
 
         var samImg = new Image();
         samImg.onload = function (imge) {
-            console.log("inside function")
             var pug = new fabric.Image(samImg, {
-                id:"imageID",
+                id: "imageID",
                 width: samImg.width,
                 height: samImg.height,
-                scaleX : 60/samImg.width,
-                scaleY : 60/samImg.height,
-                top:120,
-                left:130,
-                innerWidth:200,
-                innerHeight:200,
+                scaleX: 60 / samImg.width,
+                scaleY: 60 / samImg.height,
+                top: 120,
+                left: 130,
+                innerWidth: 200,
+                innerHeight: 200,
 
             });
-
-
             canvas.add(pug);
-            console.log(pug, "lll")
         };
 
         samImg.src = l;
 
         var l_logo = new Image();
-        l_logo.onload = function (left_logo){
-            console.log("Inside Left Logo")
+        l_logo.onload = function (left_logo) {
             var left = new fabric.Image(l_logo, {
-                id:"image_left_logo",
-                width:l_logo.width/2,
-                height:l_logo.height,
-                scaleX : 30/samImg.width,
-                scaleY : 30/samImg.height,
-                angle:30,
-                flipX:true,
-                top:45,
-                left:72,
-                selectable:false,
+                id: "image_left_logo",
+                width: l_logo.width / 2,
+                height: l_logo.height,
+                scaleX: 30 / samImg.width,
+                scaleY: 30 / samImg.height,
+                angle: 30,
+                flipX: true,
+                top: 46,
+                left: 69,
+                selectable: false,
             });
             canvas.add(left);
-            console.log(left, "left")
         }
         l_logo.src = l;
 
-         var r_logo = new Image();
-        r_logo.onload = function (left_logo){
-            console.log("Inside Right Logo")
+        var r_logo = new Image();
+        r_logo.onload = function (left_logo) {
             var right = new fabric.Image(r_logo, {
-                id:"image_left_logo",
-                width:r_logo.width/2,
-                height:r_logo.height,
-                scaleX : 30/samImg.width,
-                scaleY : 30/samImg.height,
-                angle:-30,
-                top:55,
-                left:228,
-                selectable:false,
+                id: "image_left_logo",
+                width: r_logo.width / 2,
+                height: r_logo.height,
+                scaleX: 30 / samImg.width,
+                scaleY: 30 / samImg.height,
+                angle: -30,
+                top: 56,
+                left: 224,
+                selectable: false,
             });
             canvas.add(right);
-            console.log(right, "left")
         }
         r_logo.src = l;
-
-        console.log("Image Clicked", l)
     }
 
     console.log(img, "222")
@@ -307,131 +431,689 @@ function SamLocalEditorHoodieFront(props) {
 
     function frontImageLoad() {
         clearCanvas()
-        let body = JSON.parse(localStorage.getItem('body'))
-        if (body.body_first_section?.image) {
-            if (localStorage.getItem('body_first_section')) {
-                loadObject(JSON.parse(localStorage.getItem('body_first_section')))
+        let front_view_hoodie = JSON.parse(localStorage.getItem('front_view_hoodie'))
+        if (front_view_hoodie.cap_left?.image) {
+            if (localStorage.getItem('cap_left')) {
+                loadObject(JSON.parse(localStorage.getItem('cap_left')))
             } else {
-                loadImage(body.body_first_section.image, 'body_first_section', body.body_first_section.x_point, body.body_first_section.y_point)
+                loadImage(front_view_hoodie.cap_left.image, 'cap_left',
+                    front_view_hoodie.cap_left.x_point,
+                    front_view_hoodie.cap_left.y_point)
             }
 
         }
-        if (body.body_second_section?.image) {
-            if (localStorage.getItem('body_second_section')) {
-                loadObject(JSON.parse(localStorage.getItem('body_second_section')))
+        if (front_view_hoodie.cap_right?.image) {
+            if (localStorage.getItem('cap_right')) {
+                loadObject(JSON.parse(localStorage.getItem('cap_right')))
             } else {
-                loadImage(body.body_second_section.image, 'body_second_section', body.body_second_section.x_point, body.body_second_section.y_point)
+                loadImage(front_view_hoodie.cap_right.image,
+                    'cap_right',
+                    front_view_hoodie.cap_right.x_point, front_view_hoodie.cap_right.y_point)
             }
         }
-        if (body.body_third_section?.image) {
-            if (localStorage.getItem('body_third_section')) {
-                loadObject(JSON.parse(localStorage.getItem('body_third_section')))
+        if (front_view_hoodie.cap_inner_mid?.image) {
+            if (localStorage.getItem('cap_inner_mid')) {
+                loadObject(JSON.parse(localStorage.getItem('cap_inner_mid')))
             } else {
-                loadImage(body.body_third_section.image, 'body_third_section', body.body_third_section.x_point, body.body_third_section.y_point)
+                loadImage(front_view_hoodie.cap_inner_mid.image,
+                    'cap_inner_mid', front_view_hoodie.cap_inner_mid.x_point,
+                    front_view_hoodie.cap_inner_mid.y_point)
             }
         }
-        if (body.collar?.image) {
-            if (localStorage.getItem('front-collar')) {
-                loadObject(JSON.parse(localStorage.getItem('front-collar')))
+        if (front_view_hoodie.cap_inner_left?.image) {
+            if (localStorage.getItem('cap_inner_left')) {
+                loadObject(JSON.parse(localStorage.getItem('cap_inner_left')))
             } else {
-                loadImage(body.collar.image, 'front-collar', body.collar.x_point, body.collar.y_point)
+                loadImage(front_view_hoodie.cap_inner_left.image,
+                    'cap_inner_left', front_view_hoodie.cap_inner_left.x_point,
+                    front_view_hoodie.cap_inner_left.y_point)
             }
         }
-        if (body.right_sleeve?.image) {
-            if (localStorage.getItem('right_sleeve')) {
-                loadObject(JSON.parse(localStorage.getItem('right_sleeve')))
+        if (front_view_hoodie.cap_inner_right?.image) {
+            if (localStorage.getItem('cap_inner_right')) {
+                loadObject(JSON.parse(localStorage.getItem('cap_inner_right')))
             } else {
-                loadImage(body.right_sleeve.image, 'right_sleeve', body.right_sleeve.x_point, body.right_sleeve.y_point)
+                loadImage(front_view_hoodie.cap_inner_right.image,
+                    'cap_inner_right', front_view_hoodie.cap_inner_right.x_point,
+                    front_view_hoodie.cap_inner_right.y_point)
             }
         }
 
-        if (body.left_sleeve?.image) {
-            if (localStorage.getItem('left_sleeve')) {
-                loadObject(JSON.parse(localStorage.getItem('left_sleeve')))
+        if (front_view_hoodie.cap_inner_bottom?.image) {
+            if (localStorage.getItem('cap_inner_bottom')) {
+                loadObject(JSON.parse(localStorage.getItem('cap_inner_bottom')))
             } else {
-                loadImage(body.left_sleeve.image, 'left_sleeve', body.left_sleeve.x_point, body.left_sleeve.y_point)
+                loadImage(front_view_hoodie.cap_inner_bottom.image,
+                    'cap_inner_bottom', front_view_hoodie.cap_inner_bottom.x_point,
+                    front_view_hoodie.cap_inner_bottom.y_point)
 
             }
         }
 
-        if (body.towel_front?.image) {
-            if (localStorage.getItem('towel_front')) {
-                loadObject(JSON.parse(localStorage.getItem('towel_front')))
+        if (front_view_hoodie.hood_top?.image) {
+            if (localStorage.getItem('hood_top')) {
+                loadObject(JSON.parse(localStorage.getItem('hood_top')))
             } else {
-                loadImage(body.towel_front.image,
-                    'towel_front',
-                    body.towel_front.x_point,
-                    body.towel_front.y_point)
+                loadImage(front_view_hoodie.hood_top.image,
+                    'hood_top',
+                    front_view_hoodie.hood_top.x_point,
+                    front_view_hoodie.hood_top.y_point)
             }
 
+        }
+
+        if (front_view_hoodie.hood_top_left?.image) {
+            if (localStorage.getItem('hood_top_left')) {
+                loadObject(JSON.parse(localStorage.getItem('hood_top_left')))
+            } else {
+                loadImage(front_view_hoodie.hood_top_left.image,
+                    'hood_top_left',
+                    front_view_hoodie.hood_top_left.x_point,
+                    front_view_hoodie.hood_top_left.y_point)
+            }
+
+        }
+
+        if (front_view_hoodie.hood_top_right?.image) {
+            if (localStorage.getItem('hood_top_right')) {
+                loadObject(JSON.parse(localStorage.getItem('hood_top_right')))
+            } else {
+                loadImage(front_view_hoodie.hood_top_right.image,
+                    'hood_top_right',
+                    front_view_hoodie.hood_top_right.x_point,
+                    front_view_hoodie.hood_top_right.y_point)
+            }
+
+        }
+
+        if (front_view_hoodie.hood_left_strip?.image) {
+            if (localStorage.getItem('hood_left_strip')) {
+                loadObject(JSON.parse(localStorage.getItem('hood_left_strip')))
+            } else {
+                loadImage(front_view_hoodie.hood_left_strip.image,
+                    'hood_left_strip',
+                    front_view_hoodie.hood_left_strip.x_point,
+                    front_view_hoodie.hood_left_strip.y_point)
+            }
+
+        }
+
+        if (front_view_hoodie.hood_right_strip?.image) {
+            if (localStorage.getItem('hood_right_strip')) {
+                loadObject(JSON.parse(localStorage.getItem('hood_right_strip')))
+            } else {
+                loadImage(front_view_hoodie.hood_right_strip.image,
+                    'hood_right_strip',
+                    front_view_hoodie.hood_right_strip.x_point,
+                    front_view_hoodie.hood_right_strip.y_point)
+            }
+
+        }
+
+        if (front_view_hoodie.hood_mid?.image) {
+            if (localStorage.getItem('hood_mid')) {
+                loadObject(JSON.parse(localStorage.getItem('hood_mid')))
+            } else {
+                loadImage(front_view_hoodie.hood_mid.image,
+                    'hood_mid',
+                    front_view_hoodie.hood_mid.x_point,
+                    front_view_hoodie.hood_mid.y_point)
+            }
+
+        }
+
+        if (front_view_hoodie.hood_mid_left?.image) {
+            if (localStorage.getItem('hood_mid_left')) {
+                loadObject(JSON.parse(localStorage.getItem('hood_mid_left')))
+            } else {
+                loadImage(front_view_hoodie.hood_mid_left.image,
+                    'hood_mid_left',
+                    front_view_hoodie.hood_mid_left.x_point,
+                    front_view_hoodie.hood_mid_left.y_point)
+            }
+
+        }
+
+        if (front_view_hoodie.hood_mid_right?.image) {
+            if (localStorage.getItem('hood_mid_right')) {
+                loadObject(JSON.parse(localStorage.getItem('hood_mid_right')))
+            } else {
+                loadImage(front_view_hoodie.hood_mid_right.image,
+                    'hood_mid_right',
+                    front_view_hoodie.hood_mid_right.x_point,
+                    front_view_hoodie.hood_mid_right.y_point)
+            }
+
+        }
+
+        if (front_view_hoodie.hood_bottom?.image) {
+            if (localStorage.getItem('hood_bottom')) {
+                loadObject(JSON.parse(localStorage.getItem('hood_bottom')))
+            } else {
+                loadImage(front_view_hoodie.hood_bottom.image,
+                    'hood_bottom',
+                    front_view_hoodie.hood_bottom.x_point,
+                    front_view_hoodie.hood_bottom.y_point)
+            }
+
+        }
+
+        if (front_view_hoodie.hood_bottom_left?.image) {
+            if (localStorage.getItem('hood_bottom_left')) {
+                loadObject(JSON.parse(localStorage.getItem('hood_bottom_left')))
+            } else {
+                loadImage(front_view_hoodie.hood_bottom_left.image,
+                    'hood_bottom_left',
+                    front_view_hoodie.hood_bottom_left.x_point,
+                    front_view_hoodie.hood_bottom_left.y_point)
+            }
+
+        }
+
+        if (front_view_hoodie.hood_bottom_right?.image) {
+            if (localStorage.getItem('hood_bottom_right')) {
+                loadObject(JSON.parse(localStorage.getItem('hood_bottom_right')))
+            } else {
+                loadImage(front_view_hoodie.hood_bottom_right.image,
+                    'hood_bottom_right',
+                    front_view_hoodie.hood_bottom_right.x_point,
+                    front_view_hoodie.hood_bottom_right.y_point)
+            }
+
+        }
+
+        if (front_view_hoodie.hood_hem_left?.image) {
+            if (localStorage.getItem('hood_hem_left')) {
+                loadObject(JSON.parse(localStorage.getItem('hood_hem_left')))
+            } else {
+                loadImage(front_view_hoodie.hood_hem_left.image,
+                    'hood_hem_left',
+                    front_view_hoodie.hood_hem_left.x_point,
+                    front_view_hoodie.hood_hem_left.y_point)
+            }
+
+        }
+
+        if (front_view_hoodie.hood_hem_right?.image) {
+            if (localStorage.getItem('hood_hem_right')) {
+                loadObject(JSON.parse(localStorage.getItem('hood_hem_right')))
+            } else {
+                loadImage(front_view_hoodie.hood_hem_right.image,
+                    'hood_hem_right',
+                    front_view_hoodie.hood_hem_right.x_point,
+                    front_view_hoodie.hood_hem_right.y_point)
+            }
+
+        }
+
+        if (front_view_hoodie.zip?.image) {
+            if (localStorage.getItem('zip')) {
+                loadObject(JSON.parse(localStorage.getItem('zip')))
+            } else {
+                loadImage(front_view_hoodie.zip.image,
+                    'zip',
+                    front_view_hoodie.zip.x_point,
+                    front_view_hoodie.zip.y_point)
+            }
+
+        }
+
+        if (front_view_hoodie.hood_left_sleeve_full?.image) {
+            if (localStorage.getItem('hood_left_sleeve_full')) {
+                loadObject(JSON.parse(localStorage.getItem('hood_left_sleeve_full')))
+            } else {
+                loadImage(front_view_hoodie.hood_left_sleeve_full.image,
+                    'hood_left_sleeve_full',
+                    front_view_hoodie.hood_left_sleeve_full.x_point,
+                    front_view_hoodie.hood_left_sleeve_full.y_point)
+            }
+
+        }
+
+        if (front_view_hoodie.hood_left_sleeve_top?.image) {
+            if (localStorage.getItem('hood_left_sleeve_top')) {
+                loadObject(JSON.parse(localStorage.getItem('hood_left_sleeve_top')))
+            } else {
+                loadImage(front_view_hoodie.hood_left_sleeve_top.image,
+                    'hood_left_sleeve_top',
+                    front_view_hoodie.hood_left_sleeve_top.x_point,
+                    front_view_hoodie.hood_left_sleeve_top.y_point)
+            }
+
+        }
+
+        if (front_view_hoodie.hood_left_sleeve_mid?.image) {
+            if (localStorage.getItem('hood_left_sleeve_mid')) {
+                loadObject(JSON.parse(localStorage.getItem('hood_left_sleeve_mid')))
+            } else {
+                loadImage(front_view_hoodie.hood_left_sleeve_mid.image,
+                    'hood_left_sleeve_mid',
+                    front_view_hoodie.hood_left_sleeve_mid.x_point,
+                    front_view_hoodie.hood_left_sleeve_mid.y_point)
+            }
+
+        }
+
+        if (front_view_hoodie.hood_left_sleeve_bottom?.image) {
+            if (localStorage.getItem('hood_left_sleeve_bottom')) {
+                loadObject(JSON.parse(localStorage.getItem('hood_left_sleeve_bottom')))
+            } else {
+                loadImage(front_view_hoodie.hood_left_sleeve_bottom.image,
+                    'hood_left_sleeve_bottom',
+                    front_view_hoodie.hood_left_sleeve_bottom.x_point,
+                    front_view_hoodie.hood_left_sleeve_bottom.y_point)
+            }
+
+        }
+
+        if (front_view_hoodie.hood_left_sleeve_cuff?.image) {
+            if (localStorage.getItem('hood_left_sleeve_cuff')) {
+                loadObject(JSON.parse(localStorage.getItem('hood_left_sleeve_cuff')))
+            } else {
+                loadImage(front_view_hoodie.hood_left_sleeve_cuff.image,
+                    'hood_left_sleeve_cuff',
+                    front_view_hoodie.hood_left_sleeve_cuff.x_point,
+                    front_view_hoodie.hood_left_sleeve_cuff.y_point)
+            }
+
+        }
+
+        if (front_view_hoodie.hood_left_sleeve_cuff_strips?.image) {
+            if (localStorage.getItem('hood_left_sleeve_cuff_strips')) {
+                loadObject(JSON.parse(localStorage.getItem('hood_left_sleeve_cuff_strips')))
+            } else {
+                loadImage(front_view_hoodie.hood_left_sleeve_cuff_strips.image,
+                    'hood_left_sleeve_cuff_strips',
+                    front_view_hoodie.hood_left_sleeve_cuff_strips.x_point,
+                    front_view_hoodie.hood_left_sleeve_cuff_strips.y_point)
+            }
+
+        }
+
+        if (front_view_hoodie.hood_right_sleeve_full?.image) {
+            if (localStorage.getItem('hood_right_sleeve_full')) {
+                loadObject(JSON.parse(localStorage.getItem('hood_right_sleeve_full')))
+            } else {
+                loadImage(front_view_hoodie.hood_right_sleeve_full.image,
+                    'hood_right_sleeve_full',
+                    front_view_hoodie.hood_right_sleeve_full.x_point,
+                    front_view_hoodie.hood_right_sleeve_full.y_point)
+            }
+
+        }
+
+        if (front_view_hoodie.hood_right_sleeve_top?.image) {
+            if (localStorage.getItem('hood_right_sleeve_top')) {
+                loadObject(JSON.parse(localStorage.getItem('hood_right_sleeve_top')))
+            } else {
+                loadImage(front_view_hoodie.hood_right_sleeve_top.image,
+                    'hood_right_sleeve_top',
+                    front_view_hoodie.hood_right_sleeve_top.x_point,
+                    front_view_hoodie.hood_right_sleeve_top.y_point)
+            }
+
+        }
+
+        if (front_view_hoodie.hood_right_sleeve_mid?.image) {
+            if (localStorage.getItem('hood_right_sleeve_mid')) {
+                loadObject(JSON.parse(localStorage.getItem('hood_right_sleeve_mid')))
+            } else {
+                loadImage(front_view_hoodie.hood_right_sleeve_mid.image,
+                    'hood_right_sleeve_mid',
+                    front_view_hoodie.hood_right_sleeve_mid.x_point,
+                    front_view_hoodie.hood_right_sleeve_mid.y_point)
+            }
+
+        }
+
+        if (front_view_hoodie.hood_right_sleeve_bottom?.image) {
+            if (localStorage.getItem('hood_right_sleeve_bottom')) {
+                loadObject(JSON.parse(localStorage.getItem('hood_right_sleeve_bottom')))
+            } else {
+                loadImage(front_view_hoodie.hood_right_sleeve_bottom.image,
+                    'hood_right_sleeve_bottom',
+                    front_view_hoodie.hood_right_sleeve_bottom.x_point,
+                    front_view_hoodie.hood_right_sleeve_bottom.y_point)
+            }
+
+        }
+
+        if (front_view_hoodie.hood_right_sleeve_cuff?.image) {
+            if (localStorage.getItem('hood_right_sleeve_cuff')) {
+                loadObject(JSON.parse(localStorage.getItem('hood_right_sleeve_cuff')))
+            } else {
+                loadImage(front_view_hoodie.hood_right_sleeve_cuff.image,
+                    'hood_right_sleeve_cuff',
+                    front_view_hoodie.hood_right_sleeve_cuff.x_point,
+                    front_view_hoodie.hood_right_sleeve_cuff.y_point)
+            }
+
+        }
+
+        if (front_view_hoodie.hood_right_sleeve_cuff_strips?.image) {
+            if (localStorage.getItem('hood_right_sleeve_cuff_strips')) {
+                loadObject(JSON.parse(localStorage.getItem('hood_right_sleeve_cuff_strips')))
+            } else {
+                loadImage(front_view_hoodie.hood_right_sleeve_cuff_strips.image,
+                    'hood_right_sleeve_cuff_strips',
+                    front_view_hoodie.hood_right_sleeve_cuff_strips.x_point,
+                    front_view_hoodie.hood_right_sleeve_cuff_strips.y_point)
+            }
         }
     }
 
     function backImageLoad() {
         clearCanvas()
-        let back = JSON.parse(localStorage.getItem('back'))
-        if (back.back_first_part?.image) {
-            if (localStorage.getItem('back_first_part')) {
-                loadObject(JSON.parse(localStorage.getItem('back_first_part')))
+        let back_view_hoodie = JSON.parse(localStorage.getItem('back_view_hoodie'))
+        if (back_view_hoodie.cap_left_back?.image) {
+            if (localStorage.getItem('cap_left_back')) {
+                loadObject(JSON.parse(localStorage.getItem('cap_left_back')))
             } else {
                 loadImage(
-                    back.back_first_part.image,
-                    'back_first_part',
-                    back.back_first_part.x_point,
-                    back.back_first_part.y_point,
+                    back_view_hoodie.cap_left_back.image,
+                    'cap_left_back',
+                    back_view_hoodie.cap_left_back.x_point,
+                    back_view_hoodie.cap_left_back.y_point,
                 )
             }
 
         }
 
-        if (back.back_second_part?.image) {
-            if (localStorage.getItem('back_second_part')) {
-                loadObject(JSON.parse(localStorage.getItem('back_second_part')))
+        if (back_view_hoodie.cap_right_back?.image) {
+            if (localStorage.getItem('cap_right_back')) {
+                loadObject(JSON.parse(localStorage.getItem('cap_right_back')))
             } else {
                 loadImage(
-                    back.back_second_part.image,
-                    'back_second_part',
-                    back.back_second_part.x_point,
-                    back.back_second_part.y_point,
+                    back_view_hoodie.cap_right_back.image,
+                    'cap_right_back',
+                    back_view_hoodie.cap_right_back.x_point,
+                    back_view_hoodie.cap_right_back.y_point,
                 )
             }
         }
 
-        if (back.back_third_part?.image) {
-            if (localStorage.getItem('back_third_part')) {
-                loadObject(JSON.parse(localStorage.getItem('back_third_part')))
+        if (back_view_hoodie.hood_top_back?.image) {
+            if (localStorage.getItem('hood_top_back')) {
+                loadObject(JSON.parse(localStorage.getItem('hood_top_back')))
             } else {
                 loadImage(
-                    back.back_third_part.image,
-                    'back_third_part',
-                    back.back_third_part.x_point,
-                    back.back_third_part.y_point,
+                    back_view_hoodie.hood_top_back.image,
+                    'hood_top_back',
+                    back_view_hoodie.hood_top_back.x_point,
+                    back_view_hoodie.hood_top_back.y_point,
                 )
             }
         }
 
-        if (back.back_left_sleeve?.image) {
-            if (localStorage.getItem('back_left_sleeve')) {
-                loadObject(JSON.parse(localStorage.getItem('back_left_sleeve')))
+        if (back_view_hoodie.hood_top_left_back?.image) {
+            if (localStorage.getItem('hood_top_left_back')) {
+                loadObject(JSON.parse(localStorage.getItem('hood_top_left_back')))
             } else {
                 loadImage(
-                    back.back_left_sleeve.image,
-                    'back_left_sleeve',
-                    back.back_left_sleeve.x_point,
-                    back.back_left_sleeve.y_point,
+                    back_view_hoodie.hood_top_left_back.image,
+                    'hood_top_left_back',
+                    back_view_hoodie.hood_top_left_back.x_point,
+                    back_view_hoodie.hood_top_left_back.y_point,
                 )
             }
         }
 
-        if (back.back_right_sleeve?.image) {
-            if (localStorage.getItem('back_right_sleeve')) {
-                loadObject(JSON.parse(localStorage.getItem('back_right_sleeve')))
+        if (back_view_hoodie.hood_top_right_back?.image) {
+            if (localStorage.getItem('hood_top_right_back')) {
+                loadObject(JSON.parse(localStorage.getItem('hood_top_right_back')))
             } else {
                 loadImage(
-                    back.back_right_sleeve.image,
-                    'back_right_sleeve',
-                    back.back_right_sleeve.x_point,
-                    back.back_right_sleeve.y_point,
+                    back_view_hoodie.hood_top_right_back.image,
+                    'hood_top_right_back',
+                    back_view_hoodie.hood_top_right_back.x_point,
+                    back_view_hoodie.hood_top_right_back.y_point,
+                )
+            }
+        }
+
+        if (back_view_hoodie.hood_mid_back?.image) {
+            if (localStorage.getItem('hood_mid_back')) {
+                loadObject(JSON.parse(localStorage.getItem('hood_mid_back')))
+            } else {
+                loadImage(
+                    back_view_hoodie.hood_mid_back.image,
+                    'hood_mid_back',
+                    back_view_hoodie.hood_mid_back.x_point,
+                    back_view_hoodie.hood_mid_back.y_point,
+                )
+            }
+        }
+
+        if (back_view_hoodie.hood_mid_left_back?.image) {
+            if (localStorage.getItem('hood_mid_left_back')) {
+                loadObject(JSON.parse(localStorage.getItem('hood_mid_left_back')))
+            } else {
+                loadImage(
+                    back_view_hoodie.hood_mid_left_back.image,
+                    'hood_mid_left_back',
+                    back_view_hoodie.hood_mid_left_back.x_point,
+                    back_view_hoodie.hood_mid_left_back.y_point,
+                )
+            }
+        }
+
+        if (back_view_hoodie.hood_mid_right_back?.image) {
+            if (localStorage.getItem('hood_mid_right_back')) {
+                loadObject(JSON.parse(localStorage.getItem('hood_mid_right_back')))
+            } else {
+                loadImage(
+                    back_view_hoodie.hood_mid_right_back.image,
+                    'hood_mid_right_back',
+                    back_view_hoodie.hood_mid_right_back.x_point,
+                    back_view_hoodie.hood_mid_right_back.y_point,
+                )
+            }
+        }
+
+        if (back_view_hoodie.hood_bottom_back?.image) {
+            if (localStorage.getItem('hood_bottom_back')) {
+                loadObject(JSON.parse(localStorage.getItem('hood_bottom_back')))
+            } else {
+                loadImage(
+                    back_view_hoodie.hood_bottom_back.image,
+                    'hood_bottom_back',
+                    back_view_hoodie.hood_bottom_back.x_point,
+                    back_view_hoodie.hood_bottom_back.y_point,
+                )
+            }
+        }
+
+        if (back_view_hoodie.hood_bottom_left_back?.image) {
+            if (localStorage.getItem('hood_bottom_left_back')) {
+                loadObject(JSON.parse(localStorage.getItem('hood_bottom_left_back')))
+            } else {
+                loadImage(
+                    back_view_hoodie.hood_bottom_left_back.image,
+                    'hood_bottom_left_back',
+                    back_view_hoodie.hood_bottom_left_back.x_point,
+                    back_view_hoodie.hood_bottom_left_back.y_point,
+                )
+            }
+        }
+
+        if (back_view_hoodie.hood_bottom_right_back?.image) {
+            if (localStorage.getItem('hood_bottom_right_back')) {
+                loadObject(JSON.parse(localStorage.getItem('hood_bottom_right_back')))
+            } else {
+                loadImage(
+                    back_view_hoodie.hood_bottom_right_back.image,
+                    'hood_bottom_right_back',
+                    back_view_hoodie.hood_bottom_right_back.x_point,
+                    back_view_hoodie.hood_bottom_right_back.y_point,
+                )
+            }
+        }
+
+        if (back_view_hoodie.hood_hem_back?.image) {
+            if (localStorage.getItem('hood_hem_back')) {
+                loadObject(JSON.parse(localStorage.getItem('hood_hem_back')))
+            } else {
+                loadImage(
+                    back_view_hoodie.hood_hem_back.image,
+                    'hood_hem_back',
+                    back_view_hoodie.hood_hem_back.x_point,
+                    back_view_hoodie.hood_hem_back.y_point,
+                )
+            }
+        }
+
+        if (back_view_hoodie.hood_left_sleeve_full_back?.image) {
+            if (localStorage.getItem('hood_left_sleeve_full_back')) {
+                loadObject(JSON.parse(localStorage.getItem('hood_left_sleeve_full_back')))
+            } else {
+                loadImage(
+                    back_view_hoodie.hood_left_sleeve_full_back.image,
+                    'hood_left_sleeve_full_back',
+                    back_view_hoodie.hood_left_sleeve_full_back.x_point,
+                    back_view_hoodie.hood_left_sleeve_full_back.y_point,
+                )
+            }
+        }
+
+        if (back_view_hoodie.hood_left_sleeve_top_back?.image) {
+            if (localStorage.getItem('hood_left_sleeve_top_back')) {
+                loadObject(JSON.parse(localStorage.getItem('hood_left_sleeve_top_back')))
+            } else {
+                loadImage(
+                    back_view_hoodie.hood_left_sleeve_top_back.image,
+                    'hood_left_sleeve_top_back',
+                    back_view_hoodie.hood_left_sleeve_top_back.x_point,
+                    back_view_hoodie.hood_left_sleeve_top_back.y_point,
+                )
+            }
+        }
+
+        if (back_view_hoodie.hood_left_sleeve_mid_back?.image) {
+            if (localStorage.getItem('hood_left_sleeve_mid_back')) {
+                loadObject(JSON.parse(localStorage.getItem('hood_left_sleeve_mid_back')))
+            } else {
+                loadImage(
+                    back_view_hoodie.hood_left_sleeve_mid_back.image,
+                    'hood_left_sleeve_mid_back',
+                    back_view_hoodie.hood_left_sleeve_mid_back.x_point,
+                    back_view_hoodie.hood_left_sleeve_mid_back.y_point,
+                )
+            }
+        }
+
+        if (back_view_hoodie.hood_left_sleeve_bottom_back?.image) {
+            if (localStorage.getItem('hood_left_sleeve_bottom_back')) {
+                loadObject(JSON.parse(localStorage.getItem('hood_left_sleeve_bottom_back')))
+            } else {
+                loadImage(
+                    back_view_hoodie.hood_left_sleeve_bottom_back.image,
+                    'hood_left_sleeve_bottom_back',
+                    back_view_hoodie.hood_left_sleeve_bottom_back.x_point,
+                    back_view_hoodie.hood_left_sleeve_bottom_back.y_point,
+                )
+            }
+        }
+
+        if (back_view_hoodie.hood_left_sleeve_cuff_back?.image) {
+            if (localStorage.getItem('hood_left_sleeve_cuff_back')) {
+                loadObject(JSON.parse(localStorage.getItem('hood_left_sleeve_cuff_back')))
+            } else {
+                loadImage(
+                    back_view_hoodie.hood_left_sleeve_cuff_back.image,
+                    'hood_left_sleeve_cuff_back',
+                    back_view_hoodie.hood_left_sleeve_cuff_back.x_point,
+                    back_view_hoodie.hood_left_sleeve_cuff_back.y_point,
+                )
+            }
+        }
+
+        if (back_view_hoodie.hood_left_sleeve_cuff_strips_back?.image) {
+            if (localStorage.getItem('hood_left_sleeve_cuff_strips_back')) {
+                loadObject(JSON.parse(localStorage.getItem('hood_left_sleeve_cuff_strips_back')))
+            } else {
+                loadImage(
+                    back_view_hoodie.hood_left_sleeve_cuff_strips_back.image,
+                    'hood_left_sleeve_cuff_strips_back',
+                    back_view_hoodie.hood_left_sleeve_cuff_strips_back.x_point,
+                    back_view_hoodie.hood_left_sleeve_cuff_strips_back.y_point,
+                )
+            }
+        }
+
+        if (back_view_hoodie.hood_right_sleeve_full_back?.image) {
+            if (localStorage.getItem('hood_right_sleeve_full_back')) {
+                loadObject(JSON.parse(localStorage.getItem('hood_right_sleeve_full_back')))
+            } else {
+                loadImage(
+                    back_view_hoodie.hood_right_sleeve_full_back.image,
+                    'hood_right_sleeve_full_back',
+                    back_view_hoodie.hood_right_sleeve_full_back.x_point,
+                    back_view_hoodie.hood_right_sleeve_full_back.y_point,
+                )
+            }
+        }
+
+        if (back_view_hoodie.hood_right_sleeve_top_back?.image) {
+            if (localStorage.getItem('hood_right_sleeve_top_back')) {
+                loadObject(JSON.parse(localStorage.getItem('hood_right_sleeve_top_back')))
+            } else {
+                loadImage(
+                    back_view_hoodie.hood_right_sleeve_top_back.image,
+                    'hood_right_sleeve_top_back',
+                    back_view_hoodie.hood_right_sleeve_top_back.x_point,
+                    back_view_hoodie.hood_right_sleeve_top_back.y_point,
+                )
+            }
+        }
+
+        if (back_view_hoodie.hood_right_sleeve_mid_back?.image) {
+            if (localStorage.getItem('hood_right_sleeve_mid_back')) {
+                loadObject(JSON.parse(localStorage.getItem('hood_right_sleeve_mid_back')))
+            } else {
+                loadImage(
+                    back_view_hoodie.hood_right_sleeve_mid_back.image,
+                    'hood_right_sleeve_mid_back',
+                    back_view_hoodie.hood_right_sleeve_mid_back.x_point,
+                    back_view_hoodie.hood_right_sleeve_mid_back.y_point,
+                )
+            }
+        }
+
+        if (back_view_hoodie.hood_right_sleeve_bottom_back?.image) {
+            if (localStorage.getItem('hood_left_sleeve_mid_back')) {
+                loadObject(JSON.parse(localStorage.getItem('hood_left_sleeve_mid_back')))
+            } else {
+                loadImage(
+                    back_view_hoodie.hood_right_sleeve_bottom_back.image,
+                    'hood_right_sleeve_bottom_back',
+                    back_view_hoodie.hood_right_sleeve_bottom_back.x_point,
+                    back_view_hoodie.hood_right_sleeve_bottom_back.y_point,
+                )
+            }
+        }
+
+        if (back_view_hoodie.hood_right_sleeve_bottom_back?.image) {
+            if (localStorage.getItem('hood_right_sleeve_bottom_back')) {
+                loadObject(JSON.parse(localStorage.getItem('hood_right_sleeve_bottom_back')))
+            } else {
+                loadImage(
+                    back_view_hoodie.hood_right_sleeve_bottom_back.image,
+                    'hood_right_sleeve_bottom_back',
+                    back_view_hoodie.hood_right_sleeve_bottom_back.x_point,
+                    back_view_hoodie.hood_right_sleeve_bottom_back.y_point,
+                )
+            }
+        }
+
+        if (back_view_hoodie.hood_right_sleeve_cuff_back?.image) {
+            if (localStorage.getItem('hood_right_sleeve_cuff_back')) {
+                loadObject(JSON.parse(localStorage.getItem('hood_right_sleeve_cuff_back')))
+            } else {
+                loadImage(
+                    back_view_hoodie.hood_right_sleeve_cuff_back.image,
+                    'hood_right_sleeve_cuff_back',
+                    back_view_hoodie.hood_right_sleeve_cuff_back.x_point,
+                    back_view_hoodie.hood_right_sleeve_cuff_back.y_point,
                 )
             }
         }
@@ -439,225 +1121,661 @@ function SamLocalEditorHoodieFront(props) {
 
     const leftImageLoad = (e) => {
         clearCanvas()
-        let left = JSON.parse(localStorage.getItem('left'))
+        let left_view_hoodie = JSON.parse(localStorage.getItem('left_view_hoodie'))
 
-        if (left?.left_v_body_view?.image) {
-            if (localStorage.getItem('left_v_body_view')) {
-                loadObject(JSON.parse(localStorage.getItem('left_v_body_view')))
+        if (left_view_hoodie?.mid_full_body_hoodie_left?.image) {
+            if (localStorage.getItem('mid_full_body_hoodie_left')) {
+                loadObject(JSON.parse(localStorage.getItem('mid_full_body_hoodie_left')))
             } else {
                 loadImage(
-                    left.left_v_body_view.image,
-                    'left_v_body_view',
-                    left.left_v_body_view.x_point,
-                    left.left_v_body_view.y_point,
+                    left_view_hoodie.mid_full_body_hoodie_left.image,
+                    'mid_full_body_hoodie_left',
+                    left_view_hoodie.mid_full_body_hoodie_left.x_point,
+                    left_view_hoodie.mid_full_body_hoodie_left.y_point,
                 )
             }
 
         }
 
-        if (left.left_v_upper_part?.image) {
-            if (localStorage.getItem('left_v_upper_part')) {
-                loadObject(JSON.parse(localStorage.getItem('left_v_upper_part')))
+        if (left_view_hoodie.mid_top_hoodie_left?.image) {
+            if (localStorage.getItem('mid_top_hoodie_left')) {
+                loadObject(JSON.parse(localStorage.getItem('mid_top_hoodie_left')))
             } else {
                 loadImage(
-                    left.left_v_upper_part.image,
-                    'left_v_upper_part',
-                    left.left_v_upper_part.x_point,
-                    left.left_v_upper_part.y_point,
+                    left_view_hoodie.mid_top_hoodie_left.image,
+                    'mid_top_hoodie_left',
+                    left_view_hoodie.mid_top_hoodie_left.x_point,
+                    left_view_hoodie.mid_top_hoodie_left.y_point,
                 )
             }
         }
 
-        if (left?.left_v_lower_part?.image) {
-            if (localStorage.getItem('left_v_lower_part')) {
-                loadObject(JSON.parse(localStorage.getItem('left_v_lower_part')))
+        if (left_view_hoodie?.mid_mid_hoodie_left?.image) {
+            if (localStorage.getItem('mid_mid_hoodie_left')) {
+                loadObject(JSON.parse(localStorage.getItem('mid_mid_hoodie_left')))
             } else {
                 loadImage(
-                    left.left_v_lower_part.image,
-                    'left_v_lower_part',
-                    left.left_v_lower_part.x_point,
-                    left.left_v_lower_part.y_point,
+                    left_view_hoodie.mid_mid_hoodie_left.image,
+                    'mid_mid_hoodie_left',
+                    left_view_hoodie.mid_mid_hoodie_left.x_point,
+                    left_view_hoodie.mid_mid_hoodie_left.y_point,
                 )
             }
         }
 
-        if (left?.left_v_left_s_upper?.image) {
-            if (localStorage.getItem('left_v_left_s_upper')) {
-                loadObject(JSON.parse(localStorage.getItem('left_v_left_s_upper')))
+        if (left_view_hoodie?.mid_bottom_hoodie_left?.image) {
+            if (localStorage.getItem('mid_bottom_hoodie_left')) {
+                loadObject(JSON.parse(localStorage.getItem('mid_bottom_hoodie_left')))
             } else {
                 loadImage(
-                    left.left_v_left_s_upper.image,
-                    'left_v_left_s_upper',
-                    left.left_v_left_s_upper.x_point,
-                    left.left_v_left_s_upper.y_point,
+                    left_view_hoodie.mid_bottom_hoodie_left.image,
+                    'mid_bottom_hoodie_left',
+                    left_view_hoodie.mid_bottom_hoodie_left.x_point,
+                    left_view_hoodie.mid_bottom_hoodie_left.y_point,
                 )
             }
         }
 
-        if (left?.left_v_left_s_lower?.image) {
-            if (localStorage.getItem('left_v_left_s_lower')) {
-                loadObject(JSON.parse(localStorage.getItem('left_v_left_s_lower')))
+        if (left_view_hoodie?.mid_cuff_hoodie_left?.image) {
+            if (localStorage.getItem('mid_cuff_hoodie_left')) {
+                loadObject(JSON.parse(localStorage.getItem('mid_cuff_hoodie_left')))
             } else {
                 loadImage(
-                    left.left_v_left_s_lower.image,
-                    'left_v_left_s_lower',
-                    left.left_v_left_s_lower.x_point,
-                    left.left_v_left_s_lower.y_point,
+                    left_view_hoodie.mid_cuff_hoodie_left.image,
+                    'mid_cuff_hoodie_left',
+                    left_view_hoodie.mid_cuff_hoodie_left.x_point,
+                    left_view_hoodie.mid_cuff_hoodie_left.y_point,
                 )
             }
         }
 
-        if (left?.left_v_right_s_upper?.image) {
-            if (localStorage.getItem('left_v_right_s_upper')) {
-                loadObject(JSON.parse(localStorage.getItem('left_v_right_s_upper')))
+        if (left_view_hoodie?.mid_cuff_strips_hoodie_left?.image) {
+            if (localStorage.getItem('mid_cuff_strips_hoodie_left')) {
+                loadObject(JSON.parse(localStorage.getItem('mid_cuff_strips_hoodie_left')))
             } else {
                 loadImage(
-                    left.left_v_right_s_upper.image,
-                    'left_v_right_s_upper',
-                    left.left_v_right_s_upper.x_point,
-                    left.left_v_right_s_upper.y_point,
+                    left_view_hoodie.mid_cuff_strips_hoodie_left.image,
+                    'mid_cuff_strips_hoodie_left',
+                    left_view_hoodie.mid_cuff_strips_hoodie_left.x_point,
+                    left_view_hoodie.mid_cuff_strips_hoodie_left.y_point,
                 )
             }
         }
 
-        if (left?.left_v_right_s_lower?.image) {
-            if (localStorage.getItem('left_v_right_s_lower')) {
-                loadObject(JSON.parse(localStorage.getItem('left_v_right_s_lower')))
+        if (left_view_hoodie?.left_full_body_hoodie_left?.image) {
+            if (localStorage.getItem('left_full_body_hoodie_left')) {
+                loadObject(JSON.parse(localStorage.getItem('left_full_body_hoodie_left')))
             } else {
                 loadImage(
-                    left.left_v_right_s_lower.image,
-                    'left_v_right_s_lower',
-                    left.left_v_right_s_lower.x_point,
-                    left.left_v_right_s_lower.y_point,
+                    left_view_hoodie.left_full_body_hoodie_left.image,
+                    'left_full_body_hoodie_left',
+                    left_view_hoodie.left_full_body_hoodie_left.x_point,
+                    left_view_hoodie.left_full_body_hoodie_left.y_point,
+                )
+            }
+        }
+
+        if (left_view_hoodie?.left_top_hoodie_left?.image) {
+            if (localStorage.getItem('left_top_hoodie_left')) {
+                loadObject(JSON.parse(localStorage.getItem('left_top_hoodie_left')))
+            } else {
+                loadImage(
+                    left_view_hoodie.left_top_hoodie_left.image,
+                    'left_top_hoodie_left',
+                    left_view_hoodie.left_top_hoodie_left.x_point,
+                    left_view_hoodie.left_top_hoodie_left.y_point,
+                )
+            }
+        }
+
+        if (left_view_hoodie?.left_mid_hoodie_left?.image) {
+            if (localStorage.getItem('left_mid_hoodie_left')) {
+                loadObject(JSON.parse(localStorage.getItem('left_mid_hoodie_left')))
+            } else {
+                loadImage(
+                    left_view_hoodie.left_mid_hoodie_left.image,
+                    'left_mid_hoodie_left',
+                    left_view_hoodie.left_mid_hoodie_left.x_point,
+                    left_view_hoodie.left_mid_hoodie_left.y_point,
+                )
+            }
+        }
+
+        if (left_view_hoodie?.left_bottom_hoodie_left?.image) {
+            if (localStorage.getItem('left_bottom_hoodie_left')) {
+                loadObject(JSON.parse(localStorage.getItem('left_bottom_hoodie_left')))
+            } else {
+                loadImage(
+                    left_view_hoodie.left_bottom_hoodie_left.image,
+                    'left_bottom_hoodie_left',
+                    left_view_hoodie.left_bottom_hoodie_left.x_point,
+                    left_view_hoodie.left_bottom_hoodie_left.y_point,
+                )
+            }
+        }
+
+        if (left_view_hoodie?.left_cuff_hoodie_left?.image) {
+            if (localStorage.getItem('left_cuff_hoodie_left')) {
+                loadObject(JSON.parse(localStorage.getItem('left_cuff_hoodie_left')))
+            } else {
+                loadImage(
+                    left_view_hoodie.left_cuff_hoodie_left.image,
+                    'left_cuff_hoodie_left',
+                    left_view_hoodie.left_cuff_hoodie_left.x_point,
+                    left_view_hoodie.left_cuff_hoodie_left.y_point,
+                )
+            }
+        }
+
+        if (left_view_hoodie?.left_cuff_strips_hoodie_left?.image) {
+            if (localStorage.getItem('left_cuff_strips_hoodie_left')) {
+                loadObject(JSON.parse(localStorage.getItem('left_cuff_strips_hoodie_left')))
+            } else {
+                loadImage(
+                    left_view_hoodie.left_cuff_strips_hoodie_left.image,
+                    'left_cuff_strips_hoodie_left',
+                    left_view_hoodie.left_cuff_strips_hoodie_left.x_point,
+                    left_view_hoodie.left_cuff_strips_hoodie_left.y_point,
+                )
+            }
+        }
+
+        if (left_view_hoodie?.right_full_body_hoodie_left?.image) {
+            if (localStorage.getItem('right_full_body_hoodie_left')) {
+                loadObject(JSON.parse(localStorage.getItem('right_full_body_hoodie_left')))
+            } else {
+                loadImage(
+                    left_view_hoodie.right_full_body_hoodie_left.image,
+                    'right_full_body_hoodie_left',
+                    left_view_hoodie.right_full_body_hoodie_left.x_point,
+                    left_view_hoodie.right_full_body_hoodie_left.y_point,
+                )
+            }
+        }
+
+        if (left_view_hoodie?.right_top_hoodie_left?.image) {
+            if (localStorage.getItem('right_top_hoodie_left')) {
+                loadObject(JSON.parse(localStorage.getItem('right_top_hoodie_left')))
+            } else {
+                loadImage(
+                    left_view_hoodie.right_top_hoodie_left.image,
+                    'right_top_hoodie_left',
+                    left_view_hoodie.right_top_hoodie_left.x_point,
+                    left_view_hoodie.right_top_hoodie_left.y_point,
+                )
+            }
+        }
+
+        if (left_view_hoodie?.right_mid_hoodie_left?.image) {
+            if (localStorage.getItem('right_mid_hoodie_left')) {
+                loadObject(JSON.parse(localStorage.getItem('right_mid_hoodie_left')))
+            } else {
+                loadImage(
+                    left_view_hoodie.right_mid_hoodie_left.image,
+                    'right_mid_hoodie_left',
+                    left_view_hoodie.right_mid_hoodie_left.x_point,
+                    left_view_hoodie.right_mid_hoodie_left.y_point,
+                )
+            }
+        }
+
+        if (left_view_hoodie?.right_bottom_hoodie_left?.image) {
+            if (localStorage.getItem('right_bottom_hoodie_left')) {
+                loadObject(JSON.parse(localStorage.getItem('right_bottom_hoodie_left')))
+            } else {
+                loadImage(
+                    left_view_hoodie.right_bottom_hoodie_left.image,
+                    'right_bottom_hoodie_left',
+                    left_view_hoodie.right_bottom_hoodie_left.x_point,
+                    left_view_hoodie.right_bottom_hoodie_left.y_point,
+                )
+            }
+        }
+
+        if (left_view_hoodie?.right_cuff_hoodie_left?.image) {
+            if (localStorage.getItem('right_cuff_hoodie_left')) {
+                loadObject(JSON.parse(localStorage.getItem('right_cuff_hoodie_left')))
+            } else {
+                loadImage(
+                    left_view_hoodie.right_cuff_hoodie_left.image,
+                    'right_cuff_hoodie_left',
+                    left_view_hoodie.right_cuff_hoodie_left.x_point,
+                    left_view_hoodie.right_cuff_hoodie_left.y_point,
+                )
+            }
+        }
+
+        if (left_view_hoodie?.right_cuff_strips_hoodie_left?.image) {
+            if (localStorage.getItem('right_cuff_strips_hoodie_left')) {
+                loadObject(JSON.parse(localStorage.getItem('right_cuff_strips_hoodie_left')))
+            } else {
+                loadImage(
+                    left_view_hoodie.right_cuff_strips_hoodie_left.image,
+                    'right_cuff_strips_hoodie_left',
+                    left_view_hoodie.right_cuff_strips_hoodie_left.x_point,
+                    left_view_hoodie.right_cuff_strips_hoodie_left.y_point,
+                )
+            }
+        }
+
+        if (left_view_hoodie?.bottom_full_body_hoodie_left?.image) {
+            if (localStorage.getItem('bottom_full_body_hoodie_left')) {
+                loadObject(JSON.parse(localStorage.getItem('bottom_full_body_hoodie_left')))
+            } else {
+                loadImage(
+                    left_view_hoodie.bottom_full_body_hoodie_left.image,
+                    'bottom_full_body_hoodie_left',
+                    left_view_hoodie.bottom_full_body_hoodie_left.x_point,
+                    left_view_hoodie.bottom_full_body_hoodie_left.y_point,
+                )
+            }
+        }
+
+        if (left_view_hoodie?.bottom_top_hoodie_left?.image) {
+            if (localStorage.getItem('bottom_top_hoodie_left')) {
+                loadObject(JSON.parse(localStorage.getItem('bottom_top_hoodie_left')))
+            } else {
+                loadImage(
+                    left_view_hoodie.bottom_top_hoodie_left.image,
+                    'bottom_top_hoodie_left',
+                    left_view_hoodie.bottom_top_hoodie_left.x_point,
+                    left_view_hoodie.bottom_top_hoodie_left.y_point,
+                )
+            }
+        }
+
+        if (left_view_hoodie?.bottom_mid_hoodie_left?.image) {
+            if (localStorage.getItem('bottom_mid_hoodie_left')) {
+                loadObject(JSON.parse(localStorage.getItem('bottom_mid_hoodie_left')))
+            } else {
+                loadImage(
+                    left_view_hoodie.bottom_mid_hoodie_left.image,
+                    'bottom_mid_hoodie_left',
+                    left_view_hoodie.bottom_mid_hoodie_left.x_point,
+                    left_view_hoodie.bottom_mid_hoodie_left.y_point,
+                )
+            }
+        }
+
+        if (left_view_hoodie?.bottom_bottom_hoodie_left?.image) {
+            if (localStorage.getItem('bottom_bottom_hoodie_left')) {
+                loadObject(JSON.parse(localStorage.getItem('bottom_bottom_hoodie_left')))
+            } else {
+                loadImage(
+                    left_view_hoodie.bottom_bottom_hoodie_left.image,
+                    'bottom_bottom_hoodie_left',
+                    left_view_hoodie.bottom_bottom_hoodie_left.x_point,
+                    left_view_hoodie.bottom_bottom_hoodie_left.y_point,
+                )
+            }
+        }
+
+        if (left_view_hoodie?.bottom_cuff_hoodie_left?.image) {
+            if (localStorage.getItem('bottom_cuff_hoodie_left')) {
+                loadObject(JSON.parse(localStorage.getItem('bottom_cuff_hoodie_left')))
+            } else {
+                loadImage(
+                    left_view_hoodie.bottom_cuff_hoodie_left.image,
+                    'bottom_cuff_hoodie_left',
+                    left_view_hoodie.bottom_cuff_hoodie_left.x_point,
+                    left_view_hoodie.bottom_cuff_hoodie_left.y_point,
+                )
+            }
+        }
+
+        if (left_view_hoodie?.bottom_cuff_strips_hoodie_left?.image) {
+            if (localStorage.getItem('bottom_cuff_strips_hoodie_left')) {
+                loadObject(JSON.parse(localStorage.getItem('bottom_cuff_strips_hoodie_left')))
+            } else {
+                loadImage(
+                    left_view_hoodie.bottom_cuff_strips_hoodie_left.image,
+                    'bottom_cuff_strips_hoodie_left',
+                    left_view_hoodie.bottom_cuff_strips_hoodie_left.x_point,
+                    left_view_hoodie.bottom_cuff_strips_hoodie_left.y_point,
                 )
             }
         }
 
     }
-
-
 
     const rightImageLoad = (e) => {
         clearCanvas()
-        let right = JSON.parse(localStorage.getItem('right'))
+        let right_view_hoodie = JSON.parse(localStorage.getItem('right_view_hoodie'))
 
-        if (right.right_v_body_view?.image) {
-            if (localStorage.getItem('right_v_body_view')) {
-                loadObject(JSON.parse(localStorage.getItem('right_v_body_view')))
+        if (right_view_hoodie.mid_full_body_hoodie_right?.image) {
+            if (localStorage.getItem('mid_full_body_hoodie_right')) {
+                loadObject(JSON.parse(localStorage.getItem('mid_full_body_hoodie_right')))
             } else {
                 loadImage(
-                    right.right_v_body_view.image,
-                    'right_v_body_view',
-                    right.right_v_body_view.x_point,
-                    right.right_v_body_view.y_point,
+                    right_view_hoodie.mid_full_body_hoodie_right.image,
+                    'mid_full_body_hoodie_right',
+                    right_view_hoodie.mid_full_body_hoodie_right.x_point,
+                    right_view_hoodie.mid_full_body_hoodie_right.y_point,
                 )
             }
         }
-        if (right.right_v_upper_part?.image) {
-            if (localStorage.getItem('right_v_upper_part')) {
-                loadObject(JSON.parse(localStorage.getItem('right_v_upper_part')))
+        if (right_view_hoodie.mid_top_hoodie_right?.image) {
+            if (localStorage.getItem('mid_top_hoodie_right')) {
+                loadObject(JSON.parse(localStorage.getItem('mid_top_hoodie_right')))
             } else {
                 loadImage(
-                    right.right_v_upper_part.image,
-                    'right_v_upper_part',
-                    right.right_v_upper_part.x_point,
-                    right.right_v_upper_part.y_point,
+                    right_view_hoodie.mid_top_hoodie_right.image,
+                    'mid_top_hoodie_right',
+                    right_view_hoodie.mid_top_hoodie_right.x_point,
+                    right_view_hoodie.mid_top_hoodie_right.y_point,
                 )
             }
         }
 
-        if (right.right_v_lower_part?.image) {
-            if (localStorage.getItem('right_v_upper_part')){
-                loadObject(JSON.parse(localStorage.getItem('right_v_lower_part')))
-            }
-            else if(localStorage.getItem(right.right_v_lower_part?.image)){
+        if (right_view_hoodie.mid_mid_hoodie_right?.image) {
+            if (localStorage.getItem('mid_mid_hoodie_right')) {
+                loadObject(JSON.parse(localStorage.getItem('mid_mid_hoodie_right')))
+            } else if (localStorage.getItem(right_view_hoodie.mid_mid_hoodie_right?.image)) {
 
-            }
-            else {
-                loadImage(
-                    right.right_v_lower_part.image,
-                    'right_v_lower_part',
-                    right.right_v_lower_part.x_point,
-                    right.right_v_lower_part.y_point,
-                )
-            }
-        }
-
-        if (right.right_v_left_s_upper?.image) {
-            if (localStorage.getItem('right_v_left_s_upper')) {
-                loadObject(JSON.parse(localStorage.getItem('right_v_left_s_upper')))
             } else {
                 loadImage(
-                    right.right_v_left_s_upper.image,
-                    'right_v_left_s_upper',
-                    right.right_v_left_s_upper.x_point,
-                    right.right_v_left_s_upper.y_point,
+                    right_view_hoodie.mid_mid_hoodie_right.image,
+                    'mid_mid_hoodie_right',
+                    right_view_hoodie.mid_mid_hoodie_right.x_point,
+                    right_view_hoodie.mid_mid_hoodie_right.y_point,
                 )
             }
         }
 
-        if (right.right_v_left_s_lower?.image) {
-            if (localStorage.getItem('right_v_left_s_lower')) {
-                loadObject(JSON.parse(localStorage.getItem('right_v_left_s_lower')))
+        if (right_view_hoodie.mid_bottom_hoodie_right?.image) {
+            if (localStorage.getItem('mid_bottom_hoodie_right')) {
+                loadObject(JSON.parse(localStorage.getItem('mid_bottom_hoodie_right')))
             } else {
                 loadImage(
-                    right.right_v_left_s_lower.image,
-                    'right_v_left_s_lower',
-                    right.right_v_left_s_lower.x_point,
-                    right.right_v_left_s_lower.y_point,
+                    right_view_hoodie.mid_bottom_hoodie_right.image,
+                    'mid_bottom_hoodie_right',
+                    right_view_hoodie.mid_bottom_hoodie_right.x_point,
+                    right_view_hoodie.mid_bottom_hoodie_right.y_point,
                 )
             }
         }
 
-        if (right.right_v_right_s_upper?.image) {
-            if (localStorage.getItem('right_v_right_s_upper')) {
-                loadObject(JSON.parse(localStorage.getItem('right_v_right_s_upper')))
+        if (right_view_hoodie.mid_cuff_hoodie_right?.image) {
+            if (localStorage.getItem('mid_cuff_hoodie_right')) {
+                loadObject(JSON.parse(localStorage.getItem('mid_cuff_hoodie_right')))
             } else {
                 loadImage(
-                    right.right_v_right_s_upper.image,
-                    'right_v_right_s_upper',
-                    right.right_v_right_s_upper.x_point,
-                    right.right_v_right_s_upper.y_point,
+                    right_view_hoodie.mid_cuff_hoodie_right.image,
+                    'mid_cuff_hoodie_right',
+                    right_view_hoodie.mid_cuff_hoodie_right.x_point,
+                    right_view_hoodie.mid_cuff_hoodie_right.y_point,
                 )
             }
         }
 
-        if (right.right_v_right_s_lower?.image) {
-            if (localStorage.getItem('right_v_right_s_lower')) {
-                loadObject(JSON.parse(localStorage.getItem('right_v_right_s_lower')))
+        if (right_view_hoodie.mid_cuff_strips_hoodie_right?.image) {
+            if (localStorage.getItem('mid_cuff_strips_hoodie_right')) {
+                loadObject(JSON.parse(localStorage.getItem('mid_cuff_strips_hoodie_right')))
             } else {
                 loadImage(
-                    right.right_v_right_s_lower.image,
-                    'right_v_right_s_lower',
-                    right.right_v_right_s_lower.x_point,
-                    right.right_v_right_s_lower.y_point,
+                    right_view_hoodie.mid_cuff_strips_hoodie_right.image,
+                    'mid_cuff_strips_hoodie_right',
+                    right_view_hoodie.mid_cuff_strips_hoodie_right.x_point,
+                    right_view_hoodie.mid_cuff_strips_hoodie_right.y_point,
                 )
             }
         }
 
+        if (right_view_hoodie.left_full_body_hoodie_right?.image) {
+            if (localStorage.getItem('left_full_body_hoodie_right')) {
+                loadObject(JSON.parse(localStorage.getItem('left_full_body_hoodie_right')))
+            } else {
+                loadImage(
+                    right_view_hoodie.left_full_body_hoodie_right.image,
+                    'left_full_body_hoodie_right',
+                    right_view_hoodie.left_full_body_hoodie_right.x_point,
+                    right_view_hoodie.left_full_body_hoodie_right.y_point,
+                )
+            }
+        }
 
+        if (right_view_hoodie.left_top_hoodie_right?.image) {
+            if (localStorage.getItem('left_top_hoodie_right')) {
+                loadObject(JSON.parse(localStorage.getItem('left_top_hoodie_right')))
+            } else {
+                loadImage(
+                    right_view_hoodie.left_top_hoodie_right.image,
+                    'left_top_hoodie_right',
+                    right_view_hoodie.left_top_hoodie_right.x_point,
+                    right_view_hoodie.left_top_hoodie_right.y_point,
+                )
+            }
+        }
 
+        if (right_view_hoodie.left_mid_hoodie_right?.image) {
+            if (localStorage.getItem('left_mid_hoodie_right')) {
+                loadObject(JSON.parse(localStorage.getItem('left_mid_hoodie_right')))
+            } else {
+                loadImage(
+                    right_view_hoodie.left_mid_hoodie_right.image,
+                    'left_mid_hoodie_right',
+                    right_view_hoodie.left_mid_hoodie_right.x_point,
+                    right_view_hoodie.left_mid_hoodie_right.y_point,
+                )
+            }
+        }
+
+        if (right_view_hoodie.left_bottom_hoodie_right?.image) {
+            if (localStorage.getItem('left_bottom_hoodie_right')) {
+                loadObject(JSON.parse(localStorage.getItem('left_bottom_hoodie_right')))
+            } else {
+                loadImage(
+                    right_view_hoodie.left_bottom_hoodie_right.image,
+                    'left_bottom_hoodie_right',
+                    right_view_hoodie.left_bottom_hoodie_right.x_point,
+                    right_view_hoodie.left_bottom_hoodie_right.y_point,
+                )
+            }
+        }
+
+        if (right_view_hoodie.left_cuff_hoodie_right?.image) {
+            if (localStorage.getItem('left_cuff_hoodie_right')) {
+                loadObject(JSON.parse(localStorage.getItem('left_cuff_hoodie_right')))
+            } else {
+                loadImage(
+                    right_view_hoodie.left_cuff_hoodie_right.image,
+                    'left_cuff_hoodie_right',
+                    right_view_hoodie.left_cuff_hoodie_right.x_point,
+                    right_view_hoodie.left_cuff_hoodie_right.y_point,
+                )
+            }
+        }
+
+        if (right_view_hoodie.left_cuff_strips_hoodie_right?.image) {
+            if (localStorage.getItem('left_cuff_strips_hoodie_right')) {
+                loadObject(JSON.parse(localStorage.getItem('left_cuff_strips_hoodie_right')))
+            } else {
+                loadImage(
+                    right_view_hoodie.left_cuff_strips_hoodie_right.image,
+                    'left_cuff_strips_hoodie_right',
+                    right_view_hoodie.left_cuff_strips_hoodie_right.x_point,
+                    right_view_hoodie.left_cuff_strips_hoodie_right.y_point,
+                )
+            }
+        }
+
+        if (right_view_hoodie.right_full_body_hoodie_right?.image) {
+            if (localStorage.getItem('right_full_body_hoodie_right')) {
+                loadObject(JSON.parse(localStorage.getItem('right_full_body_hoodie_right')))
+            } else {
+                loadImage(
+                    right_view_hoodie.right_full_body_hoodie_right.image,
+                    'right_full_body_hoodie_right',
+                    right_view_hoodie.right_full_body_hoodie_right.x_point,
+                    right_view_hoodie.right_full_body_hoodie_right.y_point,
+                )
+            }
+        }
+
+        if (right_view_hoodie.right_top_hoodie_right?.image) {
+            if (localStorage.getItem('right_top_hoodie_right')) {
+                loadObject(JSON.parse(localStorage.getItem('right_top_hoodie_right')))
+            } else {
+                loadImage(
+                    right_view_hoodie.right_top_hoodie_right.image,
+                    'right_top_hoodie_right',
+                    right_view_hoodie.right_top_hoodie_right.x_point,
+                    right_view_hoodie.right_top_hoodie_right.y_point,
+                )
+            }
+        }
+
+        if (right_view_hoodie.right_mid_hoodie_right?.image) {
+            if (localStorage.getItem('right_mid_hoodie_right')) {
+                loadObject(JSON.parse(localStorage.getItem('right_mid_hoodie_right')))
+            } else {
+                loadImage(
+                    right_view_hoodie.right_mid_hoodie_right.image,
+                    'right_mid_hoodie_right',
+                    right_view_hoodie.right_mid_hoodie_right.x_point,
+                    right_view_hoodie.right_mid_hoodie_right.y_point,
+                )
+            }
+        }
+
+        if (right_view_hoodie.right_bottom_hoodie_right?.image) {
+            if (localStorage.getItem('right_bottom_hoodie_right')) {
+                loadObject(JSON.parse(localStorage.getItem('right_bottom_hoodie_right')))
+            } else {
+                loadImage(
+                    right_view_hoodie.right_bottom_hoodie_right.image,
+                    'right_bottom_hoodie_right',
+                    right_view_hoodie.right_bottom_hoodie_right.x_point,
+                    right_view_hoodie.right_bottom_hoodie_right.y_point,
+                )
+            }
+        }
+
+        if (right_view_hoodie.right_cuff_hoodie_right?.image) {
+            if (localStorage.getItem('right_cuff_hoodie_right')) {
+                loadObject(JSON.parse(localStorage.getItem('right_cuff_hoodie_right')))
+            } else {
+                loadImage(
+                    right_view_hoodie.right_cuff_hoodie_right.image,
+                    'right_cuff_hoodie_right',
+                    right_view_hoodie.right_cuff_hoodie_right.x_point,
+                    right_view_hoodie.right_cuff_hoodie_right.y_point,
+                )
+            }
+        }
+
+        if (right_view_hoodie.right_cuff_strips_hoodie_right?.image) {
+            if (localStorage.getItem('right_cuff_strips_hoodie_right')) {
+                loadObject(JSON.parse(localStorage.getItem('right_cuff_strips_hoodie_right')))
+            } else {
+                loadImage(
+                    right_view_hoodie.right_cuff_strips_hoodie_right.image,
+                    'right_cuff_strips_hoodie_right',
+                    right_view_hoodie.right_cuff_strips_hoodie_right.x_point,
+                    right_view_hoodie.right_cuff_strips_hoodie_right.y_point,
+                )
+            }
+        }
+
+        if (right_view_hoodie.bottom_full_body_hoodie_right?.image) {
+            if (localStorage.getItem('bottom_full_body_hoodie_right')) {
+                loadObject(JSON.parse(localStorage.getItem('bottom_full_body_hoodie_right')))
+            } else {
+                loadImage(
+                    right_view_hoodie.bottom_full_body_hoodie_right.image,
+                    'bottom_full_body_hoodie_right',
+                    right_view_hoodie.bottom_full_body_hoodie_right.x_point,
+                    right_view_hoodie.bottom_full_body_hoodie_right.y_point,
+                )
+            }
+        }
+
+        if (right_view_hoodie.bottom_top_hoodie_right?.image) {
+            if (localStorage.getItem('bottom_top_hoodie_right')) {
+                loadObject(JSON.parse(localStorage.getItem('bottom_top_hoodie_right')))
+            } else {
+                loadImage(
+                    right_view_hoodie.bottom_top_hoodie_right.image,
+                    'bottom_top_hoodie_right',
+                    right_view_hoodie.bottom_top_hoodie_right.x_point,
+                    right_view_hoodie.bottom_top_hoodie_right.y_point,
+                )
+            }
+        }
+
+        if (right_view_hoodie.bottom_mid_hoodie_right?.image) {
+            if (localStorage.getItem('bottom_mid_hoodie_right')) {
+                loadObject(JSON.parse(localStorage.getItem('bottom_mid_hoodie_right')))
+            } else {
+                loadImage(
+                    right_view_hoodie.bottom_mid_hoodie_right.image,
+                    'bottom_mid_hoodie_right',
+                    right_view_hoodie.bottom_mid_hoodie_right.x_point,
+                    right_view_hoodie.bottom_mid_hoodie_right.y_point,
+                )
+            }
+        }
+
+        if (right_view_hoodie.bottom_bottom_hoodie_right?.image) {
+            if (localStorage.getItem('bottom_bottom_hoodie_right')) {
+                loadObject(JSON.parse(localStorage.getItem('bottom_bottom_hoodie_right')))
+            } else {
+                loadImage(
+                    right_view_hoodie.bottom_bottom_hoodie_right.image,
+                    'bottom_bottom_hoodie_right',
+                    right_view_hoodie.bottom_bottom_hoodie_right.x_point,
+                    right_view_hoodie.bottom_bottom_hoodie_right.y_point,
+                )
+            }
+        }
+
+        if (right_view_hoodie.bottom_cuff_hoodie_right?.image) {
+            if (localStorage.getItem('bottom_cuff_hoodie_right')) {
+                loadObject(JSON.parse(localStorage.getItem('bottom_cuff_hoodie_right')))
+            } else {
+                loadImage(
+                    right_view_hoodie.bottom_cuff_hoodie_right.image,
+                    'bottom_cuff_hoodie_right',
+                    right_view_hoodie.bottom_cuff_hoodie_right.x_point,
+                    right_view_hoodie.bottom_cuff_hoodie_right.y_point,
+                )
+            }
+        }
+
+        if (right_view_hoodie.bottom_cuff_strips_hoodie_right?.image) {
+            if (localStorage.getItem('bottom_cuff_strips_hoodie_right')) {
+                loadObject(JSON.parse(localStorage.getItem('bottom_cuff_strips_hoodie_right')))
+            } else {
+                loadImage(
+                    right_view_hoodie.bottom_cuff_strips_hoodie_right.image,
+                    'bottom_cuff_strips_hoodie_right',
+                    right_view_hoodie.bottom_cuff_strips_hoodie_right.x_point,
+                    right_view_hoodie.bottom_cuff_strips_hoodie_right.y_point,
+                )
+            }
+        }
     }
 
+
     const getSampleImages = (s) => {
-        var url = 'http://localhost:8000/api/logos';
+        var url = BASE_URL + 'logos';
 
         fetch(url)
-            .then(function(response){
+            .then(function (response) {
                 return response.json();
             })
-            .then(function (data){
+            .then(function (data) {
                 console.log(data)
                 setImg(data)
 
             })
     }
 
-    function displaySample(img_sample){
+    function displaySample(img_sample) {
         document.getElementById('sample_images').src = img_sample;
     }
 
-    function imageSaved(i){
+    function imageSaved(i) {
         let logo = JSON.parse(localStorage.getItem('samImage'))
 
         if (logo.image1?.image) {
@@ -676,7 +1794,7 @@ function SamLocalEditorHoodieFront(props) {
     }
 
 
-    const hexatoHSL=(hex)=> {
+    const hexatoHSL = (hex) => {
         var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
         var r = parseInt(result[1], 16);
         var g = parseInt(result[2], 16);
@@ -705,7 +1823,7 @@ function SamLocalEditorHoodieFront(props) {
         s = Math.round(s);
         l = l * 100;
         l = Math.round(l);
-        var colorInHSL =  h;
+        var colorInHSL = h;
         return colorInHSL
     }
 
@@ -756,216 +1874,394 @@ function SamLocalEditorHoodieFront(props) {
                 </Tabs>
             </AppBar>
             {/* front view*/}
-            <div>
-                {selectedTab === 0 &&
-                <div className='row'>
-                    <div className="btn-group" role="group" aria-label="Basic example" style={{width: "100%"}}>
-                        <button type="button" className="btn btn-secondary" onClick={() => {
-                            onComponentClick('body_first_section')
-                        }}>Body
-                        </button>
-                        <button type="button" className="btn btn-secondary" onClick={() => {
-                            onComponentClick('front-collar')
-                        }}>Collar
-                        </button>
-                        <button type="button" className="btn btn-secondary" onClick={() => {
-                            onComponentClick('sleeve')
-                        }}>sleeve
-                        </button>
-                    </div>
 
-                    {colorShow &&
-                    <div>
-                        <div style={{width: "400px", float: "left", marginLeft: "20px"}}>
-                            <p> Choose Body color</p>
-                            <CirclePicker
-                                color={color}
-                                onChangeComplete={handleChangeComplete}
-                            />
-                            <br></br>
-                            <div id="output-text">
-                                <input onChange={handleInput} placeholder="Enter text"/>
-                                <button type='button'
-                                        name='text_show'
-                                        onClick={textShow}
-                                        style={{
-                                            backgroundColor: "#767FE0",
-                                            color: "white",
-                                            border: "none",
-                                            borderRadius: "50px",
-                                            width: "120px",
-                                            height: "30px",
-                                            margin: "10px"
-                                        }}>
-                                    Add Text
-                                </button>
-                                <br></br>
+            {selectedTab === 0 &&
+            <div className='row'>
+                <div className="btn-group" role="group" aria-label="Basic example" style={{width: "100%"}}>
+                    {displyComponents &&
+                    displyComponents.map((item, index) => {
+                        return (
+                            <button key={index} type="button" className="btn btn-secondary" onClick={() => {
+                                onComponentClick(item)
+                            }}>{item}</button>
+                        )
+                    })
+                    }
+                    {/*<button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('body_first_section')}}>Body First Section</button>*/}
+                    {/*<button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('body_second_section')}}>Body second section</button>*/}
+                    {/*<button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('body_third_section')}}>Body Third Section</button>*/}
+                    {/*<button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('front-collar')}}>Collar</button>*/}
+                    {/*<button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('sleeve')}}>sleeve</button>*/}
+                </div>
+                {/*<div className="btn-group" role="group" aria-label="Basic example" style={{width: "100%"}}>*/}
+                {/*    <button type="button" className="btn btn-secondary" onClick={() => {*/}
+                {/*        onComponentClick('body_first_section')*/}
+                {/*    }}>Body*/}
+                {/*    </button>*/}
+                {/*    <button type="button" className="btn btn-secondary" onClick={() => {*/}
+                {/*        onComponentClick('front-collar')*/}
+                {/*    }}>Collar*/}
+                {/*    </button>*/}
+                {/*    <button type="button" className="btn btn-secondary" onClick={() => {*/}
+                {/*        onComponentClick('sleeve')*/}
+                {/*    }}>sleeve*/}
+                {/*    </button>*/}
+                {/*</div>*/}
 
-                                <select id="input-font" onChange={changeFontStyle(this)}>
-
-                                    <option value="DengXian"
-                                            selected="selected">
-                                        DengXian 等线
-                                    </option>
-                                    <option value="DengXian Bold">DengXian Bold   等线</option>
-                                    <option value="DengXian Light">DengXian Light   等线</option>
-                                    <option value="DFLiJinHeiW8-GB">DFLiJinHeiW8-GB   华康俪金黑W8</option>
-                                    <option value="DFGothic-EB">DFGothic-EB   ＤＦ特太ゴシック体</option>
-                                    <option value="DFKaiSho-SB">DFKaiSho-SB   ＤＦ中太楷書体</option>
-                                    <option value="DFMincho-SU">DFMincho-SU   ＤＦ超極太明朝体</option>
-                                    <option value="DFMincho-UB">DFMincho-UB   ＤＦ極太明朝体</option>
-                                    <option value="DFMincho-W5">DFMincho-W5   ＤＦ明朝体W5</option>
-                                    <option value="DFPOP1-W9">DFPOP1-W9   ＤＦPOP1体W9</option>
-                                    <option value="Flavors-Regular">Flavors-Regular</option>
-                                    <option value="Fluffy-Gothic">Fluffy-Gothic</option>
-                                    <option value="Fredericka The Great-Regular">Fredericka The Great-Regular</option>
-                                    <option value="FZQingKeYueSongS-R-GB">FZQingKeYueSongS-R-GB   方正清刻本悦宋简体</option>
-                                    <option value="GebaFont2000">GebaFont2000   方正正中黑简体</option>
-                                    <option value="FZZhengHeiS-DB-GB">FZZhengHeiS-DB-GB</option>
-                                    <option value="GeikaiSuikou">GeikaiSuikou   鯨海酔侯</option>
-                                    <option value="HannotateSC-Regular">HannotateSC-Regular   手札体-简 标准体</option>
-                                    <option value="HeiT ASC Bold Regular">HeiT ASC Bold Regular</option>
-                                    <option value="HirakakuStd-W8">HirakakuStd-W8   ヒラギノ角ゴ Std-W8</option>
-                                    <option value="HOPE">HOPE 火柴棍儿</option>
-                                    <option value="HYQinChuanFeiYingF">HYQinChuanFeiYingF   汉仪秦川飞影 繁</option>
-                                    <option value="HYShangWeiShouShuW">HYShangWeiShouShuW   汉仪尚巍手书W</option>
-                                    <option value="HYXiaoMaiTiJ">HYXiaoMaiTiJ   汉仪小麦体</option>
-                                    <option value="HYZhuZiMuTouRenW">HYZhuZiMuTouRenW   汉仪铸字木头人W 常规</option>
-                                    <option value="OTF-KanteiryuStd-Ultra">OTF-KanteiryuStd-Ultra   A-OTF 勘亭流 Std Ultra</option>
-                                    <option value="大髭115">大髭115</option>
-                                    <option value="Tayuka_R">Tayuka_R</option>
-                                    <option value="KAISO-MAKINA">KAISO-MAKINA   廻想体 マキナ B</option>
-                                    <option value="KozGoPr6N-Bold">KozGoPr6N-Bold   小塚ゴシック Pr6N H</option>
-                                    <option value="KozGoPr6N-ExtraLight">KozGoPr6N-ExtraLight   小塚ゴシック Pr6N EL</option>
-                                    <option value="KozGoPr6N-Heavy">KozGoPr6N-Heavy   小塚ゴシック Pr6N H Bold</option>
-                                    <option value="KozGoPr6N-Light">KozGoPr6N-Light   小塚ゴシック Pr6N L</option>
-                                    <option value="KozGoPr6N-Medium">KozGoPr6N-Medium   小塚ゴシック Pr6N M</option>
-                                    <option value="KozGoPr6N-Regular">KozGoPr6N-Regular   小塚ゴシック Pr6N M Regular</option>
-                                    <option value="KozGoPro-Bold">KozGoPro-Bold   小塚ゴシック Pro B Bold</option>
-                                    <option value="KozGoPro-ExtraLight">KozGoPro-ExtraLight   小塚ゴシック Pro EL</option>
-                                    <option value="KozGoPro-Heavy">KozGoPro-Heavy   小塚ゴシック Pro H</option>
-                                    <option value="KozGoPro-Light">KozGoPro-Light   小塚ゴシック Pro L</option>
-                                    <option value="KozGoPro-Medium">KozGoPro-Medium   小塚ゴシック Pro M</option>
-                                    <option value="KozGoPro-Regular">KozGoPro-Regular    小塚ゴシック Pro R</option>
-                                    <option value="KozMinPr6N-Bold">KozMinPr6N-Bold    小塚明朝 Pr6N B</option>
-                                    <option value="KozMinPr6N-ExtraLight">KozMinPr6N-ExtraLight    小塚明朝 Pr6N EL</option>
-                                    <option value="KozMinPr6N-Heavy">KozMinPr6N-Heavy     小塚明朝 Pr6N H</option>
-                                    <option value="KozMinPr6N-Light">KozMinPr6N-Light     小塚明朝 Pr6N L</option>
-                                    <option value="KozMinPr6N-Medium">KozMinPr6N-Medium     小塚明朝 Pr6N M</option>
-                                    <option value="KozMinPr6N-Regular">KozMinPr6N-Regular     小塚明朝 Pr6N R</option>
-                                    <option value="Mermaid Swash Caps">Mermaid Swash Caps</option>
-                                    <option value="Mermaid1001">Mermaid1001</option>
-                                    <option value="MFYueHei_Noncommercial-Regular">MFYueHei_Noncommercial-Regular   造字工房悦黑</option>
-                                    <option value=" Microsoft JhengHei Console"> Microsoft JhengHei Console</option>
-                                    <option value=" Microsoft JhengHei Bold"> Microsoft JhengHei Bold</option>
-                                    <option value=" Microsoft JhengHei Light"> Microsoft JhengHei Light</option>
-                                    <option value=" Microsoft YaHei">Microsoft YaHei</option>
-                                    <option value=" Microsoft Yahei Bold">Microsoft Yahei Bold   微软雅黑 Bold</option>
-                                    <option value=" Microsoft JhengHei UI Light">Microsoft JhengHei UI Light</option>
-                                    <option value=" Microsoft YaHei Regular">Microsoft YaHei Regular</option>
-                                    <option value=" Microsoft YaHei Bold">Microsoft YaHei Bold</option>
-                                    <option value=" Microsoft YaHei Heavy">Microsoft YaHei Heavy</option>
-                                    <option value=" Microsoft YaHei Light">Microsoft YaHei Light</option>
-                                    <option value=" Pacifico">Pacifico</option>
-                                    <option value=" Permanent Marker">Permanent Marker</option>
-                                    <option value=" Princess Sofia">Princess Sofia</option>
-                                    <option value=" Ronde B Square">Ronde B Square   ロンド B スクエア</option>
-                                    <option value=" Senty ZHAO">Senty ZHAO   新蒂赵孟頫</option>
-                                    <option value=" Shunpu隼風">Shunpu隼風   隼風</option>
-                                    <option value=" SimFang">SimFang   仿宋</option>
-                                    <option value=" SimHei">SimHei   常规</option>
-                                    <option value=" SimKai">SimKai   楷体-GBK</option>
-                                    <option value=" SimSun">SimSun</option>
-                                    <option value=" SimSun Bold">SimSun Bold</option>
-                                    <option value=" Vevey">Vevey</option>
-                                    <option value=" Wallpoet">Wallpoet</option>
-                                    <option value=" HanWangShinSu">HanWangShinSu 韩华新秀</option>
-                                    <option value=" Republic of China font">Republic of China font 中華民國字體</option>
-                                    <option value=" Kyodo">Kyodo   京円</option>
-                                    <option value=" Haolong">Haolong   今昔豪龙</option>
-                                    <option value=" Goodbye old times">Goodbye OldTimes   再见旧时光</option>
-                                    <option value=" Lihei">Lihei   力黑体</option>
-                                    <option value=" 华康少女文字W5">华康少女文字W5</option>
-                                    <option value="  华康海报体W12"> 华康海报体W12</option>
-                                    <option value="  华康钢笔体W2 Regular"> 华康钢笔体W2 Regular</option>
-                                    <option value="四重音">四重音</option>
-                                    <option value="基督山伯爵">基督山伯爵</option>
-                                    <option value="字酷堂清楷体">字酷堂清楷体</option>
-                                    <option value="康熙字典體 Regular">康熙字典體 Regular</option>
-                                    <option value="Genghis Khan">Genghis Khan   成吉思汗</option>
-                                    <option value="Afternoon Tea">Afternoon Tea   新蒂下午茶基本版</option>
-                                    <option value="新蒂剪纸体 Regular">新蒂剪纸体 Regular</option>
-                                    <option value="方正喵呜体 Regular">方正喵呜体 Regular</option>
-                                    <option value="FZYaoTi-M06">FZYaoTi-M06   方正姚体_GBK Regular</option>
-                                    <option value="FZYaoTi-M06T">FZYaoTi-M06T   方正姚体繁体</option>
-                                    <option value="FZZJ-XTCSJW">FZZJ-XTCSJW   方正字迹-邢体草书简体</option>
-                                    <option value="FZJingHeiShouXieS-R-GB">FZJingHeiShouXieS-R-GB   方正经黑手写简体</option>
-                                    <option value="FZJingHeiS-R-GB">FZJingHeiS-R-GB   方正经黑简体</option>
-                                    <option value="FZXingKai-S04T">FZXingKai-S04T   方正行楷繁体</option>
-                                    <option value="Highway Font">Highway Font   日本高速公路字体</option>
-                                    <option value="Long Qian body bold">Long Qian Body Bold   朗倩体粗体</option>
-                                    <option value="朗倩体细体">朗倩体细体</option>
-                                    <option value="李旭科毛笔行书 Regular">李旭科毛笔行书 Regular</option>
-                                    <option value="HYLeMiaoTiJ Regular">HYLeMiaoTiJ Regular   汉仪乐喵体简</option>
-                                    <option value="淘淘简体字体 Regular">淘淘简体字体 Regular</option>
-                                    <option value="狸记号油性笔字体 Regular">狸记号油性笔字体 Regular</option>
-                                    <option value="YuWeiJ 禹卫书法行书简体">YuWeiJ 禹卫书法行书简体</option>
-                                    <option value="YuWeiF 禹卫书法行书繁体">YuWeiF 禹卫书法行书繁体</option>
-                                    <option value="YuWeiShuFaLiShuJMFX 禹卫书法隶书繁体">YuWeiShuFaLiShuJMFX   禹卫书法隶书繁体</option>
-                                    <option value="HuJingLi-Mao 胡敬礼毛笔行书简">HuJingLi Mao   胡敬礼毛笔行书简</option>
-                                    <option value="HuJingLi-Fan 胡敬礼毛笔行书繁">HuJingLi Fan   胡敬礼毛笔行书繁</option>
-                                    <option value="SuXinShi MaoCao 苏新诗毛糙体简">SuXinShi MaoCao   苏新诗毛糙体简</option>
-                                    <option value="MBanquet P HKS Medium 蒙纳简喜宴体P">MBanquet P HKS Medium   蒙纳简喜宴体P</option>
-                                    <option value="MComic PRC Medium 蒙纳漫画体简">MComic PRC Medium   蒙纳漫画体简</option>
-                                    <option value="MComputer HK Bold 蒙纳电脑体">MComputer HK Bold   蒙纳电脑体</option>
-                                    <option value="MRocky HK Bold 蒙纳石印体">MRocky HK Bold   蒙纳石印体</option>
-                                    <option value="MStiffHei PRC UltraBold 蒙纳简超刚黑">MStiffHei PRC UltraBold   蒙纳简超刚黑</option>
-                                    <option value="MStiffHeiHK-Big5 蒙纳超刚黑">MStiffHeiHK Big5   蒙纳超刚黑</option>
-                                    <option value="MF DianHei(Noncommercial) 造字工房典黑体">MF DianHei(Noncommercial)   造字工房典黑体</option>
-                                    <option value="MF JinHei(Noncommercial) 造字工房劲黑体（非商用)">MF JinHei(Noncommercial)    造字工房劲黑体（非商用)</option>
-                                    <option value="RTWS ShangGothic G0v1 Bold 造字工房尚黑 G0v1 粗体">RTWS ShangGothic G0v1 Bold    造字工房尚黑 G0v1 粗体</option>
-                                    <option value="RTWS YueRoundedGothic Demo Regular 造字工房悦圆演示版常规体">RTWS YueRoundedGothic Demo Regular   造字工房悦圆演示版常规体</option>
-                                    <option value=",RTWSYueGoTrial-Regular 造字工房悦黑体验版常规体">RTWSYueGoTrial Regular   造字工房悦黑体验版常规体</option>
-                                    <option value="MF YiHei 造字工房毅黑体">MF YiHei(Noncommercial)   造字工房毅黑体</option>
-                                    <option value="MF BanHei 造字工房版黑体">MF BanHei(Noncommercial)   造字工房版黑体</option>
-                                    <option value="REEJI-HonghuangLi-MediumGB1.0 锐字工房洪荒之力中黑简1.0">HonghuangLi MediumGB1.0   锐字工房洪荒之力中黑简1.0</option>
-                                    <option value="QingYang 青羊字体">QingYang   青羊字体</option>
-                                </select>
-                                <select id="input-font" style={{marginLeft: "10px"}}>
-
-                                    <option value="Normal"
-                                            selected="selected">
-                                        Normal
-                                    </option>
-                                    <option value="Arial" style={{fontStyle: "bolder"}}>Bold</option>
-                                    <option value="fantasy" style={{fontStyle: "italic"}}>Italic</option>
-                                    <option value="cursive" style={{fontStyle: "underline"}}>Underline</option>
-                                </select>
-
-                            </div>
-                            <br></br>
-                            {/*    <CirclePicker*/}
-                            {/*    // color={ name }*/}
-                            {/*    // onChangeComplete={ handleChangeComplete}*/}
-                            {/*/>*/}
+                {colorShow &&
+                <div>
+                    <div style={{width: "400px", float: "left", marginLeft: "20px"}}>
+                        <p> Choose Body color</p>
+                        <CirclePicker
+                            color={color}
+                            onChangeComplete={handleChangeComplete}
+                        />
+                        <br></br>
+                        <div id="output-text">
+                            <input onChange={handleInput} placeholder="Enter text"/>
+                            <button type='button'
+                                    name='text_show'
+                                    onClick={textShow}
+                                    style={{
+                                        backgroundColor: "#767FE0",
+                                        color: "white",
+                                        border: "none",
+                                        borderRadius: "50px",
+                                        width: "120px",
+                                        height: "30px",
+                                        margin: "10px"
+                                    }}>
+                                Add Text
+                            </button>
                             <br></br>
 
-                            <input type="file"/>
-                            {/*<button type='button'*/}
-                            {/*                        name='text_show'*/}
-                            {/*                        onClick={download_Image}*/}
-                            {/*                        style={{*/}
-                            {/*                            backgroundColor: "#767FE0",*/}
-                            {/*                            color: "white",*/}
-                            {/*                            border: "none",*/}
-                            {/*                            borderRadius: "50px",*/}
-                            {/*                            width: "120px",*/}
-                            {/*                            height: "30px",*/}
-                            {/*                            margin: "10px"*/}
-                            {/*                        }}>*/}
-                            {/*                    Download Design*/}
-                            {/*                </button>*/}
+                            <select id="input-font" onChange={changeFontStyle(this)}>
+
+                                <option value="DengXian"
+                                        selected="selected">
+                                    DengXian 等线
+                                </option>
+                                <option value="DengXian Bold">DengXian Bold 等线</option>
+                                <option value="DengXian Light">DengXian Light 等线</option>
+                                <option value="DFLiJinHeiW8-GB">DFLiJinHeiW8-GB 华康俪金黑W8</option>
+                                <option value="DFGothic-EB">DFGothic-EB ＤＦ特太ゴシック体</option>
+                                <option value="DFKaiSho-SB">DFKaiSho-SB ＤＦ中太楷書体</option>
+                                <option value="DFMincho-SU">DFMincho-SU ＤＦ超極太明朝体</option>
+                                <option value="DFMincho-UB">DFMincho-UB ＤＦ極太明朝体</option>
+                                <option value="DFMincho-W5">DFMincho-W5 ＤＦ明朝体W5</option>
+                                <option value="DFPOP1-W9">DFPOP1-W9 ＤＦPOP1体W9</option>
+                                <option value="Flavors-Regular">Flavors-Regular</option>
+                                <option value="Fluffy-Gothic">Fluffy-Gothic</option>
+                                <option value="Fredericka The Great-Regular">Fredericka The Great-Regular</option>
+                                <option value="FZQingKeYueSongS-R-GB">FZQingKeYueSongS-R-GB 方正清刻本悦宋简体</option>
+                                <option value="GebaFont2000">GebaFont2000 方正正中黑简体</option>
+                                <option value="FZZhengHeiS-DB-GB">FZZhengHeiS-DB-GB</option>
+                                <option value="GeikaiSuikou">GeikaiSuikou 鯨海酔侯</option>
+                                <option value="HannotateSC-Regular">HannotateSC-Regular 手札体-简 标准体</option>
+                                <option value="HeiT ASC Bold Regular">HeiT ASC Bold Regular</option>
+                                <option value="HirakakuStd-W8">HirakakuStd-W8 ヒラギノ角ゴ Std-W8</option>
+                                <option value="HOPE">HOPE 火柴棍儿</option>
+                                <option value="HYQinChuanFeiYingF">HYQinChuanFeiYingF 汉仪秦川飞影 繁</option>
+                                <option value="HYShangWeiShouShuW">HYShangWeiShouShuW 汉仪尚巍手书W</option>
+                                <option value="HYXiaoMaiTiJ">HYXiaoMaiTiJ 汉仪小麦体</option>
+                                <option value="HYZhuZiMuTouRenW">HYZhuZiMuTouRenW 汉仪铸字木头人W 常规</option>
+                                <option value="OTF-KanteiryuStd-Ultra">OTF-KanteiryuStd-Ultra A-OTF 勘亭流 Std Ultra
+                                </option>
+                                <option value="大髭115">大髭115</option>
+                                <option value="Tayuka_R">Tayuka_R</option>
+                                <option value="KAISO-MAKINA">KAISO-MAKINA 廻想体 マキナ B</option>
+                                <option value="KozGoPr6N-Bold">KozGoPr6N-Bold 小塚ゴシック Pr6N H</option>
+                                <option value="KozGoPr6N-ExtraLight">KozGoPr6N-ExtraLight 小塚ゴシック Pr6N EL</option>
+                                <option value="KozGoPr6N-Heavy">KozGoPr6N-Heavy 小塚ゴシック Pr6N H Bold</option>
+                                <option value="KozGoPr6N-Light">KozGoPr6N-Light 小塚ゴシック Pr6N L</option>
+                                <option value="KozGoPr6N-Medium">KozGoPr6N-Medium 小塚ゴシック Pr6N M</option>
+                                <option value="KozGoPr6N-Regular">KozGoPr6N-Regular 小塚ゴシック Pr6N M Regular</option>
+                                <option value="KozGoPro-Bold">KozGoPro-Bold 小塚ゴシック Pro B Bold</option>
+                                <option value="KozGoPro-ExtraLight">KozGoPro-ExtraLight 小塚ゴシック Pro EL</option>
+                                <option value="KozGoPro-Heavy">KozGoPro-Heavy 小塚ゴシック Pro H</option>
+                                <option value="KozGoPro-Light">KozGoPro-Light 小塚ゴシック Pro L</option>
+                                <option value="KozGoPro-Medium">KozGoPro-Medium 小塚ゴシック Pro M</option>
+                                <option value="KozGoPro-Regular">KozGoPro-Regular 小塚ゴシック Pro R</option>
+                                <option value="KozMinPr6N-Bold">KozMinPr6N-Bold 小塚明朝 Pr6N B</option>
+                                <option value="KozMinPr6N-ExtraLight">KozMinPr6N-ExtraLight 小塚明朝 Pr6N EL</option>
+                                <option value="KozMinPr6N-Heavy">KozMinPr6N-Heavy 小塚明朝 Pr6N H</option>
+                                <option value="KozMinPr6N-Light">KozMinPr6N-Light 小塚明朝 Pr6N L</option>
+                                <option value="KozMinPr6N-Medium">KozMinPr6N-Medium 小塚明朝 Pr6N M</option>
+                                <option value="KozMinPr6N-Regular">KozMinPr6N-Regular 小塚明朝 Pr6N R</option>
+                                <option value="Mermaid Swash Caps">Mermaid Swash Caps</option>
+                                <option value="Mermaid1001">Mermaid1001</option>
+                                <option value="MFYueHei_Noncommercial-Regular">MFYueHei_Noncommercial-Regular
+                                    造字工房悦黑
+                                </option>
+                                <option value=" Microsoft JhengHei Console"> Microsoft JhengHei Console</option>
+                                <option value=" Microsoft JhengHei Bold"> Microsoft JhengHei Bold</option>
+                                <option value=" Microsoft JhengHei Light"> Microsoft JhengHei Light</option>
+                                <option value=" Microsoft YaHei">Microsoft YaHei</option>
+                                <option value=" Microsoft Yahei Bold">Microsoft Yahei Bold 微软雅黑 Bold</option>
+                                <option value=" Microsoft JhengHei UI Light">Microsoft JhengHei UI Light</option>
+                                <option value=" Microsoft YaHei Regular">Microsoft YaHei Regular</option>
+                                <option value=" Microsoft YaHei Bold">Microsoft YaHei Bold</option>
+                                <option value=" Microsoft YaHei Heavy">Microsoft YaHei Heavy</option>
+                                <option value=" Microsoft YaHei Light">Microsoft YaHei Light</option>
+                                <option value=" Pacifico">Pacifico</option>
+                                <option value=" Permanent Marker">Permanent Marker</option>
+                                <option value=" Princess Sofia">Princess Sofia</option>
+                                <option value=" Ronde B Square">Ronde B Square ロンド B スクエア</option>
+                                <option value=" Senty ZHAO">Senty ZHAO 新蒂赵孟頫</option>
+                                <option value=" Shunpu隼風">Shunpu隼風 隼風</option>
+                                <option value=" SimFang">SimFang 仿宋</option>
+                                <option value=" SimHei">SimHei 常规</option>
+                                <option value=" SimKai">SimKai 楷体-GBK</option>
+                                <option value=" SimSun">SimSun</option>
+                                <option value=" SimSun Bold">SimSun Bold</option>
+                                <option value=" Vevey">Vevey</option>
+                                <option value=" Wallpoet">Wallpoet</option>
+                                <option value=" HanWangShinSu">HanWangShinSu 韩华新秀</option>
+                                <option value=" Republic of China font">Republic of China font 中華民國字體</option>
+                                <option value=" Kyodo">Kyodo 京円</option>
+                                <option value=" Haolong">Haolong 今昔豪龙</option>
+                                <option value=" Goodbye old times">Goodbye OldTimes 再见旧时光</option>
+                                <option value=" Lihei">Lihei 力黑体</option>
+                                <option value=" 华康少女文字W5">华康少女文字W5</option>
+                                <option value="  华康海报体W12"> 华康海报体W12</option>
+                                <option value="  华康钢笔体W2 Regular"> 华康钢笔体W2 Regular</option>
+                                <option value="四重音">四重音</option>
+                                <option value="基督山伯爵">基督山伯爵</option>
+                                <option value="字酷堂清楷体">字酷堂清楷体</option>
+                                <option value="康熙字典體 Regular">康熙字典體 Regular</option>
+                                <option value="Genghis Khan">Genghis Khan 成吉思汗</option>
+                                <option value="Afternoon Tea">Afternoon Tea 新蒂下午茶基本版</option>
+                                <option value="新蒂剪纸体 Regular">新蒂剪纸体 Regular</option>
+                                <option value="方正喵呜体 Regular">方正喵呜体 Regular</option>
+                                <option value="FZYaoTi-M06">FZYaoTi-M06 方正姚体_GBK Regular</option>
+                                <option value="FZYaoTi-M06T">FZYaoTi-M06T 方正姚体繁体</option>
+                                <option value="FZZJ-XTCSJW">FZZJ-XTCSJW 方正字迹-邢体草书简体</option>
+                                <option value="FZJingHeiShouXieS-R-GB">FZJingHeiShouXieS-R-GB 方正经黑手写简体</option>
+                                <option value="FZJingHeiS-R-GB">FZJingHeiS-R-GB 方正经黑简体</option>
+                                <option value="FZXingKai-S04T">FZXingKai-S04T 方正行楷繁体</option>
+                                <option value="Highway Font">Highway Font 日本高速公路字体</option>
+                                <option value="Long Qian body bold">Long Qian Body Bold 朗倩体粗体</option>
+                                <option value="朗倩体细体">朗倩体细体</option>
+                                <option value="李旭科毛笔行书 Regular">李旭科毛笔行书 Regular</option>
+                                <option value="HYLeMiaoTiJ Regular">HYLeMiaoTiJ Regular 汉仪乐喵体简</option>
+                                <option value="淘淘简体字体 Regular">淘淘简体字体 Regular</option>
+                                <option value="狸记号油性笔字体 Regular">狸记号油性笔字体 Regular</option>
+                                <option value="YuWeiJ 禹卫书法行书简体">YuWeiJ 禹卫书法行书简体</option>
+                                <option value="YuWeiF 禹卫书法行书繁体">YuWeiF 禹卫书法行书繁体</option>
+                                <option value="YuWeiShuFaLiShuJMFX 禹卫书法隶书繁体">YuWeiShuFaLiShuJMFX 禹卫书法隶书繁体</option>
+                                <option value="HuJingLi-Mao 胡敬礼毛笔行书简">HuJingLi Mao 胡敬礼毛笔行书简</option>
+                                <option value="HuJingLi-Fan 胡敬礼毛笔行书繁">HuJingLi Fan 胡敬礼毛笔行书繁</option>
+                                <option value="SuXinShi MaoCao 苏新诗毛糙体简">SuXinShi MaoCao 苏新诗毛糙体简</option>
+                                <option value="MBanquet P HKS Medium 蒙纳简喜宴体P">MBanquet P HKS Medium 蒙纳简喜宴体P</option>
+                                <option value="MComic PRC Medium 蒙纳漫画体简">MComic PRC Medium 蒙纳漫画体简</option>
+                                <option value="MComputer HK Bold 蒙纳电脑体">MComputer HK Bold 蒙纳电脑体</option>
+                                <option value="MRocky HK Bold 蒙纳石印体">MRocky HK Bold 蒙纳石印体</option>
+                                <option value="MStiffHei PRC UltraBold 蒙纳简超刚黑">MStiffHei PRC UltraBold 蒙纳简超刚黑
+                                </option>
+                                <option value="MStiffHeiHK-Big5 蒙纳超刚黑">MStiffHeiHK Big5 蒙纳超刚黑</option>
+                                <option value="MF DianHei(Noncommercial) 造字工房典黑体">MF DianHei(Noncommercial)
+                                    造字工房典黑体
+                                </option>
+                                <option value="MF JinHei(Noncommercial) 造字工房劲黑体（非商用)">MF JinHei(Noncommercial)
+                                    造字工房劲黑体（非商用)
+                                </option>
+                                <option value="RTWS ShangGothic G0v1 Bold 造字工房尚黑 G0v1 粗体">RTWS ShangGothic G0v1 Bold
+                                    造字工房尚黑 G0v1 粗体
+                                </option>
+                                <option value="RTWS YueRoundedGothic Demo Regular 造字工房悦圆演示版常规体">RTWS
+                                    YueRoundedGothic Demo Regular 造字工房悦圆演示版常规体
+                                </option>
+                                <option value=",RTWSYueGoTrial-Regular 造字工房悦黑体验版常规体">RTWSYueGoTrial Regular
+                                    造字工房悦黑体验版常规体
+                                </option>
+                                <option value="MF YiHei 造字工房毅黑体">MF YiHei(Noncommercial) 造字工房毅黑体</option>
+                                <option value="MF BanHei 造字工房版黑体">MF BanHei(Noncommercial) 造字工房版黑体</option>
+                                <option value="REEJI-HonghuangLi-MediumGB1.0 锐字工房洪荒之力中黑简1.0">HonghuangLi MediumGB1.0
+                                    锐字工房洪荒之力中黑简1.0
+                                </option>
+                                <option value="QingYang 青羊字体">QingYang 青羊字体</option>
+                            </select>
+                            <select id="input-font" style={{marginLeft: "10px"}}>
+
+                                <option value="Normal"
+                                        selected="selected">
+                                    Normal
+                                </option>
+                                <option value="Arial" style={{fontStyle: "bolder"}}>Bold</option>
+                                <option value="fantasy" style={{fontStyle: "italic"}}>Italic</option>
+                                <option value="cursive" style={{fontStyle: "underline"}}>Underline</option>
+                            </select>
+
                         </div>
+                        <br></br>
+                        {/*    <CirclePicker*/}
+                        {/*    // color={ name }*/}
+                        {/*    // onChangeComplete={ handleChangeComplete}*/}
+                        {/*/>*/}
+                        <br></br>
+
+                        <input type="file"/>
+                        {/*<button type='button'*/}
+                        {/*                        name='text_show'*/}
+                        {/*                        onClick={download_Image}*/}
+                        {/*                        style={{*/}
+                        {/*                            backgroundColor: "#767FE0",*/}
+                        {/*                            color: "white",*/}
+                        {/*                            border: "none",*/}
+                        {/*                            borderRadius: "50px",*/}
+                        {/*                            width: "120px",*/}
+                        {/*                            height: "30px",*/}
+                        {/*                            margin: "10px"*/}
+                        {/*                        }}>*/}
+                        {/*                    Download Design*/}
+                        {/*                </button>*/}
+                    </div>
+                    <div style={{width: "300px", float: "right"}}>
+                        <div style={{
+                            width: "300px",
+                            height: "300px",
+                            border: "solid",
+                            borderColor: "black",
+                            borderWidth: "1px",
+                            float: "right",
+                            marginRight: "-500px",
+                            marginTop: "10px"
+                        }}>
+                            <button onClick={getSampleImages}>Load Images</button>
+                            {
+                                img ?
+                                    img.map((s) =>
+                                        <img src={s.image} alt={''} style={{width: "50px", height: "50px"}}
+                                             onClick={() => {
+                                                 load_logo(s.image)
+                                             }}/>
+                                    )
+                                    : null}
+                        </div>
+
+                    </div>
+                </div>
+                }
+
+                {/*<form action="">*/}
+                {/*    <label htmlFor="patterns" style={{marginTop: "20px"}}></label>*/}
+                {/*    <select name="patterns" id="patterns" style={{*/}
+                {/*        width: "150px",*/}
+                {/*        height: "30px",*/}
+                {/*        borderWidth: "1px",*/}
+                {/*        borderStyle: "solid",*/}
+                {/*        margin: "10px"*/}
+                {/*    }}>*/}
+                {/*        <option value="image1">Image1</option>*/}
+                {/*        <option value="image2">Image2</option>*/}
+                {/*        <option value="image3">Image3</option>*/}
+                {/*        <option value="image4">Image4</option>*/}
+                {/*    </select>*/}
+                {/*    <input type="submit" value="Submit"></input>*/}
+                {/*</form>*/}
+
+                {/*<button type='button'*/}
+                {/*        name='upload_logo'*/}
+                {/*    // onClick={load_logo}*/}
+                {/*        style={{*/}
+                {/*            backgroundColor: "#767FE0",*/}
+                {/*            color: "white",*/}
+                {/*            border: "none",*/}
+                {/*            borderRadius: "50px",*/}
+                {/*            width: "120px",*/}
+                {/*            height: "30px",*/}
+                {/*            margin: "10px"*/}
+                {/*        }}>*/}
+                {/*    Load Logo*/}
+                {/*</button>*/}
+                {/*<br></br>*/}
+                {/*<button type="button"*/}
+                {/*        onClick={download_Image}*/}
+                {/*        style={{*/}
+                {/*            backgroundColor: "#767FE0",*/}
+                {/*            color: "white",*/}
+                {/*            border: "none",*/}
+                {/*            borderRadius: "50px",*/}
+                {/*            width: "120px",*/}
+                {/*            height: "30px",*/}
+                {/*            margin: "10px"*/}
+                {/*        }}>Download Image*/}
+                {/*</button>*/}
+
+            </div>
+            }
+            {/* back view */}
+            {selectedTab === 1 &&
+            <div className='row' style={{width: "100%"}}>
+                <div className="btn-group" role="group" aria-label="Basic example" style={{width: "100%"}}>
+                    {displyComponents &&
+                    displyComponents.map((item, index) => {
+                        return (
+                            <button key={index} type="button" className="btn btn-secondary" onClick={() => {
+                                onComponentClick(item)
+                            }}>{item}</button>
+                        )
+                    })
+                    }
+                    {/*<button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('body_first_section')}}>Body First Section</button>*/}
+                    {/*<button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('body_second_section')}}>Body second section</button>*/}
+                    {/*<button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('body_third_section')}}>Body Third Section</button>*/}
+                    {/*<button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('front-collar')}}>Collar</button>*/}
+                    {/*<button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('sleeve')}}>sleeve</button>*/}
+                </div>
+                {/*<div className="btn-group" role="group" aria-label="Basic example" style={{width:"100%"}}>*/}
+                {/*    <button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('back_second_part')}}>Back</button>*/}
+                {/*    /!*<button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('front-collar')}}>Collar</button>*!/*/}
+                {/*    <button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('sleeve')}}>Sleeve</button>*/}
+                {/*</div>*/}
+                {colorShow &&
+                <div style={{marginLeft: "50px", display: "inline"}}>
+                    <p> Choose color</p>
+
+                    <CirclePicker
+                        color={color}
+                        onChangeComplete={handleChangeComplete}
+                    />
+                    <br></br>
+                    <div id="output-text">
+                        <input onChange={handleInput} placeholder="Enter text"/>
+                        <button type='button'
+                                name='text_show'
+                                onClick={textShow}
+                                style={{
+                                    backgroundColor: "#767FE0",
+                                    color: "white",
+                                    border: "none",
+                                    borderRadius: "50px",
+                                    width: "120px",
+                                    height: "30px",
+                                    margin: "10px"
+                                }}>
+                            Add Text
+                        </button>
+                        <br></br>
+
+                        <select id="input-font" onChange={changeFontStyle(this)}>
+
+                            <option value="Comic Sans"
+                                    selected="selected">
+                                Comic Sans
+                            </option>
+                            <option value="Arial">Arial</option>
+                            <option value="fantasy">Fantasy</option>
+                            <option value="cursive">cursive</option>
+                        </select>
+                        <select id="input-font" style={{marginLeft: "10px"}}>
+
+                            <option value="Normal"
+                                    selected="selected">
+                                Normal
+                            </option>
+                            <option value="Arial" style={{fontStyle: "bolder"}}>Bold</option>
+                            <option value="fantasy" style={{fontStyle: "italic"}}>Italic</option>
+                            <option value="cursive" style={{fontStyle: "underline"}}>Underline</option>
+                        </select>
+                        <br></br>
                         <div style={{width: "300px", float: "right"}}>
                             <div style={{
                                 width: "300px",
@@ -974,8 +2270,8 @@ function SamLocalEditorHoodieFront(props) {
                                 borderColor: "black",
                                 borderWidth: "1px",
                                 float: "right",
-                                marginRight: "-500px",
-                                marginTop: "10px"
+                                marginRight: "-980px",
+                                marginTop: "-200px"
                             }}>
                                 <button onClick={getSampleImages}>Load Images</button>
                                 {
@@ -990,295 +2286,222 @@ function SamLocalEditorHoodieFront(props) {
                             </div>
 
                         </div>
+                        <br></br>
+
                     </div>
-                    }
-
-                    {/*<form action="">*/}
-                    {/*    <label htmlFor="patterns" style={{marginTop: "20px"}}></label>*/}
-                    {/*    <select name="patterns" id="patterns" style={{*/}
-                    {/*        width: "150px",*/}
-                    {/*        height: "30px",*/}
-                    {/*        borderWidth: "1px",*/}
-                    {/*        borderStyle: "solid",*/}
-                    {/*        margin: "10px"*/}
-                    {/*    }}>*/}
-                    {/*        <option value="image1">Image1</option>*/}
-                    {/*        <option value="image2">Image2</option>*/}
-                    {/*        <option value="image3">Image3</option>*/}
-                    {/*        <option value="image4">Image4</option>*/}
-                    {/*    </select>*/}
-                    {/*    <input type="submit" value="Submit"></input>*/}
-                    {/*</form>*/}
-
-                    {/*<button type='button'*/}
-                    {/*        name='upload_logo'*/}
-                    {/*    // onClick={load_logo}*/}
-                    {/*        style={{*/}
-                    {/*            backgroundColor: "#767FE0",*/}
-                    {/*            color: "white",*/}
-                    {/*            border: "none",*/}
-                    {/*            borderRadius: "50px",*/}
-                    {/*            width: "120px",*/}
-                    {/*            height: "30px",*/}
-                    {/*            margin: "10px"*/}
-                    {/*        }}>*/}
-                    {/*    Load Logo*/}
-                    {/*</button>*/}
-                    {/*<br></br>*/}
-                    {/*<button type="button"*/}
-                    {/*        onClick={download_Image}*/}
-                    {/*        style={{*/}
-                    {/*            backgroundColor: "#767FE0",*/}
-                    {/*            color: "white",*/}
-                    {/*            border: "none",*/}
-                    {/*            borderRadius: "50px",*/}
-                    {/*            width: "120px",*/}
-                    {/*            height: "30px",*/}
-                    {/*            margin: "10px"*/}
-                    {/*        }}>Download Image*/}
-                    {/*</button>*/}
-
                 </div>
                 }
-                {/* back view */}
-                {selectedTab === 1 &&
-                // <div className='row' style={{width:"100%"}}>
-                //     <div className="btn-group" role="group" aria-label="Basic example" style={{width:"100%"}}>
-                //         <button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('back_second_part')}}>Back</button>
-                //         {/*<button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('front-collar')}}>Collar</button>*/}
-                //         <button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('sleeve')}}>Sleeve</button>
-                //     </div>
-                //     {colorShow &&
-                //     <div style={{marginLeft:"50px", display:"inline"}}>
-                //      <p> Choose color</p>
-                //
-                //     <CirclePicker
-                //         color={ color }
-                //         onChangeComplete={ handleChangeComplete}
-                //     />
-                //     <br></br>
-                //         <div id="output-text">
-                //             <input onChange={handleInput} placeholder="Enter text"/>
-                //                     <button type='button'
-                //                             name='text_show'
-                //                             onClick={textShow}
-                //                             style={{
-                //                                 backgroundColor: "#767FE0",
-                //                                 color: "white",
-                //                                 border: "none",
-                //                                 borderRadius: "50px",
-                //                                 width: "120px",
-                //                                 height: "30px",
-                //                                 margin: "10px"
-                //                             }}>
-                //                         Add Text
-                //                     </button>
-                //             <br></br>
-                //
-                //             <select id="input-font" onChange={changeFontStyle (this)}>
-                //
-                //             <option value="Comic Sans"
-                //                     selected="selected">
-                //                 Comic Sans
-                //             </option>
-                //             <option value="Arial">Arial</option>
-                //             <option value="fantasy">Fantasy</option>
-                //             <option value="cursive">cursive</option>
-                //         </select>
-                //             <select id="input-font" style={{marginLeft:"10px"}}>
-                //
-                //             <option value="Normal"
-                //                     selected="selected">
-                //                 Normal
-                //             </option>
-                //             <option value="Arial" style={{fontStyle:"bolder"}}>Bold</option>
-                //             <option value="fantasy" style={{fontStyle:"italic"}}>Italic</option>
-                //             <option value="cursive" style={{fontStyle:"underline"}}>Underline</option>
-                //         </select>
-                //             <br></br>
-                //             <div style={{width:"300px", float:"right"}}>
-                //             <div style={{width:"300px", height:"300px", border:"solid", borderColor:"black", borderWidth:"1px", float:"right", marginRight:"-980px", marginTop:"-200px"}}>
-                //                 <button onClick={getSampleImages}>Load Images</button>
-                //                 {
-                //                     img?
-                //                     img.map((s) =>
-                //                              <img src={s.image} alt={''} style={{width:"50px", height:"50px"}} onClick={()=> {load_logo(s.image)}}/>
-                //
-                //                     )
-                //                 :null}
-                //             </div>
-                //
-                //         </div>
-                //             <br></br>
-                //
-                //         </div>
-                //     </div>
-                //     }
-                // </div>
-                // <SamLocalEditorBack/>
-                    <SamLocalEditorHoodieBack/>
-                }
-                {selectedTab === 2 &&
-                // <div className='row' style={{width:"100%"}}>
-                //     <div className="btn-group" role="group" aria-label="Basic example" style={{width:"100%"}}>
-                //         <button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('left_v_upper_part')}}>Left Sleeve</button>
-                //         {/*<button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('front-collar')}}>Collar</button>*/}
-                //         <button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('left_v_lower_part')}}>Right Sleeve</button>
-                //     </div>
-                //     {colorShow &&
-                //     <div style={{marginLeft:"50px", display:"inline"}}>
-                //      <p> Choose color</p>
-                //
-                //     <CirclePicker
-                //         color={ color }
-                //         onChangeComplete={ handleChangeComplete }
-                //     />
-                //     <br></br>
-                //         <div id="output-text">
-                //             <input onChange={handleInput} placeholder="Enter text"/>
-                //                     <button type='button'
-                //                             name='text_show'
-                //                             onClick={textShow}
-                //                             style={{
-                //                                 backgroundColor: "#767FE0",
-                //                                 color: "white",
-                //                                 border: "none",
-                //                                 borderRadius: "50px",
-                //                                 width: "120px",
-                //                                 height: "30px",
-                //                                 margin: "10px"
-                //                             }}>
-                //                         Add Text
-                //                     </button>
-                //             <br></br>
-                //
-                //             <select id="input-font" onChange={changeFontStyle (this)}>
-                //
-                //             <option value="Comic Sans"
-                //                     selected="selected">
-                //                 Comic Sans
-                //             </option>
-                //             <option value="Arial">Arial</option>
-                //             <option value="fantasy">Fantasy</option>
-                //             <option value="cursive">cursive</option>
-                //         </select>
-                //             <select id="input-font" style={{marginLeft:"10px"}}>
-                //
-                //             <option value="Normal"
-                //                     selected="selected">
-                //                 Normal
-                //             </option>
-                //             <option value="Arial" style={{fontStyle:"bolder"}}>Bold</option>
-                //             <option value="fantasy" style={{fontStyle:"italic"}}>Italic</option>
-                //             <option value="cursive" style={{fontStyle:"underline"}}>Underline</option>
-                //         </select>
-                //             <br></br>
-                //             <div style={{width:"300px", float:"right"}}>
-                //             <div style={{width:"300px", height:"300px", border:"solid", borderColor:"black", borderWidth:"1px", float:"right", marginRight:"-900px", marginTop:"-150px"}}>
-                //                 <button onClick={getSampleImages}>Load Images</button>
-                //                 {
-                //                     img?
-                //                     img.map((s) =>
-                //                              <img src={s.image} alt={''} style={{width:"50px", height:"50px"}} onClick={()=> {load_logo(s.image)}}/>
-                //                     )
-                //                 :null}
-                //             </div>
-                //
-                //         </div>
-                //             <br></br>
-                //
-                //         </div>
-                //     </div>
-                //     }
-                // </div>
-                // <SamLocalEditorRight/>
-                    <SamLocalEditorHoodieRight/>
-                }
-                {selectedTab === 3 &&
-                // // <div>
-                // // {/*    <div className='row' style={{width:"100%"}}>*/}
-                // // {/*    <div className="btn-group" role="group" aria-label="Basic example" style={{width:"100%"}}>*/}
-                // // {/*        <button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('left_v_upper_part')}}>Left Sleeve</button>*/}
-                // // {/*        /!*<button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('front-collar')}}>Collar</button>*!/*/}
-                // // {/*        <button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('left_v_lower_part')}}>Right Sleeve</button>*/}
-                // // {/*    </div>*/}
-                // // {/*    {colorShow &&*/}
-                // // {/*    <div style={{marginLeft:"50px", display:"inline"}}>*/}
-                // // {/*     <p> Choose color</p>*/}
-                // //
-                // // {/*    <CirclePicker*/}
-                // // {/*        color={ color }*/}
-                // // {/*        onChangeComplete={ handleChangeComplete }*/}
-                // // {/*    />*/}
-                // // {/*    <br></br>*/}
-                // // {/*        <div id="output-text">*/}
-                // // {/*            <input onChange={handleInput} placeholder="Enter text"/>*/}
-                // // {/*                    <button type='button'*/}
-                // // {/*                            name='text_show'*/}
-                // // {/*                            onClick={textShow}*/}
-                // // {/*                            style={{*/}
-                // // {/*                                backgroundColor: "#767FE0",*/}
-                // // {/*                                color: "white",*/}
-                // // {/*                                border: "none",*/}
-                // // {/*                                borderRadius: "50px",*/}
-                // // {/*                                width: "120px",*/}
-                // // {/*                                height: "30px",*/}
-                // // {/*                                margin: "10px"*/}
-                // // {/*                            }}>*/}
-                // // {/*                        Add Text*/}
-                // // {/*                    </button>*/}
-                // // {/*            <br></br>*/}
-                // //
-                // // {/*            <select id="input-font" onChange={changeFontStyle (this)}>*/}
-                // //
-                // // {/*            <option value="Comic Sans"*/}
-                // // {/*                    selected="selected">*/}
-                // // {/*                Comic Sans*/}
-                // // {/*            </option>*/}
-                // {/*/!*            <option value="Arial">Arial</option>*!/*/}
-                // {/*/!*            <option value="fantasy">Fantasy</option>*!/*/}
-                // {/*/!*            <option value="cursive">cursive</option>*!/*/}
-                // {/*/!*        </select>*!/*/}
-                // {/*/!*            <select id="input-font" style={{marginLeft:"10px"}}>*!/*/}
-                //
-                // {/*/!*            <option value="Normal"*!/*/}
-                // {/*/!*                    selected="selected">*!/*/}
-                // {/*/!*                Normal*!/*/}
-                // {/*/!*            </option>*!/*/}
-                // // {/*            <option value="Arial" style={{fontStyle:"bolder"}}>Bold</option>*/}
-                // {/*/!*            <option value="fantasy" style={{fontStyle:"italic"}}>Italic</option>*!/*/}
-                // {/*/!*            <option value="cursive" style={{fontStyle:"underline"}}>Underline</option>*!/*/}
-                // {/*/!*        </select>*!/*/}
-                // {/*/!*            <br></br>*!/*/}
-                // {/*/!*            <div style={{width:"300px", float:"right"}}>*!/*/}
-                // // {/*            <div style={{width:"300px", height:"300px", border:"solid", borderColor:"black", borderWidth:"1px", float:"right", marginRight:"-900px", marginTop:"-150px"}}>*/}
-                // {/*/!*                <button onClick={getSampleImages}>Load Images</button>*!/*/}
-                // {/*/!*                {*!/*/}
-                // {/*/!*                    img?*!/*/}
-                // {/*/!*                    img.map((s) =>*!/*/}
-                // {/*/!*                             <img src={s.image} alt={''} style={{width:"50px", height:"50px"}} onClick={()=> {load_logo(s.image)}}/>*!/*/}
-                // {/*/!*                    )*!/*/}
-                // {/*/!*                :null}*!/*/}
-                // // {/*            </div>*/}
-                // //
-                // // {/*        </div>*/}
-                // // {/*            <br></br>*/}
-                // //
-                // // {/*        </div>*/}
-                // {/*/!*    </div>*!/*/}
-                // {/*/!*    }*!/*/}
-                // {/*/!*</div>*!/*/}
-                // {/*    /!*<SamLocalEditorLeft/>*!/*/}
-                // {/*</div>*/}
-                    <SamLocalEditorHoodieLeft/>
+            </div>
+            }
+            {selectedTab === 2 &&
+            <div className='row' style={{width: "100%"}}>
+                <div className="btn-group" role="group" aria-label="Basic example" style={{width: "100%"}}>
+                    {displyComponents &&
+                    displyComponents.map((item, index) => {
+                        return (
+                            <button key={index} type="button" className="btn btn-secondary" onClick={() => {
+                                onComponentClick(item)
+                            }}>{item}</button>
+                        )
+                    })
+                    }
+                    {/*<button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('body_first_section')}}>Body First Section</button>*/}
+                    {/*<button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('body_second_section')}}>Body second section</button>*/}
+                    {/*<button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('body_third_section')}}>Body Third Section</button>*/}
+                    {/*<button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('front-collar')}}>Collar</button>*/}
+                    {/*<button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('sleeve')}}>sleeve</button>*/}
+                </div>
+                {/*<div className="btn-group" role="group" aria-label="Basic example" style={{width:"100%"}}>*/}
+                {/*    <button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('left_v_upper_part')}}>Left Sleeve</button>*/}
+                {/*    /!*<button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('front-collar')}}>Collar</button>*!/*/}
+                {/*    <button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('left_v_lower_part')}}>Right Sleeve</button>*/}
+                {/*</div>*/}
+                {colorShow &&
+                <div style={{marginLeft: "50px", display: "inline"}}>
+                    <p> Choose color</p>
+
+                    <CirclePicker
+                        color={color}
+                        onChangeComplete={handleChangeComplete}
+                    />
+                    <br></br>
+                    <div id="output-text">
+                        <input onChange={handleInput} placeholder="Enter text"/>
+                        <button type='button'
+                                name='text_show'
+                                onClick={textShow}
+                                style={{
+                                    backgroundColor: "#767FE0",
+                                    color: "white",
+                                    border: "none",
+                                    borderRadius: "50px",
+                                    width: "120px",
+                                    height: "30px",
+                                    margin: "10px"
+                                }}>
+                            Add Text
+                        </button>
+                        <br></br>
+
+                        <select id="input-font" onChange={changeFontStyle(this)}>
+
+                            <option value="Comic Sans"
+                                    selected="selected">
+                                Comic Sans
+                            </option>
+                            <option value="Arial">Arial</option>
+                            <option value="fantasy">Fantasy</option>
+                            <option value="cursive">cursive</option>
+                        </select>
+                        <select id="input-font" style={{marginLeft: "10px"}}>
+
+                            <option value="Normal"
+                                    selected="selected">
+                                Normal
+                            </option>
+                            <option value="Arial" style={{fontStyle: "bolder"}}>Bold</option>
+                            <option value="fantasy" style={{fontStyle: "italic"}}>Italic</option>
+                            <option value="cursive" style={{fontStyle: "underline"}}>Underline</option>
+                        </select>
+                        <br></br>
+                        <div style={{width: "300px", float: "right"}}>
+                            <div style={{
+                                width: "300px",
+                                height: "300px",
+                                border: "solid",
+                                borderColor: "black",
+                                borderWidth: "1px",
+                                float: "right",
+                                marginRight: "-900px",
+                                marginTop: "-150px"
+                            }}>
+                                <button onClick={getSampleImages}>Load Images</button>
+                                {
+                                    img ?
+                                        img.map((s) =>
+                                            <img src={s.image} alt={''} style={{width: "50px", height: "50px"}}
+                                                 onClick={() => {
+                                                     load_sleeve_logo(s.image)
+                                                 }}/>
+                                        )
+                                        : null}
+                            </div>
+
+                        </div>
+                        <br></br>
+
+                    </div>
+                </div>
                 }
             </div>
+            }
+            {selectedTab === 3 &&
+            <div className='row' style={{width: "100%"}}>
+                <div className="btn-group" role="group" aria-label="Basic example" style={{width: "100%"}}>
+                    {displyComponents &&
+                    displyComponents.map((item, index) => {
+                        return (
+                            <button key={index} type="button" className="btn btn-secondary" onClick={() => {
+                                onComponentClick(item)
+                            }}>{item}</button>
+                        )
+                    })
+                    }
+                    {/*<button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('body_first_section')}}>Body First Section</button>*/}
+                    {/*<button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('body_second_section')}}>Body second section</button>*/}
+                    {/*<button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('body_third_section')}}>Body Third Section</button>*/}
+                    {/*<button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('front-collar')}}>Collar</button>*/}
+                    {/*<button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('sleeve')}}>sleeve</button>*/}
+                </div>
+                {/*<div className="btn-group" role="group" aria-label="Basic example" style={{width:"100%"}}>*/}
+                {/*    <button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('left_v_upper_part')}}>Left Sleeve</button>*/}
+                {/*    /!*<button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('front-collar')}}>Collar</button>*!/*/}
+                {/*    <button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('left_v_lower_part')}}>Right Sleeve</button>*/}
+                {/*</div>*/}
+                {colorShow &&
+                <div style={{marginLeft: "50px", display: "inline"}}>
+                    <p> Choose color</p>
+
+                    <CirclePicker
+                        color={color}
+                        onChangeComplete={handleChangeComplete}
+                    />
+                    <br></br>
+                    <div id="output-text">
+                        <input onChange={handleInput} placeholder="Enter text"/>
+                        <button type='button'
+                                name='text_show'
+                                onClick={textShow}
+                                style={{
+                                    backgroundColor: "#767FE0",
+                                    color: "white",
+                                    border: "none",
+                                    borderRadius: "50px",
+                                    width: "120px",
+                                    height: "30px",
+                                    margin: "10px"
+                                }}>
+                            Add Text
+                        </button>
+                        <br></br>
+
+                        <select id="input-font" onChange={changeFontStyle(this)}>
+
+                            <option value="Comic Sans"
+                                    selected="selected">
+                                Comic Sans
+                            </option>
+                            <option value="Arial">Arial</option>
+                            <option value="fantasy">Fantasy</option>
+                            <option value="cursive">cursive</option>
+                        </select>
+                        <select id="input-font" style={{marginLeft: "10px"}}>
+
+                            <option value="Normal"
+                                    selected="selected">
+                                Normal
+                            </option>
+                            <option value="Arial" style={{fontStyle: "bolder"}}>Bold</option>
+                            <option value="fantasy" style={{fontStyle: "italic"}}>Italic</option>
+                            <option value="cursive" style={{fontStyle: "underline"}}>Underline</option>
+                        </select>
+                        <br></br>
+                        <div style={{width: "300px", float: "right"}}>
+                            <div style={{
+                                width: "300px",
+                                height: "300px",
+                                border: "solid",
+                                borderColor: "black",
+                                borderWidth: "1px",
+                                float: "right",
+                                marginRight: "-900px",
+                                marginTop: "-150px"
+                            }}>
+                                <button onClick={getSampleImages}>Load Images</button>
+                                {
+                                    img ?
+                                        img.map((s) =>
+                                            <img src={s.image} alt={''} style={{width: "50px", height: "50px"}}
+                                                 onClick={() => {
+                                                     load_sleeve_logo(s.image)
+                                                 }}/>
+                                        )
+                                        : null}
+                            </div>
+
+                        </div>
+                        <br></br>
+
+                    </div>
+                </div>
+                }
+            </div>
+            }
             <canvas id='canvas'>
                 <div id="ans"></div>
             </canvas>
 
         </div>
-
     );
 
 
