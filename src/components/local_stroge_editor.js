@@ -12,6 +12,7 @@ import {getProductDetail} from "../apiService";
 import {Link} from "react-router-dom";
 import {MEDIA_URL} from "../services";
 import {BASE_URL} from "../services";
+import axios from "axios";
 
 const viewOptions = [
     'front',
@@ -41,6 +42,8 @@ function SamLocalEditor(props) {
     const [canvas, setCanvas] = useState(null)
     const [name, setName] = useState(null);
     let [image, setImage] = useState(null);
+
+    const [selectedFile, setSelectedFile] = useState(null)
 
     const [img, setImg] = useState(null);
     const [displyComponents, setDisplyComponents] = useState([null])
@@ -820,11 +823,19 @@ function SamLocalEditor(props) {
     }
 
     const fileChangedHandler = (event) => {
-        const file = event.target.files[0]
+        setSelectedFile(event.target.files[0])
     }
-    // const uploadHandler = () => {
-    //
-    // }
+    const uploadHandler = async () => {
+        console.log(selectedFile)
+        const formData = new FormData()
+        formData.append(
+        'file',
+        selectedFile
+
+  )
+  const {data} = await     axios.post('http://localhost:8000/api/logos/upload_logo/', formData)
+        console.log("jflkfjglfjglfl",data)
+    }
 
 
 
@@ -895,6 +906,7 @@ function SamLocalEditor(props) {
                                     Add Text
                                 </button>
                                 <br></br>
+
 
                                 <select id="input-font" onChange={changeFontStyle(this)}>
 
@@ -1052,8 +1064,15 @@ function SamLocalEditor(props) {
                                     <option value="fantasy" style={{fontStyle: "italic"}}>Italic</option>
                                     <option value="cursive" style={{fontStyle: "underline"}}>Underline</option>
                                 </select>
-
                             </div>
+                            <br></br>
+                            <div>
+                                    <input type="file" onChange={(e)=>{fileChangedHandler(e)}}>
+                                    </input>
+                                <br></br>
+                                <br></br>
+                                <button onClick={() => {uploadHandler()}}>Upload Image</button>
+                                </div>
                             <br></br>
                             {/*    <CirclePicker*/}
                             {/*    // color={ name }*/}
@@ -1078,8 +1097,7 @@ function SamLocalEditor(props) {
                             {/*                </button>*/}
                         </div>
                         <div style={{width: "300px", float: "right"}}>
-                            {/*<input type="file" onChange={(e)=>{fileChangedHandler(e)}}>*/}
-                            {/*    <button onClick={()=>{uploadHandler}}>Upload!</button>*/}
+
                             <div style={{
                                 width: "300px",
                                 height: "300px",
@@ -1090,6 +1108,7 @@ function SamLocalEditor(props) {
                                 marginRight: "-500px",
                                 marginTop: "10px"
                             }}>
+
                                 <button onClick={getSampleImages}>Load Images</button>
                                 {
 
