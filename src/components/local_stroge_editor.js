@@ -288,7 +288,7 @@ function SamLocalEditor(props) {
         var obj = JSON.parse(localStorage.getItem(selectedComponentId))
         obj.type = 'sleeve'
         console.log(obj, "objec")
-        if (selectedComponentId === 'sleeve' || obj.type === 'sleeve') {
+        if (selectedComponentId === 'right_sleeve') {
 
             setColor(color)
 
@@ -296,13 +296,100 @@ function SamLocalEditor(props) {
             obj.color = color
             localStorage.setItem('right_sleeve', JSON.stringify(obj))
 
+            // if(localStorage.getItem('back_left_sleeve')){
+            //     var obj_b = JSON.parse(localStorage.getItem('back_left_sleeve'))
+            //     obj_b.color = color
+            //     localStorage.setItem('back_left_sleeve', JSON.stringify(obj_b))
+            // }
+            //
+            // if(localStorage.getItem('right_v_upper_part')){
+            //     var obj_u = JSON.parse(localStorage.getItem('right_v_upper_part'))
+            //     obj_u.color = color
+            //     localStorage.setItem('right_v_upper_part', JSON.stringify(obj_u))
+            // }
+            //
+            // if(localStorage.getItem('right_v_lower_part')){
+            //     var obj_l = JSON.parse(localStorage.getItem('right_v_lower_part'))
+            //     obj_l.color = color
+            //     localStorage.setItem('right_v_lower_part', JSON.stringify(obj_l))
+            // }
+            //
+            // if(localStorage.getItem('right_v_body_view')){
+            //     var obj_body = JSON.parse(localStorage.getItem('right_v_body_view'))
+            //     obj_body.color = color
+            //     localStorage.setItem('right_v_body_view', JSON.stringify(obj_body))
+            // }
+
+            var obj = JSON.parse(localStorage.getItem('back_left_sleeve'))
+            obj.color = color
+            localStorage.setItem('back_left_sleeve', JSON.stringify(obj))
+
+            var obj = JSON.parse(localStorage.getItem('right_v_body_view'))
+            obj.color = color
+            localStorage.setItem('right_v_body_view', JSON.stringify(obj))
+
+            var obj = JSON.parse(localStorage.getItem('right_v_upper_part'))
+            obj.color = color
+            localStorage.setItem('right_v_upper_part', JSON.stringify(obj))
+
+            var obj = JSON.parse(localStorage.getItem('right_v_lower_part'))
+            obj.color = color
+            localStorage.setItem('right_v_lower_part', JSON.stringify(obj))
+
+        }
+
+        if (selectedComponentId === 'left_sleeve') {
+
+            setColor(color)
 
             var obj = JSON.parse(localStorage.getItem('left_sleeve'))
             obj.color = color
             localStorage.setItem('left_sleeve', JSON.stringify(obj))
 
+            // if(localStorage.getItem('back_left_sleeve')){
+            //     var obj_b = JSON.parse(localStorage.getItem('back_left_sleeve'))
+            //     obj_b.color = color
+            //     localStorage.setItem('back_left_sleeve', JSON.stringify(obj_b))
+            // }
+            //
+            // if(localStorage.getItem('right_v_upper_part')){
+            //     var obj_u = JSON.parse(localStorage.getItem('right_v_upper_part'))
+            //     obj_u.color = color
+            //     localStorage.setItem('right_v_upper_part', JSON.stringify(obj_u))
+            // }
+            //
+            // if(localStorage.getItem('right_v_lower_part')){
+            //     var obj_l = JSON.parse(localStorage.getItem('right_v_lower_part'))
+            //     obj_l.color = color
+            //     localStorage.setItem('right_v_lower_part', JSON.stringify(obj_l))
+            // }
+            //
+            // if(localStorage.getItem('right_v_body_view')){
+            //     var obj_body = JSON.parse(localStorage.getItem('right_v_body_view'))
+            //     obj_body.color = color
+            //     localStorage.setItem('right_v_body_view', JSON.stringify(obj_body))
+            // }
 
-        } else {
+            var obj = JSON.parse(localStorage.getItem('back_right_sleeve'))
+            obj.color = color
+            localStorage.setItem('back_right_sleeve', JSON.stringify(obj))
+
+            var obj = JSON.parse(localStorage.getItem('left_v_body_view'))
+            obj.color = color
+            localStorage.setItem('left_v_body_view', JSON.stringify(obj))
+
+            var obj = JSON.parse(localStorage.getItem('left_v_upper_part'))
+            obj.color = color
+            localStorage.setItem('left_v_upper_part', JSON.stringify(obj))
+
+            var obj = JSON.parse(localStorage.getItem('left_v_lower_part'))
+            obj.color = color
+            localStorage.setItem('left_v_lower_part', JSON.stringify(obj))
+
+        }
+
+
+        else {
             if (selectedComponentId) {
                 var obj = JSON.parse(localStorage.getItem(selectedComponentId))
                 obj.color = color
@@ -678,6 +765,7 @@ function SamLocalEditor(props) {
                 )
             }
         }
+
         if (right.right_v_upper_part?.image) {
             if (localStorage.getItem('right_v_upper_part')) {
                 loadObject(JSON.parse(localStorage.getItem('right_v_upper_part')))
@@ -1115,7 +1203,7 @@ function SamLocalEditor(props) {
 
                                     img ?
                                         img.map((s) =>
-                                            <img src={s.image} alt={''} style={{width: "50px", height: "50px"}}
+                                            <img src={s.image} alt={''} style={{width: "50px", height: "50px", marginLeft: "5px", marginTop:"5px"}}
                                                  onClick={() => {
                                                      load_logo(s.image)
                                                  }}/>
@@ -1254,7 +1342,7 @@ function SamLocalEditor(props) {
                                     {
                                         img ?
                                             img.map((s) =>
-                                                <img src={s.image} alt={''} style={{width: "50px", height: "50px"}}
+                                                <img src={s.image} alt={''} style={{width: "50px", height: "50px", marginLeft: "5px", marginTop:"5px"}}
                                                      onClick={() => {
                                                          load_logo(s.image)
                                                      }}/>
@@ -1349,7 +1437,7 @@ function SamLocalEditor(props) {
                                     {
                                         img ?
                                             img.map((s) =>
-                                                <img src={s.image} alt={''} style={{width: "50px", height: "50px"}}
+                                                <img src={s.image} alt={''} style={{width: "50px", height: "50px", marginLeft: "5px", marginTop:"5px"}}
                                                      onClick={() => {
                                                          load_sleeve_logo(s.image)
                                                      }}/>
@@ -1444,7 +1532,7 @@ function SamLocalEditor(props) {
                                     {
                                         img ?
                                             img.map((s) =>
-                                                <img src={s.image} alt={''} style={{width: "50px", height: "50px"}}
+                                                <img src={s.image} alt={''} style={{width: "50px", height: "50px", marginLeft: "5px", marginTop:"5px"}}
                                                      onClick={() => {
                                                          load_sleeve_logo(s.image)
                                                      }}/>
