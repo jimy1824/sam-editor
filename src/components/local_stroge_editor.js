@@ -813,6 +813,15 @@ function SamLocalEditor(props) {
         canvas.renderAll()
     }
 
+    const fileChangedHandler = (event) => {
+        const file = event.target.files[0]
+    }
+    // const uploadHandler = () => {
+    //
+    // }
+
+
+
     console.log(addingComponent, 'adding')
     return (
 
@@ -1046,7 +1055,7 @@ function SamLocalEditor(props) {
                             {/*/>*/}
                             <br></br>
 
-                            <input type="file"/>
+
                             {/*<button type='button'*/}
                             {/*                        name='text_show'*/}
                             {/*                        onClick={download_Image}*/}
@@ -1063,6 +1072,8 @@ function SamLocalEditor(props) {
                             {/*                </button>*/}
                         </div>
                         <div style={{width: "300px", float: "right"}}>
+                            {/*<input type="file" onChange={(e)=>{fileChangedHandler(e)}}>*/}
+                            {/*    <button onClick={()=>{uploadHandler}}>Upload!</button>*/}
                             <div style={{
                                 width: "300px",
                                 height: "300px",
