@@ -237,6 +237,7 @@ function SamLocalEditor(props) {
 
         fabric.Image.fromURL(url, function (img) {
             img.id = imageId;
+            img.component_type = 'sleeve'
             img.filters = [new fabric.Image.filters.HueRotation()];
             img.applyFilters()
             var cor = img.set(
@@ -247,8 +248,10 @@ function SamLocalEditor(props) {
 
 
                 })
-            localStorage.setItem(imageId, JSON.stringify(img));
+
             canvas.add(img);
+            console.log(img, "abc")
+            localStorage.setItem(imageId, JSON.stringify(img));
             // canvas.centerObject(img)
 
         }, {crossOrigin: 'anonymous'})
@@ -279,7 +282,10 @@ function SamLocalEditor(props) {
         }
     }
     const handleChangeComplete = (color) => {
-        if (selectedComponentId === 'sleeve') {
+        var obj = JSON.parse(localStorage.getItem(selectedComponentId))
+        obj.type = 'sleeve'
+        console.log(obj, "objec")
+        if (selectedComponentId === 'sleeve' || obj.type === 'sleeve') {
 
             setColor(color)
 
@@ -299,7 +305,7 @@ function SamLocalEditor(props) {
                 obj.color = color
                 localStorage.setItem(selectedComponentId, JSON.stringify(obj))
             }
-            setColor(color)
+            setColor(color, obj.type)
             addColor()
         }
 

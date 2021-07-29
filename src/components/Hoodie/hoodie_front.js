@@ -1,8 +1,5 @@
 import React, {useEffect, useState, useRef} from "react";
 // import THREELib from "three-js";
-import SamLocalEditorHoodieBack from "./hoodie_back";
-import SamLocalEditorHoodieLeft from "./hoodie_left";
-import SamLocalEditorHoodieRight from "./hoodie_right";
 import {fabric} from "fabric";
 import {saveAs} from 'file-saver'
 import {v1 as uuid} from 'uuid';
