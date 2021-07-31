@@ -921,7 +921,7 @@ function SamLocalEditor(props) {
         selectedFile
 
   )
-  const {data} = await     axios.post('http://localhost:8000/api/logos/upload_logo/', formData)
+  const {data} = await     axios.post(BASE_URL+'logos/upload_logo/', formData)
         console.log("jflkfjglfjglfl",data)
     }
 
