@@ -262,18 +262,19 @@ function SamLocalEditorBagFront(props) {
     }
     const handleChangeComplete = (color) => {
         console.log(selectedComponentId, "selectedID")
-        if(selectedComponentId==='sleeve'){
+        if(selectedComponentId==='bag_handle_front'){
 
             setColor(color)
 
-            var obj=JSON.parse(localStorage.getItem('right_sleeve'))
+            var obj=JSON.parse(localStorage.getItem('bag_handle_front'))
             obj.color=color
-            localStorage.setItem('right_sleeve', JSON.stringify(obj))
+            localStorage.setItem('bag_handle_front', JSON.stringify(obj))
+            loadObject(JSON.parse(localStorage.getItem('bag_handle_front')))
 
 
-            var obj=JSON.parse(localStorage.getItem('left_sleeve'))
+            var obj=JSON.parse(localStorage.getItem('bag_handle_back'))
             obj.color=color
-            localStorage.setItem('left_sleeve', JSON.stringify(obj))
+            localStorage.setItem('bag_handle_back', JSON.stringify(obj))
 
 
         }else {
@@ -357,18 +358,7 @@ function SamLocalEditorBagFront(props) {
     function frontImageLoad() {
         clearCanvas()
         let front_view_bag = JSON.parse(localStorage.getItem('front_view_bag'))
-        if (front_view_bag.bag_handle_front?.image) {
-            if (localStorage.getItem('bag_handle_front')) {
-                loadObject(JSON.parse(localStorage.getItem('bag_handle_front')))
-            } else {
-                loadImage(
-                    front_view_bag.bag_handle_front.image,
-                    'bag_handle_front',
-                    front_view_bag.bag_handle_front.x_point,
-                    front_view_bag.bag_handle_front.y_point)
-            }
 
-        }
         if (front_view_bag.bag_full_front_body?.image) {
             if (localStorage.getItem('bag_full_front_body')) {
                 loadObject(JSON.parse(localStorage.getItem('bag_full_front_body')))
@@ -392,12 +382,12 @@ function SamLocalEditorBagFront(props) {
             }
         }
         if (front_view_bag.bag_mid_front_body?.image) {
-            if (localStorage.getItem('front-bag_mid_front_body')) {
-                loadObject(JSON.parse(localStorage.getItem('front-bag_mid_front_body')))
+            if (localStorage.getItem('bag_mid_front_body')) {
+                loadObject(JSON.parse(localStorage.getItem('bag_mid_front_body')))
             } else {
                 loadImage(
                     front_view_bag.bag_mid_front_body.image,
-                    'front-bag_mid_front_body',
+                    'bag_mid_front_body',
                     front_view_bag.bag_mid_front_body.x_point,
                     front_view_bag.bag_mid_front_body.y_point)
             }
@@ -413,24 +403,23 @@ function SamLocalEditorBagFront(props) {
                     front_view_bag.bag_bottom_front_body.y_point)
             }
         }
+        if (front_view_bag.bag_handle_front?.image) {
+            if (localStorage.getItem('bag_handle_front')) {
+                loadObject(JSON.parse(localStorage.getItem('bag_handle_front')))
+            } else {
+                loadImage(
+                    front_view_bag.bag_handle_front.image,
+                    'bag_handle_front',
+                    front_view_bag.bag_handle_front.x_point,
+                    front_view_bag.bag_handle_front.y_point)
+            }
+
+        }
     }
 
     function backImageLoad() {
         clearCanvas()
         let back_view_bag = JSON.parse(localStorage.getItem('back_view_bag'))
-        if (back_view_bag.bag_handle_back?.image) {
-            if (localStorage.getItem('bag_handle_back')) {
-                loadObject(JSON.parse(localStorage.getItem('bag_handle_back')))
-            } else {
-                loadImage(
-                    back_view_bag.bag_handle_back.image,
-                    'bag_handle_back',
-                    back_view_bag.bag_handle_back.x_point,
-                    back_view_bag.bag_handle_back.y_point,
-                )
-            }
-
-        }
 
         if (back_view_bag.bag_full_back_body?.image) {
             if (localStorage.getItem('bag_full_back_body')) {
@@ -482,6 +471,19 @@ function SamLocalEditorBagFront(props) {
                     back_view_bag.bag_bottom_back_body.y_point,
                 )
             }
+        }
+        if (back_view_bag.bag_handle_back?.image) {
+            if (localStorage.getItem('bag_handle_back')) {
+                loadObject(JSON.parse(localStorage.getItem('bag_handle_back')))
+            } else {
+                loadImage(
+                    back_view_bag.bag_handle_back.image,
+                    'bag_handle_back',
+                    back_view_bag.bag_handle_back.x_point,
+                    back_view_bag.bag_handle_back.y_point,
+                )
+            }
+
         }
     }
 

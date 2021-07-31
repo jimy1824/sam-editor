@@ -89,7 +89,7 @@ function SamLocalEditorTowelFront(props) {
         });
 
     useEffect(() => {
-        setCanvas(initCanvas('canvas_towel'));
+        setCanvas(initCanvas('canvas'));
     }, []);
     useEffect(() => {
         if (product) {

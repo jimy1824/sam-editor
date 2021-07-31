@@ -285,21 +285,178 @@ function SamLocalEditorBaseBJacFront(props) {
     }
     const handleChangeComplete = (color) => {
         console.log(selectedComponentId, "selectedID")
-        if(selectedComponentId==='sleeve'){
+        if(selectedComponentId==='base_b_jac_front_collar'){
 
             setColor(color)
 
-            var obj=JSON.parse(localStorage.getItem('right_sleeve'))
+            var obj=JSON.parse(localStorage.getItem('base_b_jac_front_collar'))
             obj.color=color
-            localStorage.setItem('right_sleeve', JSON.stringify(obj))
+            localStorage.setItem('base_b_jac_front_collar', JSON.stringify(obj))
+            loadObject(JSON.parse(localStorage.getItem('base_b_jac_front_collar')))
 
-
-            var obj=JSON.parse(localStorage.getItem('left_sleeve'))
+            var obj=JSON.parse(localStorage.getItem('base_b_jac_collar_back'))
             obj.color=color
-            localStorage.setItem('left_sleeve', JSON.stringify(obj))
+            localStorage.setItem('base_b_jac_collar_back', JSON.stringify(obj))
+
+        }
+
+        else if(selectedComponentId==='base_b_jac_left_cuff_front'){
+
+            setColor(color)
+
+            var obj=JSON.parse(localStorage.getItem('base_b_jac_right_cuff_front'))
+            obj.color=color
+            localStorage.setItem('base_b_jac_right_cuff_front', JSON.stringify(obj))
+            loadObject(JSON.parse(localStorage.getItem('base_b_jac_right_cuff_front')))
+
+            var obj=JSON.parse(localStorage.getItem('base_b_jac_left_cuff_back'))
+            obj.color=color
+            localStorage.setItem('base_b_jac_left_cuff_back', JSON.stringify(obj))
+
+            var obj=JSON.parse(localStorage.getItem('base_b_jac_mid_cuff_left'))
+            obj.color=color
+            localStorage.setItem('base_b_jac_mid_cuff_left', JSON.stringify(obj))
+
+            var obj=JSON.parse(localStorage.getItem('base_b_jac_left_cuff_left'))
+            obj.color=color
+            localStorage.setItem('base_b_jac_left_cuff_left', JSON.stringify(obj))
+
+            var obj=JSON.parse(localStorage.getItem('base_b_jac_right_cuff_left'))
+            obj.color=color
+            localStorage.setItem('base_b_jac_right_cuff_left', JSON.stringify(obj))
+
+            var obj=JSON.parse(localStorage.getItem('base_b_jac_bottom_cuff_left'))
+            obj.color=color
+            localStorage.setItem('base_b_jac_bottom_cuff_left', JSON.stringify(obj))
 
 
-        }else {
+        }
+
+        else if(selectedComponentId==='base_b_jac_right_cuff_front'){
+
+            setColor(color)
+
+            var obj=JSON.parse(localStorage.getItem('base_b_jac_left_cuff_front'))
+            obj.color=color
+            localStorage.setItem('base_b_jac_left_cuff_front', JSON.stringify(obj))
+            loadObject(JSON.parse(localStorage.getItem('base_b_jac_left_cuff_front')))
+
+            var obj=JSON.parse(localStorage.getItem('base_b_jac_right_cuff_back'))
+            obj.color=color
+            localStorage.setItem('base_b_jac_right_cuff_back', JSON.stringify(obj))
+
+            var obj=JSON.parse(localStorage.getItem('base_b_jac_mid_cuff_right'))
+            obj.color=color
+            localStorage.setItem('base_b_jac_mid_cuff_right', JSON.stringify(obj))
+
+            var obj=JSON.parse(localStorage.getItem('base_b_jac_left_cuff_right'))
+            obj.color=color
+            localStorage.setItem('base_b_jac_left_cuff_right', JSON.stringify(obj))
+
+            var obj=JSON.parse(localStorage.getItem('base_b_jac_right_cuff_right'))
+            obj.color=color
+            localStorage.setItem('base_b_jac_right_cuff_right', JSON.stringify(obj))
+
+            var obj=JSON.parse(localStorage.getItem('base_b_jac_bottom_cuff_right'))
+            obj.color=color
+            localStorage.setItem('base_b_jac_bottom_cuff_right', JSON.stringify(obj))
+
+
+        }
+
+        else if(selectedComponentId==='base_b_jac_front_hem'){
+
+            setColor(color)
+
+            var obj=JSON.parse(localStorage.getItem('base_b_jac_front_hem'))
+            obj.color=color
+            localStorage.setItem('base_b_jac_front_hem', JSON.stringify(obj))
+            loadObject(JSON.parse(localStorage.getItem('base_b_jac_front_hem')))
+
+            var obj=JSON.parse(localStorage.getItem('base_b_jac_hem_back'))
+            obj.color=color
+            localStorage.setItem('base_b_jac_hem_back', JSON.stringify(obj))
+        }
+
+        else if(selectedComponentId==='base_b_jac_front_hem_strips'){
+
+            setColor(color)
+
+            var obj=JSON.parse(localStorage.getItem('base_b_jac_front_hem_strips'))
+            obj.color=color
+            localStorage.setItem('base_b_jac_front_hem_strips', JSON.stringify(obj))
+            loadObject(JSON.parse(localStorage.getItem('base_b_jac_front_hem_strips')))
+
+            var obj=JSON.parse(localStorage.getItem('base_b_jac_hem_strips_back'))
+            obj.color=color
+            localStorage.setItem('base_b_jac_hem_strips_back', JSON.stringify(obj))
+        }
+
+        else if(selectedComponentId==='base_b_jac_left_sleeve_front'){
+
+            setColor(color)
+
+            var obj=JSON.parse(localStorage.getItem('base_b_jac_right_sleeve_front'))
+            obj.color=color
+            localStorage.setItem('base_b_jac_right_sleeve_front', JSON.stringify(obj))
+            loadObject(JSON.parse(localStorage.getItem('base_b_jac_right_sleeve_front')))
+
+            var obj=JSON.parse(localStorage.getItem('base_b_jac_left_sleeve_back'))
+            obj.color=color
+            localStorage.setItem('base_b_jac_left_sleeve_back', JSON.stringify(obj))
+
+            var obj=JSON.parse(localStorage.getItem('base_b_jac_mid_body_left'))
+            obj.color=color
+            localStorage.setItem('base_b_jac_mid_body_left', JSON.stringify(obj))
+
+            var obj=JSON.parse(localStorage.getItem('base_b_jac_left_body_left'))
+            obj.color=color
+            localStorage.setItem('base_b_jac_left_body_left', JSON.stringify(obj))
+
+            var obj=JSON.parse(localStorage.getItem('base_b_jac_right_body_left'))
+            obj.color=color
+            localStorage.setItem('base_b_jac_right_body_left', JSON.stringify(obj))
+
+            var obj=JSON.parse(localStorage.getItem('base_b_jac_bottom_body_left'))
+            obj.color=color
+            localStorage.setItem('base_b_jac_bottom_body_left', JSON.stringify(obj))
+
+
+        }
+
+        else if(selectedComponentId==='base_b_jac_right_sleeve_front'){
+
+            setColor(color)
+
+            var obj=JSON.parse(localStorage.getItem('base_b_jac_left_sleeve_front'))
+            obj.color=color
+            localStorage.setItem('base_b_jac_left_sleeve_front', JSON.stringify(obj))
+            loadObject(JSON.parse(localStorage.getItem('base_b_jac_left_sleeve_front')))
+
+            var obj=JSON.parse(localStorage.getItem('base_b_jac_right_sleeve_back'))
+            obj.color=color
+            localStorage.setItem('base_b_jac_right_sleeve_back', JSON.stringify(obj))
+
+            var obj=JSON.parse(localStorage.getItem('base_b_jac_mid_body_right'))
+            obj.color=color
+            localStorage.setItem('base_b_jac_mid_body_right', JSON.stringify(obj))
+
+            var obj=JSON.parse(localStorage.getItem('base_b_jac_left_body_right'))
+            obj.color=color
+            localStorage.setItem('base_b_jac_left_body_right', JSON.stringify(obj))
+
+            var obj=JSON.parse(localStorage.getItem('base_b_jac_right_body_right'))
+            obj.color=color
+            localStorage.setItem('base_b_jac_right_body_right', JSON.stringify(obj))
+
+            var obj=JSON.parse(localStorage.getItem('base_b_jac_bottom_body_right'))
+            obj.color=color
+            localStorage.setItem('base_b_jac_bottom_body_right', JSON.stringify(obj))
+
+
+        }
+
+        else {
             if(selectedComponentId){
                 var obj=JSON.parse(localStorage.getItem(selectedComponentId))
                 // debugger;

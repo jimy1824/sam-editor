@@ -282,21 +282,159 @@ function SamLocalEditorCoachJacFront(props) {
     }
     const handleChangeComplete = (color) => {
         console.log(selectedComponentId, "selectedID")
-        if(selectedComponentId==='sleeve'){
+        if(selectedComponentId==='coach_jac_collar_front'){
 
             setColor(color)
 
-            var obj=JSON.parse(localStorage.getItem('right_sleeve'))
+            var obj=JSON.parse(localStorage.getItem('coach_jac_collar_front'))
             obj.color=color
-            localStorage.setItem('right_sleeve', JSON.stringify(obj))
+            localStorage.setItem('coach_jac_collar_front', JSON.stringify(obj))
+            loadObject(JSON.parse(localStorage.getItem('coach_jac_collar_front')))
 
 
-            var obj=JSON.parse(localStorage.getItem('left_sleeve'))
+            var obj=JSON.parse(localStorage.getItem('coach_jac_collar_back'))
             obj.color=color
-            localStorage.setItem('left_sleeve', JSON.stringify(obj))
+            localStorage.setItem('coach_jac_collar_back', JSON.stringify(obj))
 
 
-        }else {
+        }
+
+        else if(selectedComponentId==='coach_jac_hem_front'){
+
+            setColor(color)
+
+            var obj=JSON.parse(localStorage.getItem('coach_jac_hem_front'))
+            obj.color=color
+            localStorage.setItem('coach_jac_hem_front', JSON.stringify(obj))
+            loadObject(JSON.parse(localStorage.getItem('coach_jac_hem_front')))
+
+
+            var obj=JSON.parse(localStorage.getItem('coach_jac_hem_back'))
+            obj.color=color
+            localStorage.setItem('coach_jac_hem_back', JSON.stringify(obj))
+        }
+
+        else if(selectedComponentId==='coach_jac_left_sleeve_front'){
+
+            setColor(color)
+
+            var obj=JSON.parse(localStorage.getItem('coach_jac_right_sleeve_front'))
+            obj.color=color
+            localStorage.setItem('coach_jac_right_sleeve_front', JSON.stringify(obj))
+            loadObject(JSON.parse(localStorage.getItem('coach_jac_right_sleeve_front')))
+
+            var obj=JSON.parse(localStorage.getItem('coach_jac_left_sleeve_back'))
+            obj.color=color
+            localStorage.setItem('coach_jac_left_sleeve_back', JSON.stringify(obj))
+
+            var obj=JSON.parse(localStorage.getItem('coach_jac_mid_body_left'))
+            obj.color=color
+            localStorage.setItem('coach_jac_mid_body_left', JSON.stringify(obj))
+
+            var obj=JSON.parse(localStorage.getItem('coach_jac_left_body_left'))
+            obj.color=color
+            localStorage.setItem('coach_jac_left_body_left', JSON.stringify(obj))
+
+            var obj=JSON.parse(localStorage.getItem('coach_jac_right_body_left'))
+            obj.color=color
+            localStorage.setItem('coach_jac_right_body_left', JSON.stringify(obj))
+
+            var obj=JSON.parse(localStorage.getItem('coach_jac_bottom_body_left'))
+            obj.color=color
+            localStorage.setItem('coach_jac_bottom_body_left', JSON.stringify(obj))
+        }
+
+        else if(selectedComponentId==='coach_jac_right_sleeve_front'){
+
+            setColor(color)
+
+            var obj=JSON.parse(localStorage.getItem('coach_jac_left_sleeve_front'))
+            obj.color=color
+            localStorage.setItem('coach_jac_left_sleeve_front', JSON.stringify(obj))
+            loadObject(JSON.parse(localStorage.getItem('coach_jac_left_sleeve_front')))
+
+            var obj=JSON.parse(localStorage.getItem('coach_jac_right_sleeve_back'))
+            obj.color=color
+            localStorage.setItem('coach_jac_right_sleeve_back', JSON.stringify(obj))
+
+            var obj=JSON.parse(localStorage.getItem('coach_jac_mid_body_right'))
+            obj.color=color
+            localStorage.setItem('coach_jac_mid_body_right', JSON.stringify(obj))
+
+            var obj=JSON.parse(localStorage.getItem('coach_jac_left_body_right'))
+            obj.color=color
+            localStorage.setItem('coach_jac_left_body_right', JSON.stringify(obj))
+
+            var obj=JSON.parse(localStorage.getItem('coach_jac_right_body_right'))
+            obj.color=color
+            localStorage.setItem('coach_jac_right_body_right', JSON.stringify(obj))
+
+            var obj=JSON.parse(localStorage.getItem('coach_jac_bottom_body_right'))
+            obj.color=color
+            localStorage.setItem('coach_jac_bottom_body_right', JSON.stringify(obj))
+        }
+
+        else if(selectedComponentId==='coach_jac_left_cuff_front'){
+
+            setColor(color)
+
+            var obj=JSON.parse(localStorage.getItem('coach_jac_right_cuff_front'))
+            obj.color=color
+            localStorage.setItem('coach_jac_right_cuff_front', JSON.stringify(obj))
+            loadObject(JSON.parse(localStorage.getItem('coach_jac_right_cuff_front')))
+
+            var obj=JSON.parse(localStorage.getItem('coach_jac_left_cuff_back'))
+            obj.color=color
+            localStorage.setItem('coach_jac_left_cuff_back', JSON.stringify(obj))
+
+            var obj=JSON.parse(localStorage.getItem('coach_jac_mid_cuff_left'))
+            obj.color=color
+            localStorage.setItem('coach_jac_mid_cuff_left', JSON.stringify(obj))
+
+            var obj=JSON.parse(localStorage.getItem('coach_jac_left_cuff_left'))
+            obj.color=color
+            localStorage.setItem('coach_jac_left_cuff_left', JSON.stringify(obj))
+
+            var obj=JSON.parse(localStorage.getItem('coach_jac_right_cuff_left'))
+            obj.color=color
+            localStorage.setItem('coach_jac_right_cuff_left', JSON.stringify(obj))
+
+            var obj=JSON.parse(localStorage.getItem('coach_jac_bottom_cuff_left'))
+            obj.color=color
+            localStorage.setItem('coach_jac_bottom_cuff_left', JSON.stringify(obj))
+        }
+
+        else if(selectedComponentId==='coach_jac_right_cuff_front'){
+
+            setColor(color)
+
+            var obj=JSON.parse(localStorage.getItem('coach_jac_left_cuff_front'))
+            obj.color=color
+            localStorage.setItem('coach_jac_left_cuff_front', JSON.stringify(obj))
+            loadObject(JSON.parse(localStorage.getItem('coach_jac_left_cuff_front')))
+
+            var obj=JSON.parse(localStorage.getItem('coach_jac_right_cuff_back'))
+            obj.color=color
+            localStorage.setItem('coach_jac_right_cuff_back', JSON.stringify(obj))
+
+            var obj=JSON.parse(localStorage.getItem('coach_jac_mid_cuff_right'))
+            obj.color=color
+            localStorage.setItem('coach_jac_mid_cuff_right', JSON.stringify(obj))
+
+            var obj=JSON.parse(localStorage.getItem('coach_jac_left_cuff_right'))
+            obj.color=color
+            localStorage.setItem('coach_jac_left_cuff_right', JSON.stringify(obj))
+
+            var obj=JSON.parse(localStorage.getItem('coach_jac_right_cuff_right'))
+            obj.color=color
+            localStorage.setItem('coach_jac_right_cuff_right', JSON.stringify(obj))
+
+            var obj=JSON.parse(localStorage.getItem('coach_jac_bottom_cuff_right'))
+            obj.color=color
+            localStorage.setItem('coach_jac_bottom_cuff_right', JSON.stringify(obj))
+        }
+
+        else {
             if(selectedComponentId){
                 var obj=JSON.parse(localStorage.getItem(selectedComponentId))
                 // debugger;
@@ -471,17 +609,6 @@ function SamLocalEditorCoachJacFront(props) {
                     front_view_coach_jac.coach_jac_collar_front.y_point)
             }
         }
-        if (front_view_coach_jac.coach_jac_collar_inner_front?.image) {
-            if (localStorage.getItem('coach_jac_collar_inner_front')) {
-                loadObject(JSON.parse(localStorage.getItem('coach_jac_collar_inner_front')))
-            } else {
-                loadImage(
-                    front_view_coach_jac.coach_jac_collar_inner_front.image,
-                    'coach_jac_collar_inner_front',
-                    front_view_coach_jac.coach_jac_collar_inner_front.x_point,
-                    front_view_coach_jac.coach_jac_collar_inner_front.y_point)
-            }
-        }
         if (front_view_coach_jac.coach_jac_button_front?.image) {
             if (localStorage.getItem('coach_jac_button_front')) {
                 loadObject(JSON.parse(localStorage.getItem('coach_jac_button_front')))
@@ -576,6 +703,17 @@ function SamLocalEditorCoachJacFront(props) {
                     front_view_coach_jac.coach_jac_right_cuff_front.y_point)
             }
 
+        }
+        if (front_view_coach_jac.coach_jac_collar_inner_front?.image) {
+            if (localStorage.getItem('coach_jac_collar_inner_front')) {
+                loadObject(JSON.parse(localStorage.getItem('coach_jac_collar_inner_front')))
+            } else {
+                loadImage(
+                    front_view_coach_jac.coach_jac_collar_inner_front.image,
+                    'coach_jac_collar_inner_front',
+                    front_view_coach_jac.coach_jac_collar_inner_front.x_point,
+                    front_view_coach_jac.coach_jac_collar_inner_front.y_point)
+            }
         }
     }
 

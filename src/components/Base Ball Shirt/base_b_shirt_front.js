@@ -22,7 +22,7 @@ const viewOptions = [
 var fonts = ["Pacifico", "VT323", "Quicksand", "Inconsolata"];
 var logo_img
 
-let addingComponent =null
+let addingComponent = null
 
 function SamLocalEditorBaseBShirtFront(props) {
     let {id} = props.match.params
@@ -160,14 +160,14 @@ function SamLocalEditorBaseBShirtFront(props) {
 
                 })
             canvas.add(img);
-            if(obj.logo){
-                fabric.Image.fromObject(obj.logo,function (logo) {
+            if (obj.logo) {
+                fabric.Image.fromObject(obj.logo, function (logo) {
                     canvas.add(logo);
                 })
 
             }
-            if(obj.text){
-                fabric.Textbox.fromObject(obj.text,function (text) {
+            if (obj.text) {
+                fabric.Textbox.fromObject(obj.text, function (text) {
                     canvas.add(text);
                 })
 
@@ -200,12 +200,12 @@ function SamLocalEditorBaseBShirtFront(props) {
             var obj = JSON.parse(localStorage.getItem(selectedComponentId))
             obj.text = text
             localStorage.setItem(selectedComponentId, JSON.stringify(obj))
-            addingComponent='text';
+            addingComponent = 'text';
         }
 
     }
 
-    canvas?.on('after:render', function() {
+    canvas?.on('after:render', function () {
         var ao = canvas.getActiveObject();
         if (ao) {
             var bound = ao.getBoundingRect();
@@ -217,11 +217,11 @@ function SamLocalEditorBaseBShirtFront(props) {
                         obj.logo.left = bound.left
                         obj.logo.top = bound.top
 
-                        fabric.Image.fromObject(obj.logo,function (test) {
+                        fabric.Image.fromObject(obj.logo, function (test) {
                             test.scaleToHeight(bound.height)
                             test.scaleToWidth(bound.width);
-                            obj.logo.scaleY=test.scaleY
-                            obj.logo.scaleX=test.scaleX
+                            obj.logo.scaleY = test.scaleY
+                            obj.logo.scaleX = test.scaleX
                             localStorage.setItem(selectedComponentId, JSON.stringify(obj))
 
                         })
@@ -275,28 +275,81 @@ function SamLocalEditorBaseBShirtFront(props) {
             loadObject(obj)
         }
     }
+
     const handleChangeComplete = (color) => {
-        if (selectedComponentId === 'sleeve') {
+        var obj = JSON.parse(localStorage.getItem(selectedComponentId))
+        obj.type = 'sleeve'
+        console.log(obj, "objec")
+        setColor(color)
+        if (selectedComponentId === 'base_b_shirt_left_sleeve_front') {
+            // setColor(color)
 
-            setColor(color)
-
-            var obj = JSON.parse(localStorage.getItem('right_sleeve'))
+            var obj = JSON.parse(localStorage.getItem('base_b_shirt_right_sleeve_front'))
             obj.color = color
-            localStorage.setItem('right_sleeve', JSON.stringify(obj))
+            localStorage.setItem('base_b_shirt_right_sleeve_front', JSON.stringify(obj))
+            loadObject(JSON.parse(localStorage.getItem('base_b_shirt_right_sleeve_front')))
 
 
-            var obj = JSON.parse(localStorage.getItem('left_sleeve'))
+            var obj = JSON.parse(localStorage.getItem('base_b_shirt_left_sleeve_back'))
             obj.color = color
-            localStorage.setItem('left_sleeve', JSON.stringify(obj))
+            localStorage.setItem('base_b_shirt_left_sleeve_back', JSON.stringify(obj))
+
+            var obj = JSON.parse(localStorage.getItem('base_b_shirt_mid_left'))
+            obj.color = color
+            localStorage.setItem('base_b_shirt_mid_left', JSON.stringify(obj))
+
+            var obj = JSON.parse(localStorage.getItem('base_b_shirt_left_sleeve_left'))
+            obj.color = color
+            localStorage.setItem('base_b_shirt_left_sleeve_left', JSON.stringify(obj))
+
+            var obj = JSON.parse(localStorage.getItem('base_b_shirt_right_sleeve_left'))
+            obj.color = color
+            localStorage.setItem('base_b_shirt_right_sleeve_left', JSON.stringify(obj))
+
+            var obj = JSON.parse(localStorage.getItem('base_b_shirt_bottom_sleeve_left'))
+            obj.color = color
+            localStorage.setItem('base_b_shirt_bottom_sleeve_left', JSON.stringify(obj))
+
+        }
+        else if (selectedComponentId === 'base_b_shirt_right_sleeve_front') {
+
+            // setColor(color)
+
+            var obj = JSON.parse(localStorage.getItem('base_b_shirt_left_sleeve_front'))
+            obj.color = color
+            localStorage.setItem('base_b_shirt_left_sleeve_front', JSON.stringify(obj))
+            loadObject(JSON.parse(localStorage.getItem('base_b_shirt_left_sleeve_front')))
 
 
-        } else {
+            var obj = JSON.parse(localStorage.getItem('base_b_shirt_right_sleeve_back'))
+            obj.color = color
+            localStorage.setItem('base_b_shirt_right_sleeve_back', JSON.stringify(obj))
+
+            var obj = JSON.parse(localStorage.getItem('base_b_shirt_mid_right'))
+            obj.color = color
+            localStorage.setItem('base_b_shirt_mid_right', JSON.stringify(obj))
+
+            var obj = JSON.parse(localStorage.getItem('base_b_shirt_left_sleeve_right'))
+            obj.color = color
+            localStorage.setItem('base_b_shirt_left_sleeve_right', JSON.stringify(obj))
+
+            var obj = JSON.parse(localStorage.getItem('base_b_shirt_right_sleeve_right'))
+            obj.color = color
+            localStorage.setItem('base_b_shirt_right_sleeve_right', JSON.stringify(obj))
+
+            var obj = JSON.parse(localStorage.getItem('base_b_shirt_bottom_sleeve_right'))
+            obj.color = color
+            localStorage.setItem('base_b_shirt_bottom_sleeve_right', JSON.stringify(obj))
+
+        }
+        //
+        else {
             if (selectedComponentId) {
                 var obj = JSON.parse(localStorage.getItem(selectedComponentId))
                 obj.color = color
                 localStorage.setItem(selectedComponentId, JSON.stringify(obj))
             }
-            setColor(color)
+            // setColor(color)
             addColor()
         }
 
@@ -1300,19 +1353,19 @@ function SamLocalEditorBaseBShirtFront(props) {
                 {selectedTab === 3 &&
                 <div className='row' style={{width: "100%"}}>
                     <div className="btn-group" role="group" aria-label="Basic example" style={{width: "100%"}}>
-                            {displyComponents &&
-                            displyComponents.map((item, index) => {
-                                return (
-                                    <button key={index} type="button" className="btn btn-secondary" onClick={() => {
-                                        onComponentClick(item)
-                                    }}>{item}</button>
-                                )
-                            })
-                            }
-                            {/*<button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('left_v_upper_part')}}>Left Sleeve</button>*/}
-                            {/*<button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('front-collar')}}>Collar</button>*/}
-                            {/*<button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('left_v_lower_part')}}>Right Sleeve</button>*/}
-                        </div>
+                        {displyComponents &&
+                        displyComponents.map((item, index) => {
+                            return (
+                                <button key={index} type="button" className="btn btn-secondary" onClick={() => {
+                                    onComponentClick(item)
+                                }}>{item}</button>
+                            )
+                        })
+                        }
+                        {/*<button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('left_v_upper_part')}}>Left Sleeve</button>*/}
+                        {/*<button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('front-collar')}}>Collar</button>*/}
+                        {/*<button type="button" className="btn btn-secondary" onClick={()=>{onComponentClick('left_v_lower_part')}}>Right Sleeve</button>*/}
+                    </div>
 
                     {/*<div className="btn-group" role="group" aria-label="Basic example" style={{width: "100%"}}>*/}
                     {/*    <button type="button" className="btn btn-secondary" onClick={() => {*/}

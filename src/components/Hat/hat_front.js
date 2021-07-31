@@ -281,21 +281,128 @@ function SamLocalEditorHatFront(props) {
     }
     const handleChangeComplete = (color) => {
         console.log(selectedComponentId, "selectedID")
-        if(selectedComponentId==='sleeve'){
+        if(selectedComponentId==='hat_upper_part_front'){
 
             setColor(color)
 
-            var obj=JSON.parse(localStorage.getItem('right_sleeve'))
+            var obj=JSON.parse(localStorage.getItem('hat_upper_part_front'))
             obj.color=color
-            localStorage.setItem('right_sleeve', JSON.stringify(obj))
+            localStorage.setItem('hat_upper_part_front', JSON.stringify(obj))
+            loadObject(JSON.parse(localStorage.getItem('hat_upper_part_front')))
 
-
-            var obj=JSON.parse(localStorage.getItem('left_sleeve'))
+            var obj=JSON.parse(localStorage.getItem('hat_upper_part_back'))
             obj.color=color
-            localStorage.setItem('left_sleeve', JSON.stringify(obj))
+            localStorage.setItem('hat_upper_part_back', JSON.stringify(obj))
 
+            var obj=JSON.parse(localStorage.getItem('hat_upper_part_right'))
+            obj.color=color
+            localStorage.setItem('hat_upper_part_right', JSON.stringify(obj))
 
-        }else {
+            var obj=JSON.parse(localStorage.getItem('hat_upper_part_left'))
+            obj.color=color
+            localStorage.setItem('hat_upper_part_left', JSON.stringify(obj))
+
+            var obj=JSON.parse(localStorage.getItem('hat_lower_part_front'))
+            obj.color=color
+            localStorage.setItem('hat_lower_part_front', JSON.stringify(obj))
+            loadObject(JSON.parse(localStorage.getItem('hat_lower_part_front')))
+
+            // var obj=JSON.parse(localStorage.getItem('base_b_jac_left_cuff_back'))
+            // obj.color=color
+            // localStorage.setItem('base_b_jac_left_cuff_back', JSON.stringify(obj))
+
+            var obj=JSON.parse(localStorage.getItem('hat_lower_part_left'))
+            obj.color=color
+            localStorage.setItem('hat_lower_part_left', JSON.stringify(obj))
+
+            var obj=JSON.parse(localStorage.getItem('hat_lower_part_right'))
+            obj.color=color
+            localStorage.setItem('hat_lower_part_right', JSON.stringify(obj))
+
+            var obj=JSON.parse(localStorage.getItem('hat_top_button_front'))
+            obj.color=color
+            localStorage.setItem('hat_top_button_front', JSON.stringify(obj))
+
+            // var obj=JSON.parse(localStorage.getItem('base_b_jac_left_cuff_back'))
+            // obj.color=color
+            // localStorage.setItem('base_b_jac_left_cuff_back', JSON.stringify(obj))
+
+            var obj=JSON.parse(localStorage.getItem('hat_top_button_left'))
+            obj.color=color
+            localStorage.setItem('hat_top_button_left', JSON.stringify(obj))
+
+            var obj=JSON.parse(localStorage.getItem('hat_top_button_right'))
+            obj.color=color
+            localStorage.setItem('hat_top_button_right', JSON.stringify(obj))
+        }
+
+        // else if(selectedComponentId==='hat_lower_part_front'){
+        //
+        //     setColor(color)
+        //
+        //     var obj=JSON.parse(localStorage.getItem('hat_lower_part_front'))
+        //     obj.color=color
+        //     localStorage.setItem('hat_lower_part_front', JSON.stringify(obj))
+        //     loadObject(JSON.parse(localStorage.getItem('hat_lower_part_front')))
+        //
+        //     // var obj=JSON.parse(localStorage.getItem('base_b_jac_left_cuff_back'))
+        //     // obj.color=color
+        //     // localStorage.setItem('base_b_jac_left_cuff_back', JSON.stringify(obj))
+        //
+        //     var obj=JSON.parse(localStorage.getItem('hat_lower_part_left'))
+        //     obj.color=color
+        //     localStorage.setItem('hat_lower_part_left', JSON.stringify(obj))
+        //
+        //     var obj=JSON.parse(localStorage.getItem('hat_lower_part_right'))
+        //     obj.color=color
+        //     localStorage.setItem('hat_lower_part_right', JSON.stringify(obj))
+        // }
+
+        // else if(selectedComponentId==='hat_top_button_front'){
+        //
+        //     setColor(color)
+        //
+        //     var obj=JSON.parse(localStorage.getItem('hat_top_button_front'))
+        //     obj.color=color
+        //     localStorage.setItem('hat_top_button_front', JSON.stringify(obj))
+        //     loadObject(JSON.parse(localStorage.getItem('hat_top_button_front')))
+        //
+        //     // var obj=JSON.parse(localStorage.getItem('base_b_jac_left_cuff_back'))
+        //     // obj.color=color
+        //     // localStorage.setItem('base_b_jac_left_cuff_back', JSON.stringify(obj))
+        //
+        //     var obj=JSON.parse(localStorage.getItem('hat_top_button_left'))
+        //     obj.color=color
+        //     localStorage.setItem('hat_top_button_left', JSON.stringify(obj))
+        //
+        //     var obj=JSON.parse(localStorage.getItem('hat_top_button_right'))
+        //     obj.color=color
+        //     localStorage.setItem('hat_top_button_right', JSON.stringify(obj))
+        // }
+
+        else if(selectedComponentId==='hat_dot_left_front'){
+
+            setColor(color)
+
+            var obj=JSON.parse(localStorage.getItem('hat_dot_right_front'))
+            obj.color=color
+            localStorage.setItem('hat_dot_right_front', JSON.stringify(obj))
+            loadObject(JSON.parse(localStorage.getItem('hat_dot_right_front')))
+
+            var obj=JSON.parse(localStorage.getItem('hat_dot_left_back'))
+            obj.color=color
+            localStorage.setItem('hat_dot_left_back', JSON.stringify(obj))
+
+            var obj=JSON.parse(localStorage.getItem('hat_dot_left_left'))
+            obj.color=color
+            localStorage.setItem('hat_dot_left_left', JSON.stringify(obj))
+
+            var obj=JSON.parse(localStorage.getItem('hat_dot_right_left'))
+            obj.color=color
+            localStorage.setItem('hat_dot_right_left', JSON.stringify(obj))
+        }
+
+        else {
             if(selectedComponentId){
                 var obj=JSON.parse(localStorage.getItem(selectedComponentId))
                 // debugger;
@@ -420,7 +527,7 @@ function SamLocalEditorHatFront(props) {
 
     function backImageLoad() {
         clearCanvas()
-        let back_view_hat = JSON.parse(localStorage.getItem('hat_upper_part_back'))
+        let back_view_hat = JSON.parse(localStorage.getItem('back_view_hat'))
         if (back_view_hat.hat_upper_part_back?.image) {
             if (localStorage.getItem('hat_upper_part_back')) {
                 loadObject(JSON.parse(localStorage.getItem('hat_upper_part_back')))

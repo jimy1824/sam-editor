@@ -295,6 +295,7 @@ function SamLocalEditor(props) {
             var obj = JSON.parse(localStorage.getItem('right_sleeve'))
             obj.color = color
             localStorage.setItem('right_sleeve', JSON.stringify(obj))
+            loadObject(JSON.parse(localStorage.getItem('right_sleeve')))
 
             // if(localStorage.getItem('back_left_sleeve')){
             //     var obj_b = JSON.parse(localStorage.getItem('back_left_sleeve'))
@@ -345,30 +346,7 @@ function SamLocalEditor(props) {
             var obj = JSON.parse(localStorage.getItem('left_sleeve'))
             obj.color = color
             localStorage.setItem('left_sleeve', JSON.stringify(obj))
-
-            // if(localStorage.getItem('back_left_sleeve')){
-            //     var obj_b = JSON.parse(localStorage.getItem('back_left_sleeve'))
-            //     obj_b.color = color
-            //     localStorage.setItem('back_left_sleeve', JSON.stringify(obj_b))
-            // }
-            //
-            // if(localStorage.getItem('right_v_upper_part')){
-            //     var obj_u = JSON.parse(localStorage.getItem('right_v_upper_part'))
-            //     obj_u.color = color
-            //     localStorage.setItem('right_v_upper_part', JSON.stringify(obj_u))
-            // }
-            //
-            // if(localStorage.getItem('right_v_lower_part')){
-            //     var obj_l = JSON.parse(localStorage.getItem('right_v_lower_part'))
-            //     obj_l.color = color
-            //     localStorage.setItem('right_v_lower_part', JSON.stringify(obj_l))
-            // }
-            //
-            // if(localStorage.getItem('right_v_body_view')){
-            //     var obj_body = JSON.parse(localStorage.getItem('right_v_body_view'))
-            //     obj_body.color = color
-            //     localStorage.setItem('right_v_body_view', JSON.stringify(obj_body))
-            // }
+            loadObject(JSON.parse(localStorage.getItem('left_sleeve')))
 
             var obj = JSON.parse(localStorage.getItem('back_right_sleeve'))
             obj.color = color
