@@ -397,7 +397,7 @@ function SamLocalEditor(props) {
                 obj.color = color
                 localStorage.setItem(selectedComponentId, JSON.stringify(obj))
             }
-            setColor(color, obj.type)
+            setColor(color)
             addColor()
         }
 
@@ -556,61 +556,44 @@ function SamLocalEditor(props) {
         clearCanvas()
         let body = JSON.parse(localStorage.getItem('body'))
         if (body.body_first_section?.image) {
-            if (localStorage.getItem('body_first_section')) {
-                loadObject(JSON.parse(localStorage.getItem('body_first_section')))
-            } else {
-                loadImage(body.body_first_section.image, 'body_first_section', body.body_first_section.x_point, body.body_first_section.y_point)
-            }
+            var body_first_section=JSON.parse(localStorage.getItem('body_first_section'))
+            if (body_first_section) {
+                loadObject(body_first_section)
 
+            }
         }
         if (body.body_second_section?.image) {
-            if (localStorage.getItem('body_second_section')) {
-                loadObject(JSON.parse(localStorage.getItem('body_second_section')))
-            } else {
-                loadImage(body.body_second_section.image, 'body_second_section', body.body_second_section.x_point, body.body_second_section.y_point)
+            var body_second_section=JSON.parse(localStorage.getItem('body_second_section'))
+            if (body_second_section) {
+                loadObject(body_second_section)
             }
         }
         if (body.body_third_section?.image) {
-            if (localStorage.getItem('body_third_section')) {
-                loadObject(JSON.parse(localStorage.getItem('body_third_section')))
-            } else {
-                loadImage(body.body_third_section.image, 'body_third_section', body.body_third_section.x_point, body.body_third_section.y_point)
+            var body_third_section=JSON.parse(localStorage.getItem('body_third_section'))
+            if (body_third_section) {
+                loadObject(body_third_section)
+
             }
         }
         if (body.collar?.image) {
-            if (localStorage.getItem('collar')) {
-                loadObject(JSON.parse(localStorage.getItem('collar')))
-            } else {
-                loadImage(body.collar.image, 'collar', body.collar.x_point, body.collar.y_point)
+            var collar =JSON.parse(localStorage.getItem('collar'))
+            if (collar) {
+                loadObject(collar)
             }
         }
         if (body.right_sleeve?.image) {
-            if (localStorage.getItem('right_sleeve')) {
-                loadObject(JSON.parse(localStorage.getItem('right_sleeve')))
-            } else {
-                loadImage(body.right_sleeve.image, 'right_sleeve', body.right_sleeve.x_point, body.right_sleeve.y_point)
+            var right_sleeve=JSON.parse(localStorage.getItem('right_sleeve'))
+            if (right_sleeve) {
+                loadObject(right_sleeve)
             }
         }
 
         if (body.left_sleeve?.image) {
-            if (localStorage.getItem('left_sleeve')) {
-                loadObject(JSON.parse(localStorage.getItem('left_sleeve')))
-            } else {
-                loadImage(body.left_sleeve.image, 'left_sleeve', body.left_sleeve.x_point, body.left_sleeve.y_point)
+            var left_sleeve=JSON.parse(localStorage.getItem('left_sleeve'))
+            if (left_sleeve) {
+                loadObject(left_sleeve)
 
             }
-        }
-
-        if (body.towel_front?.image) {
-            if (localStorage.getItem('towel_front')) {
-                loadObject(JSON.parse(localStorage.getItem('towel_front')))
-            } else {
-                loadImage(body.towel_front.image,
-                    'towel_front',
-                    body.towel_front.x_point,
-                    body.towel_front.y_point)
-            }
-
         }
     }
 
