@@ -111,8 +111,15 @@ function SamLocalEditor(props) {
     }, []);
     useEffect(() => {
         if (product) {
+            preFrontImageLoad()
+            prebackImageLoad()
+            preleftImageLoad()
+            prerightImageLoad()
             frontImageLoad()
             setComponents('body')
+            // setComponents('back', false)
+            // setComponents('left', false)
+            // setComponents('right', false)
         }
     }, [product])
 
@@ -234,6 +241,23 @@ function SamLocalEditor(props) {
     var changeFontStyle = function (font) {
         // document.getElementById("output-text")
         //              .style.fontWeight = "italic";
+    }
+    const preloadImge = (url, imageId, left, top) => {
+
+        fabric.Image.fromURL(url, function (img) {
+            img.id = imageId;
+            img.filters = [new fabric.Image.filters.HueRotation()];
+            img.applyFilters()
+            var cor = img.set(
+                {
+                    left: left,
+                    top: top,
+                    selectable: false,
+
+                })
+            localStorage.setItem(imageId, JSON.stringify(img));
+        }, {crossOrigin: 'anonymous'})
+
     }
 
     const loadImage = (url, imageId, left, top) => {
@@ -495,7 +519,39 @@ function SamLocalEditor(props) {
     //     link.href = image;
     //     link.click();
     // }
+    function preFrontImageLoad() {
+        let body = JSON.parse(localStorage.getItem('body'))
+        if (body.body_first_section?.image) {
 
+                loadImage(body.body_first_section.image, 'body_first_section', body.body_first_section.x_point, body.body_first_section.y_point)
+
+        }
+        if (body.body_second_section?.image) {
+
+                loadImage(body.body_second_section.image, 'body_second_section', body.body_second_section.x_point, body.body_second_section.y_point)
+        }
+        if (body.body_third_section?.image) {
+                loadImage(body.body_third_section.image, 'body_third_section', body.body_third_section.x_point, body.body_third_section.y_point)
+        }
+        if (body.collar?.image) {
+                loadImage(body.collar.image, 'collar', body.collar.x_point, body.collar.y_point)
+        }
+        if (body.right_sleeve?.image) {
+                loadImage(body.right_sleeve.image, 'right_sleeve', body.right_sleeve.x_point, body.right_sleeve.y_point)
+        }
+
+        if (body.left_sleeve?.image) {
+
+                loadImage(body.left_sleeve.image, 'left_sleeve', body.left_sleeve.x_point, body.left_sleeve.y_point)
+        }
+
+        if (body.towel_front?.image) {
+                loadImage(body.towel_front.image,
+                    'towel_front',
+                    body.towel_front.x_point,
+                    body.towel_front.y_point)
+        }
+    }
     function frontImageLoad() {
         clearCanvas()
         let body = JSON.parse(localStorage.getItem('body'))
@@ -628,6 +684,59 @@ function SamLocalEditor(props) {
         }
     }
 
+    function prebackImageLoad() {
+        let back = JSON.parse(localStorage.getItem('back'))
+        if (back.back_first_part?.image) {
+            preloadImge(
+                    back.back_first_part.image,
+                    'back_first_part',
+                    back.back_first_part.x_point,
+                    back.back_first_part.y_point,
+                )
+        }
+
+        if (back.back_second_part?.image) {
+            preloadImge(
+                    back.back_second_part.image,
+                    'back_second_part',
+                    back.back_second_part.x_point,
+                    back.back_second_part.y_point,
+                )
+        }
+
+        if (back.back_third_part?.image) {
+
+            preloadImge(
+                    back.back_third_part.image,
+                    'back_third_part',
+                    back.back_third_part.x_point,
+                    back.back_third_part.y_point,
+                )
+        }
+
+        if (back.back_left_sleeve?.image) {
+
+            preloadImge(
+                    back.back_left_sleeve.image,
+                    'back_left_sleeve',
+                    back.back_left_sleeve.x_point,
+                    back.back_left_sleeve.y_point,
+                )
+
+        }
+
+        if (back.back_right_sleeve?.image) {
+
+            preloadImge(
+                    back.back_right_sleeve.image,
+                    'back_right_sleeve',
+                    back.back_right_sleeve.x_point,
+                    back.back_right_sleeve.y_point,
+                )
+
+        }
+    }
+
     const leftImageLoad = (e) => {
         clearCanvas()
         let left = JSON.parse(localStorage.getItem('left'))
@@ -722,6 +831,84 @@ function SamLocalEditor(props) {
                     left.left_v_right_s_lower.y_point,
                 )
             }
+        }
+
+    }
+
+    const preleftImageLoad = (e) => {
+        let left = JSON.parse(localStorage.getItem('left'))
+
+        if (left?.left_v_body_view?.image) {
+
+            preloadImge(
+                    left.left_v_body_view.image,
+                    'left_v_body_view',
+                    left.left_v_body_view.x_point,
+                    left.left_v_body_view.y_point,
+                )
+
+
+        }
+
+        if (left.left_v_upper_part?.image) {
+
+            preloadImge(
+                    left.left_v_upper_part.image,
+                    'left_v_upper_part',
+                    left.left_v_upper_part.x_point,
+                    left.left_v_upper_part.y_point,
+                )
+        }
+
+        if (left?.left_v_lower_part?.image) {
+
+            preloadImge(
+                    left.left_v_lower_part.image,
+                    'left_v_lower_part',
+                    left.left_v_lower_part.x_point,
+                    left.left_v_lower_part.y_point,
+                )
+        }
+
+        if (left?.left_v_left_s_upper?.image) {
+
+            preloadImge(
+                    left.left_v_left_s_upper.image,
+                    'left_v_left_s_upper',
+                    left.left_v_left_s_upper.x_point,
+                    left.left_v_left_s_upper.y_point,
+                )
+        }
+
+        if (left?.left_v_left_s_lower?.image) {
+
+            preloadImge(
+                    left.left_v_left_s_lower.image,
+                    'left_v_left_s_lower',
+                    left.left_v_left_s_lower.x_point,
+                    left.left_v_left_s_lower.y_point,
+                )
+        }
+
+        if (left?.left_v_right_s_upper?.image) {
+
+            preloadImge(
+                    left.left_v_right_s_upper.image,
+                    'left_v_right_s_upper',
+                    left.left_v_right_s_upper.x_point,
+                    left.left_v_right_s_upper.y_point,
+                )
+        }
+
+        if (left?.left_v_right_s_lower?.image) {
+
+            preloadImge(
+                    left.left_v_right_s_lower.image,
+                    'left_v_right_s_lower',
+                    left.left_v_right_s_lower.x_point,
+                    left.left_v_right_s_lower.y_point,
+                )
+
         }
 
     }
@@ -822,6 +1009,85 @@ function SamLocalEditor(props) {
                     right.right_v_right_s_lower.y_point,
                 )
             }
+        }
+
+
+    }
+
+    const prerightImageLoad = (e) => {
+        let right = JSON.parse(localStorage.getItem('right'))
+
+        if (right.right_v_body_view?.image) {
+
+            preloadImge(
+                    right.right_v_body_view.image,
+                    'right_v_body_view',
+                    right.right_v_body_view.x_point,
+                    right.right_v_body_view.y_point,
+                )
+
+        }
+
+        if (right.right_v_upper_part?.image) {
+            preloadImge(
+                    right.right_v_upper_part.image,
+                    'right_v_upper_part',
+                    right.right_v_upper_part.x_point,
+                    right.right_v_upper_part.y_point,
+                )
+        }
+
+        if (right.right_v_lower_part?.image) {
+
+            preloadImge(
+                    right.right_v_lower_part.image,
+                    'right_v_lower_part',
+                    right.right_v_lower_part.x_point,
+                    right.right_v_lower_part.y_point,
+                )
+
+        }
+
+        if (right.right_v_left_s_upper?.image) {
+
+            preloadImge(
+                    right.right_v_left_s_upper.image,
+                    'right_v_left_s_upper',
+                    right.right_v_left_s_upper.x_point,
+                    right.right_v_left_s_upper.y_point,
+                )
+
+        }
+
+        if (right.right_v_left_s_lower?.image) {
+
+            preloadImge(
+                    right.right_v_left_s_lower.image,
+                    'right_v_left_s_lower',
+                    right.right_v_left_s_lower.x_point,
+                    right.right_v_left_s_lower.y_point,
+                )
+
+        }
+
+        if (right.right_v_right_s_upper?.image) {
+
+            preloadImge(
+                    right.right_v_right_s_upper.image,
+                    'right_v_right_s_upper',
+                    right.right_v_right_s_upper.x_point,
+                    right.right_v_right_s_upper.y_point,
+                )
+        }
+
+        if (right.right_v_right_s_lower?.image) {
+
+            preloadImge(
+                    right.right_v_right_s_lower.image,
+                    'right_v_right_s_lower',
+                    right.right_v_right_s_lower.x_point,
+                    right.right_v_right_s_lower.y_point,
+                )
         }
 
 
