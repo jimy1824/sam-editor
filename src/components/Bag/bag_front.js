@@ -89,8 +89,11 @@ function SamLocalEditorBagFront(props) {
     useEffect(() => {
         setCanvas(initCanvas('canvas'));
     }, []);
+
     useEffect(() => {
         if (product) {
+            preFrontImageLoad()
+            preBackImageLoad()
             frontImageLoad()
             setComponents('front_view_bag')
         }
@@ -214,6 +217,24 @@ function SamLocalEditorBagFront(props) {
            // document.getElementById("output-text")
            //              .style.fontWeight = "italic";
         }
+
+    const preloadImge = (url, imageId, left, top) => {
+
+        fabric.Image.fromURL(url, function (img) {
+            img.id = imageId;
+            img.filters = [new fabric.Image.filters.HueRotation()];
+            img.applyFilters()
+            var cor = img.set(
+                {
+                    left: left,
+                    top: top,
+                    selectable: false,
+
+                })
+            localStorage.setItem(imageId, JSON.stringify(img));
+        }, {crossOrigin: 'anonymous'})
+
+    }
 
     const loadImage = (url, imageId, left, top) => {
 
@@ -355,58 +376,48 @@ function SamLocalEditorBagFront(props) {
     //     link.click();
     // }
 
-    function frontImageLoad() {
-        clearCanvas()
+    function preFrontImageLoad() {
         let front_view_bag = JSON.parse(localStorage.getItem('front_view_bag'))
 
         if (front_view_bag.bag_full_front_body?.image) {
-            if (localStorage.getItem('bag_full_front_body')) {
-                loadObject(JSON.parse(localStorage.getItem('bag_full_front_body')))
-            } else {
+
                 loadImage(
                     front_view_bag.bag_full_front_body.image,
                     'bag_full_front_body',
                     front_view_bag.bag_full_front_body.x_point,
                     front_view_bag.bag_full_front_body.y_point)
-            }
+
         }
         if (front_view_bag.bag_top_front_body?.image) {
-            if (localStorage.getItem('bag_top_front_body')) {
-                loadObject(JSON.parse(localStorage.getItem('bag_top_front_body')))
-            } else {
+
                 loadImage(
                     front_view_bag.bag_top_front_body.image,
                     'bag_top_front_body',
                     front_view_bag.bag_top_front_body.x_point,
                     front_view_bag.bag_top_front_body.y_point)
-            }
+
         }
         if (front_view_bag.bag_mid_front_body?.image) {
-            if (localStorage.getItem('bag_mid_front_body')) {
-                loadObject(JSON.parse(localStorage.getItem('bag_mid_front_body')))
-            } else {
+
                 loadImage(
                     front_view_bag.bag_mid_front_body.image,
                     'bag_mid_front_body',
                     front_view_bag.bag_mid_front_body.x_point,
                     front_view_bag.bag_mid_front_body.y_point)
-            }
+
         }
         if (front_view_bag.bag_bottom_front_body?.image) {
-            if (localStorage.getItem('bag_bottom_front_body')) {
-                loadObject(JSON.parse(localStorage.getItem('bag_bottom_front_body')))
-            } else {
+
                 loadImage(
                     front_view_bag.bag_bottom_front_body.image,
                     'bag_bottom_front_body',
                     front_view_bag.bag_bottom_front_body.x_point,
-                    front_view_bag.bag_bottom_front_body.y_point)
-            }
+                    front_view_bag.bag_bottom_front_body.y_point
+                )
         }
+
         if (front_view_bag.bag_handle_front?.image) {
-            if (localStorage.getItem('bag_handle_front')) {
-                loadObject(JSON.parse(localStorage.getItem('bag_handle_front')))
-            } else {
+
                 loadImage(
                     front_view_bag.bag_handle_front.image,
                     'bag_handle_front',
@@ -414,7 +425,111 @@ function SamLocalEditorBagFront(props) {
                     front_view_bag.bag_handle_front.y_point)
             }
 
+    }
+
+    function frontImageLoad() {
+        clearCanvas()
+        let front_view_bag = JSON.parse(localStorage.getItem('front_view_bag'))
+
+        if (front_view_bag.bag_full_front_body?.image) {
+            var bag_full_front_body=JSON.parse(localStorage.getItem('bag_full_front_body'))
+            if (bag_full_front_body) {
+                loadObject(bag_full_front_body)
+
+            }
         }
+
+        if (front_view_bag.bag_top_front_body?.image) {
+            var bag_top_front_body=JSON.parse(localStorage.getItem('bag_top_front_body'))
+            if (bag_top_front_body) {
+                loadObject(bag_top_front_body)
+
+            }
+        }
+
+        if (front_view_bag.bag_mid_front_body?.image) {
+            var bag_mid_front_body=JSON.parse(localStorage.getItem('bag_mid_front_body'))
+            if (bag_mid_front_body) {
+                loadObject(bag_mid_front_body)
+
+            }
+        }
+
+        if (front_view_bag.bag_bottom_front_body?.image) {
+            var bag_bottom_front_body=JSON.parse(localStorage.getItem('bag_bottom_front_body'))
+            if (bag_bottom_front_body) {
+                loadObject(bag_bottom_front_body)
+            }
+        }
+
+        if (front_view_bag.bag_handle_front?.image) {
+            var bag_handle_front=JSON.parse(localStorage.getItem('bag_handle_front'))
+            if (bag_handle_front) {
+                loadObject(bag_handle_front)
+            }
+
+        }
+    }
+
+    function preBackImageLoad() {
+        let back_view_bag = JSON.parse(localStorage.getItem('back_view_bag'))
+
+        if (back_view_bag.bag_full_back_body?.image) {
+
+                preloadImge(
+                    back_view_bag.bag_full_back_body.image,
+                    'bag_full_back_body',
+                    back_view_bag.bag_full_back_body.x_point,
+                    back_view_bag.bag_full_back_body.y_point,
+                )
+
+        }
+
+        if (back_view_bag.bag_top_back_body?.image) {
+
+                preloadImge(
+                    back_view_bag.bag_top_back_body.image,
+                    'bag_top_back_body',
+                    back_view_bag.bag_top_back_body.x_point,
+                    back_view_bag.bag_top_back_body.y_point,
+                )
+
+        }
+
+        if (back_view_bag.bag_mid_back_body?.image) {
+
+                preloadImge(
+                    back_view_bag.bag_mid_back_body.image,
+                    'bag_mid_back_body',
+                    back_view_bag.bag_mid_back_body.x_point,
+                    back_view_bag.bag_mid_back_body.y_point,
+                )
+
+        }
+
+        if (back_view_bag.bag_bottom_back_body?.image) {
+
+                preloadImge(
+                    back_view_bag.bag_bottom_back_body.image,
+                    'bag_bottom_back_body',
+                    back_view_bag.bag_bottom_back_body.x_point,
+                    back_view_bag.bag_bottom_back_body.y_point,
+                )
+
+        }
+
+        if (back_view_bag.bag_handle_back?.image) {
+
+                preloadImge(
+                    back_view_bag.bag_handle_back.image,
+                    'bag_handle_back',
+                    back_view_bag.bag_handle_back.x_point,
+                    back_view_bag.bag_handle_back.y_point,
+                )
+
+
+        }
+
     }
 
     function backImageLoad() {
@@ -422,68 +537,43 @@ function SamLocalEditorBagFront(props) {
         let back_view_bag = JSON.parse(localStorage.getItem('back_view_bag'))
 
         if (back_view_bag.bag_full_back_body?.image) {
-            if (localStorage.getItem('bag_full_back_body')) {
-                loadObject(JSON.parse(localStorage.getItem('bag_full_back_body')))
-            } else {
-                loadImage(
-                    back_view_bag.bag_full_back_body.image,
-                    'bag_full_back_body',
-                    back_view_bag.bag_full_back_body.x_point,
-                    back_view_bag.bag_full_back_body.y_point,
-                )
+            var bag_full_back_body=JSON.parse(localStorage.getItem('bag_full_back_body'))
+            if (bag_full_back_body) {
+                loadObject(bag_full_back_body)
+
             }
         }
 
         if (back_view_bag.bag_top_back_body?.image) {
-            if (localStorage.getItem('bag_top_back_body')) {
-                loadObject(JSON.parse(localStorage.getItem('bag_top_back_body')))
-            } else {
-                loadImage(
-                    back_view_bag.bag_top_back_body.image,
-                    'bag_top_back_body',
-                    back_view_bag.bag_top_back_body.x_point,
-                    back_view_bag.bag_top_back_body.y_point,
-                )
+            var bag_top_back_body=JSON.parse(localStorage.getItem('bag_top_back_body'))
+            if (bag_top_back_body) {
+                loadObject(bag_top_back_body)
+
             }
         }
 
         if (back_view_bag.bag_mid_back_body?.image) {
-            if (localStorage.getItem('bag_mid_back_body')) {
-                loadObject(JSON.parse(localStorage.getItem('bag_mid_back_body')))
-            } else {
-                loadImage(
-                    back_view_bag.bag_mid_back_body.image,
-                    'bag_mid_back_body',
-                    back_view_bag.bag_mid_back_body.x_point,
-                    back_view_bag.bag_mid_back_body.y_point,
-                )
+            var bag_mid_back_body=JSON.parse(localStorage.getItem('bag_mid_back_body'))
+            if (bag_mid_back_body) {
+                loadObject(bag_mid_back_body)
+
             }
         }
 
         if (back_view_bag.bag_bottom_back_body?.image) {
-            if (localStorage.getItem('bag_bottom_back_body')) {
-                loadObject(JSON.parse(localStorage.getItem('bag_bottom_back_body')))
-            } else {
-                loadImage(
-                    back_view_bag.bag_bottom_back_body.image,
-                    'bag_bottom_back_body',
-                    back_view_bag.bag_bottom_back_body.x_point,
-                    back_view_bag.bag_bottom_back_body.y_point,
-                )
+            var bag_bottom_back_body=JSON.parse(localStorage.getItem('bag_bottom_back_body'))
+            if (bag_bottom_back_body) {
+                loadObject(bag_bottom_back_body)
+
             }
         }
-        if (back_view_bag.bag_handle_back?.image) {
-            if (localStorage.getItem('bag_handle_back')) {
-                loadObject(JSON.parse(localStorage.getItem('bag_handle_back')))
-            } else {
-                loadImage(
-                    back_view_bag.bag_handle_back.image,
-                    'bag_handle_back',
-                    back_view_bag.bag_handle_back.x_point,
-                    back_view_bag.bag_handle_back.y_point,
-                )
-            }
 
+        if (back_view_bag.bag_handle_back?.image) {
+            var bag_handle_back=JSON.parse(localStorage.getItem('bag_handle_back'))
+            if (bag_handle_back) {
+                loadObject(bag_handle_back)
+
+            }
         }
     }
 

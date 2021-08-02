@@ -153,14 +153,14 @@ function SamLocalEditor(props) {
 
                 })
             canvas.add(img);
-            if(obj.logo){
-                fabric.Image.fromObject(obj.logo,function (logo) {
+            if (obj.logo) {
+                fabric.Image.fromObject(obj.logo, function (logo) {
                     canvas.add(logo);
                 })
 
             }
-            if(obj.text){
-                fabric.Textbox.fromObject(obj.text,function (text) {
+            if (obj.text) {
+                fabric.Textbox.fromObject(obj.text, function (text) {
                     canvas.add(text);
                 })
 
@@ -193,11 +193,11 @@ function SamLocalEditor(props) {
             var obj = JSON.parse(localStorage.getItem(selectedComponentId))
             obj.text = text
             localStorage.setItem(selectedComponentId, JSON.stringify(obj))
-            addingComponent='text';
+            addingComponent = 'text';
         }
     }
 
-    canvas?.on('after:render', function() {
+    canvas?.on('after:render', function () {
         var ao = canvas.getActiveObject();
         if (ao) {
             var bound = ao.getBoundingRect();
@@ -209,11 +209,11 @@ function SamLocalEditor(props) {
                         obj.logo.left = bound.left
                         obj.logo.top = bound.top
 
-                        fabric.Image.fromObject(obj.logo,function (test) {
+                        fabric.Image.fromObject(obj.logo, function (test) {
                             test.scaleToHeight(bound.height)
                             test.scaleToWidth(bound.width);
-                            obj.logo.scaleY=test.scaleY
-                            obj.logo.scaleX=test.scaleX
+                            obj.logo.scaleY = test.scaleY
+                            obj.logo.scaleX = test.scaleX
                             localStorage.setItem(selectedComponentId, JSON.stringify(obj))
 
                         })
@@ -316,10 +316,10 @@ function SamLocalEditor(props) {
 
             setColor(color)
 
-            var obj = JSON.parse(localStorage.getItem('right_sleeve'))
+            var obj = JSON.parse(localStorage.getItem('left_sleeve'))
             obj.color = color
-            localStorage.setItem('right_sleeve', JSON.stringify(obj))
-            loadObject(JSON.parse(localStorage.getItem('right_sleeve')))
+            localStorage.setItem('left_sleeve', JSON.stringify(obj))
+            loadObject(JSON.parse(localStorage.getItem('left_sleeve')))
 
             // if(localStorage.getItem('back_left_sleeve')){
             //     var obj_b = JSON.parse(localStorage.getItem('back_left_sleeve'))
@@ -345,9 +345,9 @@ function SamLocalEditor(props) {
             //     localStorage.setItem('right_v_body_view', JSON.stringify(obj_body))
             // }
 
-            var obj = JSON.parse(localStorage.getItem('back_left_sleeve'))
+            var obj = JSON.parse(localStorage.getItem('back_right_sleeve'))
             obj.color = color
-            localStorage.setItem('back_left_sleeve', JSON.stringify(obj))
+            localStorage.setItem('back_right_sleeve', JSON.stringify(obj))
 
             var obj = JSON.parse(localStorage.getItem('right_v_body_view'))
             obj.color = color
@@ -363,18 +363,18 @@ function SamLocalEditor(props) {
 
         }
 
-        if (selectedComponentId === 'left_sleeve') {
+        else if (selectedComponentId === 'left_sleeve') {
 
             setColor(color)
 
-            var obj = JSON.parse(localStorage.getItem('left_sleeve'))
+            var obj = JSON.parse(localStorage.getItem('right_sleeve'))
             obj.color = color
-            localStorage.setItem('left_sleeve', JSON.stringify(obj))
-            loadObject(JSON.parse(localStorage.getItem('left_sleeve')))
+            localStorage.setItem('right_sleeve', JSON.stringify(obj))
+            loadObject(JSON.parse(localStorage.getItem('right_sleeve')))
 
-            var obj = JSON.parse(localStorage.getItem('back_right_sleeve'))
+            var obj = JSON.parse(localStorage.getItem('back_left_sleeve'))
             obj.color = color
-            localStorage.setItem('back_right_sleeve', JSON.stringify(obj))
+            localStorage.setItem('back_left_sleeve', JSON.stringify(obj))
 
             var obj = JSON.parse(localStorage.getItem('left_v_body_view'))
             obj.color = color
@@ -388,10 +388,7 @@ function SamLocalEditor(props) {
             obj.color = color
             localStorage.setItem('left_v_lower_part', JSON.stringify(obj))
 
-        }
-
-
-        else {
+        } else {
             if (selectedComponentId) {
                 var obj = JSON.parse(localStorage.getItem(selectedComponentId))
                 obj.color = color
@@ -518,40 +515,7 @@ function SamLocalEditor(props) {
     //     link.download = "Your_Product_Design.svg";
     //     link.href = image;
     //     link.click();
-    // }
-    function preFrontImageLoad() {
-        let body = JSON.parse(localStorage.getItem('body'))
-        if (body.body_first_section?.image) {
-
-                loadImage(body.body_first_section.image, 'body_first_section', body.body_first_section.x_point, body.body_first_section.y_point)
-
-        }
-        if (body.body_second_section?.image) {
-
-                loadImage(body.body_second_section.image, 'body_second_section', body.body_second_section.x_point, body.body_second_section.y_point)
-        }
-        if (body.body_third_section?.image) {
-                loadImage(body.body_third_section.image, 'body_third_section', body.body_third_section.x_point, body.body_third_section.y_point)
-        }
-        if (body.collar?.image) {
-                loadImage(body.collar.image, 'collar', body.collar.x_point, body.collar.y_point)
-        }
-        if (body.right_sleeve?.image) {
-                loadImage(body.right_sleeve.image, 'right_sleeve', body.right_sleeve.x_point, body.right_sleeve.y_point)
-        }
-
-        if (body.left_sleeve?.image) {
-
-                loadImage(body.left_sleeve.image, 'left_sleeve', body.left_sleeve.x_point, body.left_sleeve.y_point)
-        }
-
-        if (body.towel_front?.image) {
-                loadImage(body.towel_front.image,
-                    'towel_front',
-                    body.towel_front.x_point,
-                    body.towel_front.y_point)
-        }
-    }
+// }
     function frontImageLoad() {
         clearCanvas()
         let body = JSON.parse(localStorage.getItem('body'))
@@ -597,72 +561,72 @@ function SamLocalEditor(props) {
         }
     }
 
+    function preFrontImageLoad() {
+        let body = JSON.parse(localStorage.getItem('body'))
+        if (body.body_first_section?.image) {
+
+            loadImage(body.body_first_section.image,
+                'body_first_section',
+                body.body_first_section.x_point,
+                body.body_first_section.y_point)
+
+        }
+        if (body.body_second_section?.image) {
+
+            loadImage(body.body_second_section.image, 'body_second_section', body.body_second_section.x_point, body.body_second_section.y_point)
+        }
+        if (body.body_third_section?.image) {
+            loadImage(body.body_third_section.image, 'body_third_section', body.body_third_section.x_point, body.body_third_section.y_point)
+        }
+        if (body.collar?.image) {
+            loadImage(body.collar.image, 'collar', body.collar.x_point, body.collar.y_point)
+        }
+        if (body.right_sleeve?.image) {
+            loadImage(body.right_sleeve.image, 'right_sleeve', body.right_sleeve.x_point, body.right_sleeve.y_point)
+        }
+
+        if (body.left_sleeve?.image) {
+
+            loadImage(body.left_sleeve.image, 'left_sleeve', body.left_sleeve.x_point, body.left_sleeve.y_point)
+        }
+    }
+
     function backImageLoad() {
         clearCanvas()
         let back = JSON.parse(localStorage.getItem('back'))
-        if (back.back_first_part?.image) {
-            if (localStorage.getItem('back_first_part')) {
-                loadObject(JSON.parse(localStorage.getItem('back_first_part')))
-            } else {
-                loadImage(
-                    back.back_first_part.image,
-                    'back_first_part',
-                    back.back_first_part.x_point,
-                    back.back_first_part.y_point,
-                )
-            }
 
+        if (back.back_first_part?.image) {
+            var back_first_part=JSON.parse(localStorage.getItem('back_first_part'))
+            if (back_first_part) {
+                loadObject(back_first_part)
+            }
         }
 
         if (back.back_second_part?.image) {
-            if (localStorage.getItem('back_second_part')) {
-                loadObject(JSON.parse(localStorage.getItem('back_second_part')))
-            } else {
-                loadImage(
-                    back.back_second_part.image,
-                    'back_second_part',
-                    back.back_second_part.x_point,
-                    back.back_second_part.y_point,
-                )
+           var back_second_part=JSON.parse(localStorage.getItem('back_second_part'))
+            if (back_second_part) {
+                loadObject(back_second_part)
             }
         }
 
         if (back.back_third_part?.image) {
-            if (localStorage.getItem('back_third_part')) {
-                loadObject(JSON.parse(localStorage.getItem('back_third_part')))
-            } else {
-                loadImage(
-                    back.back_third_part.image,
-                    'back_third_part',
-                    back.back_third_part.x_point,
-                    back.back_third_part.y_point,
-                )
+            var back_third_part=JSON.parse(localStorage.getItem('back_third_part'))
+            if (back_third_part) {
+                loadObject(back_third_part)
             }
         }
 
         if (back.back_left_sleeve?.image) {
-            if (localStorage.getItem('back_left_sleeve')) {
-                loadObject(JSON.parse(localStorage.getItem('back_left_sleeve')))
-            } else {
-                loadImage(
-                    back.back_left_sleeve.image,
-                    'back_left_sleeve',
-                    back.back_left_sleeve.x_point,
-                    back.back_left_sleeve.y_point,
-                )
+            var back_left_sleeve=JSON.parse(localStorage.getItem('back_left_sleeve'))
+            if (back_left_sleeve) {
+                loadObject(back_left_sleeve)
             }
         }
 
         if (back.back_right_sleeve?.image) {
-            if (localStorage.getItem('back_right_sleeve')) {
-                loadObject(JSON.parse(localStorage.getItem('back_right_sleeve')))
-            } else {
-                loadImage(
-                    back.back_right_sleeve.image,
-                    'back_right_sleeve',
-                    back.back_right_sleeve.x_point,
-                    back.back_right_sleeve.y_point,
-                )
+            var back_right_sleeve=JSON.parse(localStorage.getItem('back_right_sleeve'))
+            if (back_right_sleeve) {
+                loadObject(back_right_sleeve)
             }
         }
     }
@@ -725,94 +689,52 @@ function SamLocalEditor(props) {
         let left = JSON.parse(localStorage.getItem('left'))
 
         if (left?.left_v_body_view?.image) {
-            if (localStorage.getItem('left_v_body_view')) {
-                loadObject(JSON.parse(localStorage.getItem('left_v_body_view')))
-            } else {
-                loadImage(
-                    left.left_v_body_view.image,
-                    'left_v_body_view',
-                    left.left_v_body_view.x_point,
-                    left.left_v_body_view.y_point,
-                )
+            var left_v_body_view=JSON.parse(localStorage.getItem('left_v_body_view'))
+            if (left_v_body_view) {
+                loadObject(left_v_body_view)
             }
 
         }
 
         if (left.left_v_upper_part?.image) {
-            if (localStorage.getItem('left_v_upper_part')) {
-                loadObject(JSON.parse(localStorage.getItem('left_v_upper_part')))
-            } else {
-                loadImage(
-                    left.left_v_upper_part.image,
-                    'left_v_upper_part',
-                    left.left_v_upper_part.x_point,
-                    left.left_v_upper_part.y_point,
-                )
+             var left_v_upper_part=JSON.parse(localStorage.getItem('left_v_upper_part'))
+            if (left_v_upper_part) {
+                loadObject(left_v_upper_part)
             }
         }
 
         if (left?.left_v_lower_part?.image) {
-            if (localStorage.getItem('left_v_lower_part')) {
-                loadObject(JSON.parse(localStorage.getItem('left_v_lower_part')))
-            } else {
-                loadImage(
-                    left.left_v_lower_part.image,
-                    'left_v_lower_part',
-                    left.left_v_lower_part.x_point,
-                    left.left_v_lower_part.y_point,
-                )
+             var left_v_lower_part=JSON.parse(localStorage.getItem('left_v_lower_part'))
+            if (left_v_lower_part) {
+                loadObject(left_v_lower_part)
             }
         }
 
         if (left?.left_v_left_s_upper?.image) {
-            if (localStorage.getItem('left_v_left_s_upper')) {
-                loadObject(JSON.parse(localStorage.getItem('left_v_left_s_upper')))
-            } else {
-                loadImage(
-                    left.left_v_left_s_upper.image,
-                    'left_v_left_s_upper',
-                    left.left_v_left_s_upper.x_point,
-                    left.left_v_left_s_upper.y_point,
-                )
+            var left_v_left_s_upper=JSON.parse(localStorage.getItem('left_v_left_s_upper'))
+            if (left_v_left_s_upper) {
+                loadObject(left_v_left_s_upper)
             }
         }
 
         if (left?.left_v_left_s_lower?.image) {
-            if (localStorage.getItem('left_v_left_s_lower')) {
-                loadObject(JSON.parse(localStorage.getItem('left_v_left_s_lower')))
-            } else {
-                loadImage(
-                    left.left_v_left_s_lower.image,
-                    'left_v_left_s_lower',
-                    left.left_v_left_s_lower.x_point,
-                    left.left_v_left_s_lower.y_point,
-                )
+            var left_v_left_s_lower=JSON.parse(localStorage.getItem('left_v_left_s_lower'))
+            if (left_v_left_s_lower) {
+                loadObject(left_v_left_s_lower)
             }
         }
 
         if (left?.left_v_right_s_upper?.image) {
-            if (localStorage.getItem('left_v_right_s_upper')) {
-                loadObject(JSON.parse(localStorage.getItem('left_v_right_s_upper')))
-            } else {
-                loadImage(
-                    left.left_v_right_s_upper.image,
-                    'left_v_right_s_upper',
-                    left.left_v_right_s_upper.x_point,
-                    left.left_v_right_s_upper.y_point,
-                )
+            var left_v_right_s_upper=JSON.parse(localStorage.getItem('left_v_right_s_upper'))
+            if (left_v_right_s_upper) {
+                loadObject(left_v_right_s_upper)
             }
         }
 
         if (left?.left_v_right_s_lower?.image) {
-            if (localStorage.getItem('left_v_right_s_lower')) {
-                loadObject(JSON.parse(localStorage.getItem('left_v_right_s_lower')))
-            } else {
-                loadImage(
-                    left.left_v_right_s_lower.image,
-                    'left_v_right_s_lower',
-                    left.left_v_right_s_lower.x_point,
-                    left.left_v_right_s_lower.y_point,
-                )
+            var left_v_right_s_lower=JSON.parse(localStorage.getItem('left_v_right_s_lower'))
+            if (left_v_right_s_lower) {
+                loadObject(left_v_right_s_lower)
             }
         }
 
@@ -902,99 +824,53 @@ function SamLocalEditor(props) {
         let right = JSON.parse(localStorage.getItem('right'))
 
         if (right.right_v_body_view?.image) {
-            if (localStorage.getItem('right_v_body_view')) {
-                loadObject(JSON.parse(localStorage.getItem('right_v_body_view')))
-            } else {
-                loadImage(
-                    right.right_v_body_view.image,
-                    'right_v_body_view',
-                    right.right_v_body_view.x_point,
-                    right.right_v_body_view.y_point,
-                )
+            var right_v_body_view=JSON.parse(localStorage.getItem('right_v_body_view'))
+            if (right_v_body_view) {
+                loadObject(right_v_body_view)
             }
         }
 
         if (right.right_v_upper_part?.image) {
-            if (localStorage.getItem('right_v_upper_part')) {
-                loadObject(JSON.parse(localStorage.getItem('right_v_upper_part')))
-            } else {
-                loadImage(
-                    right.right_v_upper_part.image,
-                    'right_v_upper_part',
-                    right.right_v_upper_part.x_point,
-                    right.right_v_upper_part.y_point,
-                )
+            var right_v_upper_part=JSON.parse(localStorage.getItem('right_v_upper_part'))
+            if (right_v_upper_part) {
+                loadObject(right_v_upper_part)
             }
         }
 
         if (right.right_v_lower_part?.image) {
-            if (localStorage.getItem('right_v_upper_part')) {
-                loadObject(JSON.parse(localStorage.getItem('right_v_lower_part')))
-            } else if (localStorage.getItem(right.right_v_lower_part?.image)) {
-
-            } else {
-                loadImage(
-                    right.right_v_lower_part.image,
-                    'right_v_lower_part',
-                    right.right_v_lower_part.x_point,
-                    right.right_v_lower_part.y_point,
-                )
+            var right_v_lower_part=JSON.parse(localStorage.getItem('right_v_lower_part'))
+            if (right_v_lower_part) {
+                loadObject(right_v_lower_part)
             }
         }
 
         if (right.right_v_left_s_upper?.image) {
-            if (localStorage.getItem('right_v_left_s_upper')) {
-                loadObject(JSON.parse(localStorage.getItem('right_v_left_s_upper')))
-            } else {
-                loadImage(
-                    right.right_v_left_s_upper.image,
-                    'right_v_left_s_upper',
-                    right.right_v_left_s_upper.x_point,
-                    right.right_v_left_s_upper.y_point,
-                )
+            var right_v_left_s_upper=JSON.parse(localStorage.getItem('right_v_left_s_upper'))
+            if (right_v_left_s_upper) {
+                loadObject(right_v_left_s_upper)
             }
         }
 
         if (right.right_v_left_s_lower?.image) {
-            if (localStorage.getItem('right_v_left_s_lower')) {
-                loadObject(JSON.parse(localStorage.getItem('right_v_left_s_lower')))
-            } else {
-                loadImage(
-                    right.right_v_left_s_lower.image,
-                    'right_v_left_s_lower',
-                    right.right_v_left_s_lower.x_point,
-                    right.right_v_left_s_lower.y_point,
-                )
+            var right_v_left_s_lower=JSON.parse(localStorage.getItem('right_v_left_s_lower'))
+            if (right_v_left_s_lower) {
+                loadObject(right_v_left_s_lower)
             }
         }
 
         if (right.right_v_right_s_upper?.image) {
-            if (localStorage.getItem('right_v_right_s_upper')) {
-                loadObject(JSON.parse(localStorage.getItem('right_v_right_s_upper')))
-            } else {
-                loadImage(
-                    right.right_v_right_s_upper.image,
-                    'right_v_right_s_upper',
-                    right.right_v_right_s_upper.x_point,
-                    right.right_v_right_s_upper.y_point,
-                )
+           var right_v_right_s_upper=JSON.parse(localStorage.getItem('right_v_right_s_upper'))
+            if (right_v_right_s_upper) {
+                loadObject(right_v_right_s_upper)
             }
         }
 
         if (right.right_v_right_s_lower?.image) {
-            if (localStorage.getItem('right_v_right_s_lower')) {
-                loadObject(JSON.parse(localStorage.getItem('right_v_right_s_lower')))
-            } else {
-                loadImage(
-                    right.right_v_right_s_lower.image,
-                    'right_v_right_s_lower',
-                    right.right_v_right_s_lower.x_point,
-                    right.right_v_right_s_lower.y_point,
-                )
+           var right_v_right_s_lower=JSON.parse(localStorage.getItem('right_v_right_s_lower'))
+            if (right_v_right_s_lower) {
+                loadObject(right_v_right_s_lower)
             }
         }
-
-
     }
 
     const prerightImageLoad = (e) => {

@@ -106,6 +106,11 @@ function SamLocalEditorBaseBShirtFront(props) {
     }, []);
     useEffect(() => {
         if (product) {
+            preFrontImageLoad()
+            prebackImageLoad()
+            preleftImageLoad()
+            prerightImageLoad()
+
             frontImageLoad()
             setComponents('front_view_base_b_shirt')
         }
@@ -116,6 +121,24 @@ function SamLocalEditorBaseBShirtFront(props) {
             canvas.remove(obj)
         });
         canvas.renderAll()
+    }
+
+    const preloadImge = (url, imageId, left, top) => {
+
+        fabric.Image.fromURL(url, function (img) {
+            img.id = imageId;
+            img.filters = [new fabric.Image.filters.HueRotation()];
+            img.applyFilters()
+            var cor = img.set(
+                {
+                    left: left,
+                    top: top,
+                    selectable: false,
+
+                })
+            localStorage.setItem(imageId, JSON.stringify(img));
+        }, {crossOrigin: 'anonymous'})
+
     }
 
     const loadImage = (url, imageId, left, top) => {
@@ -487,15 +510,11 @@ function SamLocalEditorBaseBShirtFront(props) {
     //     link.click();
     // }
 
-    function frontImageLoad() {
-        clearCanvas()
+    function preFrontImageLoad() {
         let front_view_base_b_shirt = JSON.parse(localStorage.getItem('front_view_base_b_shirt'))
+
         if (front_view_base_b_shirt.base_b_shirt_body_front?.image) {
-            if (localStorage.getItem('base_b_shirt_body_front')) {
-                console.log('load object ')
-                loadObject(JSON.parse(localStorage.getItem('base_b_shirt_body_front')))
-            } else {
-                console.log('load loadImage ')
+
                 loadImage(
                     front_view_base_b_shirt.base_b_shirt_body_front.image,
                     'base_b_shirt_body_front',
@@ -503,97 +522,204 @@ function SamLocalEditorBaseBShirtFront(props) {
                     front_view_base_b_shirt.base_b_shirt_body_front.y_point)
             }
 
-        }
         if (front_view_base_b_shirt.base_b_shirt_neck_front?.image) {
-            if (localStorage.getItem('base_b_shirt_neck_front')) {
-                loadObject(JSON.parse(localStorage.getItem('base_b_shirt_neck_front')))
-            } else {
+
                 loadImage(
                     front_view_base_b_shirt.base_b_shirt_neck_front.image,
                     'base_b_shirt_neck_front',
                     front_view_base_b_shirt.base_b_shirt_neck_front.x_point,
                     front_view_base_b_shirt.base_b_shirt_neck_front.y_point
                 )
-            }
         }
         if (front_view_base_b_shirt.base_b_shirt_left_sleeve_front?.image) {
-            if (localStorage.getItem('base_b_shirt_left_sleeve_front')) {
-                loadObject(JSON.parse(localStorage.getItem('base_b_shirt_left_sleeve_front')))
-            } else {
+
                 loadImage(
                     front_view_base_b_shirt.base_b_shirt_left_sleeve_front.image,
                     'base_b_shirt_left_sleeve_front',
                     front_view_base_b_shirt.base_b_shirt_left_sleeve_front.x_point,
                     front_view_base_b_shirt.base_b_shirt_left_sleeve_front.y_point)
-            }
+
         }
         if (front_view_base_b_shirt.base_b_shirt_right_sleeve_front?.image) {
-            if (localStorage.getItem('base_b_shirt_right_sleeve_front')) {
-                loadObject(JSON.parse(localStorage.getItem('base_b_shirt_right_sleeve_front')))
-            } else {
+
                 loadImage(
                     front_view_base_b_shirt.base_b_shirt_right_sleeve_front.image,
                     'base_b_shirt_right_sleeve_front',
                     front_view_base_b_shirt.base_b_shirt_right_sleeve_front.x_point,
                     front_view_base_b_shirt.base_b_shirt_right_sleeve_front.y_point
                 )
-            }
+
         }
         if (front_view_base_b_shirt.base_b_shirt_button_front?.image) {
-            if (localStorage.getItem('base_b_shirt_button_front')) {
-                loadObject(JSON.parse(localStorage.getItem('base_b_shirt_button_front')))
-            } else {
+
                 loadImage(
                     front_view_base_b_shirt.base_b_shirt_button_front.image,
                     'base_b_shirt_button_front',
                     front_view_base_b_shirt.base_b_shirt_button_front.x_point,
                     front_view_base_b_shirt.base_b_shirt_button_front.y_point)
             }
+    }
+
+    function frontImageLoad() {
+        clearCanvas()
+        let front_view_base_b_shirt = JSON.parse(localStorage.getItem('front_view_base_b_shirt'))
+
+        if (front_view_base_b_shirt.base_b_shirt_body_front?.image) {
+            var base_b_shirt_body_front=JSON.parse(localStorage.getItem('base_b_shirt_body_front'))
+            if (base_b_shirt_body_front) {
+                loadObject(base_b_shirt_body_front)
+
+            }
+
+        }
+        if (front_view_base_b_shirt.base_b_shirt_neck_front?.image) {
+            var base_b_shirt_neck_front=JSON.parse(localStorage.getItem('base_b_shirt_neck_front'))
+            if (base_b_shirt_neck_front) {
+                loadObject(base_b_shirt_neck_front)
+
+            }
+        }
+        if (front_view_base_b_shirt.base_b_shirt_left_sleeve_front?.image) {
+            var base_b_shirt_left_sleeve_front=JSON.parse(localStorage.getItem('base_b_shirt_left_sleeve_front'))
+            if (base_b_shirt_left_sleeve_front) {
+                loadObject(base_b_shirt_left_sleeve_front)
+
+            }
+        }
+        if (front_view_base_b_shirt.base_b_shirt_right_sleeve_front?.image) {
+            var base_b_shirt_right_sleeve_front=JSON.parse(localStorage.getItem('base_b_shirt_right_sleeve_front'))
+            if (base_b_shirt_right_sleeve_front) {
+                loadObject(base_b_shirt_right_sleeve_front)
+
+            }
+        }
+        if (front_view_base_b_shirt.base_b_shirt_button_front?.image) {
+            var base_b_shirt_button_front=JSON.parse(localStorage.getItem('base_b_shirt_button_front'))
+            if (base_b_shirt_button_front) {
+                loadObject(base_b_shirt_button_front)
+
+            }
+        }
+    }
+
+
+    function prebackImageLoad() {
+        let back_view_base_b_shirt = JSON.parse(localStorage.getItem('back_view_base_b_shirt'))
+
+        if (back_view_base_b_shirt.base_b_shirt_body_back?.image) {
+
+                preloadImge(
+                    back_view_base_b_shirt.base_b_shirt_body_back.image,
+                    'base_b_shirt_body_back',
+                    back_view_base_b_shirt.base_b_shirt_body_back.x_point,
+                    back_view_base_b_shirt.base_b_shirt_body_back.y_point,
+                )
+
+        }
+
+        if (back_view_base_b_shirt.base_b_shirt_left_sleeve_back?.image) {
+
+                preloadImge(
+                    back_view_base_b_shirt.base_b_shirt_left_sleeve_back.image,
+                    'base_b_shirt_left_sleeve_back',
+                    back_view_base_b_shirt.base_b_shirt_left_sleeve_back.x_point,
+                    back_view_base_b_shirt.base_b_shirt_left_sleeve_back.y_point,
+                )
+
+        }
+
+        if (back_view_base_b_shirt.base_b_shirt_right_sleeve_back?.image) {
+
+                preloadImge(
+                    back_view_base_b_shirt.base_b_shirt_right_sleeve_back.image,
+                    'base_b_shirt_right_sleeve_back',
+                    back_view_base_b_shirt.base_b_shirt_right_sleeve_back.x_point,
+                    back_view_base_b_shirt.base_b_shirt_right_sleeve_back.y_point,
+                )
+
         }
     }
 
     function backImageLoad() {
         clearCanvas()
         let back_view_base_b_shirt = JSON.parse(localStorage.getItem('back_view_base_b_shirt'))
+
         if (back_view_base_b_shirt.base_b_shirt_body_back?.image) {
-            if (localStorage.getItem('base_b_shirt_body_back')) {
-                loadObject(JSON.parse(localStorage.getItem('base_b_shirt_body_back')))
-            } else {
-                loadImage(
-                    back_view_base_b_shirt.base_b_shirt_body_back.image,
-                    'base_b_shirt_body_back',
-                    back_view_base_b_shirt.base_b_shirt_body_back.x_point,
-                    back_view_base_b_shirt.base_b_shirt_body_back.y_point,
-                )
+            var base_b_shirt_body_back=JSON.parse(localStorage.getItem('base_b_shirt_body_back'))
+            if (base_b_shirt_body_back) {
+                loadObject(base_b_shirt_body_back)
+
             }
 
         }
 
         if (back_view_base_b_shirt.base_b_shirt_left_sleeve_back?.image) {
-            if (localStorage.getItem('base_b_shirt_left_sleeve_back')) {
-                loadObject(JSON.parse(localStorage.getItem('base_b_shirt_left_sleeve_back')))
-            } else {
-                loadImage(
-                    back_view_base_b_shirt.base_b_shirt_left_sleeve_back.image,
-                    'base_b_shirt_left_sleeve_back',
-                    back_view_base_b_shirt.base_b_shirt_left_sleeve_back.x_point,
-                    back_view_base_b_shirt.base_b_shirt_left_sleeve_back.y_point,
-                )
+            var base_b_shirt_left_sleeve_back=JSON.parse(localStorage.getItem('base_b_shirt_left_sleeve_back'))
+            if (base_b_shirt_left_sleeve_back) {
+                loadObject(base_b_shirt_left_sleeve_back)
+
             }
         }
 
         if (back_view_base_b_shirt.base_b_shirt_right_sleeve_back?.image) {
-            if (localStorage.getItem('base_b_shirt_right_sleeve_back')) {
-                loadObject(JSON.parse(localStorage.getItem('base_b_shirt_right_sleeve_back')))
-            } else {
-                loadImage(
-                    back_view_base_b_shirt.base_b_shirt_right_sleeve_back.image,
-                    'base_b_shirt_right_sleeve_back',
-                    back_view_base_b_shirt.base_b_shirt_right_sleeve_back.x_point,
-                    back_view_base_b_shirt.base_b_shirt_right_sleeve_back.y_point,
-                )
+            var base_b_shirt_right_sleeve_back=JSON.parse(localStorage.getItem('base_b_shirt_right_sleeve_back'))
+            if (base_b_shirt_right_sleeve_back) {
+                loadObject(base_b_shirt_right_sleeve_back)
+
             }
         }
+    }
+
+
+    const preleftImageLoad = (e) => {
+        let left = JSON.parse(localStorage.getItem('left'))
+
+        let left_view_base_b_shirt = JSON.parse(localStorage.getItem('left_view_base_b_shirt'))
+
+        if (left_view_base_b_shirt?.base_b_shirt_mid_left?.image) {
+
+                preloadImge(
+                    left_view_base_b_shirt.base_b_shirt_mid_left.image,
+                    'base_b_shirt_mid_left',
+                    left_view_base_b_shirt.base_b_shirt_mid_left.x_point,
+                    left_view_base_b_shirt.base_b_shirt_mid_left.y_point,
+                )
+
+
+        }
+
+        if (left_view_base_b_shirt.base_b_shirt_left_sleeve_left?.image) {
+
+                preloadImge(
+                    left_view_base_b_shirt.base_b_shirt_left_sleeve_left.image,
+                    'base_b_shirt_left_sleeve_left',
+                    left_view_base_b_shirt.base_b_shirt_left_sleeve_left.x_point,
+                    left_view_base_b_shirt.base_b_shirt_left_sleeve_left.y_point,
+                )
+
+        }
+
+        if (left_view_base_b_shirt?.base_b_shirt_right_sleeve_left?.image) {
+
+                preloadImge(
+                    left_view_base_b_shirt.base_b_shirt_right_sleeve_left.image,
+                    'base_b_shirt_right_sleeve_left',
+                    left_view_base_b_shirt.base_b_shirt_right_sleeve_left.x_point,
+                    left_view_base_b_shirt.base_b_shirt_right_sleeve_left.y_point,
+                )
+
+        }
+
+        if (left_view_base_b_shirt?.base_b_shirt_bottom_sleeve_left?.image) {
+
+                preloadImge(
+                    left_view_base_b_shirt.base_b_shirt_bottom_sleeve_left.image,
+                    'base_b_shirt_bottom_sleeve_left',
+                    left_view_base_b_shirt.base_b_shirt_bottom_sleeve_left.x_point,
+                    left_view_base_b_shirt.base_b_shirt_bottom_sleeve_left.y_point,
+                )
+        }
+
     }
 
     const leftImageLoad = (e) => {
@@ -601,114 +727,121 @@ function SamLocalEditorBaseBShirtFront(props) {
         let left_view_base_b_shirt = JSON.parse(localStorage.getItem('left_view_base_b_shirt'))
 
         if (left_view_base_b_shirt?.base_b_shirt_mid_left?.image) {
-            if (localStorage.getItem('base_b_shirt_mid_left')) {
-                loadObject(JSON.parse(localStorage.getItem('base_b_shirt_mid_left')))
-            } else {
-                loadImage(
-                    left_view_base_b_shirt.base_b_shirt_mid_left.image,
-                    'base_b_shirt_mid_left',
-                    left_view_base_b_shirt.base_b_shirt_mid_left.x_point,
-                    left_view_base_b_shirt.base_b_shirt_mid_left.y_point,
-                )
+            var base_b_shirt_mid_left=JSON.parse(localStorage.getItem('base_b_shirt_mid_left'))
+            if (base_b_shirt_mid_left) {
+                loadObject(base_b_shirt_mid_left)
+
             }
 
         }
 
         if (left_view_base_b_shirt.base_b_shirt_left_sleeve_left?.image) {
-            if (localStorage.getItem('base_b_shirt_left_sleeve_left')) {
-                loadObject(JSON.parse(localStorage.getItem('base_b_shirt_left_sleeve_left')))
-            } else {
-                loadImage(
-                    left_view_base_b_shirt.base_b_shirt_left_sleeve_left.image,
-                    'base_b_shirt_left_sleeve_left',
-                    left_view_base_b_shirt.base_b_shirt_left_sleeve_left.x_point,
-                    left_view_base_b_shirt.base_b_shirt_left_sleeve_left.y_point,
-                )
+            var base_b_shirt_left_sleeve_left=JSON.parse(localStorage.getItem('base_b_shirt_left_sleeve_left'))
+            if (base_b_shirt_left_sleeve_left) {
+                loadObject(base_b_shirt_left_sleeve_left)
+
             }
         }
 
         if (left_view_base_b_shirt?.base_b_shirt_right_sleeve_left?.image) {
-            if (localStorage.getItem('base_b_shirt_right_sleeve_left')) {
-                loadObject(JSON.parse(localStorage.getItem('base_b_shirt_right_sleeve_left')))
-            } else {
-                loadImage(
-                    left_view_base_b_shirt.base_b_shirt_right_sleeve_left.image,
-                    'base_b_shirt_right_sleeve_left',
-                    left_view_base_b_shirt.base_b_shirt_right_sleeve_left.x_point,
-                    left_view_base_b_shirt.base_b_shirt_right_sleeve_left.y_point,
-                )
+            var base_b_shirt_right_sleeve_left=JSON.parse(localStorage.getItem('base_b_shirt_right_sleeve_left'))
+            if (base_b_shirt_right_sleeve_left) {
+                loadObject(base_b_shirt_right_sleeve_left)
+
             }
         }
 
         if (left_view_base_b_shirt?.base_b_shirt_bottom_sleeve_left?.image) {
-            if (localStorage.getItem('base_b_shirt_bottom_sleeve_left')) {
-                loadObject(JSON.parse(localStorage.getItem('base_b_shirt_bottom_sleeve_left')))
-            } else {
-                loadImage(
-                    left_view_base_b_shirt.base_b_shirt_bottom_sleeve_left.image,
-                    'base_b_shirt_bottom_sleeve_left',
-                    left_view_base_b_shirt.base_b_shirt_bottom_sleeve_left.x_point,
-                    left_view_base_b_shirt.base_b_shirt_bottom_sleeve_left.y_point,
-                )
+            var base_b_shirt_bottom_sleeve_left=JSON.parse(localStorage.getItem('base_b_shirt_bottom_sleeve_left'))
+            if (base_b_shirt_bottom_sleeve_left) {
+                loadObject(base_b_shirt_bottom_sleeve_left)
+
             }
+        }
+    }
+
+
+    const prerightImageLoad = (e) => {
+        let right_view_base_b_shirt = JSON.parse(localStorage.getItem('right_view_base_b_shirt'))
+
+        if (right_view_base_b_shirt.base_b_shirt_mid_right?.image) {
+
+                preloadImge(
+                    right_view_base_b_shirt.base_b_shirt_mid_right.image,
+                    'base_b_shirt_mid_right',
+                    right_view_base_b_shirt.base_b_shirt_mid_right.x_point,
+                    right_view_base_b_shirt.base_b_shirt_mid_right.y_point,
+                )
+
+        }
+        if (right_view_base_b_shirt.base_b_shirt_left_sleeve_right?.image) {
+
+                preloadImge(
+                    right_view_base_b_shirt.base_b_shirt_left_sleeve_right.image,
+                    'base_b_shirt_left_sleeve_right',
+                    right_view_base_b_shirt.base_b_shirt_left_sleeve_right.x_point,
+                    right_view_base_b_shirt.base_b_shirt_left_sleeve_right.y_point,
+                )
+
+        }
+
+        if (right_view_base_b_shirt.base_b_shirt_right_sleeve_right?.image) {
+
+                preloadImge(
+                    right_view_base_b_shirt.base_b_shirt_right_sleeve_right.image,
+                    'base_b_shirt_right_sleeve_right',
+                    right_view_base_b_shirt.base_b_shirt_right_sleeve_right.x_point,
+                    right_view_base_b_shirt.base_b_shirt_right_sleeve_right.y_point,
+                )
+
+        }
+
+        if (right_view_base_b_shirt.base_b_shirt_bottom_sleeve_right?.image) {
+
+                preloadImge(
+                    right_view_base_b_shirt.base_b_shirt_bottom_sleeve_right.image,
+                    'base_b_shirt_bottom_sleeve_right',
+                    right_view_base_b_shirt.base_b_shirt_bottom_sleeve_right.x_point,
+                    right_view_base_b_shirt.base_b_shirt_bottom_sleeve_right.y_point,
+                )
+
         }
 
 
     }
-
 
     const rightImageLoad = (e) => {
         clearCanvas()
         let right_view_base_b_shirt = JSON.parse(localStorage.getItem('right_view_base_b_shirt'))
 
         if (right_view_base_b_shirt.base_b_shirt_mid_right?.image) {
-            if (localStorage.getItem('base_b_shirt_mid_right')) {
-                loadObject(JSON.parse(localStorage.getItem('base_b_shirt_mid_right')))
-            } else {
-                loadImage(
-                    right_view_base_b_shirt.base_b_shirt_mid_right.image,
-                    'base_b_shirt_mid_right',
-                    right_view_base_b_shirt.base_b_shirt_mid_right.x_point,
-                    right_view_base_b_shirt.base_b_shirt_mid_right.y_point,
-                )
+            var base_b_shirt_mid_right=JSON.parse(localStorage.getItem('base_b_shirt_mid_right'))
+            if (base_b_shirt_mid_right) {
+                loadObject(base_b_shirt_mid_right)
+
             }
         }
         if (right_view_base_b_shirt.base_b_shirt_left_sleeve_right?.image) {
-            if (localStorage.getItem('base_b_shirt_left_sleeve_right')) {
-                loadObject(JSON.parse(localStorage.getItem('base_b_shirt_left_sleeve_right')))
-            } else {
-                loadImage(
-                    right_view_base_b_shirt.base_b_shirt_left_sleeve_right.image,
-                    'base_b_shirt_left_sleeve_right',
-                    right_view_base_b_shirt.base_b_shirt_left_sleeve_right.x_point,
-                    right_view_base_b_shirt.base_b_shirt_left_sleeve_right.y_point,
-                )
+            var base_b_shirt_left_sleeve_right=JSON.parse(localStorage.getItem('base_b_shirt_left_sleeve_right'))
+            if (base_b_shirt_left_sleeve_right) {
+                loadObject(base_b_shirt_left_sleeve_right)
+
             }
         }
 
         if (right_view_base_b_shirt.base_b_shirt_right_sleeve_right?.image) {
-            if (localStorage.getItem('base_b_shirt_right_sleeve_right')) {
-                loadObject(JSON.parse(localStorage.getItem('base_b_shirt_right_sleeve_right')))
-            } else {
-                loadImage(
-                    right_view_base_b_shirt.base_b_shirt_right_sleeve_right.image,
-                    'base_b_shirt_right_sleeve_right',
-                    right_view_base_b_shirt.base_b_shirt_right_sleeve_right.x_point,
-                    right_view_base_b_shirt.base_b_shirt_right_sleeve_right.y_point,
-                )
+            var base_b_shirt_right_sleeve_right=JSON.parse(localStorage.getItem('base_b_shirt_right_sleeve_right'))
+            if (base_b_shirt_right_sleeve_right) {
+                loadObject(base_b_shirt_right_sleeve_right)
+
             }
         }
 
         if (right_view_base_b_shirt.base_b_shirt_bottom_sleeve_right?.image) {
-            if (localStorage.getItem('base_b_shirt_bottom_sleeve_right')) {
-                loadObject(JSON.parse(localStorage.getItem('base_b_shirt_bottom_sleeve_right')))
-            } else {
-                loadImage(
-                    right_view_base_b_shirt.base_b_shirt_bottom_sleeve_right.image,
-                    'base_b_shirt_bottom_sleeve_right',
-                    right_view_base_b_shirt.base_b_shirt_bottom_sleeve_right.x_point,
-                    right_view_base_b_shirt.base_b_shirt_bottom_sleeve_right.y_point,
-                )
+            var base_b_shirt_bottom_sleeve_right=JSON.parse(localStorage.getItem('base_b_shirt_bottom_sleeve_right'))
+            if (base_b_shirt_bottom_sleeve_right) {
+                loadObject(base_b_shirt_bottom_sleeve_right)
+
             }
         }
     }

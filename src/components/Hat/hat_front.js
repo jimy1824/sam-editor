@@ -105,8 +105,13 @@ function SamLocalEditorHatFront(props) {
     useEffect(() => {
         setCanvas(initCanvas('canvas'));
     }, []);
+
     useEffect(() => {
         if (product) {
+            preFrontImageLoad()
+            prebackImageLoad()
+            preleftImageLoad()
+            prerightImageLoad()
             frontImageLoad()
             setComponents('front_view_hat')
         }
@@ -232,6 +237,24 @@ function SamLocalEditorHatFront(props) {
            // document.getElementById("output-text")
            //              .style.fontWeight = "italic";
         }
+
+    const preloadImge = (url, imageId, left, top) => {
+
+        fabric.Image.fromURL(url, function (img) {
+            img.id = imageId;
+            img.filters = [new fabric.Image.filters.HueRotation()];
+            img.applyFilters()
+            var cor = img.set(
+                {
+                    left: left,
+                    top: top,
+                    selectable: false,
+
+                })
+            localStorage.setItem(imageId, JSON.stringify(img));
+        }, {crossOrigin: 'anonymous'})
+
+    }
 
     const loadImage = (url, imageId, left, top) => {
 
@@ -480,8 +503,7 @@ function SamLocalEditorHatFront(props) {
     //     link.click();
     // }
 
-    function frontImageLoad() {
-        clearCanvas()
+    function preFrontImageLoad() {
         let front_view_hat = JSON.parse(localStorage.getItem('front_view_hat'))
         if (front_view_hat.hat_lower_part_front?.image) {
             if (localStorage.getItem('hat_lower_part_front')) {
@@ -525,60 +547,193 @@ function SamLocalEditorHatFront(props) {
         }
     }
 
-    function backImageLoad() {
+    function frontImageLoad() {
         clearCanvas()
+        let front_view_hat = JSON.parse(localStorage.getItem('front_view_hat'))
+        if (front_view_hat.hat_lower_part_front?.image) {
+            var hat_lower_part_front=JSON.parse(localStorage.getItem('hat_lower_part_front'))
+            if (hat_lower_part_front) {
+                loadObject(hat_lower_part_front)
+
+            }
+
+        }
+        if (front_view_hat.hat_upper_part_front?.image) {
+            var hat_upper_part_front=JSON.parse(localStorage.getItem('hat_upper_part_front'))
+            if (hat_upper_part_front) {
+                loadObject(hat_upper_part_front)
+
+            }
+
+        }
+        if (front_view_hat.hat_top_button_front?.image) {
+            var hat_top_button_front=JSON.parse(localStorage.getItem('hat_top_button_front'))
+            if (hat_top_button_front) {
+                loadObject(hat_top_button_front)
+
+            }
+
+        }
+        if (front_view_hat.hat_dot_left_front?.image) {
+            var hat_dot_left_front=JSON.parse(localStorage.getItem('hat_dot_left_front'))
+            if (hat_dot_left_front) {
+                loadObject(hat_dot_left_front)
+
+            }
+
+        }
+        if (front_view_hat.hat_dot_right_front?.image) {
+            var hat_dot_right_front=JSON.parse(localStorage.getItem('hat_dot_right_front'))
+            if (hat_dot_right_front) {
+                loadObject(hat_dot_right_front)
+
+            }
+
+        }
+    }
+
+
+    function prebackImageLoad() {
         let back_view_hat = JSON.parse(localStorage.getItem('back_view_hat'))
         if (back_view_hat.hat_upper_part_back?.image) {
-            if (localStorage.getItem('hat_upper_part_back')) {
-                loadObject(JSON.parse(localStorage.getItem('hat_upper_part_back')))
-            } else {
-                loadImage(
+
+                preloadImge(
                     back_view_hat.hat_upper_part_back.image,
                     'hat_upper_part_back',
                     back_view_hat.hat_upper_part_back.x_point,
                     back_view_hat.hat_upper_part_back.y_point,
                 )
-            }
+
         }
 
         if (back_view_hat.hat_lower_strip_back?.image) {
-            if (localStorage.getItem('hat_lower_strip_back')) {
-                loadObject(JSON.parse(localStorage.getItem('hat_lower_strip_back')))
-            } else {
-                loadImage(
+
+                preloadImge(
                     back_view_hat.hat_lower_strip_back.image,
                     'hat_lower_strip_back',
                     back_view_hat.hat_lower_strip_back.x_point,
                     back_view_hat.hat_lower_strip_back.y_point,
                 )
-            }
+
         }
         if (back_view_hat.hat_dot_left_back?.image) {
-            if (localStorage.getItem('hat_dot_left_back')) {
-                loadObject(JSON.parse(localStorage.getItem('hat_dot_left_back')))
-            } else {
-                loadImage(
+
+                preloadImge(
                     back_view_hat.hat_dot_left_back.image,
                     'hat_dot_left_back',
                     back_view_hat.hat_dot_left_back.x_point,
                     back_view_hat.hat_dot_left_back.y_point,
                 )
-            }
+
 
         }
 
         if (back_view_hat.hat_dot_right_back?.image) {
-            if (localStorage.getItem('hat_dot_right_back')) {
-                loadObject(JSON.parse(localStorage.getItem('hat_dot_right_back')))
-            } else {
-                loadImage(
+
+                preloadImge(
                     back_view_hat.hat_dot_right_back.image,
                     'hat_dot_right_back',
                     back_view_hat.hat_dot_right_back.x_point,
                     back_view_hat.hat_dot_right_back.y_point,
                 )
             }
+
+    }
+
+    function backImageLoad() {
+        clearCanvas()
+        let back_view_hat = JSON.parse(localStorage.getItem('back_view_hat'))
+        if (back_view_hat.hat_upper_part_back?.image) {
+            var hat_upper_part_back=JSON.parse(localStorage.getItem('hat_upper_part_back'))
+            if (hat_upper_part_back) {
+                loadObject(hat_upper_part_back)
+            }
+
         }
+
+        if (back_view_hat.hat_lower_strip_back?.image) {
+            var hat_lower_strip_back=JSON.parse(localStorage.getItem('hat_lower_strip_back'))
+            if (hat_lower_strip_back) {
+                loadObject(hat_lower_strip_back)
+            }
+
+        }
+        if (back_view_hat.hat_dot_left_back?.image) {
+
+                var hat_dot_left_back=JSON.parse(localStorage.getItem('hat_dot_left_back'))
+            if (hat_dot_left_back) {
+                loadObject(hat_dot_left_back)
+            }
+
+
+        }
+
+        if (back_view_hat.hat_dot_right_back?.image) {
+             var hat_dot_right_back=JSON.parse(localStorage.getItem('hat_dot_right_back'))
+            if (hat_dot_right_back) {
+                loadObject(hat_dot_right_back)
+            }
+        }
+    }
+
+    function preleftImageLoad() {
+        let left_view_hat = JSON.parse(localStorage.getItem('left_view_hat'))
+
+        if (left_view_hat?.hat_upper_part_left?.image) {
+
+                preloadImge(
+                    left_view_hat.hat_upper_part_left.image,
+                    'hat_upper_part_left',
+                    left_view_hat.hat_upper_part_left.x_point,
+                    left_view_hat.hat_upper_part_left.y_point,
+                )
+        }
+
+        if (left_view_hat?.hat_lower_part_left?.image) {
+
+                preloadImge(
+                    left_view_hat.hat_lower_part_left.image,
+                    'hat_lower_part_left',
+                    left_view_hat.hat_lower_part_left.x_point,
+                    left_view_hat.hat_lower_part_left.y_point,
+                )
+
+        }
+
+        if (left_view_hat?.hat_top_button_left?.image) {
+
+                preloadImge(
+                    left_view_hat.hat_top_button_left.image,
+                    'hat_top_button_left',
+                    left_view_hat.hat_top_button_left.x_point,
+                    left_view_hat.hat_top_button_left.y_point,
+                )
+
+        }
+
+        if (left_view_hat?.hat_dot_left_left?.image) {
+
+                preloadImge(
+                    left_view_hat.hat_dot_left_left.image,
+                    'hat_dot_left_left',
+                    left_view_hat.hat_dot_left_left.x_point,
+                    left_view_hat.hat_dot_left_left.y_point,
+                )
+
+
+        }
+
+        if (left_view_hat.hat_dot_right_left?.image) {
+
+                preloadImge(
+                    left_view_hat.hat_dot_right_left.image,
+                    'hat_dot_right_left',
+                    left_view_hat.hat_dot_right_left.x_point,
+                    left_view_hat.hat_dot_right_left.y_point,
+                )
+
+        }
+
     }
 
     const leftImageLoad = (e) => {
@@ -586,69 +741,97 @@ function SamLocalEditorHatFront(props) {
         let left_view_hat = JSON.parse(localStorage.getItem('left_view_hat'))
 
         if (left_view_hat?.hat_upper_part_left?.image) {
-            if (localStorage.getItem('hat_upper_part_left')) {
-                loadObject(JSON.parse(localStorage.getItem('hat_upper_part_left')))
-            } else {
-                loadImage(
-                    left_view_hat.hat_upper_part_left.image,
-                    'hat_upper_part_left',
-                    left_view_hat.hat_upper_part_left.x_point,
-                    left_view_hat.hat_upper_part_left.y_point,
-                )
+            var hat_upper_part_left=JSON.parse(localStorage.getItem('hat_upper_part_left'))
+            if (hat_upper_part_left) {
+                loadObject(hat_upper_part_left)
             }
         }
 
         if (left_view_hat?.hat_lower_part_left?.image) {
-            if (localStorage.getItem('hat_lower_part_left')) {
-                loadObject(JSON.parse(localStorage.getItem('hat_lower_part_left')))
-            } else {
-                loadImage(
-                    left_view_hat.hat_lower_part_left.image,
-                    'hat_lower_part_left',
-                    left_view_hat.hat_lower_part_left.x_point,
-                    left_view_hat.hat_lower_part_left.y_point,
-                )
+            var hat_lower_part_left=JSON.parse(localStorage.getItem('hat_lower_part_left'))
+            if (hat_lower_part_left) {
+                loadObject(hat_lower_part_left)
             }
         }
 
         if (left_view_hat?.hat_top_button_left?.image) {
-            if (localStorage.getItem('hat_top_button_left')) {
-                loadObject(JSON.parse(localStorage.getItem('hat_top_button_left')))
-            } else {
-                loadImage(
-                    left_view_hat.hat_top_button_left.image,
-                    'hat_top_button_left',
-                    left_view_hat.hat_top_button_left.x_point,
-                    left_view_hat.hat_top_button_left.y_point,
-                )
+            var hat_top_button_left=JSON.parse(localStorage.getItem('hat_top_button_left'))
+            if (hat_top_button_left) {
+                loadObject(hat_top_button_left)
             }
         }
 
         if (left_view_hat?.hat_dot_left_left?.image) {
-            if (localStorage.getItem('hat_dot_left_left')) {
-                loadObject(JSON.parse(localStorage.getItem('hat_dot_left_left')))
-            } else {
-                loadImage(
-                    left_view_hat.hat_dot_left_left.image,
-                    'hat_dot_left_left',
-                    left_view_hat.hat_dot_left_left.x_point,
-                    left_view_hat.hat_dot_left_left.y_point,
-                )
+            var hat_dot_left_left=JSON.parse(localStorage.getItem('hat_dot_left_left'))
+            if (hat_dot_left_left) {
+                loadObject(hat_dot_left_left)
             }
 
         }
 
         if (left_view_hat.hat_dot_right_left?.image) {
-            if (localStorage.getItem('hat_dot_right_left')) {
-                loadObject(JSON.parse(localStorage.getItem('hat_dot_right_left')))
-            } else {
-                loadImage(
-                    left_view_hat.hat_dot_right_left.image,
-                    'hat_dot_right_left',
-                    left_view_hat.hat_dot_right_left.x_point,
-                    left_view_hat.hat_dot_right_left.y_point,
-                )
+            var hat_dot_right_left=JSON.parse(localStorage.getItem('hat_dot_right_left'))
+            if (hat_dot_right_left) {
+                loadObject(hat_dot_right_left)
             }
+        }
+
+    }
+
+    function prerightImageLoad() {
+        let right_view_hat = JSON.parse(localStorage.getItem('right_view_hat'))
+
+        if (right_view_hat.hat_upper_part_right?.image) {
+
+                preloadImge(
+                    right_view_hat.hat_upper_part_right.image,
+                    'hat_upper_part_right',
+                    right_view_hat.hat_upper_part_right.x_point,
+                    right_view_hat.hat_upper_part_right.y_point,
+                )
+
+        }
+
+        if (right_view_hat.hat_lower_part_right?.image) {
+
+                preloadImge(
+                    right_view_hat.hat_lower_part_right.image,
+                    'hat_lower_part_right',
+                    right_view_hat.hat_lower_part_right.x_point,
+                    right_view_hat.hat_lower_part_right.y_point,
+                )
+
+        }
+
+        if (right_view_hat.hat_top_button_right?.image) {
+
+                preloadImge(
+                    right_view_hat.hat_top_button_right.image,
+                    'hat_top_button_right',
+                    right_view_hat.hat_top_button_right.x_point,
+                    right_view_hat.hat_top_button_right.y_point,
+                )
+
+        }
+        if (right_view_hat.right_v_body_view?.image) {
+
+                preloadImge(
+                    right_view_hat.hat_dot_left_right.image,
+                    'hat_dot_left_right',
+                    right_view_hat.hat_dot_left_right.x_point,
+                    right_view_hat.hat_dot_left_right.y_point,
+                )
+
+        }
+        if (right_view_hat.hat_dot_right_right?.image) {
+
+                preloadImge(
+                    right_view_hat.hat_dot_right_right.image,
+                    'hat_dot_right_right',
+                    right_view_hat.hat_dot_right_right.x_point,
+                    right_view_hat.hat_dot_right_right.y_point,
+                )
+
         }
 
     }
@@ -658,65 +841,35 @@ function SamLocalEditorHatFront(props) {
         let right_view_hat = JSON.parse(localStorage.getItem('right_view_hat'))
 
         if (right_view_hat.hat_upper_part_right?.image) {
-            if (localStorage.getItem('hat_upper_part_right')){
-                loadObject(JSON.parse(localStorage.getItem('hat_upper_part_right')))
-            }else {
-                loadImage(
-                    right_view_hat.hat_upper_part_right.image,
-                    'hat_upper_part_right',
-                    right_view_hat.hat_upper_part_right.x_point,
-                    right_view_hat.hat_upper_part_right.y_point,
-                )
+            var hat_upper_part_right=JSON.parse(localStorage.getItem('hat_upper_part_right'))
+            if (hat_upper_part_right) {
+                loadObject(hat_upper_part_right)
             }
         }
 
         if (right_view_hat.hat_lower_part_right?.image) {
-            if (localStorage.getItem('hat_lower_part_right')) {
-                loadObject(JSON.parse(localStorage.getItem('hat_lower_part_right')))
-            } else {
-                loadImage(
-                    right_view_hat.hat_lower_part_right.image,
-                    'hat_lower_part_right',
-                    right_view_hat.hat_lower_part_right.x_point,
-                    right_view_hat.hat_lower_part_right.y_point,
-                )
+            var hat_lower_part_right=JSON.parse(localStorage.getItem('hat_lower_part_right'))
+            if (hat_lower_part_right) {
+                loadObject(hat_lower_part_right)
             }
         }
 
         if (right_view_hat.hat_top_button_right?.image) {
-            if (localStorage.getItem('hat_top_button_right')) {
-                loadObject(JSON.parse(localStorage.getItem('hat_top_button_right')))
-            } else {
-                loadImage(
-                    right_view_hat.hat_top_button_right.image,
-                    'hat_top_button_right',
-                    right_view_hat.hat_top_button_right.x_point,
-                    right_view_hat.hat_top_button_right.y_point,
-                )
+            var hat_top_button_right=JSON.parse(localStorage.getItem('hat_top_button_right'))
+            if (hat_top_button_right) {
+                loadObject(hat_top_button_right)
             }
         }
         if (right_view_hat.right_v_body_view?.image) {
-            if (localStorage.getItem('hat_dot_left_right')) {
-                loadObject(JSON.parse(localStorage.getItem('hat_dot_left_right')))
-            } else {
-                loadImage(
-                    right_view_hat.hat_dot_left_right.image,
-                    'hat_dot_left_right',
-                    right_view_hat.hat_dot_left_right.x_point,
-                    right_view_hat.hat_dot_left_right.y_point,
-                )
+            var right_v_body_view=JSON.parse(localStorage.getItem('right_v_body_view'))
+            if (right_v_body_view) {
+                loadObject(right_v_body_view)
             }
         }
         if (right_view_hat.hat_dot_right_right?.image) {
-            if (localStorage.getItem('hat_dot_right_right')) {
-                loadObject(JSON.parse(localStorage.getItem('hat_dot_right_right')))
-            } else {
-                loadImage(
-                    right_view_hat.hat_dot_right_right.image,
-                    'hat_dot_right_right',
-                    right_view_hat.hat_dot_right_right.x_point,
-                    right_view_hat.hat_dot_right_right.y_point,
-                )
+            var hat_dot_right_right=JSON.parse(localStorage.getItem('hat_dot_right_right'))
+            if (hat_dot_right_right) {
+                loadObject(hat_dot_right_right)
             }
         }
     }
