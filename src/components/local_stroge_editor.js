@@ -132,6 +132,7 @@ function SamLocalEditor(props) {
 
     const loadObject = (obj) => {
         fabric.Image.fromURL(obj.src, function (img) {
+            console.log(obj)
             // img.id = id;
             // img.filters = [new fabric.Image.filters.HueRotation()];
             if (obj.color) {
@@ -154,7 +155,16 @@ function SamLocalEditor(props) {
                 })
             canvas.add(img);
             if (obj.logo) {
+                // obj.logo.left = 50
+                // obj.logo.top = 100
+                // obj.logo.selectable = false
+                console.log(obj, "obj")
+                // obj.logo.bringToFront(true)
                 fabric.Image.fromObject(obj.logo, function (logo) {
+
+                    logo.bringForward(true)
+
+                    logo.bringToFront(true)
                     canvas.add(logo);
                 })
 
@@ -439,9 +449,9 @@ function SamLocalEditor(props) {
 
                 })
             canvas.add(img);
-            if (selectedComponentId) {
-                var obj = JSON.parse(localStorage.getItem(selectedComponentId))
 
+            if(selectedComponentId) {
+                var obj = JSON.parse(localStorage.getItem(selectedComponentId))
                 obj.logo = img
                 localStorage.setItem(selectedComponentId, JSON.stringify(obj))
                 addingComponent = 'logo';
@@ -468,13 +478,37 @@ function SamLocalEditor(props) {
 
             });
             canvas.add(pug);
+            // if (selectedComponentId) {
+            //     var obj_pug = JSON.parse(localStorage.getItem('right_v_body_view'))
+            //
+            //     obj_pug.logo = pug
+            //     localStorage.setItem('right_v_body_view', JSON.stringify(obj_pug))
+            //     addingComponent = 'logo';
+            // }
+
+             if (selectedComponentId === 'left_v_body_view') {
+                var obj_pug_left = JSON.parse(localStorage.getItem('left_v_body_view'))
+
+                obj_pug_left.logo = pug
+                localStorage.setItem('left_v_body_view', JSON.stringify(obj_pug_left))
+                addingComponent = 'logo';
+            }
+
+             else if (selectedComponentId === 'right_v_body_view') {
+                var obj_pug_right = JSON.parse(localStorage.getItem('right_v_body_view'))
+
+                obj_pug_right.logo = pug
+                localStorage.setItem('right_v_body_view', JSON.stringify(obj_pug_right))
+                addingComponent = 'logo';
+            }
         };
 
         samImg.src = l;
 
+
         var l_logo = new Image();
         l_logo.onload = function (left_logo) {
-            var left = new fabric.Image(l_logo, {
+            var left_logo = new fabric.Image(l_logo, {
                 id: "image_left_logo",
                 width: l_logo.width / 2,
                 height: l_logo.height,
@@ -486,13 +520,44 @@ function SamLocalEditor(props) {
                 left: 69,
                 selectable: false,
             });
-            canvas.add(left);
+            canvas.add(left_logo);
+            if (selectedComponentId === 'left_v_body_view') {
+
+                var obj_logo_left_upper = JSON.parse(localStorage.getItem('left_v_upper_part'))
+                obj_logo_left_upper.logo = left_logo
+                localStorage.setItem('left_v_upper_part', JSON.stringify(obj_logo_left_upper))
+                addingComponent = 'logo';
+
+
+            }
+
+            else if (selectedComponentId === 'right_v_body_view') {
+
+                var obj_logo_right_upper = JSON.parse(localStorage.getItem('right_v_upper_part'))
+                obj_logo_right_upper.logo = left_logo
+                localStorage.setItem('right_v_upper_part', JSON.stringify(obj_logo_right_upper))
+                addingComponent = 'logo';
+
+                var obj_logo_front_right = JSON.parse(localStorage.getItem('left_sleeve'))
+                console.log(obj_logo_front_right, "abc")
+                obj_logo_front_right.logo = left_logo
+                localStorage.setItem('left_sleeve', JSON.stringify(obj_logo_front_right))
+                addingComponent = 'logo';
+
+                var obj_logo_front_right = JSON.parse(localStorage.getItem('back_right_sleeve'))
+                console.log(obj_logo_front_right, "abc")
+                obj_logo_front_right.logo = left_logo
+                localStorage.setItem('back_right_sleeve', JSON.stringify(obj_logo_front_right))
+                addingComponent = 'logo';
+            }
         }
         l_logo.src = l;
 
+
+
         var r_logo = new Image();
         r_logo.onload = function (left_logo) {
-            var right = new fabric.Image(r_logo, {
+            var right_logo = new fabric.Image(r_logo, {
                 id: "image_left_logo",
                 width: r_logo.width / 2,
                 height: r_logo.height,
@@ -503,9 +568,59 @@ function SamLocalEditor(props) {
                 left: 224,
                 selectable: false,
             });
-            canvas.add(right);
+            canvas.add(right_logo);
+
+            if (selectedComponentId === 'left_v_body_view'){
+                var obj_logo_left_lower = JSON.parse(localStorage.getItem('left_v_lower_part'))
+                obj_logo_left_lower.logo = right_logo
+                localStorage.setItem('left_v_lower_part', JSON.stringify(obj_logo_left_lower))
+                console.log("lower_part", obj_logo_left_lower)
+                addingComponent = 'logo';
+
+                var obj_logo_front_left= JSON.parse(localStorage.getItem('right_sleeve'))
+                obj_logo_front_left.logo = right_logo
+                localStorage.setItem('right_sleeve', JSON.stringify(obj_logo_front_left))
+                addingComponent = 'logo';
+
+                var obj_logo_front_left= JSON.parse(localStorage.getItem('back_left_sleeve'))
+                obj_logo_front_left.logo = right_logo
+                localStorage.setItem('back_left_sleeve', JSON.stringify(obj_logo_front_left))
+                addingComponent = 'logo';
+
+                // var obj_logo_left_lower = JSON.parse(localStorage.getItem('left_sleeve'))
+                // console.log(obj_logo_left_lower, "left_sleeve")
+                // obj_logo_left_lower.logo = right_logo
+                // localStorage.setItem('left_sleeve', JSON.stringify(obj_logo_left_lower))
+                // console.log("lower_part", obj_logo_left_lower)
+                // addingComponent = 'logo';
+            }
+
+            else if (selectedComponentId === 'right_v_body_view'){
+                var obj_logo_right_lower = JSON.parse(localStorage.getItem('right_v_lower_part'))
+                obj_logo_right_lower.logo = right_logo
+                localStorage.setItem('right_v_lower_part', JSON.stringify(obj_logo_right_lower))
+                console.log("lower_part", obj_logo_right_lower)
+                addingComponent = 'logo';
+            }
+
+            // if (selectedComponentId) {
+            //     var obj_right_logo = JSON.parse(localStorage.getItem('right_v_lower_part'))
+            //
+            //     obj_right_logo.logo = right_logo
+            //     localStorage.setItem('right_v_lower_part', JSON.stringify(obj_right_logo))
+            //     addingComponent = 'logo';
+            // }
+
+            //  if (selectedComponentId) {
+            //     var obj_right_logo = JSON.parse(localStorage.getItem('left_v_lower_part'))
+            //
+            //     obj_right_logo.logo = right_logo
+            //     localStorage.setItem('left_v_lower_part', JSON.stringify(obj_right_logo))
+            //     addingComponent = 'logo';
+            // }
         }
         r_logo.src = l;
+
     }
 
     // function download_Image() {

@@ -108,6 +108,10 @@ function SamLocalEditorBomberJacFront(props) {
     }, []);
     useEffect(() => {
         if (product) {
+            preFrontImageLoad()
+            prebackImageLoad()
+            preleftImageLoad()
+            prerightImageLoad()
             frontImageLoad()
             setComponents('front_view_bomber_jac')
         }
@@ -231,6 +235,24 @@ function SamLocalEditorBomberJacFront(props) {
     var changeFontStyle = function (font) {
         // document.getElementById("output-text")
         //              .style.fontWeight = "italic";
+    }
+
+    const preloadImge = (url, imageId, left, top) => {
+
+        fabric.Image.fromURL(url, function (img) {
+            img.id = imageId;
+            img.filters = [new fabric.Image.filters.HueRotation()];
+            img.applyFilters()
+            var cor = img.set(
+                {
+                    left: left,
+                    top: top,
+                    selectable: false,
+
+                })
+            localStorage.setItem(imageId, JSON.stringify(img));
+        }, {crossOrigin: 'anonymous'})
+
     }
 
     const loadImage = (url, imageId, left, top) => {
@@ -570,282 +592,476 @@ function SamLocalEditorBomberJacFront(props) {
     //     link.click();
     // }
 
-    function frontImageLoad() {
-        clearCanvas()
+    function preFrontImageLoad() {
         let front_view_bomber_jac = JSON.parse(localStorage.getItem('front_view_bomber_jac'))
         if (front_view_bomber_jac.bomber_jac_body_front?.image) {
-            if (localStorage.getItem('bomber_jac_body_front')) {
-                loadObject(JSON.parse(localStorage.getItem('bomber_jac_body_front')))
-            } else {
+
                 loadImage(
                     front_view_bomber_jac.bomber_jac_body_front.image,
                     'bomber_jac_body_front',
                     front_view_bomber_jac.bomber_jac_body_front.x_point,
                     front_view_bomber_jac.bomber_jac_body_front.y_point)
-            }
+
 
         }
         if (front_view_bomber_jac.bomber_jac_collar_front?.image) {
-            if (localStorage.getItem('bomber_jac_collar_front')) {
-                loadObject(JSON.parse(localStorage.getItem('bomber_jac_collar_front')))
-            } else {
+
                 loadImage(
                     front_view_bomber_jac.bomber_jac_collar_front.image,
                     'bomber_jac_collar_front',
                     front_view_bomber_jac.bomber_jac_collar_front.x_point,
                     front_view_bomber_jac.bomber_jac_collar_front.y_point)
-            }
 
         }
 
         if (front_view_bomber_jac.bomber_jac_collar_inner_front?.image) {
-            if (localStorage.getItem('bomber_jac_collar_inner_front')) {
-                loadObject(JSON.parse(localStorage.getItem('bomber_jac_collar_inner_front')))
-            } else {
+
                 loadImage(
                     front_view_bomber_jac.bomber_jac_collar_inner_front.image,
                     'bomber_jac_collar_inner_front',
                     front_view_bomber_jac.bomber_jac_collar_inner_front.x_point,
                     front_view_bomber_jac.bomber_jac_collar_inner_front.y_point)
-            }
 
         }
         if (front_view_bomber_jac.bomber_jac_left_pocket_front?.image) {
-            if (localStorage.getItem('bomber_jac_left_pocket_front')) {
-                loadObject(JSON.parse(localStorage.getItem('bomber_jac_left_pocket_front')))
-            } else {
+
                 loadImage(
                     front_view_bomber_jac.bomber_jac_left_pocket_front.image,
                     'bomber_jac_left_pocket_front',
                     front_view_bomber_jac.bomber_jac_left_pocket_front.x_point,
                     front_view_bomber_jac.bomber_jac_left_pocket_front.y_point)
-            }
 
         }
 
         if (front_view_bomber_jac.bomber_jac_right_pocket_front?.image) {
-            if (localStorage.getItem('bomber_jac_right_pocket_front')) {
-                loadObject(JSON.parse(localStorage.getItem('bomber_jac_right_pocket_front')))
-            } else {
+
                 loadImage(
                     front_view_bomber_jac.bomber_jac_right_pocket_front.image,
                     'bomber_jac_right_pocket_front',
                     front_view_bomber_jac.bomber_jac_right_pocket_front.x_point,
-                    front_view_bomber_jac.bomber_jac_right_pocket_front.y_point)
-            }
+                    front_view_bomber_jac.bomber_jac_right_pocket_front.y_point
+                )
 
         }
 
         if (front_view_bomber_jac.bomber_jac_left_sleeve_front?.image) {
-            if (localStorage.getItem('bomber_jac_left_sleeve_front')) {
-                loadObject(JSON.parse(localStorage.getItem('bomber_jac_left_sleeve_front')))
-            } else {
+
                 loadImage(
                     front_view_bomber_jac.bomber_jac_left_sleeve_front.image,
                     'bomber_jac_left_sleeve_front',
                     front_view_bomber_jac.bomber_jac_left_sleeve_front.x_point,
                     front_view_bomber_jac.bomber_jac_left_sleeve_front.y_point)
-            }
 
         }
 
         if (front_view_bomber_jac.bomber_jac_right_sleeve_front?.image) {
-            if (localStorage.getItem('bomber_jac_right_sleeve_front')) {
-                loadObject(JSON.parse(localStorage.getItem('bomber_jac_right_sleeve_front')))
-            } else {
+
                 loadImage(
                     front_view_bomber_jac.bomber_jac_right_sleeve_front.image,
                     'bomber_jac_right_sleeve_front',
                     front_view_bomber_jac.bomber_jac_right_sleeve_front.x_point,
                     front_view_bomber_jac.bomber_jac_right_sleeve_front.y_point)
-            }
 
         }
 
         if (front_view_bomber_jac.bomber_jac_left_cuff_front?.image) {
-            if (localStorage.getItem('bomber_jac_left_cuff_front')) {
-                loadObject(JSON.parse(localStorage.getItem('bomber_jac_left_cuff_front')))
-            } else {
+
                 loadImage(
                     front_view_bomber_jac.bomber_jac_left_cuff_front.image,
                     'bomber_jac_left_cuff_front',
                     front_view_bomber_jac.bomber_jac_left_cuff_front.x_point,
                     front_view_bomber_jac.bomber_jac_left_cuff_front.y_point)
-            }
 
         }
 
         if (front_view_bomber_jac.bomber_jac_right_cuff_front?.image) {
-            if (localStorage.getItem('bomber_jac_right_cuff_front')) {
-                loadObject(JSON.parse(localStorage.getItem('bomber_jac_right_cuff_front')))
-            } else {
+
                 loadImage(
                     front_view_bomber_jac.bomber_jac_right_cuff_front.image,
                     'bomber_jac_right_cuff_front',
                     front_view_bomber_jac.bomber_jac_right_cuff_front.x_point,
                     front_view_bomber_jac.bomber_jac_right_cuff_front.y_point)
-            }
 
         }
 
         if (front_view_bomber_jac.bomber_jac_right_sleeve_design_front?.image) {
-            if (localStorage.getItem('bomber_jac_right_sleeve_design_front')) {
-                loadObject(JSON.parse(localStorage.getItem('bomber_jac_right_sleeve_design_front')))
-            } else {
+
                 loadImage(
                     front_view_bomber_jac.bomber_jac_right_sleeve_design_front.image,
                     'bomber_jac_right_sleeve_design_front',
                     front_view_bomber_jac.bomber_jac_right_sleeve_design_front.x_point,
                     front_view_bomber_jac.bomber_jac_right_sleeve_design_front.y_point)
-            }
 
         }
 
         if (front_view_bomber_jac.bomber_jac_hem_front?.image) {
-            if (localStorage.getItem('bomber_jac_hem_front')) {
-                loadObject(JSON.parse(localStorage.getItem('bomber_jac_hem_front')))
-            } else {
+
                 loadImage(
                     front_view_bomber_jac.bomber_jac_hem_front.image,
                     'bomber_jac_hem_front',
                     front_view_bomber_jac.bomber_jac_hem_front.x_point,
                     front_view_bomber_jac.bomber_jac_hem_front.y_point)
+
+        }
+
+        if (front_view_bomber_jac.bomber_jac_zip_front?.image) {
+
+                loadImage(
+                    front_view_bomber_jac.bomber_jac_zip_front.image,
+                    'bomber_jac_zip_front',
+                    front_view_bomber_jac.bomber_jac_zip_front.x_point,
+                    front_view_bomber_jac.bomber_jac_zip_front.y_point
+                )
+        }
+    }
+
+    function frontImageLoad() {
+        clearCanvas()
+        let front_view_bomber_jac = JSON.parse(localStorage.getItem('front_view_bomber_jac'))
+        if (front_view_bomber_jac.bomber_jac_body_front?.image) {
+            var bomber_jac_body_front=JSON.parse(localStorage.getItem('bomber_jac_body_front'))
+            if (bomber_jac_body_front) {
+                loadObject(bomber_jac_body_front)
+
+            }
+
+        }
+        if (front_view_bomber_jac.bomber_jac_collar_front?.image) {
+            var bomber_jac_collar_front=JSON.parse(localStorage.getItem('bomber_jac_collar_front'))
+            if (bomber_jac_collar_front) {
+                loadObject(bomber_jac_collar_front)
+
+            }
+
+        }
+
+        if (front_view_bomber_jac.bomber_jac_collar_inner_front?.image) {
+            var bomber_jac_collar_inner_front=JSON.parse(localStorage.getItem('bomber_jac_collar_inner_front'))
+            if (bomber_jac_collar_inner_front) {
+                loadObject(bomber_jac_collar_inner_front)
+
+            }
+
+        }
+        if (front_view_bomber_jac.bomber_jac_left_pocket_front?.image) {
+            var bomber_jac_left_pocket_front=JSON.parse(localStorage.getItem('bomber_jac_left_pocket_front'))
+            if (bomber_jac_left_pocket_front) {
+                loadObject(bomber_jac_left_pocket_front)
+
+            }
+
+        }
+
+        if (front_view_bomber_jac.bomber_jac_right_pocket_front?.image) {
+           var bomber_jac_right_pocket_front=JSON.parse(localStorage.getItem('bomber_jac_right_pocket_front'))
+            if (bomber_jac_right_pocket_front) {
+                loadObject(bomber_jac_right_pocket_front)
+
+            }
+
+        }
+
+        if (front_view_bomber_jac.bomber_jac_left_sleeve_front?.image) {
+            var bomber_jac_left_sleeve_front=JSON.parse(localStorage.getItem('bomber_jac_left_sleeve_front'))
+            if (bomber_jac_left_sleeve_front) {
+                loadObject(bomber_jac_left_sleeve_front)
+
+            }
+
+        }
+
+        if (front_view_bomber_jac.bomber_jac_right_sleeve_front?.image) {
+            var bomber_jac_right_sleeve_front=JSON.parse(localStorage.getItem('bomber_jac_right_sleeve_front'))
+            if (bomber_jac_right_sleeve_front) {
+                loadObject(bomber_jac_right_sleeve_front)
+
+            }
+
+        }
+
+        if (front_view_bomber_jac.bomber_jac_left_cuff_front?.image) {
+            var bomber_jac_left_cuff_front=JSON.parse(localStorage.getItem('bomber_jac_left_cuff_front'))
+            if (bomber_jac_left_cuff_front) {
+                loadObject(bomber_jac_left_cuff_front)
+
+            }
+
+        }
+
+        if (front_view_bomber_jac.bomber_jac_right_cuff_front?.image) {
+            var bomber_jac_right_cuff_front=JSON.parse(localStorage.getItem('bomber_jac_right_cuff_front'))
+            if (bomber_jac_right_cuff_front) {
+                loadObject(bomber_jac_right_cuff_front)
+
+            }
+
+        }
+
+        if (front_view_bomber_jac.bomber_jac_right_sleeve_design_front?.image) {
+            var bomber_jac_right_sleeve_design_front=JSON.parse(localStorage.getItem('bomber_jac_right_sleeve_design_front'))
+            if (bomber_jac_right_sleeve_design_front) {
+                loadObject(bomber_jac_right_sleeve_design_front)
+
+            }
+
+        }
+
+        if (front_view_bomber_jac.bomber_jac_hem_front?.image) {
+            var bomber_jac_hem_front=JSON.parse(localStorage.getItem('bomber_jac_hem_front'))
+            if (bomber_jac_hem_front) {
+                loadObject(bomber_jac_hem_front)
+
             }
 
         }
 
         if (front_view_bomber_jac.bomber_jac_zip_front?.image) {
-            if (localStorage.getItem('bomber_jac_zip_front')) {
-                loadObject(JSON.parse(localStorage.getItem('bomber_jac_zip_front')))
-            } else {
-                loadImage(
-                    front_view_bomber_jac.bomber_jac_zip_front.image,
-                    'bomber_jac_zip_front',
-                    front_view_bomber_jac.bomber_jac_zip_front.x_point,
-                    front_view_bomber_jac.bomber_jac_zip_front.y_point)
-            }
+            var bomber_jac_zip_front=JSON.parse(localStorage.getItem('bomber_jac_zip_front'))
+            if (bomber_jac_zip_front) {
+                loadObject(bomber_jac_zip_front)
 
+            }
+        }
+    }
+
+
+    function prebackImageLoad() {
+        let back_view_base_bomber_jac = JSON.parse(localStorage.getItem('back_view_base_bomber_jac'))
+        if (back_view_base_bomber_jac.bomber_jac_body_back?.image) {
+
+                preloadImge(
+                    back_view_base_bomber_jac.bomber_jac_body_back.image,
+                    'bomber_jac_body_back',
+                    back_view_base_bomber_jac.bomber_jac_body_back.x_point,
+                    back_view_base_bomber_jac.bomber_jac_body_back.y_point,
+                )
         }
 
+        if (back_view_base_bomber_jac.bomber_jac_collar_back?.image) {
 
+                preloadImge(
+                    back_view_base_bomber_jac.bomber_jac_collar_back.image,
+                    'bomber_jac_collar_back',
+                    back_view_base_bomber_jac.bomber_jac_collar_back.x_point,
+                    back_view_base_bomber_jac.bomber_jac_collar_back.y_point,
+                )
+        }
+
+        if (back_view_base_bomber_jac.bomber_jac_hem_back?.image) {
+
+                preloadImge(
+                    back_view_base_bomber_jac.bomber_jac_hem_back.image,
+                    'bomber_jac_hem_back',
+                    back_view_base_bomber_jac.bomber_jac_hem_back.x_point,
+                    back_view_base_bomber_jac.bomber_jac_hem_back.y_point,
+                )
+        }
+
+        if (back_view_base_bomber_jac.bomber_jac_left_sleeve_back?.image) {
+
+                preloadImge(
+                    back_view_base_bomber_jac.bomber_jac_left_sleeve_back.image,
+                    'bomber_jac_left_sleeve_back',
+                    back_view_base_bomber_jac.bomber_jac_left_sleeve_back.x_point,
+                    back_view_base_bomber_jac.bomber_jac_left_sleeve_back.y_point,
+                )
+        }
+
+        if (back_view_base_bomber_jac.bomber_jac_right_sleeve_back?.image) {
+
+                preloadImge(
+                    back_view_base_bomber_jac.bomber_jac_right_sleeve_back.image,
+                    'bomber_jac_right_sleeve_back',
+                    back_view_base_bomber_jac.bomber_jac_right_sleeve_back.x_point,
+                    back_view_base_bomber_jac.bomber_jac_right_sleeve_back.y_point,
+                )
+        }
+
+        if (back_view_base_bomber_jac.bomber_jac_left_cuff_back?.image) {
+
+                preloadImge(
+                    back_view_base_bomber_jac.bomber_jac_left_cuff_back.image,
+                    'bomber_jac_left_cuff_back',
+                    back_view_base_bomber_jac.bomber_jac_left_cuff_back.x_point,
+                    back_view_base_bomber_jac.bomber_jac_left_cuff_back.y_point,
+                )
+        }
+
+        if (back_view_base_bomber_jac.bomber_jac_right_cuff_back?.image) {
+
+                preloadImge(
+                    back_view_base_bomber_jac.bomber_jac_right_cuff_back.image,
+                    'bomber_jac_right_cuff_back',
+                    back_view_base_bomber_jac.bomber_jac_right_cuff_back.x_point,
+                    back_view_base_bomber_jac.bomber_jac_right_cuff_back.y_point,
+                )
+        }
+
+        if (back_view_base_bomber_jac.bomber_jac_left_sleeve_design_back?.image) {
+
+                preloadImge(
+                    back_view_base_bomber_jac.bomber_jac_left_sleeve_design_back.image,
+                    'bomber_jac_left_sleeve_design_back',
+                    back_view_base_bomber_jac.bomber_jac_left_sleeve_design_back.x_point,
+                    back_view_base_bomber_jac.bomber_jac_left_sleeve_design_back.y_point,
+                )
+        }
     }
 
     function backImageLoad() {
         clearCanvas()
         let back_view_base_bomber_jac = JSON.parse(localStorage.getItem('back_view_base_bomber_jac'))
         if (back_view_base_bomber_jac.bomber_jac_body_back?.image) {
-            if (localStorage.getItem('bomber_jac_body_back')) {
-                loadObject(JSON.parse(localStorage.getItem('bomber_jac_body_back')))
-            } else {
-                loadImage(
-                    back_view_base_bomber_jac.bomber_jac_body_back.image,
-                    'bomber_jac_body_back',
-                    back_view_base_bomber_jac.bomber_jac_body_back.x_point,
-                    back_view_base_bomber_jac.bomber_jac_body_back.y_point,
-                )
+            var bomber_jac_body_back=JSON.parse(localStorage.getItem('bomber_jac_body_back'))
+            if (bomber_jac_body_back) {
+                loadObject(bomber_jac_body_back)
             }
 
         }
 
         if (back_view_base_bomber_jac.bomber_jac_collar_back?.image) {
-            if (localStorage.getItem('bomber_jac_collar_back')) {
-                loadObject(JSON.parse(localStorage.getItem('bomber_jac_collar_back')))
-            } else {
-                loadImage(
-                    back_view_base_bomber_jac.bomber_jac_collar_back.image,
-                    'bomber_jac_collar_back',
-                    back_view_base_bomber_jac.bomber_jac_collar_back.x_point,
-                    back_view_base_bomber_jac.bomber_jac_collar_back.y_point,
-                )
+            var bomber_jac_collar_back=JSON.parse(localStorage.getItem('bomber_jac_collar_back'))
+            if (bomber_jac_collar_back) {
+                loadObject(bomber_jac_collar_back)
             }
 
         }
 
         if (back_view_base_bomber_jac.bomber_jac_hem_back?.image) {
-            if (localStorage.getItem('bomber_jac_hem_back')) {
-                loadObject(JSON.parse(localStorage.getItem('bomber_jac_hem_back')))
-            } else {
-                loadImage(
-                    back_view_base_bomber_jac.bomber_jac_hem_back.image,
-                    'bomber_jac_hem_back',
-                    back_view_base_bomber_jac.bomber_jac_hem_back.x_point,
-                    back_view_base_bomber_jac.bomber_jac_hem_back.y_point,
-                )
+            var bomber_jac_hem_back=JSON.parse(localStorage.getItem('bomber_jac_hem_back'))
+            if (bomber_jac_hem_back) {
+                loadObject(bomber_jac_hem_back)
             }
 
         }
 
         if (back_view_base_bomber_jac.bomber_jac_left_sleeve_back?.image) {
-            if (localStorage.getItem('bomber_jac_left_sleeve_back')) {
-                loadObject(JSON.parse(localStorage.getItem('bomber_jac_left_sleeve_back')))
-            } else {
-                loadImage(
-                    back_view_base_bomber_jac.bomber_jac_left_sleeve_back.image,
-                    'bomber_jac_left_sleeve_back',
-                    back_view_base_bomber_jac.bomber_jac_left_sleeve_back.x_point,
-                    back_view_base_bomber_jac.bomber_jac_left_sleeve_back.y_point,
-                )
+            var bomber_jac_left_sleeve_back=JSON.parse(localStorage.getItem('bomber_jac_left_sleeve_back'))
+            if (bomber_jac_left_sleeve_back) {
+                loadObject(bomber_jac_left_sleeve_back)
             }
 
         }
 
         if (back_view_base_bomber_jac.bomber_jac_right_sleeve_back?.image) {
-            if (localStorage.getItem('bomber_jac_right_sleeve_back')) {
-                loadObject(JSON.parse(localStorage.getItem('bomber_jac_right_sleeve_back')))
-            } else {
-                loadImage(
-                    back_view_base_bomber_jac.bomber_jac_right_sleeve_back.image,
-                    'bomber_jac_right_sleeve_back',
-                    back_view_base_bomber_jac.bomber_jac_right_sleeve_back.x_point,
-                    back_view_base_bomber_jac.bomber_jac_right_sleeve_back.y_point,
-                )
+            var bomber_jac_right_sleeve_back=JSON.parse(localStorage.getItem('bomber_jac_right_sleeve_back'))
+            if (bomber_jac_right_sleeve_back) {
+                loadObject(bomber_jac_right_sleeve_back)
             }
 
         }
 
         if (back_view_base_bomber_jac.bomber_jac_left_cuff_back?.image) {
-            if (localStorage.getItem('bomber_jac_left_cuff_back')) {
-                loadObject(JSON.parse(localStorage.getItem('bomber_jac_left_cuff_back')))
-            } else {
-                loadImage(
-                    back_view_base_bomber_jac.bomber_jac_left_cuff_back.image,
-                    'bomber_jac_left_cuff_back',
-                    back_view_base_bomber_jac.bomber_jac_left_cuff_back.x_point,
-                    back_view_base_bomber_jac.bomber_jac_left_cuff_back.y_point,
-                )
+            var bomber_jac_left_cuff_back=JSON.parse(localStorage.getItem('bomber_jac_left_cuff_back'))
+            if (bomber_jac_left_cuff_back) {
+                loadObject(bomber_jac_left_cuff_back)
             }
 
         }
 
         if (back_view_base_bomber_jac.bomber_jac_right_cuff_back?.image) {
-            if (localStorage.getItem('bomber_jac_right_cuff_back')) {
-                loadObject(JSON.parse(localStorage.getItem('bomber_jac_right_cuff_back')))
-            } else {
-                loadImage(
-                    back_view_base_bomber_jac.bomber_jac_right_cuff_back.image,
-                    'bomber_jac_right_cuff_back',
-                    back_view_base_bomber_jac.bomber_jac_right_cuff_back.x_point,
-                    back_view_base_bomber_jac.bomber_jac_right_cuff_back.y_point,
-                )
+            var bomber_jac_right_cuff_back=JSON.parse(localStorage.getItem('bomber_jac_right_cuff_back'))
+            if (bomber_jac_right_cuff_back) {
+                loadObject(bomber_jac_right_cuff_back)
             }
 
         }
 
         if (back_view_base_bomber_jac.bomber_jac_left_sleeve_design_back?.image) {
-            if (localStorage.getItem('bomber_jac_left_sleeve_design_back')) {
-                loadObject(JSON.parse(localStorage.getItem('bomber_jac_left_sleeve_design_back')))
-            } else {
-                loadImage(
-                    back_view_base_bomber_jac.bomber_jac_left_sleeve_design_back.image,
-                    'bomber_jac_left_sleeve_design_back',
-                    back_view_base_bomber_jac.bomber_jac_left_sleeve_design_back.x_point,
-                    back_view_base_bomber_jac.bomber_jac_left_sleeve_design_back.y_point,
-                )
+            var bomber_jac_left_sleeve_design_back=JSON.parse(localStorage.getItem('bomber_jac_left_sleeve_design_back'))
+            if (bomber_jac_left_sleeve_design_back) {
+                loadObject(bomber_jac_left_sleeve_design_back)
             }
 
         }
 
 
+
+    }
+
+
+    const preleftImageLoad = (e) => {
+        let left_view_bomber_jac = JSON.parse(localStorage.getItem('left_view_bomber_jac'))
+
+        if (left_view_bomber_jac?.bomber_jac_mid_body_left?.image) {
+
+                preloadImge(
+                    left_view_bomber_jac.bomber_jac_mid_body_left.image,
+                    'bomber_jac_mid_body_left',
+                    left_view_bomber_jac.bomber_jac_mid_body_left.x_point,
+                    left_view_bomber_jac.bomber_jac_mid_body_left.y_point,
+                )
+        }
+
+        if (left_view_bomber_jac?.bomber_jac_left_body_left?.image) {
+
+                preloadImge(
+                    left_view_bomber_jac.bomber_jac_left_body_left.image,
+                    'bomber_jac_left_body_left',
+                    left_view_bomber_jac.bomber_jac_left_body_left.x_point,
+                    left_view_bomber_jac.bomber_jac_left_body_left.y_point,
+                )
+        }
+
+        if (left_view_bomber_jac?.bomber_jac_right_body_left?.image) {
+
+                preloadImge(
+                    left_view_bomber_jac.bomber_jac_right_body_left.image,
+                    'bomber_jac_right_body_left',
+                    left_view_bomber_jac.bomber_jac_right_body_left.x_point,
+                    left_view_bomber_jac.bomber_jac_right_body_left.y_point,
+                )
+        }
+
+        if (left_view_bomber_jac?.bomber_jac_bottom_body_left?.image) {
+
+                preloadImge(
+                    left_view_bomber_jac.bomber_jac_bottom_body_left.image,
+                    'bomber_jac_bottom_body_left',
+                    left_view_bomber_jac.bomber_jac_bottom_body_left.x_point,
+                    left_view_bomber_jac.bomber_jac_bottom_body_left.y_point,
+                )
+        }
+
+        if (left_view_bomber_jac?.bomber_jac_left_cuff_left?.image) {
+
+                preloadImge(
+                    left_view_bomber_jac.bomber_jac_left_cuff_left.image,
+                    'bomber_jac_left_cuff_left',
+                    left_view_bomber_jac.bomber_jac_left_cuff_left.x_point,
+                    left_view_bomber_jac.bomber_jac_left_cuff_left.y_point,
+                )
+        }
+
+        if (left_view_bomber_jac?.bomber_jac_right_cuff_left?.image) {
+
+                preloadImge(
+                    left_view_bomber_jac.bomber_jac_right_cuff_left.image,
+                    'bomber_jac_right_cuff_left',
+                    left_view_bomber_jac.bomber_jac_right_cuff_left.x_point,
+                    left_view_bomber_jac.bomber_jac_right_cuff_left.y_point,
+                )
+        }
+
+        if (left_view_bomber_jac?.bomber_jac_mid_cuff_left?.image) {
+
+                preloadImge(
+                    left_view_bomber_jac.bomber_jac_mid_cuff_left.image,
+                    'bomber_jac_mid_cuff_left',
+                    left_view_bomber_jac.bomber_jac_mid_cuff_left.x_point,
+                    left_view_bomber_jac.bomber_jac_mid_cuff_left.y_point,
+                )
+        }
+
+        if (left_view_bomber_jac?.bomber_jac_bottom_cuff_left?.image) {
+
+                preloadImge(
+                    left_view_bomber_jac.bomber_jac_bottom_cuff_left.image,
+                    'bomber_jac_bottom_cuff_left',
+                    left_view_bomber_jac.bomber_jac_bottom_cuff_left.x_point,
+                    left_view_bomber_jac.bomber_jac_bottom_cuff_left.y_point,
+                )
+        }
 
     }
 
@@ -854,117 +1070,154 @@ function SamLocalEditorBomberJacFront(props) {
         let left_view_bomber_jac = JSON.parse(localStorage.getItem('left_view_bomber_jac'))
 
         if (left_view_bomber_jac?.bomber_jac_mid_body_left?.image) {
-            if (localStorage.getItem('bomber_jac_mid_body_left')) {
-                loadObject(JSON.parse(localStorage.getItem('bomber_jac_mid_body_left')))
-            } else {
-                loadImage(
-                    left_view_bomber_jac.bomber_jac_mid_body_left.image,
-                    'bomber_jac_mid_body_left',
-                    left_view_bomber_jac.bomber_jac_mid_body_left.x_point,
-                    left_view_bomber_jac.bomber_jac_mid_body_left.y_point,
-                )
+            var bomber_jac_mid_body_left=JSON.parse(localStorage.getItem('bomber_jac_mid_body_left'))
+            if (bomber_jac_mid_body_left) {
+                loadObject(bomber_jac_mid_body_left)
             }
 
         }
 
         if (left_view_bomber_jac?.bomber_jac_left_body_left?.image) {
-            if (localStorage.getItem('bomber_jac_left_body_left')) {
-                loadObject(JSON.parse(localStorage.getItem('bomber_jac_left_body_left')))
-            } else {
-                loadImage(
-                    left_view_bomber_jac.bomber_jac_left_body_left.image,
-                    'bomber_jac_left_body_left',
-                    left_view_bomber_jac.bomber_jac_left_body_left.x_point,
-                    left_view_bomber_jac.bomber_jac_left_body_left.y_point,
-                )
+            var bomber_jac_left_body_left=JSON.parse(localStorage.getItem('bomber_jac_left_body_left'))
+            if (bomber_jac_left_body_left) {
+                loadObject(bomber_jac_left_body_left)
             }
 
         }
 
         if (left_view_bomber_jac?.bomber_jac_right_body_left?.image) {
-            if (localStorage.getItem('bomber_jac_right_body_left')) {
-                loadObject(JSON.parse(localStorage.getItem('bomber_jac_right_body_left')))
-            } else {
-                loadImage(
-                    left_view_bomber_jac.bomber_jac_right_body_left.image,
-                    'bomber_jac_right_body_left',
-                    left_view_bomber_jac.bomber_jac_right_body_left.x_point,
-                    left_view_bomber_jac.bomber_jac_right_body_left.y_point,
-                )
+            var bomber_jac_right_body_left=JSON.parse(localStorage.getItem('bomber_jac_right_body_left'))
+            if (bomber_jac_right_body_left) {
+                loadObject(bomber_jac_right_body_left)
             }
 
         }
 
         if (left_view_bomber_jac?.bomber_jac_bottom_body_left?.image) {
-            if (localStorage.getItem('bomber_jac_bottom_body_left')) {
-                loadObject(JSON.parse(localStorage.getItem('bomber_jac_bottom_body_left')))
-            } else {
-                loadImage(
-                    left_view_bomber_jac.bomber_jac_bottom_body_left.image,
-                    'bomber_jac_bottom_body_left',
-                    left_view_bomber_jac.bomber_jac_bottom_body_left.x_point,
-                    left_view_bomber_jac.bomber_jac_bottom_body_left.y_point,
-                )
+            var bomber_jac_bottom_body_left=JSON.parse(localStorage.getItem('bomber_jac_bottom_body_left'))
+            if (bomber_jac_bottom_body_left) {
+                loadObject(bomber_jac_bottom_body_left)
             }
 
         }
 
         if (left_view_bomber_jac?.bomber_jac_left_cuff_left?.image) {
-            if (localStorage.getItem('bomber_jac_left_cuff_left')) {
-                loadObject(JSON.parse(localStorage.getItem('bomber_jac_left_cuff_left')))
-            } else {
-                loadImage(
-                    left_view_bomber_jac.bomber_jac_left_cuff_left.image,
-                    'bomber_jac_left_cuff_left',
-                    left_view_bomber_jac.bomber_jac_left_cuff_left.x_point,
-                    left_view_bomber_jac.bomber_jac_left_cuff_left.y_point,
-                )
+            var bomber_jac_left_cuff_left=JSON.parse(localStorage.getItem('bomber_jac_left_cuff_left'))
+            if (bomber_jac_left_cuff_left) {
+                loadObject(bomber_jac_left_cuff_left)
             }
 
         }
 
         if (left_view_bomber_jac?.bomber_jac_right_cuff_left?.image) {
-            if (localStorage.getItem('bomber_jac_right_cuff_left')) {
-                loadObject(JSON.parse(localStorage.getItem('bomber_jac_right_cuff_left')))
-            } else {
-                loadImage(
-                    left_view_bomber_jac.bomber_jac_right_cuff_left.image,
-                    'bomber_jac_right_cuff_left',
-                    left_view_bomber_jac.bomber_jac_right_cuff_left.x_point,
-                    left_view_bomber_jac.bomber_jac_right_cuff_left.y_point,
-                )
+            var bomber_jac_right_cuff_left=JSON.parse(localStorage.getItem('bomber_jac_right_cuff_left'))
+            if (bomber_jac_right_cuff_left) {
+                loadObject(bomber_jac_right_cuff_left)
             }
 
         }
 
         if (left_view_bomber_jac?.bomber_jac_mid_cuff_left?.image) {
-            if (localStorage.getItem('bomber_jac_mid_cuff_left')) {
-                loadObject(JSON.parse(localStorage.getItem('bomber_jac_mid_cuff_left')))
-            } else {
-                loadImage(
-                    left_view_bomber_jac.bomber_jac_mid_cuff_left.image,
-                    'bomber_jac_mid_cuff_left',
-                    left_view_bomber_jac.bomber_jac_mid_cuff_left.x_point,
-                    left_view_bomber_jac.bomber_jac_mid_cuff_left.y_point,
-                )
+            var bomber_jac_mid_cuff_left=JSON.parse(localStorage.getItem('bomber_jac_mid_cuff_left'))
+            if (bomber_jac_mid_cuff_left) {
+                loadObject(bomber_jac_mid_cuff_left)
             }
 
         }
 
         if (left_view_bomber_jac?.bomber_jac_bottom_cuff_left?.image) {
-            if (localStorage.getItem('bomber_jac_bottom_cuff_left')) {
-                loadObject(JSON.parse(localStorage.getItem('bomber_jac_bottom_cuff_left')))
-            } else {
-                loadImage(
-                    left_view_bomber_jac.bomber_jac_bottom_cuff_left.image,
-                    'bomber_jac_bottom_cuff_left',
-                    left_view_bomber_jac.bomber_jac_bottom_cuff_left.x_point,
-                    left_view_bomber_jac.bomber_jac_bottom_cuff_left.y_point,
-                )
+            var bomber_jac_bottom_cuff_left=JSON.parse(localStorage.getItem('bomber_jac_bottom_cuff_left'))
+            if (bomber_jac_bottom_cuff_left) {
+                loadObject(bomber_jac_bottom_cuff_left)
             }
 
         }
 
+    }
+
+
+    const prerightImageLoad = (e) => {
+        let right_view_bomber_jac = JSON.parse(localStorage.getItem('right_view_bomber_jac'))
+        if (right_view_bomber_jac.bomber_jac_mid_body_right?.image) {
+
+                preloadImge(
+                    right_view_bomber_jac.bomber_jac_mid_body_right.image,
+                    'bomber_jac_mid_body_right',
+                    right_view_bomber_jac.bomber_jac_mid_body_right.x_point,
+                    right_view_bomber_jac.bomber_jac_mid_body_right.y_point,
+                )
+            }
+
+        if (right_view_bomber_jac.bomber_jac_left_body_right?.image) {
+
+                preloadImge(
+                    right_view_bomber_jac.bomber_jac_left_body_right.image,
+                    'bomber_jac_left_body_right',
+                    right_view_bomber_jac.bomber_jac_left_body_right.x_point,
+                    right_view_bomber_jac.bomber_jac_left_body_right.y_point,
+                )
+        }
+
+        if (right_view_bomber_jac.bomber_jac_right_body_right?.image) {
+
+                preloadImge(
+                    right_view_bomber_jac.bomber_jac_right_body_right.image,
+                    'bomber_jac_right_body_right',
+                    right_view_bomber_jac.bomber_jac_right_body_right.x_point,
+                    right_view_bomber_jac.bomber_jac_right_body_right.y_point,
+                )
+        }
+
+        if (right_view_bomber_jac.bomber_jac_bottom_body_right?.image) {
+
+                preloadImge(
+                    right_view_bomber_jac.bomber_jac_bottom_body_right.image,
+                    'bomber_jac_bottom_body_right',
+                    right_view_bomber_jac.bomber_jac_bottom_body_right.x_point,
+                    right_view_bomber_jac.bomber_jac_bottom_body_right.y_point,
+                )
+        }
+
+        if (right_view_bomber_jac.bomber_jac_left_cuff_right?.image) {
+
+                preloadImge(
+                    right_view_bomber_jac.bomber_jac_left_cuff_right.image,
+                    'bomber_jac_left_cuff_right',
+                    right_view_bomber_jac.bomber_jac_left_cuff_right.x_point,
+                    right_view_bomber_jac.bomber_jac_left_cuff_right.y_point,
+                )
+        }
+
+
+        if (right_view_bomber_jac.bomber_jac_right_cuff_right?.image) {
+
+                preloadImge(
+                    right_view_bomber_jac.bomber_jac_right_cuff_right.image,
+                    'bomber_jac_right_cuff_right',
+                    right_view_bomber_jac.bomber_jac_right_cuff_right.x_point,
+                    right_view_bomber_jac.bomber_jac_right_cuff_right.y_point,
+                )
+        }
+
+        if (right_view_bomber_jac.bomber_jac_mid_cuff_right?.image) {
+
+                preloadImge(
+                    right_view_bomber_jac.bomber_jac_mid_cuff_right.image,
+                    'bomber_jac_mid_cuff_right',
+                    right_view_bomber_jac.bomber_jac_mid_cuff_right.x_point,
+                    right_view_bomber_jac.bomber_jac_mid_cuff_right.y_point,
+                )
+        }
+
+        if (right_view_bomber_jac.bomber_jac_bottom_cuff_right?.image) {
+
+                preloadImge(
+                    right_view_bomber_jac.bomber_jac_bottom_cuff_right.image,
+                    'bomber_jac_bottom_cuff_right',
+                    right_view_bomber_jac.bomber_jac_bottom_cuff_right.x_point,
+                    right_view_bomber_jac.bomber_jac_bottom_cuff_right.y_point,
+                )
+        }
     }
 
     const rightImageLoad = (e) => {
@@ -972,107 +1225,59 @@ function SamLocalEditorBomberJacFront(props) {
         let right_view_bomber_jac = JSON.parse(localStorage.getItem('right_view_bomber_jac'))
 
         if (right_view_bomber_jac.bomber_jac_mid_body_right?.image) {
-            if (localStorage.getItem('bomber_jac_mid_body_right')) {
-                loadObject(JSON.parse(localStorage.getItem('bomber_jac_mid_body_right')))
-            } else {
-                loadImage(
-                    right_view_bomber_jac.bomber_jac_mid_body_right.image,
-                    'bomber_jac_mid_body_right',
-                    right_view_bomber_jac.bomber_jac_mid_body_right.x_point,
-                    right_view_bomber_jac.bomber_jac_mid_body_right.y_point,
-                )
+            var bomber_jac_mid_body_right=JSON.parse(localStorage.getItem('bomber_jac_mid_body_right'))
+            if (bomber_jac_mid_body_right) {
+                loadObject(bomber_jac_mid_body_right)
             }
         }
 
         if (right_view_bomber_jac.bomber_jac_left_body_right?.image) {
-            if (localStorage.getItem('bomber_jac_left_body_right')) {
-                loadObject(JSON.parse(localStorage.getItem('bomber_jac_left_body_right')))
-            } else {
-                loadImage(
-                    right_view_bomber_jac.bomber_jac_left_body_right.image,
-                    'bomber_jac_left_body_right',
-                    right_view_bomber_jac.bomber_jac_left_body_right.x_point,
-                    right_view_bomber_jac.bomber_jac_left_body_right.y_point,
-                )
+            var bomber_jac_left_body_right=JSON.parse(localStorage.getItem('bomber_jac_left_body_right'))
+            if (bomber_jac_left_body_right) {
+                loadObject(bomber_jac_left_body_right)
             }
         }
 
         if (right_view_bomber_jac.bomber_jac_right_body_right?.image) {
-            if (localStorage.getItem('bomber_jac_right_body_right')) {
-                loadObject(JSON.parse(localStorage.getItem('bomber_jac_right_body_right')))
-            } else {
-                loadImage(
-                    right_view_bomber_jac.bomber_jac_right_body_right.image,
-                    'bomber_jac_right_body_right',
-                    right_view_bomber_jac.bomber_jac_right_body_right.x_point,
-                    right_view_bomber_jac.bomber_jac_right_body_right.y_point,
-                )
+            var bomber_jac_right_body_right=JSON.parse(localStorage.getItem('bomber_jac_right_body_right'))
+            if (bomber_jac_right_body_right) {
+                loadObject(bomber_jac_right_body_right)
             }
         }
 
         if (right_view_bomber_jac.bomber_jac_bottom_body_right?.image) {
-            if (localStorage.getItem('bomber_jac_bottom_body_right')) {
-                loadObject(JSON.parse(localStorage.getItem('bomber_jac_bottom_body_right')))
-            } else {
-                loadImage(
-                    right_view_bomber_jac.bomber_jac_bottom_body_right.image,
-                    'bomber_jac_bottom_body_right',
-                    right_view_bomber_jac.bomber_jac_bottom_body_right.x_point,
-                    right_view_bomber_jac.bomber_jac_bottom_body_right.y_point,
-                )
+            var bomber_jac_bottom_body_right=JSON.parse(localStorage.getItem('bomber_jac_bottom_body_right'))
+            if (bomber_jac_bottom_body_right) {
+                loadObject(bomber_jac_bottom_body_right)
             }
         }
 
         if (right_view_bomber_jac.bomber_jac_left_cuff_right?.image) {
-            if (localStorage.getItem('bomber_jac_left_cuff_right')) {
-                loadObject(JSON.parse(localStorage.getItem('bomber_jac_left_cuff_right')))
-            } else {
-                loadImage(
-                    right_view_bomber_jac.bomber_jac_left_cuff_right.image,
-                    'bomber_jac_left_cuff_right',
-                    right_view_bomber_jac.bomber_jac_left_cuff_right.x_point,
-                    right_view_bomber_jac.bomber_jac_left_cuff_right.y_point,
-                )
+            var bomber_jac_left_cuff_right=JSON.parse(localStorage.getItem('bomber_jac_left_cuff_right'))
+            if (bomber_jac_left_cuff_right) {
+                loadObject(bomber_jac_left_cuff_right)
             }
         }
 
 
         if (right_view_bomber_jac.bomber_jac_right_cuff_right?.image) {
-            if (localStorage.getItem('bomber_jac_right_cuff_right')) {
-                loadObject(JSON.parse(localStorage.getItem('bomber_jac_right_cuff_right')))
-            } else {
-                loadImage(
-                    right_view_bomber_jac.bomber_jac_right_cuff_right.image,
-                    'bomber_jac_right_cuff_right',
-                    right_view_bomber_jac.bomber_jac_right_cuff_right.x_point,
-                    right_view_bomber_jac.bomber_jac_right_cuff_right.y_point,
-                )
+            var bomber_jac_right_cuff_right=JSON.parse(localStorage.getItem('bomber_jac_right_cuff_right'))
+            if (bomber_jac_right_cuff_right) {
+                loadObject(bomber_jac_right_cuff_right)
             }
         }
 
         if (right_view_bomber_jac.bomber_jac_mid_cuff_right?.image) {
-            if (localStorage.getItem('bomber_jac_mid_cuff_right')) {
-                loadObject(JSON.parse(localStorage.getItem('bomber_jac_mid_cuff_right')))
-            } else {
-                loadImage(
-                    right_view_bomber_jac.bomber_jac_mid_cuff_right.image,
-                    'bomber_jac_mid_cuff_right',
-                    right_view_bomber_jac.bomber_jac_mid_cuff_right.x_point,
-                    right_view_bomber_jac.bomber_jac_mid_cuff_right.y_point,
-                )
+            var bomber_jac_mid_cuff_right=JSON.parse(localStorage.getItem('bomber_jac_mid_cuff_right'))
+            if (bomber_jac_mid_cuff_right) {
+                loadObject(bomber_jac_mid_cuff_right)
             }
         }
 
         if (right_view_bomber_jac.bomber_jac_bottom_cuff_right?.image) {
-            if (localStorage.getItem('bomber_jac_bottom_cuff_right')) {
-                loadObject(JSON.parse(localStorage.getItem('bomber_jac_bottom_cuff_right')))
-            } else {
-                loadImage(
-                    right_view_bomber_jac.bomber_jac_bottom_cuff_right.image,
-                    'bomber_jac_bottom_cuff_right',
-                    right_view_bomber_jac.bomber_jac_bottom_cuff_right.x_point,
-                    right_view_bomber_jac.bomber_jac_bottom_cuff_right.y_point,
-                )
+            var bomber_jac_bottom_cuff_right=JSON.parse(localStorage.getItem('bomber_jac_bottom_cuff_right'))
+            if (bomber_jac_bottom_cuff_right) {
+                loadObject(bomber_jac_bottom_cuff_right)
             }
         }
 
