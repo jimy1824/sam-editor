@@ -105,6 +105,11 @@ function SamLocalEditorHoodieFront(props) {
     }, []);
     useEffect(() => {
         if (product) {
+            preFrontImageLoad()
+            prebackImageLoad()
+            preleftImageLoad()
+            prerightImageLoad()
+            frontImageLoad()
             frontImageLoad()
             setComponents('front_view_hoodie')
         }
@@ -231,6 +236,24 @@ function SamLocalEditorHoodieFront(props) {
     var changeFontStyle = function (font) {
         // document.getElementById("output-text")
         //              .style.fontWeight = "italic";
+    }
+
+    const preloadImge = (url, imageId, left, top) => {
+
+        fabric.Image.fromURL(url, function (img) {
+            img.id = imageId;
+            img.filters = [new fabric.Image.filters.HueRotation()];
+            img.applyFilters()
+            var cor = img.set(
+                {
+                    left: left,
+                    top: top,
+                    selectable: false,
+
+                })
+            localStorage.setItem(imageId, JSON.stringify(img));
+        }, {crossOrigin: 'anonymous'})
+
     }
 
     const loadImage = (url, imageId, left, top) => {
@@ -809,695 +832,1232 @@ function SamLocalEditorHoodieFront(props) {
     //     link.click();
     // }
 
+    function preFrontImageLoad() {
+        let front_view_hoodie = JSON.parse(localStorage.getItem('front_view_hoodie'))
+        if (front_view_hoodie.cap_left?.image) {
+
+                loadImage(front_view_hoodie.cap_left.image, 'cap_left',
+                    front_view_hoodie.cap_left.x_point,
+                    front_view_hoodie.cap_left.y_point)
+
+        }
+        if (front_view_hoodie.cap_right?.image) {
+
+                loadImage(front_view_hoodie.cap_right.image,
+                    'cap_right',
+                    front_view_hoodie.cap_right.x_point, front_view_hoodie.cap_right.y_point)
+
+        }
+        if (front_view_hoodie.cap_inner_mid?.image) {
+
+                loadImage(front_view_hoodie.cap_inner_mid.image,
+                    'cap_inner_mid', front_view_hoodie.cap_inner_mid.x_point,
+                    front_view_hoodie.cap_inner_mid.y_point)
+        }
+        if (front_view_hoodie.cap_inner_left?.image) {
+
+                loadImage(front_view_hoodie.cap_inner_left.image,
+                    'cap_inner_left', front_view_hoodie.cap_inner_left.x_point,
+                    front_view_hoodie.cap_inner_left.y_point)
+
+        }
+        if (front_view_hoodie.cap_inner_right?.image) {
+
+                loadImage(front_view_hoodie.cap_inner_right.image,
+                    'cap_inner_right', front_view_hoodie.cap_inner_right.x_point,
+                    front_view_hoodie.cap_inner_right.y_point)
+
+        }
+
+        if (front_view_hoodie.cap_inner_bottom?.image) {
+
+                loadImage(front_view_hoodie.cap_inner_bottom.image,
+                    'cap_inner_bottom', front_view_hoodie.cap_inner_bottom.x_point,
+                    front_view_hoodie.cap_inner_bottom.y_point)
+
+
+        }
+
+        if (front_view_hoodie.hood_top?.image) {
+
+                loadImage(front_view_hoodie.hood_top.image,
+                    'hood_top',
+                    front_view_hoodie.hood_top.x_point,
+                    front_view_hoodie.hood_top.y_point)
+
+
+        }
+
+        if (front_view_hoodie.hood_top_left?.image) {
+
+                loadImage(front_view_hoodie.hood_top_left.image,
+                    'hood_top_left',
+                    front_view_hoodie.hood_top_left.x_point,
+                    front_view_hoodie.hood_top_left.y_point)
+        }
+
+        if (front_view_hoodie.hood_top_right?.image) {
+
+                loadImage(front_view_hoodie.hood_top_right.image,
+                    'hood_top_right',
+                    front_view_hoodie.hood_top_right.x_point,
+                    front_view_hoodie.hood_top_right.y_point)
+
+        }
+
+        if (front_view_hoodie.hood_left_strip?.image) {
+
+                loadImage(front_view_hoodie.hood_left_strip.image,
+                    'hood_left_strip',
+                    front_view_hoodie.hood_left_strip.x_point,
+                    front_view_hoodie.hood_left_strip.y_point)
+
+        }
+
+        if (front_view_hoodie.hood_right_strip?.image) {
+
+                loadImage(front_view_hoodie.hood_right_strip.image,
+                    'hood_right_strip',
+                    front_view_hoodie.hood_right_strip.x_point,
+                    front_view_hoodie.hood_right_strip.y_point)
+
+
+        }
+
+        if (front_view_hoodie.hood_mid?.image) {
+
+                loadImage(front_view_hoodie.hood_mid.image,
+                    'hood_mid',
+                    front_view_hoodie.hood_mid.x_point,
+                    front_view_hoodie.hood_mid.y_point)
+
+        }
+
+        if (front_view_hoodie.hood_mid_left?.image) {
+
+                loadImage(front_view_hoodie.hood_mid_left.image,
+                    'hood_mid_left',
+                    front_view_hoodie.hood_mid_left.x_point,
+                    front_view_hoodie.hood_mid_left.y_point)
+
+        }
+
+        if (front_view_hoodie.hood_mid_right?.image) {
+
+                loadImage(front_view_hoodie.hood_mid_right.image,
+                    'hood_mid_right',
+                    front_view_hoodie.hood_mid_right.x_point,
+                    front_view_hoodie.hood_mid_right.y_point)
+
+        }
+
+        if (front_view_hoodie.hood_bottom?.image) {
+
+                loadImage(front_view_hoodie.hood_bottom.image,
+                    'hood_bottom',
+                    front_view_hoodie.hood_bottom.x_point,
+                    front_view_hoodie.hood_bottom.y_point)
+
+        }
+
+        if (front_view_hoodie.hood_bottom_left?.image) {
+
+                loadImage(front_view_hoodie.hood_bottom_left.image,
+                    'hood_bottom_left',
+                    front_view_hoodie.hood_bottom_left.x_point,
+                    front_view_hoodie.hood_bottom_left.y_point)
+
+        }
+
+        if (front_view_hoodie.hood_bottom_right?.image) {
+
+                loadImage(front_view_hoodie.hood_bottom_right.image,
+                    'hood_bottom_right',
+                    front_view_hoodie.hood_bottom_right.x_point,
+                    front_view_hoodie.hood_bottom_right.y_point)
+
+        }
+
+        if (front_view_hoodie.hood_hem_left?.image) {
+
+                loadImage(front_view_hoodie.hood_hem_left.image,
+                    'hood_hem_left',
+                    front_view_hoodie.hood_hem_left.x_point,
+                    front_view_hoodie.hood_hem_left.y_point)
+
+        }
+
+        if (front_view_hoodie.hood_hem_right?.image) {
+
+                loadImage(front_view_hoodie.hood_hem_right.image,
+                    'hood_hem_right',
+                    front_view_hoodie.hood_hem_right.x_point,
+                    front_view_hoodie.hood_hem_right.y_point)
+
+        }
+
+        if (front_view_hoodie.zip?.image) {
+
+                loadImage(front_view_hoodie.zip.image,
+                    'zip',
+                    front_view_hoodie.zip.x_point,
+                    front_view_hoodie.zip.y_point)
+
+        }
+
+        if (front_view_hoodie.hood_left_sleeve_full?.image) {
+
+                loadImage(front_view_hoodie.hood_left_sleeve_full.image,
+                    'hood_left_sleeve_full',
+                    front_view_hoodie.hood_left_sleeve_full.x_point,
+                    front_view_hoodie.hood_left_sleeve_full.y_point)
+
+        }
+
+        if (front_view_hoodie.hood_left_sleeve_top?.image) {
+
+                loadImage(front_view_hoodie.hood_left_sleeve_top.image,
+                    'hood_left_sleeve_top',
+                    front_view_hoodie.hood_left_sleeve_top.x_point,
+                    front_view_hoodie.hood_left_sleeve_top.y_point)
+
+        }
+
+        if (front_view_hoodie.hood_left_sleeve_mid?.image) {
+
+                loadImage(front_view_hoodie.hood_left_sleeve_mid.image,
+                    'hood_left_sleeve_mid',
+                    front_view_hoodie.hood_left_sleeve_mid.x_point,
+                    front_view_hoodie.hood_left_sleeve_mid.y_point)
+
+        }
+
+        if (front_view_hoodie.hood_left_sleeve_bottom?.image) {
+
+                loadImage(front_view_hoodie.hood_left_sleeve_bottom.image,
+                    'hood_left_sleeve_bottom',
+                    front_view_hoodie.hood_left_sleeve_bottom.x_point,
+                    front_view_hoodie.hood_left_sleeve_bottom.y_point)
+
+        }
+
+        if (front_view_hoodie.hood_left_sleeve_cuff?.image) {
+
+                loadImage(front_view_hoodie.hood_left_sleeve_cuff.image,
+                    'hood_left_sleeve_cuff',
+                    front_view_hoodie.hood_left_sleeve_cuff.x_point,
+                    front_view_hoodie.hood_left_sleeve_cuff.y_point)
+
+        }
+
+        if (front_view_hoodie.hood_left_sleeve_cuff_strips?.image) {
+
+                loadImage(front_view_hoodie.hood_left_sleeve_cuff_strips.image,
+                    'hood_left_sleeve_cuff_strips',
+                    front_view_hoodie.hood_left_sleeve_cuff_strips.x_point,
+                    front_view_hoodie.hood_left_sleeve_cuff_strips.y_point)
+
+        }
+
+        if (front_view_hoodie.hood_right_sleeve_full?.image) {
+
+                loadImage(front_view_hoodie.hood_right_sleeve_full.image,
+                    'hood_right_sleeve_full',
+                    front_view_hoodie.hood_right_sleeve_full.x_point,
+                    front_view_hoodie.hood_right_sleeve_full.y_point)
+
+        }
+
+        if (front_view_hoodie.hood_right_sleeve_top?.image) {
+
+                loadImage(front_view_hoodie.hood_right_sleeve_top.image,
+                    'hood_right_sleeve_top',
+                    front_view_hoodie.hood_right_sleeve_top.x_point,
+                    front_view_hoodie.hood_right_sleeve_top.y_point)
+
+        }
+
+        if (front_view_hoodie.hood_right_sleeve_mid?.image) {
+
+                loadImage(front_view_hoodie.hood_right_sleeve_mid.image,
+                    'hood_right_sleeve_mid',
+                    front_view_hoodie.hood_right_sleeve_mid.x_point,
+                    front_view_hoodie.hood_right_sleeve_mid.y_point)
+
+        }
+
+        if (front_view_hoodie.hood_right_sleeve_bottom?.image) {
+
+                loadImage(front_view_hoodie.hood_right_sleeve_bottom.image,
+                    'hood_right_sleeve_bottom',
+                    front_view_hoodie.hood_right_sleeve_bottom.x_point,
+                    front_view_hoodie.hood_right_sleeve_bottom.y_point)
+
+        }
+
+        if (front_view_hoodie.hood_right_sleeve_cuff?.image) {
+
+                loadImage(front_view_hoodie.hood_right_sleeve_cuff.image,
+                    'hood_right_sleeve_cuff',
+                    front_view_hoodie.hood_right_sleeve_cuff.x_point,
+                    front_view_hoodie.hood_right_sleeve_cuff.y_point)
+
+        }
+
+        if (front_view_hoodie.hood_right_sleeve_cuff_strips?.image) {
+
+                loadImage(front_view_hoodie.hood_right_sleeve_cuff_strips.image,
+                    'hood_right_sleeve_cuff_strips',
+                    front_view_hoodie.hood_right_sleeve_cuff_strips.x_point,
+                    front_view_hoodie.hood_right_sleeve_cuff_strips.y_point)
+        }
+    }
+
     function frontImageLoad() {
         clearCanvas()
         let front_view_hoodie = JSON.parse(localStorage.getItem('front_view_hoodie'))
         if (front_view_hoodie.cap_left?.image) {
-            if (localStorage.getItem('cap_left')) {
-                loadObject(JSON.parse(localStorage.getItem('cap_left')))
-            } else {
-                loadImage(front_view_hoodie.cap_left.image, 'cap_left',
-                    front_view_hoodie.cap_left.x_point,
-                    front_view_hoodie.cap_left.y_point)
+            var cap_left=JSON.parse(localStorage.getItem('cap_left'))
+            if (cap_left) {
+                loadObject(cap_left)
+
             }
 
         }
         if (front_view_hoodie.cap_right?.image) {
-            if (localStorage.getItem('cap_right')) {
-                loadObject(JSON.parse(localStorage.getItem('cap_right')))
-            } else {
-                loadImage(front_view_hoodie.cap_right.image,
-                    'cap_right',
-                    front_view_hoodie.cap_right.x_point, front_view_hoodie.cap_right.y_point)
+            var cap_right=JSON.parse(localStorage.getItem('cap_right'))
+            if (cap_right) {
+                loadObject(cap_right)
+
             }
         }
         if (front_view_hoodie.cap_inner_mid?.image) {
-            if (localStorage.getItem('cap_inner_mid')) {
-                loadObject(JSON.parse(localStorage.getItem('cap_inner_mid')))
-            } else {
-                loadImage(front_view_hoodie.cap_inner_mid.image,
-                    'cap_inner_mid', front_view_hoodie.cap_inner_mid.x_point,
-                    front_view_hoodie.cap_inner_mid.y_point)
+            var cap_inner_mid=JSON.parse(localStorage.getItem('cap_inner_mid'))
+            if (cap_inner_mid) {
+                loadObject(cap_inner_mid)
+
             }
         }
         if (front_view_hoodie.cap_inner_left?.image) {
-            if (localStorage.getItem('cap_inner_left')) {
-                loadObject(JSON.parse(localStorage.getItem('cap_inner_left')))
-            } else {
-                loadImage(front_view_hoodie.cap_inner_left.image,
-                    'cap_inner_left', front_view_hoodie.cap_inner_left.x_point,
-                    front_view_hoodie.cap_inner_left.y_point)
+            var cap_inner_left=JSON.parse(localStorage.getItem('cap_inner_left'))
+            if (cap_inner_left) {
+                loadObject(cap_inner_left)
+
             }
         }
         if (front_view_hoodie.cap_inner_right?.image) {
-            if (localStorage.getItem('cap_inner_right')) {
-                loadObject(JSON.parse(localStorage.getItem('cap_inner_right')))
-            } else {
-                loadImage(front_view_hoodie.cap_inner_right.image,
-                    'cap_inner_right', front_view_hoodie.cap_inner_right.x_point,
-                    front_view_hoodie.cap_inner_right.y_point)
+            var cap_inner_right=JSON.parse(localStorage.getItem('cap_inner_right'))
+            if (cap_inner_right) {
+                loadObject(cap_inner_right)
+
             }
         }
 
         if (front_view_hoodie.cap_inner_bottom?.image) {
-            if (localStorage.getItem('cap_inner_bottom')) {
-                loadObject(JSON.parse(localStorage.getItem('cap_inner_bottom')))
-            } else {
-                loadImage(front_view_hoodie.cap_inner_bottom.image,
-                    'cap_inner_bottom', front_view_hoodie.cap_inner_bottom.x_point,
-                    front_view_hoodie.cap_inner_bottom.y_point)
+            var cap_inner_bottom=JSON.parse(localStorage.getItem('cap_inner_bottom'))
+            if (cap_inner_bottom) {
+                loadObject(cap_inner_bottom)
 
             }
         }
 
         if (front_view_hoodie.hood_top?.image) {
-            if (localStorage.getItem('hood_top')) {
-                loadObject(JSON.parse(localStorage.getItem('hood_top')))
-            } else {
-                loadImage(front_view_hoodie.hood_top.image,
-                    'hood_top',
-                    front_view_hoodie.hood_top.x_point,
-                    front_view_hoodie.hood_top.y_point)
+            var hood_top=JSON.parse(localStorage.getItem('hood_top'))
+            if (hood_top) {
+                loadObject(hood_top)
+
             }
 
         }
 
         if (front_view_hoodie.hood_top_left?.image) {
-            if (localStorage.getItem('hood_top_left')) {
-                loadObject(JSON.parse(localStorage.getItem('hood_top_left')))
-            } else {
-                loadImage(front_view_hoodie.hood_top_left.image,
-                    'hood_top_left',
-                    front_view_hoodie.hood_top_left.x_point,
-                    front_view_hoodie.hood_top_left.y_point)
+            var hood_top_left=JSON.parse(localStorage.getItem('hood_top_left'))
+            if (hood_top_left) {
+                loadObject(hood_top_left)
+
             }
 
         }
 
         if (front_view_hoodie.hood_top_right?.image) {
-            if (localStorage.getItem('hood_top_right')) {
-                loadObject(JSON.parse(localStorage.getItem('hood_top_right')))
-            } else {
-                loadImage(front_view_hoodie.hood_top_right.image,
-                    'hood_top_right',
-                    front_view_hoodie.hood_top_right.x_point,
-                    front_view_hoodie.hood_top_right.y_point)
+            var hood_top_right=JSON.parse(localStorage.getItem('hood_top_right'))
+            if (hood_top_right) {
+                loadObject(hood_top_right)
+
             }
 
         }
 
         if (front_view_hoodie.hood_left_strip?.image) {
-            if (localStorage.getItem('hood_left_strip')) {
-                loadObject(JSON.parse(localStorage.getItem('hood_left_strip')))
-            } else {
-                loadImage(front_view_hoodie.hood_left_strip.image,
-                    'hood_left_strip',
-                    front_view_hoodie.hood_left_strip.x_point,
-                    front_view_hoodie.hood_left_strip.y_point)
+            var hood_left_strip=JSON.parse(localStorage.getItem('hood_left_strip'))
+            if (hood_left_strip) {
+                loadObject(hood_left_strip)
+
             }
 
         }
 
         if (front_view_hoodie.hood_right_strip?.image) {
-            if (localStorage.getItem('hood_right_strip')) {
-                loadObject(JSON.parse(localStorage.getItem('hood_right_strip')))
-            } else {
-                loadImage(front_view_hoodie.hood_right_strip.image,
-                    'hood_right_strip',
-                    front_view_hoodie.hood_right_strip.x_point,
-                    front_view_hoodie.hood_right_strip.y_point)
+            var hood_right_strip=JSON.parse(localStorage.getItem('hood_right_strip'))
+            if (hood_right_strip) {
+                loadObject(hood_right_strip)
+
             }
 
         }
 
         if (front_view_hoodie.hood_mid?.image) {
-            if (localStorage.getItem('hood_mid')) {
-                loadObject(JSON.parse(localStorage.getItem('hood_mid')))
-            } else {
-                loadImage(front_view_hoodie.hood_mid.image,
-                    'hood_mid',
-                    front_view_hoodie.hood_mid.x_point,
-                    front_view_hoodie.hood_mid.y_point)
+            var hood_mid=JSON.parse(localStorage.getItem('hood_mid'))
+            if (hood_mid) {
+                loadObject(hood_mid)
+
             }
 
         }
 
         if (front_view_hoodie.hood_mid_left?.image) {
-            if (localStorage.getItem('hood_mid_left')) {
-                loadObject(JSON.parse(localStorage.getItem('hood_mid_left')))
-            } else {
-                loadImage(front_view_hoodie.hood_mid_left.image,
-                    'hood_mid_left',
-                    front_view_hoodie.hood_mid_left.x_point,
-                    front_view_hoodie.hood_mid_left.y_point)
+            var hood_mid_left=JSON.parse(localStorage.getItem('hood_mid_left'))
+            if (hood_mid_left) {
+                loadObject(hood_mid_left)
+
             }
 
         }
 
         if (front_view_hoodie.hood_mid_right?.image) {
-            if (localStorage.getItem('hood_mid_right')) {
-                loadObject(JSON.parse(localStorage.getItem('hood_mid_right')))
-            } else {
-                loadImage(front_view_hoodie.hood_mid_right.image,
-                    'hood_mid_right',
-                    front_view_hoodie.hood_mid_right.x_point,
-                    front_view_hoodie.hood_mid_right.y_point)
+            var hood_mid_right=JSON.parse(localStorage.getItem('hood_mid_right'))
+            if (hood_mid_right) {
+                loadObject(hood_mid_right)
+
             }
 
         }
 
         if (front_view_hoodie.hood_bottom?.image) {
-            if (localStorage.getItem('hood_bottom')) {
-                loadObject(JSON.parse(localStorage.getItem('hood_bottom')))
-            } else {
-                loadImage(front_view_hoodie.hood_bottom.image,
-                    'hood_bottom',
-                    front_view_hoodie.hood_bottom.x_point,
-                    front_view_hoodie.hood_bottom.y_point)
+            var hood_bottom=JSON.parse(localStorage.getItem('hood_bottom'))
+            if (hood_bottom) {
+                loadObject(hood_bottom)
+
             }
 
         }
 
         if (front_view_hoodie.hood_bottom_left?.image) {
-            if (localStorage.getItem('hood_bottom_left')) {
-                loadObject(JSON.parse(localStorage.getItem('hood_bottom_left')))
-            } else {
-                loadImage(front_view_hoodie.hood_bottom_left.image,
-                    'hood_bottom_left',
-                    front_view_hoodie.hood_bottom_left.x_point,
-                    front_view_hoodie.hood_bottom_left.y_point)
+            var hood_bottom_left=JSON.parse(localStorage.getItem('hood_bottom_left'))
+            if (hood_bottom_left) {
+                loadObject(hood_bottom_left)
+
             }
 
         }
 
         if (front_view_hoodie.hood_bottom_right?.image) {
-            if (localStorage.getItem('hood_bottom_right')) {
-                loadObject(JSON.parse(localStorage.getItem('hood_bottom_right')))
-            } else {
-                loadImage(front_view_hoodie.hood_bottom_right.image,
-                    'hood_bottom_right',
-                    front_view_hoodie.hood_bottom_right.x_point,
-                    front_view_hoodie.hood_bottom_right.y_point)
+            var hood_bottom_right=JSON.parse(localStorage.getItem('hood_bottom_right'))
+            if (hood_bottom_right) {
+                loadObject(hood_bottom_right)
+
             }
 
         }
 
         if (front_view_hoodie.hood_hem_left?.image) {
-            if (localStorage.getItem('hood_hem_left')) {
-                loadObject(JSON.parse(localStorage.getItem('hood_hem_left')))
-            } else {
-                loadImage(front_view_hoodie.hood_hem_left.image,
-                    'hood_hem_left',
-                    front_view_hoodie.hood_hem_left.x_point,
-                    front_view_hoodie.hood_hem_left.y_point)
+            var hood_hem_left=JSON.parse(localStorage.getItem('hood_hem_left'))
+            if (hood_hem_left) {
+                loadObject(hood_hem_left)
+
             }
 
         }
 
         if (front_view_hoodie.hood_hem_right?.image) {
-            if (localStorage.getItem('hood_hem_right')) {
-                loadObject(JSON.parse(localStorage.getItem('hood_hem_right')))
-            } else {
-                loadImage(front_view_hoodie.hood_hem_right.image,
-                    'hood_hem_right',
-                    front_view_hoodie.hood_hem_right.x_point,
-                    front_view_hoodie.hood_hem_right.y_point)
+            var hood_hem_right=JSON.parse(localStorage.getItem('hood_hem_right'))
+            if (hood_hem_right) {
+                loadObject(hood_hem_right)
+
             }
 
         }
 
         if (front_view_hoodie.zip?.image) {
-            if (localStorage.getItem('zip')) {
-                loadObject(JSON.parse(localStorage.getItem('zip')))
-            } else {
-                loadImage(front_view_hoodie.zip.image,
-                    'zip',
-                    front_view_hoodie.zip.x_point,
-                    front_view_hoodie.zip.y_point)
+            var zip=JSON.parse(localStorage.getItem('zip'))
+            if (zip) {
+                loadObject(zip)
+
             }
 
         }
 
         if (front_view_hoodie.hood_left_sleeve_full?.image) {
-            if (localStorage.getItem('hood_left_sleeve_full')) {
-                loadObject(JSON.parse(localStorage.getItem('hood_left_sleeve_full')))
-            } else {
-                loadImage(front_view_hoodie.hood_left_sleeve_full.image,
-                    'hood_left_sleeve_full',
-                    front_view_hoodie.hood_left_sleeve_full.x_point,
-                    front_view_hoodie.hood_left_sleeve_full.y_point)
+            var hood_left_sleeve_full=JSON.parse(localStorage.getItem('hood_left_sleeve_full'))
+            if (hood_left_sleeve_full) {
+                loadObject(hood_left_sleeve_full)
+
             }
 
         }
 
         if (front_view_hoodie.hood_left_sleeve_top?.image) {
-            if (localStorage.getItem('hood_left_sleeve_top')) {
-                loadObject(JSON.parse(localStorage.getItem('hood_left_sleeve_top')))
-            } else {
-                loadImage(front_view_hoodie.hood_left_sleeve_top.image,
-                    'hood_left_sleeve_top',
-                    front_view_hoodie.hood_left_sleeve_top.x_point,
-                    front_view_hoodie.hood_left_sleeve_top.y_point)
+            var hood_left_sleeve_top=JSON.parse(localStorage.getItem('hood_left_sleeve_top'))
+            if (hood_left_sleeve_top) {
+                loadObject(hood_left_sleeve_top)
+
             }
 
         }
 
         if (front_view_hoodie.hood_left_sleeve_mid?.image) {
-            if (localStorage.getItem('hood_left_sleeve_mid')) {
-                loadObject(JSON.parse(localStorage.getItem('hood_left_sleeve_mid')))
-            } else {
-                loadImage(front_view_hoodie.hood_left_sleeve_mid.image,
-                    'hood_left_sleeve_mid',
-                    front_view_hoodie.hood_left_sleeve_mid.x_point,
-                    front_view_hoodie.hood_left_sleeve_mid.y_point)
+            var hood_left_sleeve_mid=JSON.parse(localStorage.getItem('hood_left_sleeve_mid'))
+            if (hood_left_sleeve_mid) {
+                loadObject(hood_left_sleeve_mid)
+
             }
 
         }
 
         if (front_view_hoodie.hood_left_sleeve_bottom?.image) {
-            if (localStorage.getItem('hood_left_sleeve_bottom')) {
-                loadObject(JSON.parse(localStorage.getItem('hood_left_sleeve_bottom')))
-            } else {
-                loadImage(front_view_hoodie.hood_left_sleeve_bottom.image,
-                    'hood_left_sleeve_bottom',
-                    front_view_hoodie.hood_left_sleeve_bottom.x_point,
-                    front_view_hoodie.hood_left_sleeve_bottom.y_point)
+            var hood_left_sleeve_bottom=JSON.parse(localStorage.getItem('hood_left_sleeve_bottom'))
+            if (hood_left_sleeve_bottom) {
+                loadObject(hood_left_sleeve_bottom)
+
             }
 
         }
 
         if (front_view_hoodie.hood_left_sleeve_cuff?.image) {
-            if (localStorage.getItem('hood_left_sleeve_cuff')) {
-                loadObject(JSON.parse(localStorage.getItem('hood_left_sleeve_cuff')))
-            } else {
-                loadImage(front_view_hoodie.hood_left_sleeve_cuff.image,
-                    'hood_left_sleeve_cuff',
-                    front_view_hoodie.hood_left_sleeve_cuff.x_point,
-                    front_view_hoodie.hood_left_sleeve_cuff.y_point)
+            var hood_left_sleeve_cuff=JSON.parse(localStorage.getItem('hood_left_sleeve_cuff'))
+            if (hood_left_sleeve_cuff) {
+                loadObject(hood_left_sleeve_cuff)
+
             }
 
         }
 
         if (front_view_hoodie.hood_left_sleeve_cuff_strips?.image) {
-            if (localStorage.getItem('hood_left_sleeve_cuff_strips')) {
-                loadObject(JSON.parse(localStorage.getItem('hood_left_sleeve_cuff_strips')))
-            } else {
-                loadImage(front_view_hoodie.hood_left_sleeve_cuff_strips.image,
-                    'hood_left_sleeve_cuff_strips',
-                    front_view_hoodie.hood_left_sleeve_cuff_strips.x_point,
-                    front_view_hoodie.hood_left_sleeve_cuff_strips.y_point)
+            var hood_left_sleeve_cuff_strips=JSON.parse(localStorage.getItem('hood_left_sleeve_cuff_strips'))
+            if (hood_left_sleeve_cuff_strips) {
+                loadObject(hood_left_sleeve_cuff_strips)
+
             }
 
         }
 
         if (front_view_hoodie.hood_right_sleeve_full?.image) {
-            if (localStorage.getItem('hood_right_sleeve_full')) {
-                loadObject(JSON.parse(localStorage.getItem('hood_right_sleeve_full')))
-            } else {
-                loadImage(front_view_hoodie.hood_right_sleeve_full.image,
-                    'hood_right_sleeve_full',
-                    front_view_hoodie.hood_right_sleeve_full.x_point,
-                    front_view_hoodie.hood_right_sleeve_full.y_point)
+            var hood_right_sleeve_full=JSON.parse(localStorage.getItem('hood_right_sleeve_full'))
+            if (hood_right_sleeve_full) {
+                loadObject(hood_right_sleeve_full)
+
             }
 
         }
 
         if (front_view_hoodie.hood_right_sleeve_top?.image) {
-            if (localStorage.getItem('hood_right_sleeve_top')) {
-                loadObject(JSON.parse(localStorage.getItem('hood_right_sleeve_top')))
-            } else {
-                loadImage(front_view_hoodie.hood_right_sleeve_top.image,
-                    'hood_right_sleeve_top',
-                    front_view_hoodie.hood_right_sleeve_top.x_point,
-                    front_view_hoodie.hood_right_sleeve_top.y_point)
+            var hood_right_sleeve_top=JSON.parse(localStorage.getItem('hood_right_sleeve_top'))
+            if (hood_right_sleeve_top) {
+                loadObject(hood_right_sleeve_top)
+
             }
 
         }
 
         if (front_view_hoodie.hood_right_sleeve_mid?.image) {
-            if (localStorage.getItem('hood_right_sleeve_mid')) {
-                loadObject(JSON.parse(localStorage.getItem('hood_right_sleeve_mid')))
-            } else {
-                loadImage(front_view_hoodie.hood_right_sleeve_mid.image,
-                    'hood_right_sleeve_mid',
-                    front_view_hoodie.hood_right_sleeve_mid.x_point,
-                    front_view_hoodie.hood_right_sleeve_mid.y_point)
+            var hood_right_sleeve_mid=JSON.parse(localStorage.getItem('hood_right_sleeve_mid'))
+            if (hood_right_sleeve_mid) {
+                loadObject(hood_right_sleeve_mid)
+
             }
 
         }
 
         if (front_view_hoodie.hood_right_sleeve_bottom?.image) {
-            if (localStorage.getItem('hood_right_sleeve_bottom')) {
-                loadObject(JSON.parse(localStorage.getItem('hood_right_sleeve_bottom')))
-            } else {
-                loadImage(front_view_hoodie.hood_right_sleeve_bottom.image,
-                    'hood_right_sleeve_bottom',
-                    front_view_hoodie.hood_right_sleeve_bottom.x_point,
-                    front_view_hoodie.hood_right_sleeve_bottom.y_point)
+            var hood_right_sleeve_bottom=JSON.parse(localStorage.getItem('hood_right_sleeve_bottom'))
+            if (hood_right_sleeve_bottom) {
+                loadObject(hood_right_sleeve_bottom)
+
             }
 
         }
 
         if (front_view_hoodie.hood_right_sleeve_cuff?.image) {
-            if (localStorage.getItem('hood_right_sleeve_cuff')) {
-                loadObject(JSON.parse(localStorage.getItem('hood_right_sleeve_cuff')))
-            } else {
-                loadImage(front_view_hoodie.hood_right_sleeve_cuff.image,
-                    'hood_right_sleeve_cuff',
-                    front_view_hoodie.hood_right_sleeve_cuff.x_point,
-                    front_view_hoodie.hood_right_sleeve_cuff.y_point)
+            var hood_right_sleeve_cuff=JSON.parse(localStorage.getItem('hood_right_sleeve_cuff'))
+            if (hood_right_sleeve_cuff) {
+                loadObject(hood_right_sleeve_cuff)
+
             }
 
         }
 
         if (front_view_hoodie.hood_right_sleeve_cuff_strips?.image) {
-            if (localStorage.getItem('hood_right_sleeve_cuff_strips')) {
-                loadObject(JSON.parse(localStorage.getItem('hood_right_sleeve_cuff_strips')))
-            } else {
-                loadImage(front_view_hoodie.hood_right_sleeve_cuff_strips.image,
-                    'hood_right_sleeve_cuff_strips',
-                    front_view_hoodie.hood_right_sleeve_cuff_strips.x_point,
-                    front_view_hoodie.hood_right_sleeve_cuff_strips.y_point)
+            var hood_right_sleeve_cuff_strips=JSON.parse(localStorage.getItem('hood_right_sleeve_cuff_strips'))
+            if (hood_right_sleeve_cuff_strips) {
+                loadObject(hood_right_sleeve_cuff_strips)
+
             }
+        }
+    }
+
+
+    function prebackImageLoad() {
+        let back_view_hoodie = JSON.parse(localStorage.getItem('back_view_hoodie'))
+        if (back_view_hoodie.cap_left_back?.image) {
+
+                preloadImge(
+                    back_view_hoodie.cap_left_back.image,
+                    'cap_left_back',
+                    back_view_hoodie.cap_left_back.x_point,
+                    back_view_hoodie.cap_left_back.y_point,
+                )
+
+        }
+
+        if (back_view_hoodie.cap_right_back?.image) {
+
+                preloadImge(
+                    back_view_hoodie.cap_right_back.image,
+                    'cap_right_back',
+                    back_view_hoodie.cap_right_back.x_point,
+                    back_view_hoodie.cap_right_back.y_point,
+                )
+        }
+
+        if (back_view_hoodie.hood_top_back?.image) {
+
+                preloadImge(
+                    back_view_hoodie.hood_top_back.image,
+                    'hood_top_back',
+                    back_view_hoodie.hood_top_back.x_point,
+                    back_view_hoodie.hood_top_back.y_point,
+                )
+        }
+
+        if (back_view_hoodie.hood_top_left_back?.image) {
+
+                preloadImge(
+                    back_view_hoodie.hood_top_left_back.image,
+                    'hood_top_left_back',
+                    back_view_hoodie.hood_top_left_back.x_point,
+                    back_view_hoodie.hood_top_left_back.y_point,
+                )
+        }
+
+        if (back_view_hoodie.hood_top_right_back?.image) {
+
+                preloadImge(
+                    back_view_hoodie.hood_top_right_back.image,
+                    'hood_top_right_back',
+                    back_view_hoodie.hood_top_right_back.x_point,
+                    back_view_hoodie.hood_top_right_back.y_point,
+                )
+        }
+
+        if (back_view_hoodie.hood_mid_back?.image) {
+
+                preloadImge(
+                    back_view_hoodie.hood_mid_back.image,
+                    'hood_mid_back',
+                    back_view_hoodie.hood_mid_back.x_point,
+                    back_view_hoodie.hood_mid_back.y_point,
+                )
+        }
+
+        if (back_view_hoodie.hood_mid_left_back?.image) {
+
+                preloadImge(
+                    back_view_hoodie.hood_mid_left_back.image,
+                    'hood_mid_left_back',
+                    back_view_hoodie.hood_mid_left_back.x_point,
+                    back_view_hoodie.hood_mid_left_back.y_point,
+                )
+        }
+
+        if (back_view_hoodie.hood_mid_right_back?.image) {
+
+                preloadImge(
+                    back_view_hoodie.hood_mid_right_back.image,
+                    'hood_mid_right_back',
+                    back_view_hoodie.hood_mid_right_back.x_point,
+                    back_view_hoodie.hood_mid_right_back.y_point,
+                )
+        }
+
+        if (back_view_hoodie.hood_bottom_back?.image) {
+
+                preloadImge(
+                    back_view_hoodie.hood_bottom_back.image,
+                    'hood_bottom_back',
+                    back_view_hoodie.hood_bottom_back.x_point,
+                    back_view_hoodie.hood_bottom_back.y_point,
+                )
+        }
+
+        if (back_view_hoodie.hood_hem_back?.image) {
+
+                preloadImge(
+                    back_view_hoodie.hood_hem_back.image,
+                    'hood_hem_back',
+                    back_view_hoodie.hood_hem_back.x_point,
+                    back_view_hoodie.hood_hem_back.y_point,
+                )
+        }
+
+        if (back_view_hoodie.hood_left_sleeve_full_back?.image) {
+
+                preloadImge(
+                    back_view_hoodie.hood_left_sleeve_full_back.image,
+                    'hood_left_sleeve_full_back',
+                    back_view_hoodie.hood_left_sleeve_full_back.x_point,
+                    back_view_hoodie.hood_left_sleeve_full_back.y_point,
+                )
+        }
+
+        if (back_view_hoodie.hood_left_sleeve_top_back?.image) {
+
+                preloadImge(
+                    back_view_hoodie.hood_left_sleeve_top_back.image,
+                    'hood_left_sleeve_top_back',
+                    back_view_hoodie.hood_left_sleeve_top_back.x_point,
+                    back_view_hoodie.hood_left_sleeve_top_back.y_point,
+                )
+        }
+
+        if (back_view_hoodie.hood_left_sleeve_mid_back?.image) {
+
+                preloadImge(
+                    back_view_hoodie.hood_left_sleeve_mid_back.image,
+                    'hood_left_sleeve_mid_back',
+                    back_view_hoodie.hood_left_sleeve_mid_back.x_point,
+                    back_view_hoodie.hood_left_sleeve_mid_back.y_point,
+                )
+        }
+
+        if (back_view_hoodie.hood_left_sleeve_bottom_back?.image) {
+
+                preloadImge(
+                    back_view_hoodie.hood_left_sleeve_bottom_back.image,
+                    'hood_left_sleeve_bottom_back',
+                    back_view_hoodie.hood_left_sleeve_bottom_back.x_point,
+                    back_view_hoodie.hood_left_sleeve_bottom_back.y_point,
+                )
+        }
+
+        if (back_view_hoodie.hood_left_sleeve_cuff_back?.image) {
+
+                preloadImge(
+                    back_view_hoodie.hood_left_sleeve_cuff_back.image,
+                    'hood_left_sleeve_cuff_back',
+                    back_view_hoodie.hood_left_sleeve_cuff_back.x_point,
+                    back_view_hoodie.hood_left_sleeve_cuff_back.y_point,
+                )
+        }
+
+        if (back_view_hoodie.hood_left_sleeve_cuff_strips_back?.image) {
+
+                preloadImge(
+                    back_view_hoodie.hood_left_sleeve_cuff_strips_back.image,
+                    'hood_left_sleeve_cuff_strips_back',
+                    back_view_hoodie.hood_left_sleeve_cuff_strips_back.x_point,
+                    back_view_hoodie.hood_left_sleeve_cuff_strips_back.y_point,
+                )
+        }
+
+        if (back_view_hoodie.hood_right_sleeve_full_back?.image) {
+
+                preloadImge(
+                    back_view_hoodie.hood_right_sleeve_full_back.image,
+                    'hood_right_sleeve_full_back',
+                    back_view_hoodie.hood_right_sleeve_full_back.x_point,
+                    back_view_hoodie.hood_right_sleeve_full_back.y_point,
+                )
+        }
+
+        if (back_view_hoodie.hood_right_sleeve_top_back?.image) {
+
+                preloadImge(
+                    back_view_hoodie.hood_right_sleeve_top_back.image,
+                    'hood_right_sleeve_top_back',
+                    back_view_hoodie.hood_right_sleeve_top_back.x_point,
+                    back_view_hoodie.hood_right_sleeve_top_back.y_point,
+                )
+        }
+
+        if (back_view_hoodie.hood_right_sleeve_mid_back?.image) {
+
+                preloadImge(
+                    back_view_hoodie.hood_right_sleeve_mid_back.image,
+                    'hood_right_sleeve_mid_back',
+                    back_view_hoodie.hood_right_sleeve_mid_back.x_point,
+                    back_view_hoodie.hood_right_sleeve_mid_back.y_point,
+                )
+        }
+
+        if (back_view_hoodie.hood_right_sleeve_bottom_back?.image) {
+
+                preloadImge(
+                    back_view_hoodie.hood_right_sleeve_bottom_back.image,
+                    'hood_right_sleeve_bottom_back',
+                    back_view_hoodie.hood_right_sleeve_bottom_back.x_point,
+                    back_view_hoodie.hood_right_sleeve_bottom_back.y_point,
+                )
+        }
+
+        if (back_view_hoodie.hood_right_sleeve_bottom_back?.image) {
+
+                preloadImge(
+                    back_view_hoodie.hood_right_sleeve_bottom_back.image,
+                    'hood_right_sleeve_bottom_back',
+                    back_view_hoodie.hood_right_sleeve_bottom_back.x_point,
+                    back_view_hoodie.hood_right_sleeve_bottom_back.y_point,
+                )
+        }
+
+        if (back_view_hoodie.hood_right_sleeve_cuff_back?.image) {
+
+                preloadImge(
+                    back_view_hoodie.hood_right_sleeve_cuff_back.image,
+                    'hood_right_sleeve_cuff_back',
+                    back_view_hoodie.hood_right_sleeve_cuff_back.x_point,
+                    back_view_hoodie.hood_right_sleeve_cuff_back.y_point,
+                )
+        }
+
+        if (back_view_hoodie.hood_bottom_left_back?.image) {
+
+                preloadImge(
+                    back_view_hoodie.hood_bottom_left_back.image,
+                    'hood_bottom_left_back',
+                    back_view_hoodie.hood_bottom_left_back.x_point,
+                    back_view_hoodie.hood_bottom_left_back.y_point,
+                    )
+        }
+
+        if (back_view_hoodie.hood_bottom_right_back?.image) {
+
+                preloadImge(
+                    back_view_hoodie.hood_bottom_right_back.image,
+                    'hood_bottom_right_back',
+                    back_view_hoodie.hood_bottom_right_back.x_point,
+                    back_view_hoodie.hood_bottom_right_back.y_point,
+                )
         }
     }
 
     function backImageLoad() {
         clearCanvas()
         let back_view_hoodie = JSON.parse(localStorage.getItem('back_view_hoodie'))
-        console.log("backkkkkkkkkkk",back_view_hoodie)
         if (back_view_hoodie.cap_left_back?.image) {
-            if (localStorage.getItem('cap_left_back')) {
-                loadObject(JSON.parse(localStorage.getItem('cap_left_back')))
-            } else {
-                loadImage(
-                    back_view_hoodie.cap_left_back.image,
-                    'cap_left_back',
-                    back_view_hoodie.cap_left_back.x_point,
-                    back_view_hoodie.cap_left_back.y_point,
-                )
+            var cap_left_back=JSON.parse(localStorage.getItem('cap_left_back'))
+            if (cap_left_back) {
+                loadObject(cap_left_back)
             }
 
         }
 
         if (back_view_hoodie.cap_right_back?.image) {
-            if (localStorage.getItem('cap_right_back')) {
-                loadObject(JSON.parse(localStorage.getItem('cap_right_back')))
-            } else {
-                loadImage(
-                    back_view_hoodie.cap_right_back.image,
-                    'cap_right_back',
-                    back_view_hoodie.cap_right_back.x_point,
-                    back_view_hoodie.cap_right_back.y_point,
-                )
+            var cap_right_back=JSON.parse(localStorage.getItem('cap_right_back'))
+            if (cap_right_back) {
+                loadObject(cap_right_back)
             }
         }
 
         if (back_view_hoodie.hood_top_back?.image) {
-            if (localStorage.getItem('hood_top_back')) {
-                loadObject(JSON.parse(localStorage.getItem('hood_top_back')))
-            } else {
-                loadImage(
-                    back_view_hoodie.hood_top_back.image,
-                    'hood_top_back',
-                    back_view_hoodie.hood_top_back.x_point,
-                    back_view_hoodie.hood_top_back.y_point,
-                )
+            var hood_top_back=JSON.parse(localStorage.getItem('hood_top_back'))
+            if (hood_top_back) {
+                loadObject(hood_top_back)
             }
         }
 
         if (back_view_hoodie.hood_top_left_back?.image) {
-            if (localStorage.getItem('hood_top_left_back')) {
-                loadObject(JSON.parse(localStorage.getItem('hood_top_left_back')))
-            } else {
-                loadImage(
-                    back_view_hoodie.hood_top_left_back.image,
-                    'hood_top_left_back',
-                    back_view_hoodie.hood_top_left_back.x_point,
-                    back_view_hoodie.hood_top_left_back.y_point,
-                )
+            var hood_top_left_back=JSON.parse(localStorage.getItem('hood_top_left_back'))
+            if (hood_top_left_back) {
+                loadObject(hood_top_left_back)
             }
         }
 
         if (back_view_hoodie.hood_top_right_back?.image) {
-            if (localStorage.getItem('hood_top_right_back')) {
-                loadObject(JSON.parse(localStorage.getItem('hood_top_right_back')))
-            } else {
-                loadImage(
-                    back_view_hoodie.hood_top_right_back.image,
-                    'hood_top_right_back',
-                    back_view_hoodie.hood_top_right_back.x_point,
-                    back_view_hoodie.hood_top_right_back.y_point,
-                )
+            var hood_top_right_back=JSON.parse(localStorage.getItem('hood_top_right_back'))
+            if (hood_top_right_back) {
+                loadObject(hood_top_right_back)
             }
         }
 
         if (back_view_hoodie.hood_mid_back?.image) {
-            if (localStorage.getItem('hood_mid_back')) {
-                loadObject(JSON.parse(localStorage.getItem('hood_mid_back')))
-            } else {
-                loadImage(
-                    back_view_hoodie.hood_mid_back.image,
-                    'hood_mid_back',
-                    back_view_hoodie.hood_mid_back.x_point,
-                    back_view_hoodie.hood_mid_back.y_point,
-                )
+            var hood_mid_back=JSON.parse(localStorage.getItem('hood_mid_back'))
+            if (hood_mid_back) {
+                loadObject(hood_mid_back)
             }
         }
 
         if (back_view_hoodie.hood_mid_left_back?.image) {
-            if (localStorage.getItem('hood_mid_left_back')) {
-                loadObject(JSON.parse(localStorage.getItem('hood_mid_left_back')))
-            } else {
-                loadImage(
-                    back_view_hoodie.hood_mid_left_back.image,
-                    'hood_mid_left_back',
-                    back_view_hoodie.hood_mid_left_back.x_point,
-                    back_view_hoodie.hood_mid_left_back.y_point,
-                )
+            var hood_mid_left_back=JSON.parse(localStorage.getItem('hood_mid_left_back'))
+            if (hood_mid_left_back) {
+                loadObject(hood_mid_left_back)
             }
         }
 
         if (back_view_hoodie.hood_mid_right_back?.image) {
-            if (localStorage.getItem('hood_mid_right_back')) {
-                loadObject(JSON.parse(localStorage.getItem('hood_mid_right_back')))
-            } else {
-                loadImage(
-                    back_view_hoodie.hood_mid_right_back.image,
-                    'hood_mid_right_back',
-                    back_view_hoodie.hood_mid_right_back.x_point,
-                    back_view_hoodie.hood_mid_right_back.y_point,
-                )
+            var hood_mid_right_back=JSON.parse(localStorage.getItem('hood_mid_right_back'))
+            if (hood_mid_right_back) {
+                loadObject(hood_mid_right_back)
             }
         }
 
         if (back_view_hoodie.hood_bottom_back?.image) {
-            if (localStorage.getItem('hood_bottom_back')) {
-                loadObject(JSON.parse(localStorage.getItem('hood_bottom_back')))
-            } else {
-                loadImage(
-                    back_view_hoodie.hood_bottom_back.image,
-                    'hood_bottom_back',
-                    back_view_hoodie.hood_bottom_back.x_point,
-                    back_view_hoodie.hood_bottom_back.y_point,
-                )
+            var hood_bottom_back=JSON.parse(localStorage.getItem('hood_bottom_back'))
+            if (hood_bottom_back) {
+                loadObject(hood_bottom_back)
             }
         }
 
         if (back_view_hoodie.hood_hem_back?.image) {
-            if (localStorage.getItem('hood_hem_back')) {
-                loadObject(JSON.parse(localStorage.getItem('hood_hem_back')))
-            } else {
-                loadImage(
-                    back_view_hoodie.hood_hem_back.image,
-                    'hood_hem_back',
-                    back_view_hoodie.hood_hem_back.x_point,
-                    back_view_hoodie.hood_hem_back.y_point,
-                )
+            var hood_hem_back=JSON.parse(localStorage.getItem('hood_hem_back'))
+            if (hood_hem_back) {
+                loadObject(hood_hem_back)
             }
         }
 
         if (back_view_hoodie.hood_left_sleeve_full_back?.image) {
-            if (localStorage.getItem('hood_left_sleeve_full_back')) {
-                loadObject(JSON.parse(localStorage.getItem('hood_left_sleeve_full_back')))
-            } else {
-                loadImage(
-                    back_view_hoodie.hood_left_sleeve_full_back.image,
-                    'hood_left_sleeve_full_back',
-                    back_view_hoodie.hood_left_sleeve_full_back.x_point,
-                    back_view_hoodie.hood_left_sleeve_full_back.y_point,
-                )
+            var hood_left_sleeve_full_back=JSON.parse(localStorage.getItem('hood_left_sleeve_full_back'))
+            if (hood_left_sleeve_full_back) {
+                loadObject(hood_left_sleeve_full_back)
             }
         }
 
         if (back_view_hoodie.hood_left_sleeve_top_back?.image) {
-            if (localStorage.getItem('hood_left_sleeve_top_back')) {
-                loadObject(JSON.parse(localStorage.getItem('hood_left_sleeve_top_back')))
-            } else {
-                loadImage(
-                    back_view_hoodie.hood_left_sleeve_top_back.image,
-                    'hood_left_sleeve_top_back',
-                    back_view_hoodie.hood_left_sleeve_top_back.x_point,
-                    back_view_hoodie.hood_left_sleeve_top_back.y_point,
-                )
+            var hood_left_sleeve_top_back=JSON.parse(localStorage.getItem('hood_left_sleeve_top_back'))
+            if (hood_left_sleeve_top_back) {
+                loadObject(hood_left_sleeve_top_back)
             }
         }
 
         if (back_view_hoodie.hood_left_sleeve_mid_back?.image) {
-            if (localStorage.getItem('hood_left_sleeve_mid_back')) {
-                loadObject(JSON.parse(localStorage.getItem('hood_left_sleeve_mid_back')))
-            } else {
-                loadImage(
-                    back_view_hoodie.hood_left_sleeve_mid_back.image,
-                    'hood_left_sleeve_mid_back',
-                    back_view_hoodie.hood_left_sleeve_mid_back.x_point,
-                    back_view_hoodie.hood_left_sleeve_mid_back.y_point,
-                )
+            var hood_left_sleeve_mid_back=JSON.parse(localStorage.getItem('hood_left_sleeve_mid_back'))
+            if (hood_left_sleeve_mid_back) {
+                loadObject(hood_left_sleeve_mid_back)
             }
         }
 
         if (back_view_hoodie.hood_left_sleeve_bottom_back?.image) {
-            if (localStorage.getItem('hood_left_sleeve_bottom_back')) {
-                loadObject(JSON.parse(localStorage.getItem('hood_left_sleeve_bottom_back')))
-            } else {
-                loadImage(
-                    back_view_hoodie.hood_left_sleeve_bottom_back.image,
-                    'hood_left_sleeve_bottom_back',
-                    back_view_hoodie.hood_left_sleeve_bottom_back.x_point,
-                    back_view_hoodie.hood_left_sleeve_bottom_back.y_point,
-                )
+            var hood_left_sleeve_bottom_back=JSON.parse(localStorage.getItem('hood_left_sleeve_bottom_back'))
+            if (hood_left_sleeve_bottom_back) {
+                loadObject(hood_left_sleeve_bottom_back)
             }
         }
 
         if (back_view_hoodie.hood_left_sleeve_cuff_back?.image) {
-            if (localStorage.getItem('hood_left_sleeve_cuff_back')) {
-                loadObject(JSON.parse(localStorage.getItem('hood_left_sleeve_cuff_back')))
-            } else {
-                loadImage(
-                    back_view_hoodie.hood_left_sleeve_cuff_back.image,
-                    'hood_left_sleeve_cuff_back',
-                    back_view_hoodie.hood_left_sleeve_cuff_back.x_point,
-                    back_view_hoodie.hood_left_sleeve_cuff_back.y_point,
-                )
+            var hood_left_sleeve_cuff_back=JSON.parse(localStorage.getItem('hood_left_sleeve_cuff_back'))
+            if (hood_left_sleeve_cuff_back) {
+                loadObject(hood_left_sleeve_cuff_back)
             }
         }
 
         if (back_view_hoodie.hood_left_sleeve_cuff_strips_back?.image) {
-            if (localStorage.getItem('hood_left_sleeve_cuff_strips_back')) {
-                loadObject(JSON.parse(localStorage.getItem('hood_left_sleeve_cuff_strips_back')))
-            } else {
-                loadImage(
-                    back_view_hoodie.hood_left_sleeve_cuff_strips_back.image,
-                    'hood_left_sleeve_cuff_strips_back',
-                    back_view_hoodie.hood_left_sleeve_cuff_strips_back.x_point,
-                    back_view_hoodie.hood_left_sleeve_cuff_strips_back.y_point,
-                )
+            var hood_left_sleeve_cuff_strips_back=JSON.parse(localStorage.getItem('hood_left_sleeve_cuff_strips_back'))
+            if (hood_left_sleeve_cuff_strips_back) {
+                loadObject(hood_left_sleeve_cuff_strips_back)
             }
         }
 
         if (back_view_hoodie.hood_right_sleeve_full_back?.image) {
-            if (localStorage.getItem('hood_right_sleeve_full_back')) {
-                loadObject(JSON.parse(localStorage.getItem('hood_right_sleeve_full_back')))
-            } else {
-                loadImage(
-                    back_view_hoodie.hood_right_sleeve_full_back.image,
-                    'hood_right_sleeve_full_back',
-                    back_view_hoodie.hood_right_sleeve_full_back.x_point,
-                    back_view_hoodie.hood_right_sleeve_full_back.y_point,
-                )
+            var hood_right_sleeve_top_back=JSON.parse(localStorage.getItem('hood_right_sleeve_top_back'))
+            if (hood_right_sleeve_top_back) {
+                loadObject(hood_right_sleeve_top_back)
             }
         }
 
         if (back_view_hoodie.hood_right_sleeve_top_back?.image) {
-            if (localStorage.getItem('hood_right_sleeve_top_back')) {
-                loadObject(JSON.parse(localStorage.getItem('hood_right_sleeve_top_back')))
-            } else {
-                loadImage(
-                    back_view_hoodie.hood_right_sleeve_top_back.image,
-                    'hood_right_sleeve_top_back',
-                    back_view_hoodie.hood_right_sleeve_top_back.x_point,
-                    back_view_hoodie.hood_right_sleeve_top_back.y_point,
-                )
+            var hood_right_sleeve_top_back=JSON.parse(localStorage.getItem('hood_right_sleeve_top_back'))
+            if (hood_right_sleeve_top_back) {
+                loadObject(hood_right_sleeve_top_back)
             }
         }
 
         if (back_view_hoodie.hood_right_sleeve_mid_back?.image) {
-            if (localStorage.getItem('hood_right_sleeve_mid_back')) {
-                loadObject(JSON.parse(localStorage.getItem('hood_right_sleeve_mid_back')))
-            } else {
-                loadImage(
-                    back_view_hoodie.hood_right_sleeve_mid_back.image,
-                    'hood_right_sleeve_mid_back',
-                    back_view_hoodie.hood_right_sleeve_mid_back.x_point,
-                    back_view_hoodie.hood_right_sleeve_mid_back.y_point,
-                )
+            var hood_right_sleeve_mid_back=JSON.parse(localStorage.getItem('hood_right_sleeve_mid_back'))
+            if (hood_right_sleeve_mid_back) {
+                loadObject(hood_right_sleeve_mid_back)
             }
         }
 
         if (back_view_hoodie.hood_right_sleeve_bottom_back?.image) {
-            if (localStorage.getItem('hood_left_sleeve_mid_back')) {
-                loadObject(JSON.parse(localStorage.getItem('hood_left_sleeve_mid_back')))
-            } else {
-                loadImage(
-                    back_view_hoodie.hood_right_sleeve_bottom_back.image,
-                    'hood_right_sleeve_bottom_back',
-                    back_view_hoodie.hood_right_sleeve_bottom_back.x_point,
-                    back_view_hoodie.hood_right_sleeve_bottom_back.y_point,
-                )
+            var hood_right_sleeve_bottom_back=JSON.parse(localStorage.getItem('hood_right_sleeve_bottom_back'))
+            if (hood_right_sleeve_bottom_back) {
+                loadObject(hood_right_sleeve_bottom_back)
             }
         }
 
         if (back_view_hoodie.hood_right_sleeve_bottom_back?.image) {
-            if (localStorage.getItem('hood_right_sleeve_bottom_back')) {
-                loadObject(JSON.parse(localStorage.getItem('hood_right_sleeve_bottom_back')))
-            } else {
-                loadImage(
-                    back_view_hoodie.hood_right_sleeve_bottom_back.image,
-                    'hood_right_sleeve_bottom_back',
-                    back_view_hoodie.hood_right_sleeve_bottom_back.x_point,
-                    back_view_hoodie.hood_right_sleeve_bottom_back.y_point,
-                )
+            var hood_right_sleeve_bottom_back=JSON.parse(localStorage.getItem('hood_right_sleeve_bottom_back'))
+            if (hood_right_sleeve_bottom_back) {
+                loadObject(hood_right_sleeve_bottom_back)
             }
         }
 
         if (back_view_hoodie.hood_right_sleeve_cuff_back?.image) {
-            if (localStorage.getItem('hood_right_sleeve_cuff_back')) {
-                loadObject(JSON.parse(localStorage.getItem('hood_right_sleeve_cuff_back')))
-            } else {
-                loadImage(
-                    back_view_hoodie.hood_right_sleeve_cuff_back.image,
-                    'hood_right_sleeve_cuff_back',
-                    back_view_hoodie.hood_right_sleeve_cuff_back.x_point,
-                    back_view_hoodie.hood_right_sleeve_cuff_back.y_point,
-                )
+            var hood_right_sleeve_cuff_back=JSON.parse(localStorage.getItem('hood_right_sleeve_cuff_back'))
+            if (hood_right_sleeve_cuff_back) {
+                loadObject(hood_right_sleeve_cuff_back)
             }
         }
 
         if (back_view_hoodie.hood_bottom_left_back?.image) {
-            if (localStorage.getItem('hood_bottom_left_back')) {
-                loadObject(JSON.parse(localStorage.getItem('hood_bottom_left_back')))
-            } else {
-                loadImage(
-                    back_view_hoodie.hood_bottom_left_back.image,
-                    'hood_bottom_left_back',
-                    back_view_hoodie.hood_bottom_left_back.x_point,
-                    back_view_hoodie.hood_bottom_left_back.y_point,
-                )
+            var hood_bottom_left_back=JSON.parse(localStorage.getItem('hood_bottom_left_back'))
+            if (hood_bottom_left_back) {
+                loadObject(hood_bottom_left_back)
             }
         }
 
         if (back_view_hoodie.hood_bottom_right_back?.image) {
-            if (localStorage.getItem('hood_bottom_right_back')) {
-                loadObject(JSON.parse(localStorage.getItem('hood_bottom_right_back')))
-            } else {
-                loadImage(
-                    back_view_hoodie.hood_bottom_right_back.image,
-                    'hood_bottom_right_back',
-                    back_view_hoodie.hood_bottom_right_back.x_point,
-                    back_view_hoodie.hood_bottom_right_back.y_point,
-                )
+            var hood_bottom_right_back=JSON.parse(localStorage.getItem('hood_bottom_right_back'))
+            if (hood_bottom_right_back) {
+                loadObject(hood_bottom_right_back)
             }
         }
+    }
+
+
+    const preleftImageLoad = (e) => {
+        let left_view_hoodie = JSON.parse(localStorage.getItem('left_view_hoodie'))
+
+        if (left_view_hoodie?.mid_full_body_hoodie_left?.image) {
+
+                preloadImge(
+                    left_view_hoodie.mid_full_body_hoodie_left.image,
+                    'mid_full_body_hoodie_left',
+                    left_view_hoodie.mid_full_body_hoodie_left.x_point,
+                    left_view_hoodie.mid_full_body_hoodie_left.y_point,
+                )
+
+        }
+
+        if (left_view_hoodie.mid_top_hoodie_left?.image) {
+
+                preloadImge(
+                    left_view_hoodie.mid_top_hoodie_left.image,
+                    'mid_top_hoodie_left',
+                    left_view_hoodie.mid_top_hoodie_left.x_point,
+                    left_view_hoodie.mid_top_hoodie_left.y_point,
+                )
+        }
+
+        if (left_view_hoodie?.mid_mid_hoodie_left?.image) {
+
+                preloadImge(
+                    left_view_hoodie.mid_mid_hoodie_left.image,
+                    'mid_mid_hoodie_left',
+                    left_view_hoodie.mid_mid_hoodie_left.x_point,
+                    left_view_hoodie.mid_mid_hoodie_left.y_point,
+                )
+        }
+
+        if (left_view_hoodie?.mid_bottom_hoodie_left?.image) {
+
+                preloadImge(
+                    left_view_hoodie.mid_bottom_hoodie_left.image,
+                    'mid_bottom_hoodie_left',
+                    left_view_hoodie.mid_bottom_hoodie_left.x_point,
+                    left_view_hoodie.mid_bottom_hoodie_left.y_point,
+                )
+        }
+
+        if (left_view_hoodie?.mid_cuff_hoodie_left?.image) {
+
+                preloadImge(
+                    left_view_hoodie.mid_cuff_hoodie_left.image,
+                    'mid_cuff_hoodie_left',
+                    left_view_hoodie.mid_cuff_hoodie_left.x_point,
+                    left_view_hoodie.mid_cuff_hoodie_left.y_point,
+                )
+        }
+
+        if (left_view_hoodie?.mid_cuff_strips_hoodie_left?.image) {
+
+                preloadImge(
+                    left_view_hoodie.mid_cuff_strips_hoodie_left.image,
+                    'mid_cuff_strips_hoodie_left',
+                    left_view_hoodie.mid_cuff_strips_hoodie_left.x_point,
+                    left_view_hoodie.mid_cuff_strips_hoodie_left.y_point,
+                )
+        }
+
+        if (left_view_hoodie?.left_full_body_hoodie_left?.image) {
+
+                preloadImge(
+                    left_view_hoodie.left_full_body_hoodie_left.image,
+                    'left_full_body_hoodie_left',
+                    left_view_hoodie.left_full_body_hoodie_left.x_point,
+                    left_view_hoodie.left_full_body_hoodie_left.y_point,
+                )
+        }
+
+        if (left_view_hoodie?.left_top_hoodie_left?.image) {
+
+                preloadImge(
+                    left_view_hoodie.left_top_hoodie_left.image,
+                    'left_top_hoodie_left',
+                    left_view_hoodie.left_top_hoodie_left.x_point,
+                    left_view_hoodie.left_top_hoodie_left.y_point,
+                )
+        }
+
+        if (left_view_hoodie?.left_mid_hoodie_left?.image) {
+
+                preloadImge(
+                    left_view_hoodie.left_mid_hoodie_left.image,
+                    'left_mid_hoodie_left',
+                    left_view_hoodie.left_mid_hoodie_left.x_point,
+                    left_view_hoodie.left_mid_hoodie_left.y_point,
+                )
+        }
+
+        if (left_view_hoodie?.left_bottom_hoodie_left?.image) {
+
+                preloadImge(
+                    left_view_hoodie.left_bottom_hoodie_left.image,
+                    'left_bottom_hoodie_left',
+                    left_view_hoodie.left_bottom_hoodie_left.x_point,
+                    left_view_hoodie.left_bottom_hoodie_left.y_point,
+                )
+        }
+
+        if (left_view_hoodie?.left_cuff_hoodie_left?.image) {
+
+                preloadImge(
+                    left_view_hoodie.left_cuff_hoodie_left.image,
+                    'left_cuff_hoodie_left',
+                    left_view_hoodie.left_cuff_hoodie_left.x_point,
+                    left_view_hoodie.left_cuff_hoodie_left.y_point,
+                )
+        }
+
+        if (left_view_hoodie?.left_cuff_strips_hoodie_left?.image) {
+
+                preloadImge(
+                    left_view_hoodie.left_cuff_strips_hoodie_left.image,
+                    'left_cuff_strips_hoodie_left',
+                    left_view_hoodie.left_cuff_strips_hoodie_left.x_point,
+                    left_view_hoodie.left_cuff_strips_hoodie_left.y_point,
+                )
+        }
+
+        if (left_view_hoodie?.right_full_body_hoodie_left?.image) {
+
+                preloadImge(
+                    left_view_hoodie.right_full_body_hoodie_left.image,
+                    'right_full_body_hoodie_left',
+                    left_view_hoodie.right_full_body_hoodie_left.x_point,
+                    left_view_hoodie.right_full_body_hoodie_left.y_point,
+                )
+        }
+
+        if (left_view_hoodie?.right_top_hoodie_left?.image) {
+
+                preloadImge(
+                    left_view_hoodie.right_top_hoodie_left.image,
+                    'right_top_hoodie_left',
+                    left_view_hoodie.right_top_hoodie_left.x_point,
+                    left_view_hoodie.right_top_hoodie_left.y_point,
+                )
+        }
+
+        if (left_view_hoodie?.right_mid_hoodie_left?.image) {
+
+                preloadImge(
+                    left_view_hoodie.right_mid_hoodie_left.image,
+                    'right_mid_hoodie_left',
+                    left_view_hoodie.right_mid_hoodie_left.x_point,
+                    left_view_hoodie.right_mid_hoodie_left.y_point,
+                )
+        }
+
+        if (left_view_hoodie?.right_bottom_hoodie_left?.image) {
+
+                preloadImge(
+                    left_view_hoodie.right_bottom_hoodie_left.image,
+                    'right_bottom_hoodie_left',
+                    left_view_hoodie.right_bottom_hoodie_left.x_point,
+                    left_view_hoodie.right_bottom_hoodie_left.y_point,
+                )
+        }
+
+        if (left_view_hoodie?.right_cuff_hoodie_left?.image) {
+
+                preloadImge(
+                    left_view_hoodie.right_cuff_hoodie_left.image,
+                    'right_cuff_hoodie_left',
+                    left_view_hoodie.right_cuff_hoodie_left.x_point,
+                    left_view_hoodie.right_cuff_hoodie_left.y_point,
+                )
+        }
+
+        if (left_view_hoodie?.right_cuff_strips_hoodie_left?.image) {
+
+                preloadImge(
+                    left_view_hoodie.right_cuff_strips_hoodie_left.image,
+                    'right_cuff_strips_hoodie_left',
+                    left_view_hoodie.right_cuff_strips_hoodie_left.x_point,
+                    left_view_hoodie.right_cuff_strips_hoodie_left.y_point,
+                )
+        }
+
+        if (left_view_hoodie?.bottom_full_body_hoodie_left?.image) {
+
+                preloadImge(
+                    left_view_hoodie.bottom_full_body_hoodie_left.image,
+                    'bottom_full_body_hoodie_left',
+                    left_view_hoodie.bottom_full_body_hoodie_left.x_point,
+                    left_view_hoodie.bottom_full_body_hoodie_left.y_point,
+                )
+        }
+
+        if (left_view_hoodie?.bottom_top_hoodie_left?.image) {
+
+                preloadImge(
+                    left_view_hoodie.bottom_top_hoodie_left.image,
+                    'bottom_top_hoodie_left',
+                    left_view_hoodie.bottom_top_hoodie_left.x_point,
+                    left_view_hoodie.bottom_top_hoodie_left.y_point,
+                )
+        }
+
+        if (left_view_hoodie?.bottom_mid_hoodie_left?.image) {
+
+                preloadImge(
+                    left_view_hoodie.bottom_mid_hoodie_left.image,
+                    'bottom_mid_hoodie_left',
+                    left_view_hoodie.bottom_mid_hoodie_left.x_point,
+                    left_view_hoodie.bottom_mid_hoodie_left.y_point,
+                )
+        }
+
+        if (left_view_hoodie?.bottom_bottom_hoodie_left?.image) {
+
+                preloadImge(
+                    left_view_hoodie.bottom_bottom_hoodie_left.image,
+                    'bottom_bottom_hoodie_left',
+                    left_view_hoodie.bottom_bottom_hoodie_left.x_point,
+                    left_view_hoodie.bottom_bottom_hoodie_left.y_point,
+                )
+        }
+
+        if (left_view_hoodie?.bottom_cuff_hoodie_left?.image) {
+
+                preloadImge(
+                    left_view_hoodie.bottom_cuff_hoodie_left.image,
+                    'bottom_cuff_hoodie_left',
+                    left_view_hoodie.bottom_cuff_hoodie_left.x_point,
+                    left_view_hoodie.bottom_cuff_hoodie_left.y_point,
+                )
+        }
+
+        if (left_view_hoodie?.bottom_cuff_strips_hoodie_left?.image) {
+
+                preloadImge(
+                    left_view_hoodie.bottom_cuff_strips_hoodie_left.image,
+                    'bottom_cuff_strips_hoodie_left',
+                    left_view_hoodie.bottom_cuff_strips_hoodie_left.x_point,
+                    left_view_hoodie.bottom_cuff_strips_hoodie_left.y_point,
+                )
+        }
+
     }
 
     const leftImageLoad = (e) => {
@@ -1505,318 +2065,419 @@ function SamLocalEditorHoodieFront(props) {
         let left_view_hoodie = JSON.parse(localStorage.getItem('left_view_hoodie'))
 
         if (left_view_hoodie?.mid_full_body_hoodie_left?.image) {
-            if (localStorage.getItem('mid_full_body_hoodie_left')) {
-                loadObject(JSON.parse(localStorage.getItem('mid_full_body_hoodie_left')))
-            } else {
-                loadImage(
-                    left_view_hoodie.mid_full_body_hoodie_left.image,
-                    'mid_full_body_hoodie_left',
-                    left_view_hoodie.mid_full_body_hoodie_left.x_point,
-                    left_view_hoodie.mid_full_body_hoodie_left.y_point,
-                )
+            var mid_full_body_hoodie_left=JSON.parse(localStorage.getItem('mid_full_body_hoodie_left'))
+            if (mid_full_body_hoodie_left) {
+                loadObject(mid_full_body_hoodie_left)
             }
 
         }
 
         if (left_view_hoodie.mid_top_hoodie_left?.image) {
-            if (localStorage.getItem('mid_top_hoodie_left')) {
-                loadObject(JSON.parse(localStorage.getItem('mid_top_hoodie_left')))
-            } else {
-                loadImage(
-                    left_view_hoodie.mid_top_hoodie_left.image,
-                    'mid_top_hoodie_left',
-                    left_view_hoodie.mid_top_hoodie_left.x_point,
-                    left_view_hoodie.mid_top_hoodie_left.y_point,
-                )
+            var mid_top_hoodie_left=JSON.parse(localStorage.getItem('mid_top_hoodie_left'))
+            if (mid_top_hoodie_left) {
+                loadObject(mid_top_hoodie_left)
             }
         }
 
         if (left_view_hoodie?.mid_mid_hoodie_left?.image) {
-            if (localStorage.getItem('mid_mid_hoodie_left')) {
-                loadObject(JSON.parse(localStorage.getItem('mid_mid_hoodie_left')))
-            } else {
-                loadImage(
-                    left_view_hoodie.mid_mid_hoodie_left.image,
-                    'mid_mid_hoodie_left',
-                    left_view_hoodie.mid_mid_hoodie_left.x_point,
-                    left_view_hoodie.mid_mid_hoodie_left.y_point,
-                )
+            var mid_mid_hoodie_left=JSON.parse(localStorage.getItem('mid_mid_hoodie_left'))
+            if (mid_mid_hoodie_left) {
+                loadObject(mid_mid_hoodie_left)
             }
         }
 
         if (left_view_hoodie?.mid_bottom_hoodie_left?.image) {
-            if (localStorage.getItem('mid_bottom_hoodie_left')) {
-                loadObject(JSON.parse(localStorage.getItem('mid_bottom_hoodie_left')))
-            } else {
-                loadImage(
-                    left_view_hoodie.mid_bottom_hoodie_left.image,
-                    'mid_bottom_hoodie_left',
-                    left_view_hoodie.mid_bottom_hoodie_left.x_point,
-                    left_view_hoodie.mid_bottom_hoodie_left.y_point,
-                )
+            var mid_bottom_hoodie_left=JSON.parse(localStorage.getItem('mid_bottom_hoodie_left'))
+            if (mid_bottom_hoodie_left) {
+                loadObject(mid_bottom_hoodie_left)
             }
         }
 
         if (left_view_hoodie?.mid_cuff_hoodie_left?.image) {
-            if (localStorage.getItem('mid_cuff_hoodie_left')) {
-                loadObject(JSON.parse(localStorage.getItem('mid_cuff_hoodie_left')))
-            } else {
-                loadImage(
-                    left_view_hoodie.mid_cuff_hoodie_left.image,
-                    'mid_cuff_hoodie_left',
-                    left_view_hoodie.mid_cuff_hoodie_left.x_point,
-                    left_view_hoodie.mid_cuff_hoodie_left.y_point,
-                )
+            var mid_cuff_hoodie_left=JSON.parse(localStorage.getItem('mid_cuff_hoodie_left'))
+            if (mid_cuff_hoodie_left) {
+                loadObject(mid_cuff_hoodie_left)
             }
         }
 
         if (left_view_hoodie?.mid_cuff_strips_hoodie_left?.image) {
-            if (localStorage.getItem('mid_cuff_strips_hoodie_left')) {
-                loadObject(JSON.parse(localStorage.getItem('mid_cuff_strips_hoodie_left')))
-            } else {
-                loadImage(
-                    left_view_hoodie.mid_cuff_strips_hoodie_left.image,
-                    'mid_cuff_strips_hoodie_left',
-                    left_view_hoodie.mid_cuff_strips_hoodie_left.x_point,
-                    left_view_hoodie.mid_cuff_strips_hoodie_left.y_point,
-                )
+            var mid_cuff_strips_hoodie_left=JSON.parse(localStorage.getItem('mid_cuff_strips_hoodie_left'))
+            if (mid_cuff_strips_hoodie_left) {
+                loadObject(mid_cuff_strips_hoodie_left)
             }
         }
 
         if (left_view_hoodie?.left_full_body_hoodie_left?.image) {
-            if (localStorage.getItem('left_full_body_hoodie_left')) {
-                loadObject(JSON.parse(localStorage.getItem('left_full_body_hoodie_left')))
-            } else {
-                loadImage(
-                    left_view_hoodie.left_full_body_hoodie_left.image,
-                    'left_full_body_hoodie_left',
-                    left_view_hoodie.left_full_body_hoodie_left.x_point,
-                    left_view_hoodie.left_full_body_hoodie_left.y_point,
-                )
+            var left_full_body_hoodie_left=JSON.parse(localStorage.getItem('left_full_body_hoodie_left'))
+            if (left_full_body_hoodie_left) {
+                loadObject(left_full_body_hoodie_left)
             }
         }
 
         if (left_view_hoodie?.left_top_hoodie_left?.image) {
-            if (localStorage.getItem('left_top_hoodie_left')) {
-                loadObject(JSON.parse(localStorage.getItem('left_top_hoodie_left')))
-            } else {
-                loadImage(
-                    left_view_hoodie.left_top_hoodie_left.image,
-                    'left_top_hoodie_left',
-                    left_view_hoodie.left_top_hoodie_left.x_point,
-                    left_view_hoodie.left_top_hoodie_left.y_point,
-                )
+            var left_top_hoodie_left=JSON.parse(localStorage.getItem('left_top_hoodie_left'))
+            if (left_top_hoodie_left) {
+                loadObject(left_top_hoodie_left)
             }
         }
 
         if (left_view_hoodie?.left_mid_hoodie_left?.image) {
-            if (localStorage.getItem('left_mid_hoodie_left')) {
-                loadObject(JSON.parse(localStorage.getItem('left_mid_hoodie_left')))
-            } else {
-                loadImage(
-                    left_view_hoodie.left_mid_hoodie_left.image,
-                    'left_mid_hoodie_left',
-                    left_view_hoodie.left_mid_hoodie_left.x_point,
-                    left_view_hoodie.left_mid_hoodie_left.y_point,
-                )
+            var left_mid_hoodie_left=JSON.parse(localStorage.getItem('left_mid_hoodie_left'))
+            if (left_mid_hoodie_left) {
+                loadObject(left_mid_hoodie_left)
             }
         }
 
         if (left_view_hoodie?.left_bottom_hoodie_left?.image) {
-            if (localStorage.getItem('left_bottom_hoodie_left')) {
-                loadObject(JSON.parse(localStorage.getItem('left_bottom_hoodie_left')))
-            } else {
-                loadImage(
-                    left_view_hoodie.left_bottom_hoodie_left.image,
-                    'left_bottom_hoodie_left',
-                    left_view_hoodie.left_bottom_hoodie_left.x_point,
-                    left_view_hoodie.left_bottom_hoodie_left.y_point,
-                )
+            var left_bottom_hoodie_left=JSON.parse(localStorage.getItem('left_bottom_hoodie_left'))
+            if (left_bottom_hoodie_left) {
+                loadObject(left_bottom_hoodie_left)
             }
         }
 
         if (left_view_hoodie?.left_cuff_hoodie_left?.image) {
-            if (localStorage.getItem('left_cuff_hoodie_left')) {
-                loadObject(JSON.parse(localStorage.getItem('left_cuff_hoodie_left')))
-            } else {
-                loadImage(
-                    left_view_hoodie.left_cuff_hoodie_left.image,
-                    'left_cuff_hoodie_left',
-                    left_view_hoodie.left_cuff_hoodie_left.x_point,
-                    left_view_hoodie.left_cuff_hoodie_left.y_point,
-                )
+            var left_cuff_hoodie_left=JSON.parse(localStorage.getItem('left_cuff_hoodie_left'))
+            if (left_cuff_hoodie_left) {
+                loadObject(left_cuff_hoodie_left)
             }
         }
 
         if (left_view_hoodie?.left_cuff_strips_hoodie_left?.image) {
-            if (localStorage.getItem('left_cuff_strips_hoodie_left')) {
-                loadObject(JSON.parse(localStorage.getItem('left_cuff_strips_hoodie_left')))
-            } else {
-                loadImage(
-                    left_view_hoodie.left_cuff_strips_hoodie_left.image,
-                    'left_cuff_strips_hoodie_left',
-                    left_view_hoodie.left_cuff_strips_hoodie_left.x_point,
-                    left_view_hoodie.left_cuff_strips_hoodie_left.y_point,
-                )
+            var left_cuff_strips_hoodie_left=JSON.parse(localStorage.getItem('left_cuff_strips_hoodie_left'))
+            if (left_cuff_strips_hoodie_left) {
+                loadObject(left_cuff_strips_hoodie_left)
             }
         }
 
         if (left_view_hoodie?.right_full_body_hoodie_left?.image) {
-            if (localStorage.getItem('right_full_body_hoodie_left')) {
-                loadObject(JSON.parse(localStorage.getItem('right_full_body_hoodie_left')))
-            } else {
-                loadImage(
-                    left_view_hoodie.right_full_body_hoodie_left.image,
-                    'right_full_body_hoodie_left',
-                    left_view_hoodie.right_full_body_hoodie_left.x_point,
-                    left_view_hoodie.right_full_body_hoodie_left.y_point,
-                )
+            var right_full_body_hoodie_left=JSON.parse(localStorage.getItem('right_full_body_hoodie_left'))
+            if (right_full_body_hoodie_left) {
+                loadObject(right_full_body_hoodie_left)
             }
         }
 
         if (left_view_hoodie?.right_top_hoodie_left?.image) {
-            if (localStorage.getItem('right_top_hoodie_left')) {
-                loadObject(JSON.parse(localStorage.getItem('right_top_hoodie_left')))
-            } else {
-                loadImage(
-                    left_view_hoodie.right_top_hoodie_left.image,
-                    'right_top_hoodie_left',
-                    left_view_hoodie.right_top_hoodie_left.x_point,
-                    left_view_hoodie.right_top_hoodie_left.y_point,
-                )
+            var right_top_hoodie_left=JSON.parse(localStorage.getItem('right_top_hoodie_left'))
+            if (right_top_hoodie_left) {
+                loadObject(right_top_hoodie_left)
             }
         }
 
         if (left_view_hoodie?.right_mid_hoodie_left?.image) {
-            if (localStorage.getItem('right_mid_hoodie_left')) {
-                loadObject(JSON.parse(localStorage.getItem('right_mid_hoodie_left')))
-            } else {
-                loadImage(
-                    left_view_hoodie.right_mid_hoodie_left.image,
-                    'right_mid_hoodie_left',
-                    left_view_hoodie.right_mid_hoodie_left.x_point,
-                    left_view_hoodie.right_mid_hoodie_left.y_point,
-                )
+            var right_mid_hoodie_left=JSON.parse(localStorage.getItem('right_mid_hoodie_left'))
+            if (right_mid_hoodie_left) {
+                loadObject(right_mid_hoodie_left)
             }
         }
 
         if (left_view_hoodie?.right_bottom_hoodie_left?.image) {
-            if (localStorage.getItem('right_bottom_hoodie_left')) {
-                loadObject(JSON.parse(localStorage.getItem('right_bottom_hoodie_left')))
-            } else {
-                loadImage(
-                    left_view_hoodie.right_bottom_hoodie_left.image,
-                    'right_bottom_hoodie_left',
-                    left_view_hoodie.right_bottom_hoodie_left.x_point,
-                    left_view_hoodie.right_bottom_hoodie_left.y_point,
-                )
+            var right_bottom_hoodie_left=JSON.parse(localStorage.getItem('right_bottom_hoodie_left'))
+            if (right_bottom_hoodie_left) {
+                loadObject(right_bottom_hoodie_left)
             }
         }
 
         if (left_view_hoodie?.right_cuff_hoodie_left?.image) {
-            if (localStorage.getItem('right_cuff_hoodie_left')) {
-                loadObject(JSON.parse(localStorage.getItem('right_cuff_hoodie_left')))
-            } else {
-                loadImage(
-                    left_view_hoodie.right_cuff_hoodie_left.image,
-                    'right_cuff_hoodie_left',
-                    left_view_hoodie.right_cuff_hoodie_left.x_point,
-                    left_view_hoodie.right_cuff_hoodie_left.y_point,
-                )
+            var right_cuff_hoodie_left=JSON.parse(localStorage.getItem('right_cuff_hoodie_left'))
+            if (right_cuff_hoodie_left) {
+                loadObject(right_cuff_hoodie_left)
             }
         }
 
         if (left_view_hoodie?.right_cuff_strips_hoodie_left?.image) {
-            if (localStorage.getItem('right_cuff_strips_hoodie_left')) {
-                loadObject(JSON.parse(localStorage.getItem('right_cuff_strips_hoodie_left')))
-            } else {
-                loadImage(
-                    left_view_hoodie.right_cuff_strips_hoodie_left.image,
-                    'right_cuff_strips_hoodie_left',
-                    left_view_hoodie.right_cuff_strips_hoodie_left.x_point,
-                    left_view_hoodie.right_cuff_strips_hoodie_left.y_point,
-                )
+            var right_cuff_strips_hoodie_left=JSON.parse(localStorage.getItem('right_cuff_strips_hoodie_left'))
+            if (right_cuff_strips_hoodie_left) {
+                loadObject(right_cuff_strips_hoodie_left)
             }
         }
 
         if (left_view_hoodie?.bottom_full_body_hoodie_left?.image) {
-            if (localStorage.getItem('bottom_full_body_hoodie_left')) {
-                loadObject(JSON.parse(localStorage.getItem('bottom_full_body_hoodie_left')))
-            } else {
-                loadImage(
-                    left_view_hoodie.bottom_full_body_hoodie_left.image,
-                    'bottom_full_body_hoodie_left',
-                    left_view_hoodie.bottom_full_body_hoodie_left.x_point,
-                    left_view_hoodie.bottom_full_body_hoodie_left.y_point,
-                )
+            var bottom_full_body_hoodie_left=JSON.parse(localStorage.getItem('bottom_full_body_hoodie_left'))
+            if (bottom_full_body_hoodie_left) {
+                loadObject(bottom_full_body_hoodie_left)
             }
         }
 
         if (left_view_hoodie?.bottom_top_hoodie_left?.image) {
-            if (localStorage.getItem('bottom_top_hoodie_left')) {
-                loadObject(JSON.parse(localStorage.getItem('bottom_top_hoodie_left')))
-            } else {
-                loadImage(
-                    left_view_hoodie.bottom_top_hoodie_left.image,
-                    'bottom_top_hoodie_left',
-                    left_view_hoodie.bottom_top_hoodie_left.x_point,
-                    left_view_hoodie.bottom_top_hoodie_left.y_point,
-                )
+            var bottom_top_hoodie_left=JSON.parse(localStorage.getItem('bottom_top_hoodie_left'))
+            if (bottom_top_hoodie_left) {
+                loadObject(bottom_top_hoodie_left)
             }
         }
 
         if (left_view_hoodie?.bottom_mid_hoodie_left?.image) {
-            if (localStorage.getItem('bottom_mid_hoodie_left')) {
-                loadObject(JSON.parse(localStorage.getItem('bottom_mid_hoodie_left')))
-            } else {
-                loadImage(
-                    left_view_hoodie.bottom_mid_hoodie_left.image,
-                    'bottom_mid_hoodie_left',
-                    left_view_hoodie.bottom_mid_hoodie_left.x_point,
-                    left_view_hoodie.bottom_mid_hoodie_left.y_point,
-                )
+            var bottom_mid_hoodie_left=JSON.parse(localStorage.getItem('bottom_mid_hoodie_left'))
+            if (bottom_mid_hoodie_left) {
+                loadObject(bottom_mid_hoodie_left)
             }
         }
 
         if (left_view_hoodie?.bottom_bottom_hoodie_left?.image) {
-            if (localStorage.getItem('bottom_bottom_hoodie_left')) {
-                loadObject(JSON.parse(localStorage.getItem('bottom_bottom_hoodie_left')))
-            } else {
-                loadImage(
-                    left_view_hoodie.bottom_bottom_hoodie_left.image,
-                    'bottom_bottom_hoodie_left',
-                    left_view_hoodie.bottom_bottom_hoodie_left.x_point,
-                    left_view_hoodie.bottom_bottom_hoodie_left.y_point,
-                )
+            var bottom_bottom_hoodie_left=JSON.parse(localStorage.getItem('bottom_bottom_hoodie_left'))
+            if (bottom_bottom_hoodie_left) {
+                loadObject(bottom_bottom_hoodie_left)
             }
         }
 
         if (left_view_hoodie?.bottom_cuff_hoodie_left?.image) {
-            if (localStorage.getItem('bottom_cuff_hoodie_left')) {
-                loadObject(JSON.parse(localStorage.getItem('bottom_cuff_hoodie_left')))
-            } else {
-                loadImage(
-                    left_view_hoodie.bottom_cuff_hoodie_left.image,
-                    'bottom_cuff_hoodie_left',
-                    left_view_hoodie.bottom_cuff_hoodie_left.x_point,
-                    left_view_hoodie.bottom_cuff_hoodie_left.y_point,
-                )
+            var bottom_cuff_hoodie_left=JSON.parse(localStorage.getItem('bottom_cuff_hoodie_left'))
+            if (bottom_cuff_hoodie_left) {
+                loadObject(bottom_cuff_hoodie_left)
             }
         }
 
         if (left_view_hoodie?.bottom_cuff_strips_hoodie_left?.image) {
-            if (localStorage.getItem('bottom_cuff_strips_hoodie_left')) {
-                loadObject(JSON.parse(localStorage.getItem('bottom_cuff_strips_hoodie_left')))
-            } else {
-                loadImage(
-                    left_view_hoodie.bottom_cuff_strips_hoodie_left.image,
-                    'bottom_cuff_strips_hoodie_left',
-                    left_view_hoodie.bottom_cuff_strips_hoodie_left.x_point,
-                    left_view_hoodie.bottom_cuff_strips_hoodie_left.y_point,
-                )
+            var bottom_cuff_strips_hoodie_left=JSON.parse(localStorage.getItem('bottom_cuff_strips_hoodie_left'))
+            if (bottom_cuff_strips_hoodie_left) {
+                loadObject(bottom_cuff_strips_hoodie_left)
             }
         }
 
+    }
+
+
+    const prerightImageLoad = (e) => {
+        let right_view_hoodie = JSON.parse(localStorage.getItem('right_view_hoodie'))
+
+        if (right_view_hoodie.mid_full_body_hoodie_right?.image) {
+
+                preloadImge(
+                    right_view_hoodie.mid_full_body_hoodie_right.image,
+                    'mid_full_body_hoodie_right',
+                    right_view_hoodie.mid_full_body_hoodie_right.x_point,
+                    right_view_hoodie.mid_full_body_hoodie_right.y_point,
+                )
+        }
+        if (right_view_hoodie.mid_top_hoodie_right?.image) {
+
+                preloadImge(
+                    right_view_hoodie.mid_top_hoodie_right.image,
+                    'mid_top_hoodie_right',
+                    right_view_hoodie.mid_top_hoodie_right.x_point,
+                    right_view_hoodie.mid_top_hoodie_right.y_point,
+                )
+        }
+
+        if (right_view_hoodie.mid_mid_hoodie_right?.image) {
+
+                preloadImge(
+                    right_view_hoodie.mid_mid_hoodie_right.image,
+                    'mid_mid_hoodie_right',
+                    right_view_hoodie.mid_mid_hoodie_right.x_point,
+                    right_view_hoodie.mid_mid_hoodie_right.y_point,
+                )
+        }
+
+        if (right_view_hoodie.mid_bottom_hoodie_right?.image) {
+
+                preloadImge(
+                    right_view_hoodie.mid_bottom_hoodie_right.image,
+                    'mid_bottom_hoodie_right',
+                    right_view_hoodie.mid_bottom_hoodie_right.x_point,
+                    right_view_hoodie.mid_bottom_hoodie_right.y_point,
+                )
+        }
+
+        if (right_view_hoodie.mid_cuff_hoodie_right?.image) {
+
+                preloadImge(
+                    right_view_hoodie.mid_cuff_hoodie_right.image,
+                    'mid_cuff_hoodie_right',
+                    right_view_hoodie.mid_cuff_hoodie_right.x_point,
+                    right_view_hoodie.mid_cuff_hoodie_right.y_point,
+                )
+        }
+
+        if (right_view_hoodie.mid_cuff_strips_hoodie_right?.image) {
+
+                preloadImge(
+                    right_view_hoodie.mid_cuff_strips_hoodie_right.image,
+                    'mid_cuff_strips_hoodie_right',
+                    right_view_hoodie.mid_cuff_strips_hoodie_right.x_point,
+                    right_view_hoodie.mid_cuff_strips_hoodie_right.y_point,
+                    )
+
+        }
+
+        if (right_view_hoodie.left_full_body_hoodie_right?.image) {
+
+                preloadImge(
+                    right_view_hoodie.left_full_body_hoodie_right.image,
+                    'left_full_body_hoodie_right',
+                    right_view_hoodie.left_full_body_hoodie_right.x_point,
+                    right_view_hoodie.left_full_body_hoodie_right.y_point,
+                )
+        }
+
+        if (right_view_hoodie.left_top_hoodie_right?.image) {
+
+                preloadImge(
+                    right_view_hoodie.left_top_hoodie_right.image,
+                    'left_top_hoodie_right',
+                    right_view_hoodie.left_top_hoodie_right.x_point,
+                    right_view_hoodie.left_top_hoodie_right.y_point,
+                )
+        }
+
+        if (right_view_hoodie.left_mid_hoodie_right?.image) {
+
+                preloadImge(
+                    right_view_hoodie.left_mid_hoodie_right.image,
+                    'left_mid_hoodie_right',
+                    right_view_hoodie.left_mid_hoodie_right.x_point,
+                    right_view_hoodie.left_mid_hoodie_right.y_point,
+                )
+        }
+
+        if (right_view_hoodie.left_bottom_hoodie_right?.image) {
+
+                preloadImge(
+                    right_view_hoodie.left_bottom_hoodie_right.image,
+                    'left_bottom_hoodie_right',
+                    right_view_hoodie.left_bottom_hoodie_right.x_point,
+                    right_view_hoodie.left_bottom_hoodie_right.y_point,
+                )
+        }
+
+        if (right_view_hoodie.left_cuff_hoodie_right?.image) {
+
+                preloadImge(
+                    right_view_hoodie.left_cuff_hoodie_right.image,
+                    'left_cuff_hoodie_right',
+                    right_view_hoodie.left_cuff_hoodie_right.x_point,
+                    right_view_hoodie.left_cuff_hoodie_right.y_point,
+                )
+        }
+
+        if (right_view_hoodie.left_cuff_strips_hoodie_right?.image) {
+
+                preloadImge(
+                    right_view_hoodie.left_cuff_strips_hoodie_right.image,
+                    'left_cuff_strips_hoodie_right',
+                    right_view_hoodie.left_cuff_strips_hoodie_right.x_point,
+                    right_view_hoodie.left_cuff_strips_hoodie_right.y_point,
+                )
+        }
+
+        if (right_view_hoodie.right_full_body_hoodie_right?.image) {
+
+                preloadImge(
+                    right_view_hoodie.right_full_body_hoodie_right.image,
+                    'right_full_body_hoodie_right',
+                    right_view_hoodie.right_full_body_hoodie_right.x_point,
+                    right_view_hoodie.right_full_body_hoodie_right.y_point,
+                )
+        }
+
+        if (right_view_hoodie.right_top_hoodie_right?.image) {
+
+                preloadImge(
+                    right_view_hoodie.right_top_hoodie_right.image,
+                    'right_top_hoodie_right',
+                    right_view_hoodie.right_top_hoodie_right.x_point,
+                    right_view_hoodie.right_top_hoodie_right.y_point,
+                )
+        }
+
+        if (right_view_hoodie.right_mid_hoodie_right?.image) {
+
+                preloadImge(
+                    right_view_hoodie.right_mid_hoodie_right.image,
+                    'right_mid_hoodie_right',
+                    right_view_hoodie.right_mid_hoodie_right.x_point,
+                    right_view_hoodie.right_mid_hoodie_right.y_point,
+                )
+        }
+
+        if (right_view_hoodie.right_bottom_hoodie_right?.image) {
+
+                preloadImge(
+                    right_view_hoodie.right_bottom_hoodie_right.image,
+                    'right_bottom_hoodie_right',
+                    right_view_hoodie.right_bottom_hoodie_right.x_point,
+                    right_view_hoodie.right_bottom_hoodie_right.y_point,
+                )
+        }
+
+        if (right_view_hoodie.right_cuff_hoodie_right?.image) {
+
+                preloadImge(
+                    right_view_hoodie.right_cuff_hoodie_right.image,
+                    'right_cuff_hoodie_right',
+                    right_view_hoodie.right_cuff_hoodie_right.x_point,
+                    right_view_hoodie.right_cuff_hoodie_right.y_point,
+                )
+        }
+
+        if (right_view_hoodie.right_cuff_strips_hoodie_right?.image) {
+
+                preloadImge(
+                    right_view_hoodie.right_cuff_strips_hoodie_right.image,
+                    'right_cuff_strips_hoodie_right',
+                    right_view_hoodie.right_cuff_strips_hoodie_right.x_point,
+                    right_view_hoodie.right_cuff_strips_hoodie_right.y_point,
+                )
+        }
+
+        if (right_view_hoodie.bottom_full_body_hoodie_right?.image) {
+
+                preloadImge(
+                    right_view_hoodie.bottom_full_body_hoodie_right.image,
+                    'bottom_full_body_hoodie_right',
+                    right_view_hoodie.bottom_full_body_hoodie_right.x_point,
+                    right_view_hoodie.bottom_full_body_hoodie_right.y_point,
+                )
+        }
+
+        if (right_view_hoodie.bottom_top_hoodie_right?.image) {
+
+                preloadImge(
+                    right_view_hoodie.bottom_top_hoodie_right.image,
+                    'bottom_top_hoodie_right',
+                    right_view_hoodie.bottom_top_hoodie_right.x_point,
+                    right_view_hoodie.bottom_top_hoodie_right.y_point,
+                )
+        }
+
+        if (right_view_hoodie.bottom_mid_hoodie_right?.image) {
+
+                preloadImge(
+                    right_view_hoodie.bottom_mid_hoodie_right.image,
+                    'bottom_mid_hoodie_right',
+                    right_view_hoodie.bottom_mid_hoodie_right.x_point,
+                    right_view_hoodie.bottom_mid_hoodie_right.y_point,
+                )
+        }
+
+        if (right_view_hoodie.bottom_bottom_hoodie_right?.image) {
+
+                preloadImge(
+                    right_view_hoodie.bottom_bottom_hoodie_right.image,
+                    'bottom_bottom_hoodie_right',
+                    right_view_hoodie.bottom_bottom_hoodie_right.x_point,
+                    right_view_hoodie.bottom_bottom_hoodie_right.y_point,
+                )
+        }
+
+        if (right_view_hoodie.bottom_cuff_hoodie_right?.image) {
+
+                preloadImge(
+                    right_view_hoodie.bottom_cuff_hoodie_right.image,
+                    'bottom_cuff_hoodie_right',
+                    right_view_hoodie.bottom_cuff_hoodie_right.x_point,
+                    right_view_hoodie.bottom_cuff_hoodie_right.y_point,
+                )
+        }
+
+        if (right_view_hoodie.bottom_cuff_strips_hoodie_right?.image) {
+
+                preloadImge(
+                    right_view_hoodie.bottom_cuff_strips_hoodie_right.image,
+                    'bottom_cuff_strips_hoodie_right',
+                    right_view_hoodie.bottom_cuff_strips_hoodie_right.x_point,
+                    right_view_hoodie.bottom_cuff_strips_hoodie_right.y_point,
+                )
+        }
     }
 
     const rightImageLoad = (e) => {
@@ -1824,315 +2485,169 @@ function SamLocalEditorHoodieFront(props) {
         let right_view_hoodie = JSON.parse(localStorage.getItem('right_view_hoodie'))
 
         if (right_view_hoodie.mid_full_body_hoodie_right?.image) {
-            if (localStorage.getItem('mid_full_body_hoodie_right')) {
-                loadObject(JSON.parse(localStorage.getItem('mid_full_body_hoodie_right')))
-            } else {
-                loadImage(
-                    right_view_hoodie.mid_full_body_hoodie_right.image,
-                    'mid_full_body_hoodie_right',
-                    right_view_hoodie.mid_full_body_hoodie_right.x_point,
-                    right_view_hoodie.mid_full_body_hoodie_right.y_point,
-                )
+            var mid_full_body_hoodie_right=JSON.parse(localStorage.getItem('mid_full_body_hoodie_right'))
+            if (mid_full_body_hoodie_right) {
+                loadObject(mid_full_body_hoodie_right)
             }
         }
         if (right_view_hoodie.mid_top_hoodie_right?.image) {
-            if (localStorage.getItem('mid_top_hoodie_right')) {
-                loadObject(JSON.parse(localStorage.getItem('mid_top_hoodie_right')))
-            } else {
-                loadImage(
-                    right_view_hoodie.mid_top_hoodie_right.image,
-                    'mid_top_hoodie_right',
-                    right_view_hoodie.mid_top_hoodie_right.x_point,
-                    right_view_hoodie.mid_top_hoodie_right.y_point,
-                )
+            var mid_top_hoodie_right=JSON.parse(localStorage.getItem('mid_top_hoodie_right'))
+            if (mid_top_hoodie_right) {
+                loadObject(mid_top_hoodie_right)
             }
         }
 
         if (right_view_hoodie.mid_mid_hoodie_right?.image) {
-            if (localStorage.getItem('mid_mid_hoodie_right')) {
-                loadObject(JSON.parse(localStorage.getItem('mid_mid_hoodie_right')))
-            } else if (localStorage.getItem(right_view_hoodie.mid_mid_hoodie_right?.image)) {
-
-            } else {
-                loadImage(
-                    right_view_hoodie.mid_mid_hoodie_right.image,
-                    'mid_mid_hoodie_right',
-                    right_view_hoodie.mid_mid_hoodie_right.x_point,
-                    right_view_hoodie.mid_mid_hoodie_right.y_point,
-                )
+            var mid_mid_hoodie_right=JSON.parse(localStorage.getItem('mid_mid_hoodie_right'))
+            if (mid_mid_hoodie_right) {
+                loadObject(mid_mid_hoodie_right)
             }
         }
 
         if (right_view_hoodie.mid_bottom_hoodie_right?.image) {
-            if (localStorage.getItem('mid_bottom_hoodie_right')) {
-                loadObject(JSON.parse(localStorage.getItem('mid_bottom_hoodie_right')))
-            } else {
-                loadImage(
-                    right_view_hoodie.mid_bottom_hoodie_right.image,
-                    'mid_bottom_hoodie_right',
-                    right_view_hoodie.mid_bottom_hoodie_right.x_point,
-                    right_view_hoodie.mid_bottom_hoodie_right.y_point,
-                )
+            var mid_bottom_hoodie_right=JSON.parse(localStorage.getItem('mid_bottom_hoodie_right'))
+            if (mid_bottom_hoodie_right) {
+                loadObject(mid_bottom_hoodie_right)
             }
         }
 
         if (right_view_hoodie.mid_cuff_hoodie_right?.image) {
-            if (localStorage.getItem('mid_cuff_hoodie_right')) {
-                loadObject(JSON.parse(localStorage.getItem('mid_cuff_hoodie_right')))
-            } else {
-                loadImage(
-                    right_view_hoodie.mid_cuff_hoodie_right.image,
-                    'mid_cuff_hoodie_right',
-                    right_view_hoodie.mid_cuff_hoodie_right.x_point,
-                    right_view_hoodie.mid_cuff_hoodie_right.y_point,
-                )
+            var mid_cuff_hoodie_right=JSON.parse(localStorage.getItem('mid_cuff_hoodie_right'))
+            if (mid_cuff_hoodie_right) {
+                loadObject(mid_cuff_hoodie_right)
             }
         }
 
         if (right_view_hoodie.mid_cuff_strips_hoodie_right?.image) {
-            if (localStorage.getItem('mid_cuff_strips_hoodie_right')) {
-                loadObject(JSON.parse(localStorage.getItem('mid_cuff_strips_hoodie_right')))
-            } else {
-                loadImage(
-                    right_view_hoodie.mid_cuff_strips_hoodie_right.image,
-                    'mid_cuff_strips_hoodie_right',
-                    right_view_hoodie.mid_cuff_strips_hoodie_right.x_point,
-                    right_view_hoodie.mid_cuff_strips_hoodie_right.y_point,
-                )
+            var mid_cuff_strips_hoodie_right=JSON.parse(localStorage.getItem('mid_cuff_strips_hoodie_right'))
+            if (mid_cuff_strips_hoodie_right) {
+                loadObject(mid_cuff_strips_hoodie_right)
             }
         }
 
         if (right_view_hoodie.left_full_body_hoodie_right?.image) {
-            if (localStorage.getItem('left_full_body_hoodie_right')) {
-                loadObject(JSON.parse(localStorage.getItem('left_full_body_hoodie_right')))
-            } else {
-                loadImage(
-                    right_view_hoodie.left_full_body_hoodie_right.image,
-                    'left_full_body_hoodie_right',
-                    right_view_hoodie.left_full_body_hoodie_right.x_point,
-                    right_view_hoodie.left_full_body_hoodie_right.y_point,
-                )
+            var left_full_body_hoodie_right=JSON.parse(localStorage.getItem('left_full_body_hoodie_right'))
+            if (left_full_body_hoodie_right) {
+                loadObject(left_full_body_hoodie_right)
             }
         }
 
         if (right_view_hoodie.left_top_hoodie_right?.image) {
-            if (localStorage.getItem('left_top_hoodie_right')) {
-                loadObject(JSON.parse(localStorage.getItem('left_top_hoodie_right')))
-            } else {
-                loadImage(
-                    right_view_hoodie.left_top_hoodie_right.image,
-                    'left_top_hoodie_right',
-                    right_view_hoodie.left_top_hoodie_right.x_point,
-                    right_view_hoodie.left_top_hoodie_right.y_point,
-                )
+            var left_top_hoodie_right=JSON.parse(localStorage.getItem('left_top_hoodie_right'))
+            if (left_top_hoodie_right) {
+                loadObject(left_top_hoodie_right)
             }
         }
 
         if (right_view_hoodie.left_mid_hoodie_right?.image) {
-            if (localStorage.getItem('left_mid_hoodie_right')) {
-                loadObject(JSON.parse(localStorage.getItem('left_mid_hoodie_right')))
-            } else {
-                loadImage(
-                    right_view_hoodie.left_mid_hoodie_right.image,
-                    'left_mid_hoodie_right',
-                    right_view_hoodie.left_mid_hoodie_right.x_point,
-                    right_view_hoodie.left_mid_hoodie_right.y_point,
-                )
+            var left_mid_hoodie_right=JSON.parse(localStorage.getItem('left_mid_hoodie_right'))
+            if (left_mid_hoodie_right) {
+                loadObject(left_mid_hoodie_right)
             }
         }
 
         if (right_view_hoodie.left_bottom_hoodie_right?.image) {
-            if (localStorage.getItem('left_bottom_hoodie_right')) {
-                loadObject(JSON.parse(localStorage.getItem('left_bottom_hoodie_right')))
-            } else {
-                loadImage(
-                    right_view_hoodie.left_bottom_hoodie_right.image,
-                    'left_bottom_hoodie_right',
-                    right_view_hoodie.left_bottom_hoodie_right.x_point,
-                    right_view_hoodie.left_bottom_hoodie_right.y_point,
-                )
+            var left_bottom_hoodie_right=JSON.parse(localStorage.getItem('left_bottom_hoodie_right'))
+            if (left_bottom_hoodie_right) {
+                loadObject(left_bottom_hoodie_right)
             }
         }
 
         if (right_view_hoodie.left_cuff_hoodie_right?.image) {
-            if (localStorage.getItem('left_cuff_hoodie_right')) {
-                loadObject(JSON.parse(localStorage.getItem('left_cuff_hoodie_right')))
-            } else {
-                loadImage(
-                    right_view_hoodie.left_cuff_hoodie_right.image,
-                    'left_cuff_hoodie_right',
-                    right_view_hoodie.left_cuff_hoodie_right.x_point,
-                    right_view_hoodie.left_cuff_hoodie_right.y_point,
-                )
+            var left_cuff_hoodie_right=JSON.parse(localStorage.getItem('left_cuff_hoodie_right'))
+            if (left_cuff_hoodie_right) {
+                loadObject(left_cuff_hoodie_right)
             }
         }
 
         if (right_view_hoodie.left_cuff_strips_hoodie_right?.image) {
-            if (localStorage.getItem('left_cuff_strips_hoodie_right')) {
-                loadObject(JSON.parse(localStorage.getItem('left_cuff_strips_hoodie_right')))
-            } else {
-                loadImage(
-                    right_view_hoodie.left_cuff_strips_hoodie_right.image,
-                    'left_cuff_strips_hoodie_right',
-                    right_view_hoodie.left_cuff_strips_hoodie_right.x_point,
-                    right_view_hoodie.left_cuff_strips_hoodie_right.y_point,
-                )
+            var left_cuff_strips_hoodie_right=JSON.parse(localStorage.getItem('left_cuff_strips_hoodie_right'))
+            if (left_cuff_strips_hoodie_right) {
+                loadObject(left_cuff_strips_hoodie_right)
             }
         }
 
         if (right_view_hoodie.right_full_body_hoodie_right?.image) {
-            if (localStorage.getItem('right_full_body_hoodie_right')) {
-                loadObject(JSON.parse(localStorage.getItem('right_full_body_hoodie_right')))
-            } else {
-                loadImage(
-                    right_view_hoodie.right_full_body_hoodie_right.image,
-                    'right_full_body_hoodie_right',
-                    right_view_hoodie.right_full_body_hoodie_right.x_point,
-                    right_view_hoodie.right_full_body_hoodie_right.y_point,
-                )
+            var right_full_body_hoodie_right=JSON.parse(localStorage.getItem('right_full_body_hoodie_right'))
+            if (right_full_body_hoodie_right) {
+                loadObject(right_full_body_hoodie_right)
             }
         }
 
         if (right_view_hoodie.right_top_hoodie_right?.image) {
-            if (localStorage.getItem('right_top_hoodie_right')) {
-                loadObject(JSON.parse(localStorage.getItem('right_top_hoodie_right')))
-            } else {
-                loadImage(
-                    right_view_hoodie.right_top_hoodie_right.image,
-                    'right_top_hoodie_right',
-                    right_view_hoodie.right_top_hoodie_right.x_point,
-                    right_view_hoodie.right_top_hoodie_right.y_point,
-                )
+            var right_top_hoodie_right=JSON.parse(localStorage.getItem('right_top_hoodie_right'))
+            if (right_top_hoodie_right) {
+                loadObject(right_top_hoodie_right)
             }
         }
 
         if (right_view_hoodie.right_mid_hoodie_right?.image) {
-            if (localStorage.getItem('right_mid_hoodie_right')) {
-                loadObject(JSON.parse(localStorage.getItem('right_mid_hoodie_right')))
-            } else {
-                loadImage(
-                    right_view_hoodie.right_mid_hoodie_right.image,
-                    'right_mid_hoodie_right',
-                    right_view_hoodie.right_mid_hoodie_right.x_point,
-                    right_view_hoodie.right_mid_hoodie_right.y_point,
-                )
+            var right_mid_hoodie_right=JSON.parse(localStorage.getItem('right_mid_hoodie_right'))
+            if (right_mid_hoodie_right) {
+                loadObject(right_mid_hoodie_right)
             }
         }
 
         if (right_view_hoodie.right_bottom_hoodie_right?.image) {
-            if (localStorage.getItem('right_bottom_hoodie_right')) {
-                loadObject(JSON.parse(localStorage.getItem('right_bottom_hoodie_right')))
-            } else {
-                loadImage(
-                    right_view_hoodie.right_bottom_hoodie_right.image,
-                    'right_bottom_hoodie_right',
-                    right_view_hoodie.right_bottom_hoodie_right.x_point,
-                    right_view_hoodie.right_bottom_hoodie_right.y_point,
-                )
+            var right_bottom_hoodie_right=JSON.parse(localStorage.getItem('right_bottom_hoodie_right'))
+            if (right_bottom_hoodie_right) {
+                loadObject(right_bottom_hoodie_right)
             }
         }
 
         if (right_view_hoodie.right_cuff_hoodie_right?.image) {
-            if (localStorage.getItem('right_cuff_hoodie_right')) {
-                loadObject(JSON.parse(localStorage.getItem('right_cuff_hoodie_right')))
-            } else {
-                loadImage(
-                    right_view_hoodie.right_cuff_hoodie_right.image,
-                    'right_cuff_hoodie_right',
-                    right_view_hoodie.right_cuff_hoodie_right.x_point,
-                    right_view_hoodie.right_cuff_hoodie_right.y_point,
-                )
+            var right_cuff_hoodie_right=JSON.parse(localStorage.getItem('right_cuff_hoodie_right'))
+            if (right_cuff_hoodie_right) {
+                loadObject(right_cuff_hoodie_right)
             }
         }
 
         if (right_view_hoodie.right_cuff_strips_hoodie_right?.image) {
-            if (localStorage.getItem('right_cuff_strips_hoodie_right')) {
-                loadObject(JSON.parse(localStorage.getItem('right_cuff_strips_hoodie_right')))
-            } else {
-                loadImage(
-                    right_view_hoodie.right_cuff_strips_hoodie_right.image,
-                    'right_cuff_strips_hoodie_right',
-                    right_view_hoodie.right_cuff_strips_hoodie_right.x_point,
-                    right_view_hoodie.right_cuff_strips_hoodie_right.y_point,
-                )
+            var right_cuff_strips_hoodie_right=JSON.parse(localStorage.getItem('right_cuff_strips_hoodie_right'))
+            if (right_cuff_strips_hoodie_right) {
+                loadObject(right_cuff_strips_hoodie_right)
             }
         }
 
         if (right_view_hoodie.bottom_full_body_hoodie_right?.image) {
-            if (localStorage.getItem('bottom_full_body_hoodie_right')) {
-                loadObject(JSON.parse(localStorage.getItem('bottom_full_body_hoodie_right')))
-            } else {
-                loadImage(
-                    right_view_hoodie.bottom_full_body_hoodie_right.image,
-                    'bottom_full_body_hoodie_right',
-                    right_view_hoodie.bottom_full_body_hoodie_right.x_point,
-                    right_view_hoodie.bottom_full_body_hoodie_right.y_point,
-                )
+            var bottom_full_body_hoodie_right=JSON.parse(localStorage.getItem('bottom_full_body_hoodie_right'))
+            if (bottom_full_body_hoodie_right) {
+                loadObject(bottom_full_body_hoodie_right)
             }
         }
 
         if (right_view_hoodie.bottom_top_hoodie_right?.image) {
-            if (localStorage.getItem('bottom_top_hoodie_right')) {
-                loadObject(JSON.parse(localStorage.getItem('bottom_top_hoodie_right')))
-            } else {
-                loadImage(
-                    right_view_hoodie.bottom_top_hoodie_right.image,
-                    'bottom_top_hoodie_right',
-                    right_view_hoodie.bottom_top_hoodie_right.x_point,
-                    right_view_hoodie.bottom_top_hoodie_right.y_point,
-                )
+            var bottom_top_hoodie_right=JSON.parse(localStorage.getItem('bottom_top_hoodie_right'))
+            if (bottom_top_hoodie_right) {
+                loadObject(bottom_top_hoodie_right)
             }
         }
 
         if (right_view_hoodie.bottom_mid_hoodie_right?.image) {
-            if (localStorage.getItem('bottom_mid_hoodie_right')) {
-                loadObject(JSON.parse(localStorage.getItem('bottom_mid_hoodie_right')))
-            } else {
-                loadImage(
-                    right_view_hoodie.bottom_mid_hoodie_right.image,
-                    'bottom_mid_hoodie_right',
-                    right_view_hoodie.bottom_mid_hoodie_right.x_point,
-                    right_view_hoodie.bottom_mid_hoodie_right.y_point,
-                )
+            var bottom_mid_hoodie_right=JSON.parse(localStorage.getItem('bottom_mid_hoodie_right'))
+            if (bottom_mid_hoodie_right) {
+                loadObject(bottom_mid_hoodie_right)
             }
         }
 
         if (right_view_hoodie.bottom_bottom_hoodie_right?.image) {
-            if (localStorage.getItem('bottom_bottom_hoodie_right')) {
-                loadObject(JSON.parse(localStorage.getItem('bottom_bottom_hoodie_right')))
-            } else {
-                loadImage(
-                    right_view_hoodie.bottom_bottom_hoodie_right.image,
-                    'bottom_bottom_hoodie_right',
-                    right_view_hoodie.bottom_bottom_hoodie_right.x_point,
-                    right_view_hoodie.bottom_bottom_hoodie_right.y_point,
-                )
+            var bottom_bottom_hoodie_right=JSON.parse(localStorage.getItem('bottom_bottom_hoodie_right'))
+            if (bottom_bottom_hoodie_right) {
+                loadObject(bottom_bottom_hoodie_right)
             }
         }
 
         if (right_view_hoodie.bottom_cuff_hoodie_right?.image) {
-            if (localStorage.getItem('bottom_cuff_hoodie_right')) {
-                loadObject(JSON.parse(localStorage.getItem('bottom_cuff_hoodie_right')))
-            } else {
-                loadImage(
-                    right_view_hoodie.bottom_cuff_hoodie_right.image,
-                    'bottom_cuff_hoodie_right',
-                    right_view_hoodie.bottom_cuff_hoodie_right.x_point,
-                    right_view_hoodie.bottom_cuff_hoodie_right.y_point,
-                )
+            var bottom_cuff_hoodie_right=JSON.parse(localStorage.getItem('bottom_cuff_hoodie_right'))
+            if (bottom_cuff_hoodie_right) {
+                loadObject(bottom_cuff_hoodie_right)
             }
         }
 
         if (right_view_hoodie.bottom_cuff_strips_hoodie_right?.image) {
-            if (localStorage.getItem('bottom_cuff_strips_hoodie_right')) {
-                loadObject(JSON.parse(localStorage.getItem('bottom_cuff_strips_hoodie_right')))
-            } else {
-                loadImage(
-                    right_view_hoodie.bottom_cuff_strips_hoodie_right.image,
-                    'bottom_cuff_strips_hoodie_right',
-                    right_view_hoodie.bottom_cuff_strips_hoodie_right.x_point,
-                    right_view_hoodie.bottom_cuff_strips_hoodie_right.y_point,
-                )
+            var bottom_cuff_strips_hoodie_right=JSON.parse(localStorage.getItem('bottom_cuff_strips_hoodie_right'))
+            if (bottom_cuff_strips_hoodie_right) {
+                loadObject(bottom_cuff_strips_hoodie_right)
             }
         }
     }
